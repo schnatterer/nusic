@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Newsic</string>
+    <string name="action_settings">Settings</string>
+    <string name="releaseListRow_RightArrow">Click to show details</string>
+    <string name="releaseListRow_Thumbnail">Thumbnail of album art</string>
+    
+    <!-- Error message -->
+    <string name="GenericError">Something almost impossible has happened: %1s!</string>
+    <string name="MainActivity_notOnline">No connection to the internet</string>
+    <string name="ArtistQueryService_errorQueryingArtists">Error retrieving artists from the device</string>
+    <string name="ReleaseInfoService_errorFindingReleases">Error finding releases for artist %1$s</string>
+    
+ 
+</resources>

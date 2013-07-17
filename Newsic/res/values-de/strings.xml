@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="action_settings">Einstellungen</string>
+    <string name="releaseListRow_RightArrow">Anklicken für mehr details</string>
+    <string name="releaseListRow_Thumbnail">Vorschaubild des Albumcovers</string>
+
+    <!-- Error message -->
+    <string name="GenericError">Etwas beinahe unmögliches ist geschehen: %1s!</string>
+    <string name="MainActivity_notOnline">Keine Verbindung zum Internet</string>
+    <string name="ArtistQueryService_errorQueryingArtists">Fehler beim Abfragen der Interpreten vom Gerät</string>
+    <string name="ReleaseInfoService_errorFindingReleases">Fehler beim Finden von Alben für Interpret %1$s</string>
+
+</resources>

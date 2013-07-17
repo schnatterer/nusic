@@ -1,0 +1,19 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+</head>
+<body bgcolor="white">
+
+<p>Classes for interacting with the MusicBrainz XML web service.</p>
+<p>Implementations of the {@link org.musicbrainz.webservice.WebService} interface talk to
+a server implementing the MusicBrainz XML web service. They mainly handle URL generation
+and network I/O. Extend {@link org.musicbrainz.webservice.DefaultWebService} if maximum
+control is needed.</p>
+<p>The {@link org.musicbrainz.Query} class provides a convenient interface to
+the most commonly used features of the web service. By default it uses
+{@link org.musicbrainz.webservice.impl.HttpClientWebService} to retrieve data and 
+{@link org.musicbrainz.wsxml.impl.JDOMParser} to parse the responses. The results are
+object trees using the MusicBrainz domain model.</p>
+
+</body>
+</html>
