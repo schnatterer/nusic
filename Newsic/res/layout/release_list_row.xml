@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="horizontal"
     android:padding="5dip" >
 
@@ -23,36 +23,47 @@
             android:src="@drawable/ic_launcher" />
     </LinearLayout>
 
-    <!-- Artist name -->
-
-    <TextView
-        android:id="@+id/releaseListRowArtistName"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/relaseListArtistDateLayout"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/releaseListRowThumbnailLayout"
-        android:layout_toRightOf="@+id/releaseListRowThumbnailLayout"/>
-        <!-- android:text="Artist" /> -->
+        android:layout_toRightOf="@+id/releaseListRowThumbnailLayout"
+        android:orientation="horizontal" >
+
+        <!-- Artist name -->
+
+        <TextView
+            android:id="@+id/releaseListRowArtistName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:lines="1"
+            android:singleLine="true" />
+        <!-- android:text="Artisttttttttttttttttttttttttttttttttttt" /> -->
+
+
+        <!-- Release date -->
+
+        <TextView
+            android:id="@+id/releaseListRowReleaseDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:gravity="right" />
+            <!-- android:text="35.5.9999" /> -->
+    </LinearLayout>
 
     <!-- Title Of Album -->
 
     <TextView
         android:id="@+id/releaseListRowReleaseName"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/releaseListRowArtistName"
-        android:layout_toRightOf="@+id/releaseListRowThumbnailLayout"/>
-        <!-- android:text="Album" /> -->
-
-    <!-- Release date -->
-
-    <TextView
-        android:id="@+id/releaseListRowReleaseDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/releaseListRowArtistName"
-        android:gravity="right"/>
-        <!-- android:text="35.5.9999" /> -->
+        android:layout_below="@id/relaseListArtistDateLayout"
+        android:layout_toRightOf="@+id/releaseListRowThumbnailLayout" />
+    <!-- android:text="Album" /> -->
 
     <!-- Rightend Arrow -->
     <!--
@@ -61,7 +72,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/arrow"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"/>
-    -->
+        android:layout_centerVertical="true" />
+        -->
 
 </RelativeLayout>
