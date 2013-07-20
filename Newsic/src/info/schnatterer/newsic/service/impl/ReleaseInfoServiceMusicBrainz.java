@@ -19,6 +19,8 @@ import org.musicbrainz.model.searchresult.ReleaseResultWs2;
 
 import android.annotation.SuppressLint;
 
+import com.google.common.util.concurrent.RateLimiter;
+
 public class ReleaseInfoServiceMusicBrainz implements ReleaseInfoService {
 	private static final String SEARCH_BASE = "primarytype:album";
 	private static final String SEARCH_DATE_1 = " AND date:[";
@@ -28,6 +30,10 @@ public class ReleaseInfoServiceMusicBrainz implements ReleaseInfoService {
 
 	@SuppressLint("SimpleDateFormat")
 	private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	
+	// MB allows 22 requests in 20 seconds. Or 1 per second?
+	//private RateLimiter musicBrainzThrottle = RateLimiter.create(1.0);
+	private RateLimiter musicBrainzThrottle = RateLimiter.create(22.0/20.0);
 
 	@Override
 	public Artist findReleases(String artistName, Date fromDate)
@@ -36,6 +42,7 @@ public class ReleaseInfoServiceMusicBrainz implements ReleaseInfoService {
 		artist.setArtistName(artistName);
 		Map<String, Release> releases = new HashMap<String, Release>();
 		try {
+			musicBrainzThrottle.acquire();
 			// List<ReleaseResultWs2> releaseResults = findReleases();
 			org.musicbrainz.controller.Release releaseSearch = new org.musicbrainz.controller.Release();
 			releaseSearch.search(new StringBuffer(SEARCH_BASE)
