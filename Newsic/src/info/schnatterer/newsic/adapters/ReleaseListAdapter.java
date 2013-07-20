@@ -61,7 +61,7 @@ public class ReleaseListAdapter extends BaseAdapter {
 			return convertView;
 		}
 		releaseNameView.setText(release.getReleaseName());
-		artistView.setText(release.getArtistName());
+		artistView.setText(release.getArtist().getArtistName());
 		Date releaseDate = release.getReleaseDate();
 		if (releaseDate != null) {
 			releaseDateView.setText(DateFormat.getDateFormat(context).format(
