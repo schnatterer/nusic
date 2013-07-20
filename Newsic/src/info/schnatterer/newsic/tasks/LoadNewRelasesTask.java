@@ -190,6 +190,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Artist>>
 	 */
 	private ProgressDialog showDialog(int progress, int max) {
 		ProgressDialog dialog = new ProgressDialog(activity);
+		dialog.setMessage(Application.getContext().getString(R.string.LoadNewReleasesTask_CheckingArtists));
 		dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		dialog.setCancelable(false);
 		dialog.setMax(max);
