@@ -52,16 +52,16 @@ public class Release extends Controller{
         setSearch(new ReleaseSearchWs2(getQueryWs(),getSearchFilter()));
         
     }
-    public List <ReleaseResultWs2> getFullSearchResultList() {
+    public List <ReleaseResultWs2> getFullSearchResultList() throws MBWS2Exception {
 
         return getSearch().getFullList();
 
     }
-    public List <ReleaseResultWs2> getFirstSearchResultPage() {
+    public List <ReleaseResultWs2> getFirstSearchResultPage() throws MBWS2Exception {
 
         return getSearch().getFirstPage();
     }
-    public List <ReleaseResultWs2> getNextSearchResultPage() {
+    public List <ReleaseResultWs2> getNextSearchResultPage() throws MBWS2Exception {
 
         return getSearch().getNextPage();
     }

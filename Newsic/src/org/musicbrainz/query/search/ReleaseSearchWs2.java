@@ -1,7 +1,8 @@
 package org.musicbrainz.query.search;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
 import org.musicbrainz.MBWS2Exception;
 import org.musicbrainz.filter.searchfilter.ReleaseSearchFilterWs2;
 import org.musicbrainz.model.searchresult.ReleaseResultWs2;
@@ -20,7 +21,7 @@ public class ReleaseSearchWs2 extends SearchWs2{
        super(ws, filter);
     }
 
-    public List <ReleaseResultWs2> getFullList() {
+    public List <ReleaseResultWs2> getFullList() throws MBWS2Exception {
 
         getFirstPage();
         while (hasMore())
@@ -30,7 +31,7 @@ public class ReleaseSearchWs2 extends SearchWs2{
         return releaseSearchResults.getReleaseResults();
 
     }
-    public List <ReleaseResultWs2> getFirstPage() {
+    public List <ReleaseResultWs2> getFirstPage() throws MBWS2Exception {
 
         releaseSearchResults = new ReleaseSearchResultsWs2(); 
         setLastScore(100);
@@ -38,7 +39,7 @@ public class ReleaseSearchWs2 extends SearchWs2{
 
         return releaseSearchResults.getReleaseResults();
     }
- public List <ReleaseResultWs2> getNextPage() {
+ public List <ReleaseResultWs2> getNextPage() throws MBWS2Exception {
         
         List<ReleaseResultWs2> results  = getOnePage();
         
@@ -47,7 +48,7 @@ public class ReleaseSearchWs2 extends SearchWs2{
 
         return results;
     }
-    public List <ReleaseResultWs2> getResults(){
+    public List <ReleaseResultWs2> getResults() throws MBWS2Exception{
         
         if (releaseSearchResults.getReleaseResults() == null)
         return getFirstPage();
@@ -55,20 +56,20 @@ public class ReleaseSearchWs2 extends SearchWs2{
         return releaseSearchResults.getReleaseResults();
         
     }
-    private List <ReleaseResultWs2> getOnePage() {
+    private List <ReleaseResultWs2> getOnePage() throws MBWS2Exception {
 
         List<ReleaseResultWs2> results
                 = new ArrayList<ReleaseResultWs2>(0);
      
-        try {
+ //       try {
                 ReleaseSearchResultsWs2 temp = execQuery();
                 results.addAll(temp.getReleaseResults());
 
-        } catch (org.musicbrainz.MBWS2Exception ex) {
-
-                ex.printStackTrace();
-
-        }
+//        } catch (org.musicbrainz.MBWS2Exception ex) {
+//
+//                ex.printStackTrace();
+//
+//        }
         return results;
     }
     

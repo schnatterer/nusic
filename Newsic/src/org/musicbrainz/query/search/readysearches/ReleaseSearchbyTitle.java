@@ -2,6 +2,7 @@ package org.musicbrainz.query.search.readysearches;
 
 import java.util.List;
 
+import org.musicbrainz.MBWS2Exception;
 import org.musicbrainz.filter.searchfilter.ReleaseSearchFilterWs2;
 import org.musicbrainz.model.searchresult.ReleaseResultWs2;
 import org.musicbrainz.query.search.ReleaseSearchWs2;
@@ -23,18 +24,18 @@ public class ReleaseSearchbyTitle  {
         q = new ReleaseSearchWs2(f);
         
     }
-    public List <ReleaseResultWs2> getFullList() {
+    public List <ReleaseResultWs2> getFullList() throws MBWS2Exception {
 
         return q.getFullList();
 
     }
-    public List <ReleaseResultWs2> getFirstPage() {
+    public List <ReleaseResultWs2> getFirstPage() throws MBWS2Exception {
 
         f.setOffset((long)0);
         q = new ReleaseSearchWs2(f);
         return q.getFirstPage();
     }
-    public List <ReleaseResultWs2> getNextPage() {
+    public List <ReleaseResultWs2> getNextPage() throws MBWS2Exception {
         return q.getNextPage();
     }
 
