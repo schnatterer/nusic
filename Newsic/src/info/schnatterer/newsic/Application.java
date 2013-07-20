@@ -113,4 +113,16 @@ public class Application extends android.app.Application {
 	public static void toast(String message) {
 		Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 	}
+	
+	public static void toast(int stringId) {
+		Toast.makeText(context, context.getString(stringId), Toast.LENGTH_LONG).show();
+	}
+	
+	public static void toast(String message, Object... args) {
+		toast(String.format(message, args));
+	}
+	
+	public static void toast(int stringId, Object... args) {
+		toast(String.format(context.getString(stringId), args));
+	}
 }

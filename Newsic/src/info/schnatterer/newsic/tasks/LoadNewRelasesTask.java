@@ -2,12 +2,12 @@ package info.schnatterer.newsic.tasks;
 
 import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.Constants;
+import info.schnatterer.newsic.R;
 import info.schnatterer.newsic.adapters.ReleaseListAdapter;
 import info.schnatterer.newsic.model.Artist;
 import info.schnatterer.newsic.service.ReleasesService;
 import info.schnatterer.newsic.service.ServiceException;
-import info.schnatterer.newsic.service.event.ArtistProcessEvent;
-import info.schnatterer.newsic.service.event.ArtistProcessListener;
+import info.schnatterer.newsic.service.event.ArtistProgressListener;
 import info.schnatterer.newsic.service.impl.ReleasesServiceImpl;
 
 import java.util.LinkedList;
@@ -19,98 +19,259 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ListView;
 
-public class LoadNewRelasesTask extends
-		AsyncTask<Void, ArtistProcessEvent, List<Artist>> implements
-		ArtistProcessListener {
-	private Activity activity;
-	private ListView releasesListView;
-
+/**
+ * {@link AsyncTask} that loads new releases, listens to the progress (via
+ * {@link ArtistProgressListener} and visualizes the progress in a
+ * {@link ProgressDialog}.
+ * 
+ * @author schnatterer
+ * 
+ */
+public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Artist>>
+		implements ArtistProgressListener {
 	private ReleasesService releasesService;
 
-	public LoadNewRelasesTask(Activity activity, ListView releasesListView) {
-		this.activity = activity;
-		this.releasesListView = releasesListView;
-		releasesService = new ReleasesServiceImpl(activity);
-	}
+	private ProgressDialog progressDialog;
+	private boolean isExecuting = false;
+	private List<Artist> result = null;
 
-	/**
-	 * {@link AsyncTask} that loads new releases, listens to the progress (via
-	 * {@link ArtistProcessListener} and visualizes the progress in a
-	 * {@link ProgressDialog}.
-	 * 
-	 * @author schnatterer
-	 * 
-	 */
-	private ProgressDialog dialog;
+	private Activity activity;
+	private ListView resultView;
+	private List<Artist> errorArtists;
+
+	public LoadNewRelasesTask(Activity activity, ListView resultView) {
+		this.activity = activity;
+		this.resultView = resultView;
+		// Run in global context
+		releasesService = new ReleasesServiceImpl(Application.getContext());
+	}
 
 	@Override
 	protected void onPreExecute() {
+		isExecuting = true;
+		result = null;
 		releasesService.addArtistProcessedListener(this);
-		// Setup Progress Dialog
-		dialog = new ProgressDialog(activity);
-		dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		try {
-			dialog.setMax(releasesService.getArtists().size());
-			dialog.show();
-		} catch (ServiceException e) {
-			Log.w(Constants.LOG, e.getMessage());
-			Application.toast(e.getLocalizedMessage());
-			// Don't run task
-			throw new RuntimeException(e);
-		}
 	}
 
 	@Override
 	protected List<Artist> doInBackground(Void... arg0) {
 		// Do it
-		return getListData();
+		return releasesService.getNewestReleases();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void onProgressUpdate(Object... objects) {
+		// Update GUI (ProgressDialog) in MainThread
+		if (objects.length < 2 || objects[0] == null) {
+			Log.w(Constants.LOG,
+					"Can't update progressDialog. Missing arguments");
+			return;
+		}
+
+		try {
+			ProgressUpdateOperation operation = (ProgressUpdateOperation) objects[0];
+			switch (operation) {
+			case PROGRESS_STARTED:
+				progressDialog = showDialog(0, (Integer) objects[1]);
+				errorArtists = new LinkedList<Artist>();
+				break;
+			case PROGRESS: {
+				ProgressUpdate progress = (ProgressUpdate) objects[1];
+				if (progressDialog == null) {
+					// Make sure the dialog is shown
+					progressDialog = showDialog(progress.getProgress(),
+							progress.getMax());
+				}
+				if (progress.getArtist() != null) {
+					progressDialog.setProgress(progress.getProgress());
+				}
+
+				Throwable potentialException = progress.getPotentialException();
+				if (potentialException != null) {
+					if (potentialException instanceof ServiceException) {
+						errorArtists.add(progress.getArtist());
+					} else {
+						Application.toast(Application
+								.createGenericErrorMessage(potentialException));
+					}
+				}
+			}
+				break;
+			case PROGRESS_FINISHED:
+				progressDialog.dismiss();
+				progressDialog = null;
+				setResult((List<Artist>) objects[1]);
+				if (errorArtists.size() > 0) {
+					Application.toast(
+							R.string.LoadNewReleasesTask_finishedWithErrors,
+							getResult().size(), errorArtists.size());
+				}
+				break;
+			case PROGRESS_FAILED: {
+				progressDialog.dismiss();
+				progressDialog = null;
+				setResult((List<Artist>) objects[2]);
+				ProgressUpdate progress = (ProgressUpdate) objects[1];
+				Throwable potentialException = progress.getPotentialException();
+				if (potentialException != null) {
+					if (potentialException instanceof ServiceException) {
+						Application.toast(potentialException
+								.getLocalizedMessage());
+					} else {
+						Application
+								.toast(R.string.ArtistQueryService_errorQueryingArtists
+										+ potentialException
+												.getLocalizedMessage());
+					}
+				}
+			}
+				break;
+			default:
+				Log.w(Constants.LOG,
+						"Unexpected/Unimpletented progress operation \""
+								+ operation + "\"");
+				break;
+			}
+		} catch (ClassCastException e) {
+			Log.w(Constants.LOG,
+					"Can't update progressDialog. Unexpected type/order of arguments");
+			return;
+		}
+	}
+
+	private void setResult(List<Artist> result) {
+		this.result = result;
+		if (resultView != null) {
+			// Display result
+			resultView.setAdapter(new ReleaseListAdapter(activity, result));
+		}
 	}
 
 	@Override
 	protected void onPostExecute(List<Artist> result) {
+		this.result = result;
+		isExecuting = false;
 		releasesService.removeArtistProcessedListener(this);
-		// Display result
-		releasesListView.setAdapter(new ReleaseListAdapter(activity,
-				result));
+	}
+
+	public void updateActivity(Activity activity, ListView resultView) {
+		this.activity = activity;
+		this.resultView = resultView;
+		/*
+		 * If progressDialog is displayed, show a new one with same settings,
+		 * belonging to the new activty
+		 */
+		if (progressDialog != null) {
+			progressDialog = showDialog(progressDialog.getProgress(),
+					progressDialog.getMax());
+		}
+	}
+
+	public List<Artist> getResult() {
+		return result;
+	}
+
+	public boolean isExecuting() {
+		return isExecuting;
+	}
+
+	public void setExecuting(boolean isExecuting) {
+		this.isExecuting = isExecuting;
+	}
+
+	/**
+	 * This should only be called from from the main thread (e.g. from
+	 * {@link #onProgressUpdate(Object...)}).
+	 * 
+	 * @param progress
+	 * @param max
+	 * @return
+	 */
+	private ProgressDialog showDialog(int progress, int max) {
+		ProgressDialog dialog = new ProgressDialog(activity);
+		dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		dialog.setCancelable(false);
+		dialog.setMax(max);
+		dialog.setProgress(progress);
+		dialog.show();
+		return dialog;
 	}
 
 	@Override
-	protected void onProgressUpdate(ArtistProcessEvent... events) {
-		if (events.length < 1 || events[0] == null) {
-			return;
-		}
-		ArtistProcessEvent event = events[0];
-
-		Artist artist = event.getArtist();
-		if (artist != null) {
-			dialog.incrementProgressBy(1);
-		}
-
-		Throwable t = event.getPotentialException();
-		if (t != null) {
-			if (t instanceof ServiceException) {
-				Application.toast(t.getLocalizedMessage());
-			} else if (t instanceof SecurityException) {
-				// E.g. no internet. Try to output localized msg
-				Application.toast(t.getLocalizedMessage());
-			} else {
-				Application.toast(Application.createGenericErrorMessage(t));
-			}
-		}
-	}
-
-	private List<Artist> getListData() {
-		try {
-			return releasesService.getNewestReleases();
-		} catch (Throwable t) {
-			Log.w(Constants.LOG, t.getMessage());
-			publishProgress(new ArtistProcessEvent(null, 0, t));
-		}
-		return new LinkedList<Artist>();
+	public void onProgressStarted(int nEntities) {
+		publishProgress(ProgressUpdateOperation.PROGRESS_STARTED, nEntities);
 	}
 
 	@Override
-	public void artistProcessed(ArtistProcessEvent event) {
-		publishProgress(event);
+	public void onProgress(Artist entity, int progress, int max,
+			Throwable potentialException) {
+		publishProgress(ProgressUpdateOperation.PROGRESS, new ProgressUpdate(
+				entity, progress, max, potentialException));
+	}
+
+	@Override
+	public void onProgressFinished(List<Artist> result) {
+		publishProgress(ProgressUpdateOperation.PROGRESS_FINISHED, result);
+	}
+
+	@Override
+	public void onProgressFailed(Artist entity, int progress, int max,
+			List<Artist> resultOnFailure, Throwable potentialException) {
+		publishProgress(ProgressUpdateOperation.PROGRESS_FINISHED,
+				new ProgressUpdate(entity, progress, max, potentialException),
+				resultOnFailure);
+	}
+
+	public enum ProgressUpdateOperation {
+		PROGRESS_STARTED, PROGRESS, PROGRESS_FINISHED, PROGRESS_FAILED
+	};
+
+	public class ProgressUpdate {
+
+		public ProgressUpdate(Artist entity, int progress, int max,
+				Throwable potentialException) {
+			this.artist = entity;
+			this.progress = progress;
+			this.max = max;
+			this.potentialException = potentialException;
+		}
+
+		private Artist artist;
+		private int progress;
+		private int max;
+		private Throwable potentialException;
+
+		public Artist getArtist() {
+			return artist;
+		}
+
+		public void setEntity(Artist entity) {
+			this.artist = entity;
+		}
+
+		public int getProgress() {
+			return progress;
+		}
+
+		public void setProgress(int progress) {
+			this.progress = progress;
+		}
+
+		public int getMax() {
+			return max;
+		}
+
+		public void setMax(int max) {
+			this.max = max;
+		}
+
+		public Throwable getPotentialException() {
+			return potentialException;
+		}
+
+		public void setPotentialException(Throwable potentialException) {
+			this.potentialException = potentialException;
+		}
 	}
 }

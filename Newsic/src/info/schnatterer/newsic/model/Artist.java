@@ -1,5 +1,6 @@
 package info.schnatterer.newsic.model;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,7 +11,8 @@ public class Artist {
 	 */
 	private String artistName;
 	private List<Release> releases = new LinkedList<Release>();
-
+	private Date dateCreated;
+	
 	public List<Release> getReleases() {
 		return releases;
 	}
@@ -41,13 +43,23 @@ public class Artist {
 	public void setId(long l) {
 		this.id = l;
 	}
+	
+
+	public Date getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
+	}
 
 	@Override
 	public String toString() {
-		return "Artist [id=" + id + ", artistName=" + artistName + ", releases="
-				+ releases + "]";
+		return "Artist [id=" + id + ", artistName=" + artistName
+				+ ", releases=" + releases + ", dateCreated=" + dateCreated
+				+ "]";
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

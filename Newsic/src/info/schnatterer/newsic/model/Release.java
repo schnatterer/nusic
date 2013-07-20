@@ -9,16 +9,19 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 public class Release {
-	private static final int defaultThumbnail = R.drawable.ic_launcher;
+	private static final int DEFAULT_THUMBNAIL = R.drawable.ic_launcher;
+	
 	private String artistName;
 	private String releaseName;
 	private Date releaseDate;
+	private Date dateCreated;
+	//private ? releaseType;
 	private Bitmap thumbnail = null;
 
 	public Bitmap getThumbnail() {
 		if (thumbnail == null) {
 			return BitmapFactory.decodeResource(
-					Application.getDefaulResources(), defaultThumbnail);
+					Application.getDefaulResources(), DEFAULT_THUMBNAIL);
 		}
 		return thumbnail;
 	}
@@ -50,7 +53,7 @@ public class Release {
 	public void setReleaseDate(Date releaseDate) {
 		this.releaseDate = releaseDate;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -62,12 +65,6 @@ public class Release {
 		result = prime * result
 				+ ((releaseDate == null) ? 0 : releaseDate.hashCode());
 		return result;
-	}
-
-	@Override
-	public String toString() {
-		return "Release [artistName=" + artistName + ", releaseName="
-				+ releaseName + ", releaseDate=" + releaseDate + "]";
 	}
 
 	@Override
@@ -95,5 +92,21 @@ public class Release {
 		} else if (!releaseDate.equals(other.releaseDate))
 			return false;
 		return true;
+	}
+
+	public Date getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+	@Override
+	public String toString() {
+		return "Release [artistName=" + artistName + ", releaseName="
+				+ releaseName + ", releaseDate=" + releaseDate
+				+ ", dateCreated=" + dateCreated + ", thumbnail=" + thumbnail
+				+ "]";
 	}
 }
