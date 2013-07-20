@@ -39,9 +39,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ellipsize="end"
-            android:lines="1"
-            android:singleLine="true" />
+            android:textStyle="bold" />
         <!-- android:text="Artisttttttttttttttttttttttttttttttttttt" /> -->
+        <!-- android:lines="1"
+            android:singleLine="true" -->
 
 
         <!-- Release date -->
