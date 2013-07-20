@@ -1,27 +1,18 @@
 package info.schnatterer.newsic;
 
-import java.util.Locale;
-
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.DisplayMetrics;
 import android.widget.Toast;
 
 public class Application extends android.app.Application {
 
 	private static Context context;
-	private static Resources defaultResources;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		Application.context = getApplicationContext();
-		Application.defaultResources = createDefaultResources();
-
 	}
 
 	/**
@@ -31,25 +22,6 @@ public class Application extends android.app.Application {
 	 */
 	public static Context getContext() {
 		return Application.context;
-	}
-
-	/**
-	 * Returns a reference to the default resources.
-	 * 
-	 * @return
-	 */
-	public static Resources getDefaulResources() {
-		return defaultResources;
-	}
-
-	private static Resources createDefaultResources() {
-		Resources standardResources = Application.getContext().getResources();
-		AssetManager assets = standardResources.getAssets();
-		DisplayMetrics metrics = standardResources.getDisplayMetrics();
-		Configuration config = new Configuration(
-				standardResources.getConfiguration());
-		config.locale = Locale.US;
-		return defaultResources = new Resources(assets, metrics, config);
 	}
 
 	/**
@@ -113,15 +85,16 @@ public class Application extends android.app.Application {
 	public static void toast(String message) {
 		Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 	}
-	
+
 	public static void toast(int stringId) {
-		Toast.makeText(context, context.getString(stringId), Toast.LENGTH_LONG).show();
+		Toast.makeText(context, context.getString(stringId), Toast.LENGTH_LONG)
+				.show();
 	}
-	
+
 	public static void toast(String message, Object... args) {
 		toast(String.format(message, args));
 	}
-	
+
 	public static void toast(int stringId, Object... args) {
 		toast(String.format(context.getString(stringId), args));
 	}

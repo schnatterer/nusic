@@ -21,7 +21,7 @@ public class Release {
 	public Bitmap getThumbnail() {
 		if (thumbnail == null) {
 			return BitmapFactory.decodeResource(
-					Application.getDefaulResources(), DEFAULT_THUMBNAIL);
+					Application.getContext().getResources(), DEFAULT_THUMBNAIL);
 		}
 		return thumbnail;
 	}

@@ -2,6 +2,7 @@ package info.schnatterer.newsic.service;
 
 import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.Constants;
+import info.schnatterer.newsic.util.DefaultLocale;
 
 import java.util.Locale;
 
@@ -77,7 +78,7 @@ public class ServiceException extends Exception {
 	 * @param t
 	 */
 	public ServiceException(int messageId, int localizedMessageId) {
-		this(Application.getDefaulResources().getString(messageId),
+		this(DefaultLocale.getStringInDefaultResource(messageId),
 				localizedMessageId);
 	}
 
@@ -145,7 +146,7 @@ public class ServiceException extends Exception {
 	 * @param t
 	 */
 	public ServiceException(int messageId, Throwable cause) {
-		this(Application.getDefaulResources().getString(messageId), messageId,
+		this(DefaultLocale.getStringInDefaultResource(messageId), messageId,
 				cause);
 	}
 
@@ -158,7 +159,7 @@ public class ServiceException extends Exception {
 	 * @param t
 	 */
 	public ServiceException(int messageId, Throwable cause, Object... args) {
-		this(String.format(Locale.US, Application.getDefaulResources().getString(messageId), args), messageId, cause, args);
+		this(String.format(Locale.US, DefaultLocale.getStringInDefaultResource(messageId), args), messageId, cause, args);
 	}
 
 }
