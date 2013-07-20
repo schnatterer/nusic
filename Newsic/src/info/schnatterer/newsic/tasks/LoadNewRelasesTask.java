@@ -142,7 +142,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Artist>>
 
 	private void setResult(List<Artist> result) {
 		this.result = result;
-		if (resultView != null) {
+		if (resultView != null && activity != null) {
 			// Display result
 			resultView.setAdapter(new ReleaseListAdapter(activity, result));
 		}
@@ -189,13 +189,17 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Artist>>
 	 * @return
 	 */
 	private ProgressDialog showDialog(int progress, int max) {
-		ProgressDialog dialog = new ProgressDialog(activity);
-		dialog.setMessage(Application.getContext().getString(R.string.LoadNewReleasesTask_CheckingArtists));
-		dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		dialog.setCancelable(false);
-		dialog.setMax(max);
-		dialog.setProgress(progress);
-		dialog.show();
+		ProgressDialog dialog = null;
+		if (activity != null) {
+			dialog = new ProgressDialog(activity);
+			dialog.setMessage(Application.getContext().getString(
+					R.string.LoadNewReleasesTask_CheckingArtists));
+			dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			dialog.setCancelable(false);
+			dialog.setMax(max);
+			dialog.setProgress(progress);
+			dialog.show();
+		}
 		return dialog;
 	}
 

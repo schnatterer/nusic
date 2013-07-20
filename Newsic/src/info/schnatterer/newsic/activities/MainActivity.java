@@ -59,6 +59,15 @@ public class MainActivity extends Activity {
 		}
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (asyncTask != null) {
+			// Preserve memory
+			asyncTask.updateActivity(null, null);
+		}
+	}
+
 	public void setReleases(List<Artist> result) {
 		if (releasesListView != null) {
 			releasesListView.setAdapter(new ReleaseListAdapter(this, result));
