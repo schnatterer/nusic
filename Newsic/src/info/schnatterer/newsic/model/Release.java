@@ -10,13 +10,21 @@ import android.graphics.BitmapFactory;
 
 public class Release {
 	private static final int DEFAULT_THUMBNAIL = R.drawable.ic_launcher;
-	
+
 	private Artist artist;
 	private String releaseName;
 	private Date releaseDate;
 	private Date dateCreated;
-	//private ? releaseType;
+	// private ? releaseType;
 	private Bitmap thumbnail = null;
+
+	public Release(Date dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+	public Release() {
+		this(new Date());
+	}
 
 	public Bitmap getThumbnail() {
 		if (thumbnail == null) {
@@ -42,10 +50,6 @@ public class Release {
 		return releaseDate;
 	}
 
-	public void setReleaseDate(Date releaseDate) {
-		this.releaseDate = releaseDate;
-	}
-	
 	public Date getDateCreated() {
 		return dateCreated;
 	}
@@ -107,5 +111,5 @@ public class Release {
 				+ ", releaseDate=" + releaseDate + ", dateCreated="
 				+ dateCreated + ", thumbnail=" + thumbnail + "]";
 	}
-	
+
 }
