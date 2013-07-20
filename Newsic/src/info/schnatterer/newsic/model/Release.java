@@ -21,9 +21,9 @@ public class Release {
 	public Release(Date dateCreated) {
 		this.dateCreated = dateCreated;
 	}
-
+	
 	public Release() {
-		this(new Date());
+			this(new Date());
 	}
 
 	public Bitmap getThumbnail() {
@@ -50,12 +50,12 @@ public class Release {
 		return releaseDate;
 	}
 
-	public Date getDateCreated() {
-		return dateCreated;
+	public void setReleaseDate(Date releaseDate) {
+		this.releaseDate = releaseDate;
 	}
 
-	public void setDateCreated(Date dateCreated) {
-		this.dateCreated = dateCreated;
+	public Date getDateCreated() {
+		return dateCreated;
 	}
 
 	public Artist getArtist() {
