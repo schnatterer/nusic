@@ -3,7 +3,6 @@ package info.schnatterer.newsic.activities;
 import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.R;
 import info.schnatterer.newsic.adapters.ReleaseListAdapter;
-import info.schnatterer.newsic.model.Artist;
 import info.schnatterer.newsic.model.Release;
 import info.schnatterer.newsic.tasks.LoadNewRelasesTask;
 
@@ -33,8 +32,8 @@ public class MainActivity extends Activity {
 			public void onItemClick(AdapterView<?> a, View v, int position,
 					long id) {
 				Object o = releasesListView.getItemAtPosition(position);
-				Artist artist = (Artist) o;
-				Application.toast("Selected :" + " " + artist.getArtistName());
+				Release release = (Release) o;
+				Application.toast("Selected :" + " " + release.getArtistName() + " - " + release.getReleaseName());
 			}
 
 		});
