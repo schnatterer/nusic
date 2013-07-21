@@ -12,6 +12,8 @@ import info.schnatterer.newsic.service.event.ProgressListener;
 import info.schnatterer.newsic.service.event.ProgressUpdater;
 
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -93,14 +95,14 @@ public class ReleasesServiceImpl implements ReleasesService {
 					Log.w(Constants.LOG, t);
 					progressUpdater.progressFailed(artist, artistCount, t,
 							releases);
-					return releases;
+					return sortReleasesByDate(releases);
 				}
 
 				progressUpdater.progress(artist, artistCount++,
 						potentialException);
 			}
 			progressUpdater.progressFinished(releases);
-			return releases;
+			return sortReleasesByDate(releases);
 			// } catch (ServiceException e) {
 		} catch (Throwable t) {
 			Log.w(Constants.LOG, t);
@@ -126,5 +128,20 @@ public class ReleasesServiceImpl implements ReleasesService {
 
 	public List<Artist> getArtists() throws ServiceException {
 		return artistQueryService.getArtists(getContentResolver());
+	}
+
+	/**
+	 * Sorts an instance of a list of releases.
+	 * 
+	 * @param releases
+	 * @return the same instance as <code>releases</code>
+	 */
+	public List<Release> sortReleasesByDate(List<Release> releases) {
+		Collections.sort(releases, Collections.reverseOrder(new Comparator<Release>() {
+			public int compare(Release o1, Release o2) {
+				return o1.getReleaseDate().compareTo(o2.getReleaseDate());
+			}
+		}));
+		return releases;
 	}
 }

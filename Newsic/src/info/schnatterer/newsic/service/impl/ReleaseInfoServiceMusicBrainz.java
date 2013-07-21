@@ -75,15 +75,17 @@ public class ReleaseInfoServiceMusicBrainz implements ReleaseInfoService {
 				// Use only the release with the "oldest" date of a release
 				// group
 				Release existingRelease = releases
-						.get(releaseResult.getTitle());
+						.get(releaseResult.getTitle().trim());
 				Date newDate = releaseResult.getDate();
 				if (existingRelease == null) {
 					Release release = new Release();
 					release.setArtist(artist);
 					release.setReleaseName(releaseResult.getTitle());
 					release.setReleaseDate(newDate);
-					releases.put(releaseResult.getTitle(), release);
+					
+					releases.put(releaseResult.getTitle().trim(), release);
 					artist.getReleases().add(release);
+					// TODO store all release dates and their countries?
 				} else if (existingRelease.getReleaseDate().after(newDate)) {
 					// Change date of existing release
 					existingRelease.setReleaseDate(newDate);
