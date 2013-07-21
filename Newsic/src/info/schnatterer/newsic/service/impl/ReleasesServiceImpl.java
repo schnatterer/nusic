@@ -27,8 +27,8 @@ public class ReleasesServiceImpl implements ReleasesService {
 	private ReleaseInfoService releaseInfoService = new ReleaseInfoServiceMusicBrainz();
 	private ArtistQueryService artistQueryService = new ArtistQueryServiceImpl();
 
-	private Set<ProgressListener<Artist, List<Artist>>> listenerList = new HashSet<ProgressListener<Artist, List<Artist>>>();
-	private ProgressUpdater<Artist, List<Artist>> progressUpdater = new ProgressUpdater<Artist, List<Artist>>(
+	private Set<ProgressListener<Artist, List<Release>>> listenerList = new HashSet<ProgressListener<Artist, List<Release>>>();
+	private ProgressUpdater<Artist, List<Release>> progressUpdater = new ProgressUpdater<Artist, List<Release>>(
 			listenerList) {
 	};
 
@@ -48,8 +48,8 @@ public class ReleasesServiceImpl implements ReleasesService {
 	 * info.schnatterer.testapp.service.impl.ReleasesService#getNewestReleases()
 	 */
 	@Override
-	public List<Artist> getNewestReleases() {
-		return addNewestReleases(new LinkedList<Artist>());
+	public List<Release> getNewestReleases() {
+		return addNewestReleases(new LinkedList<Release>());
 	}
 
 	/*
@@ -59,7 +59,7 @@ public class ReleasesServiceImpl implements ReleasesService {
 	 * (java.util.List)
 	 */
 	@Override
-	public List<Artist> addNewestReleases(List<Artist> artistsWithReleases) {
+	public List<Release> addNewestReleases(List<Release> releases) {
 		List<Artist> artists;
 		try {
 			artists = getArtists();
@@ -79,7 +79,7 @@ public class ReleasesServiceImpl implements ReleasesService {
 							.getReleases();
 					if (artistReleases.size() > 0) {
 						artist.setReleases(artistReleases);
-						artistsWithReleases.add(artist);
+						releases.addAll(artistReleases);
 					}
 					// TODO query images from lastfm
 					// de.umass.lastfm.Artist artistInfo =
@@ -92,20 +92,20 @@ public class ReleasesServiceImpl implements ReleasesService {
 				} catch (Throwable t) {
 					Log.w(Constants.LOG, t);
 					progressUpdater.progressFailed(artist, artistCount, t,
-							artistsWithReleases);
-					return artistsWithReleases;
+							releases);
+					return releases;
 				}
 
 				progressUpdater.progress(artist, artistCount++,
 						potentialException);
 			}
-			progressUpdater.progressFinished(artistsWithReleases);
-			return artistsWithReleases;
+			progressUpdater.progressFinished(releases);
+			return releases;
 			// } catch (ServiceException e) {
 		} catch (Throwable t) {
 			Log.w(Constants.LOG, t);
-			progressUpdater.progressFailed(null, 0, t, artistsWithReleases);
-			return new LinkedList<Artist>();
+			progressUpdater.progressFailed(null, 0, t, releases);
+			return new LinkedList<Release>();
 		}
 	}
 

@@ -5,6 +5,7 @@ import info.schnatterer.newsic.Constants;
 import info.schnatterer.newsic.R;
 import info.schnatterer.newsic.adapters.ReleaseListAdapter;
 import info.schnatterer.newsic.model.Artist;
+import info.schnatterer.newsic.model.Release;
 import info.schnatterer.newsic.service.ReleasesService;
 import info.schnatterer.newsic.service.ServiceException;
 import info.schnatterer.newsic.service.event.ArtistProgressListener;
@@ -27,13 +28,13 @@ import android.widget.ListView;
  * @author schnatterer
  * 
  */
-public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Artist>>
+public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 		implements ArtistProgressListener {
 	private ReleasesService releasesService;
 
 	private ProgressDialog progressDialog;
 	private boolean isExecuting = false;
-	private List<Artist> result = null;
+	private List<Release> result = null;
 
 	private Activity activity;
 	private ListView resultView;
@@ -54,7 +55,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Artist>>
 	}
 
 	@Override
-	protected List<Artist> doInBackground(Void... arg0) {
+	protected List<Release> doInBackground(Void... arg0) {
 		// Do it
 		return releasesService.getNewestReleases();
 	}
@@ -101,7 +102,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Artist>>
 			case PROGRESS_FINISHED:
 				progressDialog.dismiss();
 				progressDialog = null;
-				setResult((List<Artist>) objects[1]);
+				setResult((List<Release>) objects[1]);
 				if (errorArtists.size() > 0) {
 					Application.toast(
 							R.string.LoadNewReleasesTask_finishedWithErrors,
@@ -111,7 +112,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Artist>>
 			case PROGRESS_FAILED: {
 				progressDialog.dismiss();
 				progressDialog = null;
-				setResult((List<Artist>) objects[2]);
+				setResult((List<Release>) objects[2]);
 				ProgressUpdate progress = (ProgressUpdate) objects[1];
 				Throwable potentialException = progress.getPotentialException();
 				if (potentialException != null) {
@@ -140,7 +141,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Artist>>
 		}
 	}
 
-	private void setResult(List<Artist> result) {
+	private void setResult(List<Release> result) {
 		this.result = result;
 		if (resultView != null && activity != null) {
 			// Display result
@@ -149,7 +150,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Artist>>
 	}
 
 	@Override
-	protected void onPostExecute(List<Artist> result) {
+	protected void onPostExecute(List<Release> result) {
 		this.result = result;
 		isExecuting = false;
 		releasesService.removeArtistProcessedListener(this);
@@ -168,7 +169,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Artist>>
 		}
 	}
 
-	public List<Artist> getResult() {
+	public List<Release> getResult() {
 		return result;
 	}
 
@@ -216,13 +217,13 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Artist>>
 	}
 
 	@Override
-	public void onProgressFinished(List<Artist> result) {
+	public void onProgressFinished(List<Release> result) {
 		publishProgress(ProgressUpdateOperation.PROGRESS_FINISHED, result);
 	}
 
 	@Override
 	public void onProgressFailed(Artist entity, int progress, int max,
-			List<Artist> resultOnFailure, Throwable potentialException) {
+			List<Release> resultOnFailure, Throwable potentialException) {
 		publishProgress(ProgressUpdateOperation.PROGRESS_FINISHED,
 				new ProgressUpdate(entity, progress, max, potentialException),
 				resultOnFailure);

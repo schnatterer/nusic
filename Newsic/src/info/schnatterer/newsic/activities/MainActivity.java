@@ -4,6 +4,7 @@ import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.R;
 import info.schnatterer.newsic.adapters.ReleaseListAdapter;
 import info.schnatterer.newsic.model.Artist;
+import info.schnatterer.newsic.model.Release;
 import info.schnatterer.newsic.tasks.LoadNewRelasesTask;
 
 import java.util.List;
@@ -16,9 +17,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 public class MainActivity extends Activity {
-	// private LoadNewRelasesTask loadNewRelasesTask = null;
-	// private List<Artist> releases = new LinkedList<Artist>();
-
 	private static LoadNewRelasesTask asyncTask = null;
 
 	private ListView releasesListView;
@@ -68,7 +66,7 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	public void setReleases(List<Artist> result) {
+	public void setReleases(List<Release> result) {
 		if (releasesListView != null) {
 			releasesListView.setAdapter(new ReleaseListAdapter(this, result));
 		}

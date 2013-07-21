@@ -1,7 +1,6 @@
 package info.schnatterer.newsic.adapters;
 
 import info.schnatterer.newsic.R;
-import info.schnatterer.newsic.model.Artist;
 import info.schnatterer.newsic.model.Release;
 
 import java.util.Date;
@@ -18,10 +17,10 @@ import android.widget.TextView;
 
 public class ReleaseListAdapter extends BaseAdapter {
 	private Context context;
-	private List<Artist> listData;
+	private List<Release> listData;
 	private static LayoutInflater layoutInflater = null;
 
-	public ReleaseListAdapter(Context context, List<Artist> listData) {
+	public ReleaseListAdapter(Context context, List<Release> listData) {
 		this.listData = listData;
 		this.context = context;
 		layoutInflater = LayoutInflater.from(context);
@@ -55,7 +54,7 @@ public class ReleaseListAdapter extends BaseAdapter {
 		ImageView thumbnailView = (ImageView) convertView
 				.findViewById(R.id.releaseListRowThumbnail);
 
-		Release release = listData.get(position).getNewestRelease();
+		Release release = listData.get(position);
 		if (release == null) {
 			artistView.setText(listData.get(position).getArtistName());
 			return convertView;

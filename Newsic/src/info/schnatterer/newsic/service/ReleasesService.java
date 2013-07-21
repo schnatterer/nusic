@@ -1,20 +1,22 @@
 package info.schnatterer.newsic.service;
 
 import info.schnatterer.newsic.model.Artist;
+import info.schnatterer.newsic.model.Release;
 import info.schnatterer.newsic.service.event.ArtistProgressListener;
 
 import java.util.List;
 
 public interface ReleasesService {
 
-	List<Artist> getNewestReleases();
+	List<Release> getNewestReleases();
 
 	/**
-	 * @param artists
+	 * @param releases
 	 * @throws ServiceException
 	 * @throws {@link NullPointerException} when artist is <code>null</code>
+	 *         @return
 	 */
-	List<Artist> addNewestReleases(List<Artist> artists);
+	List<Release> addNewestReleases(List<Release> releases);
 
 	/**
 	 * Adds an {@link ArtistProgressListener} to the Service. This is called
