@@ -17,6 +17,14 @@ public class Release {
 	private Date dateCreated;
 	//private ? releaseType;
 	private Bitmap thumbnail = null;
+	
+	public Release() {
+		this(new Date());
+	}
+
+	public Release(Date dateCreated) {
+		setDateCreated(dateCreated);
+	}
 
 	public Bitmap getThumbnail() {
 		if (thumbnail == null) {

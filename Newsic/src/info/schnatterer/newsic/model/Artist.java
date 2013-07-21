@@ -12,7 +12,15 @@ public class Artist {
 	private String artistName;
 	private List<Release> releases = new LinkedList<Release>();
 	private Date dateCreated;
-	
+
+	public Artist() {
+		this(new Date());
+	}
+
+	public Artist(Date dateCreated) {
+		setDateCreated(dateCreated);
+	}
+
 	public List<Release> getReleases() {
 		return releases;
 	}
@@ -35,7 +43,7 @@ public class Artist {
 		}
 		return null;
 	}
-	
+
 	public long getId() {
 		return id;
 	}
@@ -43,7 +51,6 @@ public class Artist {
 	public void setId(long l) {
 		this.id = l;
 	}
-	
 
 	public Date getDateCreated() {
 		return dateCreated;
