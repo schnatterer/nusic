@@ -79,7 +79,7 @@ public class ReleaseInfoServiceMusicBrainz implements ReleaseInfoService {
 				Date newDate = releaseResult.getDate();
 				if (existingRelease == null) {
 					Release release = new Release();
-					release.setArtistName(artistName);
+					release.setArtist(artist);
 					release.setReleaseName(releaseResult.getTitle());
 					release.setReleaseDate(newDate);
 					releases.put(releaseResult.getTitle(), release);

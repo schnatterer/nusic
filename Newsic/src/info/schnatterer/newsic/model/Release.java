@@ -11,7 +11,7 @@ import android.graphics.BitmapFactory;
 public class Release {
 	private static final int DEFAULT_THUMBNAIL = R.drawable.ic_launcher;
 	
-	private String artistName;
+	private Artist artist;
 	private String releaseName;
 	private Date releaseDate;
 	private Date dateCreated;
@@ -31,11 +31,15 @@ public class Release {
 	}
 
 	public String getArtistName() {
-		return artistName;
+		return artist.getArtistName();
+	}
+	
+	public Artist getArtist() {
+		return artist;
 	}
 
-	public void setArtistName(String artistName) {
-		this.artistName = artistName;
+	public void setArtist(Artist artist) {
+		this.artist = artist;
 	}
 
 	public String getReleaseName() {
@@ -59,7 +63,7 @@ public class Release {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((artistName == null) ? 0 : artistName.hashCode());
+				+ ((artist == null) ? 0 : artist.hashCode());
 		result = prime * result
 				+ ((releaseName == null) ? 0 : releaseName.hashCode());
 		result = prime * result
@@ -76,10 +80,10 @@ public class Release {
 		if (getClass() != obj.getClass())
 			return false;
 		Release other = (Release) obj;
-		if (artistName == null) {
-			if (other.artistName != null)
+		if (artist == null) {
+			if (other.artist != null)
 				return false;
-		} else if (!artistName.equals(other.artistName))
+		} else if (!artist.equals(other.artist))
 			return false;
 		if (releaseName == null) {
 			if (other.releaseName != null)
@@ -104,7 +108,7 @@ public class Release {
 
 	@Override
 	public String toString() {
-		return "Release [artistName=" + artistName + ", releaseName="
+		return "Release [artistName=" + artist + ", releaseName="
 				+ releaseName + ", releaseDate=" + releaseDate
 				+ ", dateCreated=" + dateCreated + ", thumbnail=" + thumbnail
 				+ "]";
