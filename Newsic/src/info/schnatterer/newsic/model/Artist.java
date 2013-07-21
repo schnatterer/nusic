@@ -13,6 +13,10 @@ public class Artist {
 	private List<Release> releases = new LinkedList<Release>();
 	private Date dateCreated;
 
+	/**
+	 * Creates a {@link Artist} with the current timestamp as
+	 * {@link #getDateCreated()} .
+	 */
 	public Artist() {
 		this(new Date());
 	}

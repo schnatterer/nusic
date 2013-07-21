@@ -10,14 +10,18 @@ import android.graphics.BitmapFactory;
 
 public class Release {
 	private static final int DEFAULT_THUMBNAIL = R.drawable.ic_launcher;
-	
+
 	private Artist artist;
 	private String releaseName;
 	private Date releaseDate;
 	private Date dateCreated;
-	//private ? releaseType;
+	// private ? releaseType;
 	private Bitmap thumbnail = null;
-	
+
+	/**
+	 * Creates a {@link Release} with the current timestamp as
+	 * {@link #getDateCreated()} .
+	 */
 	public Release() {
 		this(new Date());
 	}
@@ -28,8 +32,8 @@ public class Release {
 
 	public Bitmap getThumbnail() {
 		if (thumbnail == null) {
-			return BitmapFactory.decodeResource(
-					Application.getContext().getResources(), DEFAULT_THUMBNAIL);
+			return BitmapFactory.decodeResource(Application.getContext()
+					.getResources(), DEFAULT_THUMBNAIL);
 		}
 		return thumbnail;
 	}
@@ -41,7 +45,7 @@ public class Release {
 	public String getArtistName() {
 		return artist.getArtistName();
 	}
-	
+
 	public Artist getArtist() {
 		return artist;
 	}
@@ -65,13 +69,12 @@ public class Release {
 	public void setReleaseDate(Date releaseDate) {
 		this.releaseDate = releaseDate;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((artist == null) ? 0 : artist.hashCode());
+		result = prime * result + ((artist == null) ? 0 : artist.hashCode());
 		result = prime * result
 				+ ((releaseName == null) ? 0 : releaseName.hashCode());
 		result = prime * result
@@ -116,9 +119,8 @@ public class Release {
 
 	@Override
 	public String toString() {
-		return "Release [artistName=" + artist + ", releaseName="
-				+ releaseName + ", releaseDate=" + releaseDate
-				+ ", dateCreated=" + dateCreated + ", thumbnail=" + thumbnail
-				+ "]";
+		return "Release [artistName=" + artist + ", releaseName=" + releaseName
+				+ ", releaseDate=" + releaseDate + ", dateCreated="
+				+ dateCreated + ", thumbnail=" + thumbnail + "]";
 	}
 }
