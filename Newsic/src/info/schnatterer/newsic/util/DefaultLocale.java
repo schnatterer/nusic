@@ -9,7 +9,13 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 
-public class DefaultLocale {
+public final class DefaultLocale {
+	public DefaultLocale() {
+		// Don't instantiate
+	}
+
+	public static final Locale DEFAULT_LOCALE = Locale.US;
+
 	// private static Resources resourcesUs = createDefaultResources();
 	//
 	// /**
@@ -57,7 +63,15 @@ public class DefaultLocale {
 		DisplayMetrics metrics = currentResources.getDisplayMetrics();
 		Configuration config = new Configuration(
 				currentResources.getConfiguration());
-		config.locale = Locale.US;
+		config.locale = DEFAULT_LOCALE;
+		/*
+		 * Note: This (temporiarily) changes the devices locale!
+		 * 
+		 * TODO find a better way to get the string in the specific locale
+		 * http:/
+		 * /stackoverflow.com/questions/17771531/android-how-to-get-string-
+		 * in-specific-locale-without-changing-the-current-local
+		 */
 		Resources defaultLocaleResources = new Resources(assets, metrics,
 				config);
 		String string = defaultLocaleResources.getString(resId);
