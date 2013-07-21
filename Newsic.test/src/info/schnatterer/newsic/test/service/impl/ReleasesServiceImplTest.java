@@ -1,7 +1,7 @@
 package info.schnatterer.newsic.test.service.impl;
 
-import info.schnatterer.newsic.model.Artist;
-import info.schnatterer.newsic.model.Release;
+import info.schnatterer.newsic.db.model.Artist;
+import info.schnatterer.newsic.db.model.Release;
 import info.schnatterer.newsic.service.impl.ReleasesServiceImpl;
 
 import java.text.DateFormat;

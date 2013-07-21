@@ -1,4 +1,4 @@
-package info.schnatterer.newsic.model;
+package info.schnatterer.newsic.db.model;
 
 import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.R;

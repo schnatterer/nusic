@@ -1,15 +1,15 @@
-package info.schnatterer.newsic.tasks;
+package info.schnatterer.newsic.ui.tasks;
 
 import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.Constants;
 import info.schnatterer.newsic.R;
-import info.schnatterer.newsic.adapters.ReleaseListAdapter;
-import info.schnatterer.newsic.model.Artist;
-import info.schnatterer.newsic.model.Release;
+import info.schnatterer.newsic.db.model.Artist;
+import info.schnatterer.newsic.db.model.Release;
 import info.schnatterer.newsic.service.ReleasesService;
 import info.schnatterer.newsic.service.ServiceException;
 import info.schnatterer.newsic.service.event.ArtistProgressListener;
 import info.schnatterer.newsic.service.impl.ReleasesServiceImpl;
+import info.schnatterer.newsic.ui.adapters.ReleaseListAdapter;
 
 import java.util.LinkedList;
 import java.util.List;

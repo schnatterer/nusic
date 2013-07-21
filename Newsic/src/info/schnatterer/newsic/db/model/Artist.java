@@ -1,4 +1,4 @@
-package info.schnatterer.newsic.model;
+package info.schnatterer.newsic.db.model;
 
 import java.util.Date;
 import java.util.LinkedList;

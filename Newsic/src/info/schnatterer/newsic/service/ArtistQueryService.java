@@ -1,6 +1,6 @@
 package info.schnatterer.newsic.service;
 
-import info.schnatterer.newsic.model.Artist;
+import info.schnatterer.newsic.db.model.Artist;
 
 import java.util.List;
 

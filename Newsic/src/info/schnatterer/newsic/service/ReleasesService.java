@@ -1,7 +1,7 @@
 package info.schnatterer.newsic.service;
 
-import info.schnatterer.newsic.model.Artist;
-import info.schnatterer.newsic.model.Release;
+import info.schnatterer.newsic.db.model.Artist;
+import info.schnatterer.newsic.db.model.Release;
 import info.schnatterer.newsic.service.event.ArtistProgressListener;
 
 import java.util.List;

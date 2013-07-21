@@ -1,7 +1,7 @@
 package info.schnatterer.newsic.service.impl;
 
 import info.schnatterer.newsic.R;
-import info.schnatterer.newsic.model.Artist;
+import info.schnatterer.newsic.db.model.Artist;
 import info.schnatterer.newsic.service.ArtistQueryService;
 import info.schnatterer.newsic.service.ServiceException;
 

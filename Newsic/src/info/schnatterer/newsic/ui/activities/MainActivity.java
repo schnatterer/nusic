@@ -1,10 +1,10 @@
-package info.schnatterer.newsic.activities;
+package info.schnatterer.newsic.ui.activities;
 
 import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.R;
-import info.schnatterer.newsic.adapters.ReleaseListAdapter;
-import info.schnatterer.newsic.model.Release;
-import info.schnatterer.newsic.tasks.LoadNewRelasesTask;
+import info.schnatterer.newsic.db.model.Release;
+import info.schnatterer.newsic.ui.adapters.ReleaseListAdapter;
+import info.schnatterer.newsic.ui.tasks.LoadNewRelasesTask;
 
 import java.util.List;
 

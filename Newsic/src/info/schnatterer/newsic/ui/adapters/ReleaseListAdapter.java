@@ -1,7 +1,7 @@
-package info.schnatterer.newsic.adapters;
+package info.schnatterer.newsic.ui.adapters;
 
 import info.schnatterer.newsic.R;
-import info.schnatterer.newsic.model.Release;
+import info.schnatterer.newsic.db.model.Release;
 
 import java.util.Date;
 import java.util.List;
