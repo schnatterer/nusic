@@ -119,7 +119,7 @@ public class Release {
 
 	@Override
 	public String toString() {
-		return "Release [artistName=" + artist + ", releaseName=" + releaseName
+		return "Release [artist=" + artist.getArtistName() + ", releaseName=" + releaseName
 				+ ", releaseDate=" + releaseDate + ", dateCreated="
 				+ dateCreated + ", thumbnail=" + thumbnail + "]";
 	}
