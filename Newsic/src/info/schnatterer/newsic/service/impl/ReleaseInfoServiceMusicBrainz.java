@@ -20,7 +20,11 @@ import org.musicbrainz.model.searchresult.ReleaseResultWs2;
 import android.annotation.SuppressLint;
 
 public class ReleaseInfoServiceMusicBrainz implements ReleaseInfoService {
-	private static final String SEARCH_BASE = "primarytype:album";
+	/**
+	 * See http://musicbrainz.org/doc/Development/XML_Web_Service/Version_2#
+	 * Release_Type_and_Status
+	 */
+	private static final String SEARCH_BASE = "type:album";
 	private static final String SEARCH_DATE_1 = " AND date:[";
 	private static final String SEARCH_DATE_2 = " TO ????-??-??]";
 	private static final String SEARCH_ARTIST_1 = " AND artist:\"";
@@ -56,7 +60,8 @@ public class ReleaseInfoServiceMusicBrainz implements ReleaseInfoService {
 			}
 			if (t instanceof MBWS2Exception) {
 				throw new ServiceException(
-						R.string.ReleaseInfoService_errorQueryingMusicBrainz, t, artistName);
+						R.string.ReleaseInfoService_errorQueryingMusicBrainz,
+						t, artistName);
 			}
 			throw new ServiceException(
 					R.string.ReleaseInfoService_errorFindingReleasesArtist, t,
@@ -74,15 +79,15 @@ public class ReleaseInfoServiceMusicBrainz implements ReleaseInfoService {
 					.equals(artistName)) {
 				// Use only the release with the "oldest" date of a release
 				// group
-				Release existingRelease = releases
-						.get(releaseResult.getTitle().trim());
+				Release existingRelease = releases.get(releaseResult.getTitle()
+						.trim());
 				Date newDate = releaseResult.getDate();
 				if (existingRelease == null) {
 					Release release = new Release();
 					release.setArtist(artist);
 					release.setReleaseName(releaseResult.getTitle());
 					release.setReleaseDate(newDate);
-					
+
 					releases.put(releaseResult.getTitle().trim(), release);
 					artist.getReleases().add(release);
 					// TODO store all release dates and their countries?
@@ -94,33 +99,36 @@ public class ReleaseInfoServiceMusicBrainz implements ReleaseInfoService {
 		}
 	}
 
-//	/**
-//	 * Calls MusicBrainz API.
-//	 * 
-//	 * This search walks over the release page by page, returning all releases.
-//	 * It might return different artist with similar name. It also returns
-//	 * different release of the same name (i.e. releases of the same release
-//	 * group in different countries). <b>Note: It is more effective to process
-//	 * the releases page by page</b>
-//	 * 
-//	 * @param searchText
-//	 * @return
-//	 * @throws ServiceException 
-//	 */
-//	protected List<ReleaseResultWs2> findReleases(String searchText) throws ServiceException {
-//		org.musicbrainz.controller.Release releaseSearch = new org.musicbrainz.controller.Release();
-//		releaseSearch.search(searchText);
-//		List<ReleaseResultWs2> releaseResults = null;
-//		try {
-//			releaseResults = releaseSearch.getFullSearchResultList();
-//			// while (releaseSearch.hasMore()) {
-//			// releaseResults.addAll(releaseSearch.getNextSearchResultPage());
-//			// }
-//		} catch (MBWS2Exception e) {
-//			throw new ServiceException(
-//					R.string.ReleaseInfoService_errorQueryingMusicBrainz, e);
-//		}
-//
-//		return releaseResults;
-//	}
+	// /**
+	// * Calls MusicBrainz API.
+	// *
+	// * This search walks over the release page by page, returning all
+	// releases.
+	// * It might return different artist with similar name. It also returns
+	// * different release of the same name (i.e. releases of the same release
+	// * group in different countries). <b>Note: It is more effective to process
+	// * the releases page by page</b>
+	// *
+	// * @param searchText
+	// * @return
+	// * @throws ServiceException
+	// */
+	// protected List<ReleaseResultWs2> findReleases(String searchText) throws
+	// ServiceException {
+	// org.musicbrainz.controller.Release releaseSearch = new
+	// org.musicbrainz.controller.Release();
+	// releaseSearch.search(searchText);
+	// List<ReleaseResultWs2> releaseResults = null;
+	// try {
+	// releaseResults = releaseSearch.getFullSearchResultList();
+	// // while (releaseSearch.hasMore()) {
+	// // releaseResults.addAll(releaseSearch.getNextSearchResultPage());
+	// // }
+	// } catch (MBWS2Exception e) {
+	// throw new ServiceException(
+	// R.string.ReleaseInfoService_errorQueryingMusicBrainz, e);
+	// }
+	//
+	// return releaseResults;
+	// }
 }
