@@ -34,14 +34,16 @@ public class ReleaseInfoServiceMusicBrainz implements ReleaseInfoService {
 	private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	@Override
-	public Artist findReleases(String artistName, Date fromDate)
+	public Artist findReleases(Artist artist, Date fromDate)
 			throws ServiceException {
-		Artist artist = new Artist();
-		artist.setArtistName(artistName);
+		if (artist == null || artist.getArtistName() == null) {
+			return null;
+		}
+		String artistName = artist.getArtistName();
 		Map<String, Release> releases = new HashMap<String, Release>();
 		try {
 			// List<ReleaseResultWs2> releaseResults = findReleases();
-			org.musicbrainz.controller.Release releaseSearch = new org.musicbrainz.controller.Release();
+			org.musicbrainz.controller.Release releaseSearch = createReleaseSearch();
 			releaseSearch.search(new StringBuffer(SEARCH_BASE)
 					.append(SEARCH_DATE_1).append(dateFormat.format(fromDate))
 					.append(SEARCH_DATE_2).append(SEARCH_ARTIST_1)
@@ -50,19 +52,17 @@ public class ReleaseInfoServiceMusicBrainz implements ReleaseInfoService {
 					releaseSearch.getFirstSearchResultPage());
 
 			while (releaseSearch.hasMore()) {
-				// TODO check if internet connection still there
+				// TODO check if internet connection still there?
 				processReleaseResults(artistName, artist, releases,
 						releaseSearch.getNextSearchResultPage());
 			}
+		} catch (MBWS2Exception mBWS2Exception) {
+			throw new ServiceException(
+					R.string.ReleaseInfoService_errorQueryingMusicBrainz,
+					mBWS2Exception, artistName);
+		} catch (SecurityException securityException) {
+			throw securityException;
 		} catch (Throwable t) {
-			if (t instanceof SecurityException) {
-				throw (SecurityException) t;
-			}
-			if (t instanceof MBWS2Exception) {
-				throw new ServiceException(
-						R.string.ReleaseInfoService_errorQueryingMusicBrainz,
-						t, artistName);
-			}
 			throw new ServiceException(
 					R.string.ReleaseInfoService_errorFindingReleasesArtist, t,
 					artistName);
@@ -70,7 +70,11 @@ public class ReleaseInfoServiceMusicBrainz implements ReleaseInfoService {
 		return artist;
 	}
 
-	private void processReleaseResults(String artistName, Artist artist,
+	protected org.musicbrainz.controller.Release createReleaseSearch() {
+		return new org.musicbrainz.controller.Release();
+	}
+
+	protected void processReleaseResults(String artistName, Artist artist,
 			Map<String, Release> releases, List<ReleaseResultWs2> releaseResults) {
 		for (ReleaseResultWs2 releaseResultWs2 : releaseResults) {
 			// Make sure not to add other artists albums
@@ -87,6 +91,7 @@ public class ReleaseInfoServiceMusicBrainz implements ReleaseInfoService {
 					release.setArtist(artist);
 					release.setReleaseName(releaseResult.getTitle());
 					release.setReleaseDate(newDate);
+					release.setMusicBrainzId(releaseResult.getId());
 
 					releases.put(releaseResult.getTitle().trim(), release);
 					artist.getReleases().add(release);
@@ -97,6 +102,7 @@ public class ReleaseInfoServiceMusicBrainz implements ReleaseInfoService {
 				}
 			}
 		}
+
 	}
 
 	// /**

@@ -121,9 +121,8 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 								.getLocalizedMessage());
 					} else {
 						Application
-								.toast(R.string.ArtistQueryService_errorQueryingArtists
-										+ potentialException
-												.getLocalizedMessage());
+								.toast(Application.getContext().getString(R.string.LoadNewReleasesTask_errorFindingReleases) 
+										+ potentialException.getClass().getSimpleName());
 					}
 				}
 			}
@@ -136,7 +135,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 			}
 		} catch (ClassCastException e) {
 			Log.w(Constants.LOG,
-					"Can't update progressDialog. Unexpected type/order of arguments");
+					"Can't update progressDialog. Unexpected type/order of arguments", e);
 			return;
 		}
 	}
@@ -224,7 +223,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 	@Override
 	public void onProgressFailed(Artist entity, int progress, int max,
 			List<Release> resultOnFailure, Throwable potentialException) {
-		publishProgress(ProgressUpdateOperation.PROGRESS_FINISHED,
+		publishProgress(ProgressUpdateOperation.PROGRESS_FAILED,
 				new ProgressUpdate(entity, progress, max, potentialException),
 				resultOnFailure);
 	}

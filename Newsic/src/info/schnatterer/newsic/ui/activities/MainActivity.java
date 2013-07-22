@@ -3,6 +3,8 @@ package info.schnatterer.newsic.ui.activities;
 import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.R;
 import info.schnatterer.newsic.db.model.Release;
+import info.schnatterer.newsic.service.PreferencesService.AppStart;
+import info.schnatterer.newsic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.newsic.ui.adapters.ReleaseListAdapter;
 import info.schnatterer.newsic.ui.tasks.LoadNewRelasesTask;
 
@@ -33,11 +35,25 @@ public class MainActivity extends Activity {
 					long id) {
 				Object o = releasesListView.getItemAtPosition(position);
 				Release release = (Release) o;
-				Application.toast("Selected :" + " " + release.getArtistName() + " - " + release.getReleaseName());
+				Application.toast("Selected :" + " " + release.getArtistName()
+						+ " - " + release.getReleaseName());
 			}
 
 		});
+		
+		AppStart appStart = PreferencesServiceSharedPreferences.getInstance()
+				.checkAppStart();
+		switch (appStart) {
+		// case FIRST_TIME_VERSION:
+		// break;
+		case FIRST_TIME:
+			firstAppStartEver();
+		default:
+			break;
+		}
+	}
 
+	private void firstAppStartEver() {
 		if (Application.isOnline()) {
 			if (asyncTask == null) {
 				// Async task not started yet

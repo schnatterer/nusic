@@ -9,14 +9,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 public class Release {
-	private static final int DEFAULT_THUMBNAIL = R.drawable.ic_launcher;
+	private static final int DEFAULT_ARTWORK = R.drawable.ic_launcher;
+
+	private Long id;
+	private String musicBrainzId;
 
 	private Artist artist;
 	private String releaseName;
 	private Date releaseDate;
 	private Date dateCreated;
 	// private ? releaseType;
-	private Bitmap thumbnail = null;
+	private Bitmap artwork = null;
+	private String artworkPath = null;
 
 	/**
 	 * Creates a {@link Release} with the current timestamp as
@@ -30,16 +34,24 @@ public class Release {
 		setDateCreated(dateCreated);
 	}
 
-	public Bitmap getThumbnail() {
-		if (thumbnail == null) {
+	public Bitmap getArtwork() {
+		if (artwork == null) {
 			return BitmapFactory.decodeResource(Application.getContext()
-					.getResources(), DEFAULT_THUMBNAIL);
+					.getResources(), DEFAULT_ARTWORK);
 		}
-		return thumbnail;
+		return artwork;
+	}
+	
+	public void setArtwork(Bitmap artwork) {
+		this.artwork = artwork;
 	}
 
-	public void setThumbnail(Bitmap thumbnail) {
-		this.thumbnail = thumbnail;
+	public String getArtworkPath() {
+		return artworkPath;
+	}
+
+	public void setArtworkPath(String artworkPath) {
+		this.artworkPath = artworkPath;
 	}
 
 	public String getArtistName() {
@@ -119,8 +131,25 @@ public class Release {
 
 	@Override
 	public String toString() {
-		return "Release [artist=" + artist.getArtistName() + ", releaseName=" + releaseName
-				+ ", releaseDate=" + releaseDate + ", dateCreated="
-				+ dateCreated + ", thumbnail=" + thumbnail + "]";
+		return "Release [artist=" + artist.getArtistName() + ", releaseName="
+				+ releaseName + ", releaseDate=" + releaseDate
+				+ ", dateCreated=" + dateCreated + ", thumbnail=" + artwork
+				+ "]";
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getMusicBrainzId() {
+		return musicBrainzId;
+	}
+
+	public void setMusicBrainzId(String musicBrainzId) {
+		this.musicBrainzId = musicBrainzId;
 	}
 }

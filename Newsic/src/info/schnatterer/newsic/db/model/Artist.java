@@ -5,7 +5,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Artist {
-	private long id;
+	private Long id;
+	private Long androidAudioArtistId;
+	//private String musicBrainzId;
 	/**
 	 * Artist name from android db
 	 */
@@ -48,11 +50,11 @@ public class Artist {
 		return null;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long l) {
+	public void setId(Long l) {
 		this.id = l;
 	}
 
@@ -91,5 +93,21 @@ public class Artist {
 		if (id != other.id)
 			return false;
 		return true;
+	}
+
+//	public String getMusicBrainzId() {
+//		return musicBrainzId;
+//	}
+//
+//	public void setMusicBrainzId(String musicBrainzId) {
+//		this.musicBrainzId = musicBrainzId;
+//	}
+
+	public Long getAndroidAudioArtistId() {
+		return androidAudioArtistId;
+	}
+
+	public void setAndroidAudioArtistId(Long androidAudioArtistId) {
+		this.androidAudioArtistId = androidAudioArtistId;
 	}
 }

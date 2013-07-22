@@ -1,6 +1,10 @@
 package info.schnatterer.newsic.service.impl;
 
 import info.schnatterer.newsic.Constants;
+import info.schnatterer.newsic.R;
+import info.schnatterer.newsic.db.DatabaseException;
+import info.schnatterer.newsic.db.dao.ArtistDao;
+import info.schnatterer.newsic.db.dao.impl.ArtistDaoSqlite;
 import info.schnatterer.newsic.db.model.Artist;
 import info.schnatterer.newsic.db.model.Release;
 import info.schnatterer.newsic.service.ArtistQueryService;
@@ -29,6 +33,8 @@ public class ReleasesServiceImpl implements ReleasesService {
 	private ReleaseInfoService releaseInfoService = new ReleaseInfoServiceMusicBrainz();
 	private ArtistQueryService artistQueryService = new ArtistQueryServiceImpl();
 
+	private ArtistDao artistDao = null;
+
 	private Set<ProgressListener<Artist, List<Release>>> listenerList = new HashSet<ProgressListener<Artist, List<Release>>>();
 	private ProgressUpdater<Artist, List<Release>> progressUpdater = new ProgressUpdater<Artist, List<Release>>(
 			listenerList) {
@@ -38,7 +44,11 @@ public class ReleasesServiceImpl implements ReleasesService {
 
 	public ReleasesServiceImpl(Context context) {
 		this.context = context;
+		if (context != null) {
+			this.artistDao = new ArtistDaoSqlite(context);
+		}
 		Calendar cal = Calendar.getInstance();
+		// TODO extract number of months to PreferenceService
 		cal.add(Calendar.MONTH, -6);
 		fromDate = cal.getTime();
 	}
@@ -77,11 +87,12 @@ public class ReleasesServiceImpl implements ReleasesService {
 				ServiceException potentialException = null;
 				try {
 					List<Release> artistReleases = releaseInfoService
-							.findReleases(artist.getArtistName(), fromDate)
-							.getReleases();
+							.findReleases(artist, fromDate).getReleases();
 					if (artistReleases.size() > 0) {
 						artist.setReleases(artistReleases);
 						releases.addAll(artistReleases);
+						// TODO find which releases are new to the device
+						artistDao.saveOrUpdate(artist);
 					}
 					// TODO query images from lastfm
 					// de.umass.lastfm.Artist artistInfo =
@@ -91,6 +102,17 @@ public class ReleasesServiceImpl implements ReleasesService {
 					Log.w(Constants.LOG, e.getMessage(), e.getCause());
 					// Allow for displaying errors to the user.
 					potentialException = e;
+				} catch (DatabaseException databaseException) {
+					Log.w(Constants.LOG, databaseException.getMessage(),
+							databaseException.getCause());
+					progressUpdater
+							.progressFailed(
+									artist,
+									artistCount,
+									new ServiceException(
+											R.string.ReleasesService_errorPersistingData,
+											databaseException), releases);
+					return sortReleasesByDate(releases);
 				} catch (Throwable t) {
 					Log.w(Constants.LOG, t);
 					progressUpdater.progressFailed(artist, artistCount, t,
@@ -137,11 +159,13 @@ public class ReleasesServiceImpl implements ReleasesService {
 	 * @return the same instance as <code>releases</code>
 	 */
 	public List<Release> sortReleasesByDate(List<Release> releases) {
-		Collections.sort(releases, Collections.reverseOrder(new Comparator<Release>() {
-			public int compare(Release o1, Release o2) {
-				return o1.getReleaseDate().compareTo(o2.getReleaseDate());
-			}
-		}));
+		Collections.sort(releases,
+				Collections.reverseOrder(new Comparator<Release>() {
+					public int compare(Release o1, Release o2) {
+						return o1.getReleaseDate().compareTo(
+								o2.getReleaseDate());
+					}
+				}));
 		return releases;
 	}
 }

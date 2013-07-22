@@ -44,7 +44,9 @@ public class ReleaseInfoServiceMusicBrainzTest extends TestCase {
 		mockedReleases.add(createRelease("b", "X", "2013-07-14"));
 		releaseInfoService.setMockedReleases(mockedReleases);
 
-		Artist artist = releaseInfoService.findReleases(expectedArtistName,
+		Artist artist = new Artist();
+		artist.setArtistName(expectedArtistName);
+		artist = releaseInfoService.findReleases(artist,
 				expectedFromDate);
 		assertTrue("Query unexpected", releaseInfoService.getLastSearchText()
 				.contains(expectedFromDateStr));

@@ -39,7 +39,7 @@ public class ArtistQueryServiceImpl implements ArtistQueryService {
 					null, ARTIST_SORT_ORDER);
 			while (cursor.moveToNext()) {
 				Artist artist = new Artist();
-				artist.setId(cursor.getLong(ArtistProjection.ID.getIndex()));
+				artist.setAndroidAudioArtistId(cursor.getLong(ArtistProjection.ID.getIndex()));
 				artist.setArtistName(cursor.getString(ArtistProjection.ARTIST
 						.getIndex()));
 				artists.add(artist);

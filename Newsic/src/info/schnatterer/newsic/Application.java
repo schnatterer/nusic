@@ -50,6 +50,7 @@ public class Application extends android.app.Application {
 		final NetworkInfo mbobileNetwork = connectivityManager
 				.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 		if (mbobileNetwork != null) {
+			// TODO get onlyOnWifi from PreferenceService
 			// if (!onlyOnWifi) {
 			state = mbobileNetwork.isConnectedOrConnecting();
 			// }
