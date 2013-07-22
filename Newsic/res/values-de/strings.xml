@@ -13,8 +13,8 @@
     
     <string name="ArtistQueryService_errorQueryingArtists">Fehler beim Abfragen der Interpreten vom Gerät</string>
     <string name="ReleasesService_errorPersistingData">Fehler beim Speichern der Daten auf dem Gerät</string>
-    <string name="ReleaseInfoService_errorFindingReleasesArtist">Fehler beim Finden von Alben für Interpret %1$s</string>
-    <string name="ReleaseInfoService_errorQueryingMusicBrainz">Fehler beim Abfrage des Interpreten %1$s bei MusicBrainz. Keine Verbindung zum Internet?</string>
+    <string name="QueryMusicMetadataService_errorFindingReleasesArtist">Fehler beim Finden von Alben für Interpret %1$s</string>
+    <string name="QueryMusicMetadataService_errorQueryingMusicBrainz">Fehler beim Abfrage des Interpreten %1$s bei MusicBrainz. Keine Verbindung zum Internet?</string>
     <string name="LoadNewReleasesTask_errorFindingReleases">Fehler beim Finden von Alben: </string>
     <string name="LoadNewReleasesTask_finishedWithErrors">Alben für %1$d Interpreten erfolgreich aktualisiert, Fehler bei %2$d</string>
 

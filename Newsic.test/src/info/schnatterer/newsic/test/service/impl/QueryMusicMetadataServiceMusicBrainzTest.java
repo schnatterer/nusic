@@ -18,11 +18,11 @@ import org.musicbrainz.model.entity.ReleaseWs2;
 
 import android.annotation.SuppressLint;
 
-public class ReleaseInfoServiceMusicBrainzTest extends TestCase {
+public class QueryMusicMetadataServiceMusicBrainzTest extends TestCase {
 	@SuppressLint("SimpleDateFormat")
 	private final DateFormat dateFormat = new SimpleDateFormat(
 			"yyyy-MM-dd");
-	private ReleaseInfoServiceMusicBrainzMock releaseInfoService = new ReleaseInfoServiceMusicBrainzMock();
+	private QueryMusicMetadataServiceMusicBrainzMock QueryMusicMetadataService = new QueryMusicMetadataServiceMusicBrainzMock();
 
 	private final String expectedFromDateStr = "2013-01-01";
 	private Date expectedFromDate = null;
@@ -42,15 +42,15 @@ public class ReleaseInfoServiceMusicBrainzTest extends TestCase {
 		mockedReleases.add(createRelease(expectedArtistName, "I",
 				expectedReleaseDateStr));
 		mockedReleases.add(createRelease("b", "X", "2013-07-14"));
-		releaseInfoService.setMockedReleases(mockedReleases);
+		QueryMusicMetadataService.setMockedReleases(mockedReleases);
 
 		Artist artist = new Artist();
 		artist.setArtistName(expectedArtistName);
-		artist = releaseInfoService.findReleases(artist,
+		artist = QueryMusicMetadataService.findReleases(artist,
 				expectedFromDate);
-		assertTrue("Query unexpected", releaseInfoService.getLastSearchText()
+		assertTrue("Query unexpected", QueryMusicMetadataService.getLastSearchText()
 				.contains(expectedFromDateStr));
-		assertTrue("Query unexpected", releaseInfoService.getLastSearchText()
+		assertTrue("Query unexpected", QueryMusicMetadataService.getLastSearchText()
 				.contains(expectedArtistName));
 
 		assertEquals("Returned wrong number of releases", 1, artist

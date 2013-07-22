@@ -8,7 +8,7 @@ import info.schnatterer.newsic.db.dao.impl.ArtistDaoSqlite;
 import info.schnatterer.newsic.db.model.Artist;
 import info.schnatterer.newsic.db.model.Release;
 import info.schnatterer.newsic.service.ArtistQueryService;
-import info.schnatterer.newsic.service.ReleaseInfoService;
+import info.schnatterer.newsic.service.QueryMusicMetadataService;
 import info.schnatterer.newsic.service.ReleasesService;
 import info.schnatterer.newsic.service.ServiceException;
 import info.schnatterer.newsic.service.event.ArtistProgressListener;
@@ -30,7 +30,7 @@ import android.util.Log;
 
 public class ReleasesServiceImpl implements ReleasesService {
 	private Context context;
-	private ReleaseInfoService releaseInfoService = new ReleaseInfoServiceMusicBrainz();
+	private QueryMusicMetadataService QueryMusicMetadataService = new QueryMusicMetadataServiceMusicBrainz();
 	private ArtistQueryService artistQueryService = new ArtistQueryServiceImpl();
 
 	private ArtistDao artistDao = null;
@@ -86,7 +86,7 @@ public class ReleasesServiceImpl implements ReleasesService {
 				 */
 				ServiceException potentialException = null;
 				try {
-					List<Release> artistReleases = releaseInfoService
+					List<Release> artistReleases = QueryMusicMetadataService
 							.findReleases(artist, fromDate).getReleases();
 					if (artistReleases.size() > 0) {
 						artist.setReleases(artistReleases);

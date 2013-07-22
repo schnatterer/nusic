@@ -1,6 +1,6 @@
 package info.schnatterer.newsic.test.service.impl;
 
-import info.schnatterer.newsic.service.impl.ReleaseInfoServiceMusicBrainz;
+import info.schnatterer.newsic.service.impl.QueryMusicMetadataServiceMusicBrainz;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -9,8 +9,8 @@ import org.musicbrainz.MBWS2Exception;
 import org.musicbrainz.model.entity.ReleaseWs2;
 import org.musicbrainz.model.searchresult.ReleaseResultWs2;
 
-public class ReleaseInfoServiceMusicBrainzMock extends
-		ReleaseInfoServiceMusicBrainz {
+public class QueryMusicMetadataServiceMusicBrainzMock extends
+		QueryMusicMetadataServiceMusicBrainz {
 	private String lastSearchText;
 	private List<ReleaseWs2> mockedReleases;
 

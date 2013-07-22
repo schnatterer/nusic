@@ -3,7 +3,7 @@ package info.schnatterer.newsic.service.impl;
 import info.schnatterer.newsic.R;
 import info.schnatterer.newsic.db.model.Artist;
 import info.schnatterer.newsic.db.model.Release;
-import info.schnatterer.newsic.service.ReleaseInfoService;
+import info.schnatterer.newsic.service.QueryMusicMetadataService;
 import info.schnatterer.newsic.service.ServiceException;
 
 import java.text.DateFormat;
@@ -19,7 +19,7 @@ import org.musicbrainz.model.searchresult.ReleaseResultWs2;
 
 import android.annotation.SuppressLint;
 
-public class ReleaseInfoServiceMusicBrainz implements ReleaseInfoService {
+public class QueryMusicMetadataServiceMusicBrainz implements QueryMusicMetadataService {
 	/**
 	 * See http://musicbrainz.org/doc/Development/XML_Web_Service/Version_2#
 	 * Release_Type_and_Status
@@ -58,13 +58,13 @@ public class ReleaseInfoServiceMusicBrainz implements ReleaseInfoService {
 			}
 		} catch (MBWS2Exception mBWS2Exception) {
 			throw new ServiceException(
-					R.string.ReleaseInfoService_errorQueryingMusicBrainz,
+					R.string.QueryMusicMetadataService_errorQueryingMusicBrainz,
 					mBWS2Exception, artistName);
 		} catch (SecurityException securityException) {
 			throw securityException;
 		} catch (Throwable t) {
 			throw new ServiceException(
-					R.string.ReleaseInfoService_errorFindingReleasesArtist, t,
+					R.string.QueryMusicMetadataService_errorFindingReleasesArtist, t,
 					artistName);
 		}
 		return artist;
@@ -132,7 +132,7 @@ public class ReleaseInfoServiceMusicBrainz implements ReleaseInfoService {
 	// // }
 	// } catch (MBWS2Exception e) {
 	// throw new ServiceException(
-	// R.string.ReleaseInfoService_errorQueryingMusicBrainz, e);
+	// R.string.QueryMusicMetadataService_errorQueryingMusicBrainz, e);
 	// }
 	//
 	// return releaseResults;

@@ -4,7 +4,7 @@ import info.schnatterer.newsic.db.model.Artist;
 
 import java.util.Date;
 
-public interface ReleaseInfoService {
+public interface QueryMusicMetadataService {
 
 	Artist findReleases(Artist artist, Date fromDate) throws ServiceException;
 
