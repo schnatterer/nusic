@@ -4,10 +4,10 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Artist {
+public class Artist implements Entity {
 	private Long id;
 	private Long androidAudioArtistId;
-	//private String musicBrainzId;
+	// private String musicBrainzId;
 	/**
 	 * Artist name from android db
 	 */
@@ -95,13 +95,13 @@ public class Artist {
 		return true;
 	}
 
-//	public String getMusicBrainzId() {
-//		return musicBrainzId;
-//	}
-//
-//	public void setMusicBrainzId(String musicBrainzId) {
-//		this.musicBrainzId = musicBrainzId;
-//	}
+	// public String getMusicBrainzId() {
+	// return musicBrainzId;
+	// }
+	//
+	// public void setMusicBrainzId(String musicBrainzId) {
+	// this.musicBrainzId = musicBrainzId;
+	// }
 
 	public Long getAndroidAudioArtistId() {
 		return androidAudioArtistId;

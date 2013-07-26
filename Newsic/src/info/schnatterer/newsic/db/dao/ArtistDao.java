@@ -23,6 +23,6 @@ public interface ArtistDao extends GenericDao<Artist> {
 	 * @return the {@link Artist#getId()} of the artist if the artist exists.
 	 *         Otherwise <code>null</code>.
 	 */
-	Long getByAndroidId(long androidId) throws DatabaseException;
+	Long findByAndroidId(long androidId) throws DatabaseException;
 
 }

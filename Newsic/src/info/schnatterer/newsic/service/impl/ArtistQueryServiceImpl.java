@@ -46,7 +46,7 @@ public class ArtistQueryServiceImpl implements ArtistQueryService {
 			}
 		} catch (Throwable t) {
 			throw new ServiceException(
-					R.string.ArtistQueryService_errorQueryingArtists, t);
+					R.string.ArtistQueryService_errorLoadingArtists, t);
 		} finally {
 			if (cursor != null) {
 				cursor.close();

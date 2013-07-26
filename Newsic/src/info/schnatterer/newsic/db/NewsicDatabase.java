@@ -38,7 +38,7 @@ public class NewsicDatabase extends SQLiteOpenHelper {
 	public static final String TYPE_COLUMN_ARTIST_DATE_CREATED = "INTEGER NOT NULL";
 	public static final int INDEX_COLUMN_ARTIST_DATE_CREATED = 3;
 	// public static final String[] TABLE_COLUMNS_ARTIST = {};
-
+	
 	/* Table Releases */
 	public static final String TABLE_RELEASE = "release";
 
@@ -73,6 +73,12 @@ public class NewsicDatabase extends SQLiteOpenHelper {
 			+ COLUMN_RELEASE_FK_ID_ARTIST
 			+ DATABASE_REFERENCES + TABLE_ARTIST + "(" + COLUMN_ARTIST_ID + ")";
 	public static final int INDEX_COLUMN_RELEASE_FK_ID_ARTIST = 6;
+	
+	public static final String[] TABLE_RELEASE_COLUMNS = { COLUMN_RELEASE_ID,
+	COLUMN_RELEASE_MB_ID, COLUMN_RELEASE_NAME,
+	COLUMN_RELEASE_DATE_RELEASED, COLUMN_RELEASE_DATE_CREATED,
+	COLUMN_RELEASE_ARTWORK_PATH, COLUMN_RELEASE_FK_ID_ARTIST };
+
 
 	public NewsicDatabase(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -144,3 +150,4 @@ public class NewsicDatabase extends SQLiteOpenHelper {
 	// .append(pkColumn).append(")").toString();
 	// }
 }
+

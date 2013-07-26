@@ -8,25 +8,30 @@ import info.schnatterer.newsic.db.model.Artist;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 		ArtistDao {
 
-	private ReleaseDao releaseDao;
+	public static final String COLUMNS_ALL = new StringBuilder(
+			NewsicDatabase.TABLE_ARTIST).append(".")
+			.append(NewsicDatabase.COLUMN_ARTIST_ID).append(",")
+			.append(NewsicDatabase.TABLE_ARTIST).append(".")
+			.append(NewsicDatabase.COLUMN_ARTIST_ANDROID_ID).append(",")
+			.append(NewsicDatabase.TABLE_ARTIST).append(".")
+			.append(NewsicDatabase.COLUMN_ARTIST_NAME).append(",")
+			.append(NewsicDatabase.TABLE_ARTIST).append(".")
+			.append(NewsicDatabase.COLUMN_ARTIST_DATE_CREATED).toString();
+
+	private ReleaseDaoSqlite releaseDao;
 
 	public ArtistDaoSqlite(Context context) {
 		super(context);
 	}
 
-	public ArtistDaoSqlite(SQLiteDatabase db) {
-		super(db);
-	}
-
 	@Override
 	public long save(Artist artist) throws DatabaseException {
 		long ret = super.save(artist);
-		getReleaseDao().saveOrUpdate(artist.getReleases());
+		getReleaseDao().saveOrUpdate(artist.getReleases(), false);
 		return ret;
 	}
 
@@ -41,7 +46,7 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 	public long saveOrUpdate(Artist artist) throws DatabaseException {
 		Long ret = artist.getId();
 		// Does artist exist?
-		if (getByAndroidId(artist.getAndroidAudioArtistId()) == null) {
+		if (findByAndroidId(artist.getAndroidAudioArtistId()) == null) {
 			ret = save(artist);
 		} else {
 			update(artist);
@@ -50,21 +55,44 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 	}
 
 	@Override
-	public Long getByAndroidId(long androidId) throws DatabaseException {
+	public Long findByAndroidId(long androidId) throws DatabaseException {
+		Cursor cursor = null;
 		try {
-			Cursor cursor = getDb()
-					.query(NewsicDatabase.TABLE_ARTIST,
-							new String[] { NewsicDatabase.COLUMN_ARTIST_DATE_CREATED },
-							NewsicDatabase.COLUMN_ARTIST_ANDROID_ID + " = "
-									+ androidId, null, null, null, null);
+			cursor = query(
+					NewsicDatabase.TABLE_ARTIST,
+					new String[] { NewsicDatabase.COLUMN_ARTIST_DATE_CREATED },
+					NewsicDatabase.COLUMN_ARTIST_ANDROID_ID + " = " + androidId,
+					null, null, null, null);
 			if (!cursor.moveToFirst()) {
 				return null;
 			}
-			return cursor.getLong(NewsicDatabase.INDEX_COLUMN_ARTIST_ID);
+			return cursor.getLong(0);
 		} catch (Throwable t) {
 			throw new DatabaseException("Unable to find artist by android id:"
 					+ androidId, t);
+		} finally {
+			closeCursor();
 		}
+	}
+
+	@Override
+	public Long toId(Cursor cursor, int startIndex) {
+		return cursor.getLong(startIndex
+				+ NewsicDatabase.INDEX_COLUMN_ARTIST_ID);
+	}
+
+	@Override
+	public Artist toEntity(Cursor cursor, int startIndex) {
+		Artist artist = new Artist();
+
+		artist.setId(toId(cursor, startIndex));
+		artist.setAndroidAudioArtistId(cursor.getLong(startIndex
+				+ NewsicDatabase.INDEX_COLUMN_ARTIST_ANDROID_ID));
+		artist.setArtistName(cursor.getString(startIndex
+				+ NewsicDatabase.INDEX_COLUMN_ARTIST_NAME));
+		artist.setDateCreated(loadDate(cursor.getLong(startIndex
+				+ NewsicDatabase.INDEX_COLUMN_ARTIST_DATE_CREATED)));
+		return artist;
 	}
 
 	@Override
@@ -90,9 +118,16 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 
 	private ReleaseDao getReleaseDao() {
 		if (releaseDao == null) {
-			releaseDao = new ReleaseDaoSqlite(getDb());
+			releaseDao = new ReleaseDaoSqlite(getContext());
 		}
 		return releaseDao;
 	}
 
+	@Override
+	public void closeCursor() {
+		super.closeCursor();
+		if (releaseDao != null) {
+			releaseDao.closeCursor();
+		}
+	}
 }

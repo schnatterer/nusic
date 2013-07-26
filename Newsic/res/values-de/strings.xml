@@ -5,17 +5,18 @@
     <string name="action_settings">Einstellungen</string>
     <string name="releaseListRow_RightArrow">Anklicken für mehr details</string>
     <string name="releaseListRow_Thumbnail">Vorschaubild des Albumcovers</string>
-    <string name="LoadNewReleasesTask_CheckingArtists">Prüfe neue Alben für alle Interpreten</string>
+    <string name="LoadNewReleasesTask_CheckingArtists">Prüfe alle Interpreten auf neue Alben</string>
 
     <!-- Error message -->
     <string name="GenericError">Etwas beinahe unmögliches ist geschehen: %1s!</string>
     <string name="Activity_notOnline">Keine Verbindung zum Internet</string>
-    
-    <string name="ArtistQueryService_errorQueryingArtists">Fehler beim Abfragen der Interpreten vom Gerät</string>
+        <string name="MainActivity_errorLoadingReleases">Fehler beim Laden der Alben vom Gerät</string>
+        
+    <string name="ArtistQueryService_errorLoadingArtists">Fehler beim Laden der Interpreten vom Gerät</string>
     <string name="ReleasesService_errorPersistingData">Fehler beim Speichern der Daten auf dem Gerät</string>
-    <string name="QueryMusicMetadataService_errorFindingReleasesArtist">Fehler beim Finden von Alben für Interpret %1$s</string>
-    <string name="QueryMusicMetadataService_errorQueryingMusicBrainz">Fehler beim Abfrage des Interpreten %1$s bei MusicBrainz. Keine Verbindung zum Internet?</string>
-    <string name="LoadNewReleasesTask_errorFindingReleases">Fehler beim Finden von Alben: </string>
+    <string name="LoadNewReleasesTask_errorFindingReleases">Fehler beim Finden von Alben im Internet: </string>
     <string name="LoadNewReleasesTask_finishedWithErrors">Alben für %1$d Interpreten erfolgreich aktualisiert, Fehler bei %2$d</string>
+    <string name="QueryMusicMetadataService_errorFindingReleasesArtist">Fehler beim Finden von Alben für Interpret %1$s</string>
+    <string name="QueryMusicMetadataService_errorQueryingMusicBrainz">Fehler beim Abfrage der Alben des Interpreten %1$s im Internet. Keine Verbindung zum Internet?</string>
 
 </resources>

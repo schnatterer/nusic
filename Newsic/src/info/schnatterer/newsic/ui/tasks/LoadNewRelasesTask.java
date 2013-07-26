@@ -18,7 +18,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ListView;
 
 /**
  * {@link AsyncTask} that loads new releases, listens to the progress (via
@@ -37,12 +36,12 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 	private List<Release> result = null;
 
 	private Activity activity;
-	private ListView resultView;
+	private ReleaseListAdapter resultView;
 	private List<Artist> errorArtists;
 
-	public LoadNewRelasesTask(Activity activity, ListView resultView) {
+	public LoadNewRelasesTask(Activity activity, ReleaseListAdapter releasesListViewAdapter) {
 		this.activity = activity;
-		this.resultView = resultView;
+		this.resultView = releasesListViewAdapter;
 		// Run in global context
 		releasesService = new ReleasesServiceImpl(Application.getContext());
 	}
@@ -144,7 +143,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 		this.result = result;
 		if (resultView != null && activity != null) {
 			// Display result
-			resultView.setAdapter(new ReleaseListAdapter(activity, result));
+			resultView.show(result);
 		}
 	}
 
@@ -155,9 +154,9 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 		releasesService.removeArtistProcessedListener(this);
 	}
 
-	public void updateActivity(Activity activity, ListView resultView) {
+	public void updateActivity(Activity activity, ReleaseListAdapter releasesListViewAdapter) {
 		this.activity = activity;
-		this.resultView = resultView;
+		this.resultView = releasesListViewAdapter;
 		/*
 		 * If progressDialog is displayed, show a new one with same settings,
 		 * belonging to the new activty

@@ -6,16 +6,17 @@
     <string name="releaseListRow_RightArrow">Click to show details</string>
     <string name="releaseListRow_Thumbnail">Thumbnail of album art</string>
     <string name="LoadNewReleasesTask_CheckingArtists">Checking all artists for new releases</string>
-    
+
     <!-- Error message -->
     <string name="GenericError">Something almost impossible has happened: %1s!</string>
     <string name="Activity_notOnline">No connection to the internet</string>
+    <string name="MainActivity_errorLoadingReleases">Error loading releases from the device</string>
     
-    <string name="ArtistQueryService_errorQueryingArtists">Error retrieving artists from the device</string>
-    <string name="ReleasesService_errorPersistingData">Error persisting data on the device</string>
-    <string name="LoadNewReleasesTask_errorFindingReleases">Error finding releases: </string>
-    <string name="QueryMusicMetadataService_errorFindingReleasesArtist">Error finding releases for artist %1$s</string>
-    <string name="QueryMusicMetadataService_errorQueryingMusicBrainz">Error querying artist %1$s from MusicBrainz. No connection to the internet?</string>
+    <string name="ArtistQueryService_errorLoadingArtists">Error loading artists from the device</string>
+    <string name="ReleasesService_errorPersistingData">Error saving data on the device</string>
+    <string name="LoadNewReleasesTask_errorFindingReleases">Error finding releases on the internet: </string>
     <string name="LoadNewReleasesTask_finishedWithErrors">Updated releases for %1$d artists successfully, update failed for %2$d</string>
- 
+    <string name="QueryMusicMetadataService_errorFindingReleasesArtist">Error finding releases for artist %1$s</string>
+    <string name="QueryMusicMetadataService_errorQueryingMusicBrainz">Error querying releases for artist %1$s from the internet. No connection to the internet?</string>
+
 </resources>

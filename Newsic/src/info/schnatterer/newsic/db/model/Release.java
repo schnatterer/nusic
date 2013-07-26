@@ -8,7 +8,7 @@ import java.util.Date;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-public class Release {
+public class Release implements Entity {
 	private static final int DEFAULT_ARTWORK = R.drawable.ic_launcher;
 
 	private Long id;
@@ -41,7 +41,7 @@ public class Release {
 		}
 		return artwork;
 	}
-	
+
 	public void setArtwork(Bitmap artwork) {
 		this.artwork = artwork;
 	}

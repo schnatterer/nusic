@@ -20,20 +20,26 @@ public class ReleaseListAdapter extends BaseAdapter {
 	private List<Release> listData;
 	private static LayoutInflater layoutInflater = null;
 
-	public ReleaseListAdapter(Context context, List<Release> listData) {
-		this.listData = listData;
+	public ReleaseListAdapter(Context context) {
+		// this.listData = listData;
 		this.context = context;
 		layoutInflater = LayoutInflater.from(context);
 	}
 
 	@Override
 	public int getCount() {
-		return listData.size();
+		if (listData != null) {
+			return listData.size();
+		}
+		return 0;
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return listData.get(position);
+		if (listData != null) {
+			return listData.get(position);
+		}
+		return null;
 	}
 
 	@Override
@@ -43,7 +49,8 @@ public class ReleaseListAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			convertView = layoutInflater.inflate(R.layout.release_list_row, null);
+			convertView = layoutInflater.inflate(R.layout.release_list_row,
+					null);
 		}
 		TextView releaseNameView = (TextView) convertView
 				.findViewById(R.id.releaseListRowReleaseName);
@@ -71,4 +78,10 @@ public class ReleaseListAdapter extends BaseAdapter {
 		// .getThumbnail());
 		return convertView;
 	}
+
+	public void show(List<Release> listData) {
+		this.listData = listData;
+		notifyDataSetChanged();
+	}
+
 }
