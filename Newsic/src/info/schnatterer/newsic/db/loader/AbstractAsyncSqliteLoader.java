@@ -18,6 +18,7 @@ public abstract class AbstractAsyncSqliteLoader<RESULT, ENTITY extends Entity, D
 	}
 
 	protected abstract DAO createDao(Context context);
+
 	public abstract RESULT doLoadInBackground() throws Exception;
 
 	protected DAO getDao() {

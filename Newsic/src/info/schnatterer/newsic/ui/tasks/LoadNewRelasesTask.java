@@ -11,8 +11,10 @@ import info.schnatterer.newsic.service.event.ArtistProgressListener;
 import info.schnatterer.newsic.service.impl.ReleasesServiceImpl;
 import info.schnatterer.newsic.ui.adapters.ReleaseListAdapter;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -33,15 +35,14 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 
 	private ProgressDialog progressDialog;
 	private boolean isExecuting = false;
-	private List<Release> result = null;
 
 	private Activity activity;
-	private ReleaseListAdapter resultView;
 	private List<Artist> errorArtists;
 
-	public LoadNewRelasesTask(Activity activity, ReleaseListAdapter releasesListViewAdapter) {
+	private Set<FinishedLoadingListener> listeners = new HashSet<FinishedLoadingListener>();
+
+	public LoadNewRelasesTask(Activity activity) {
 		this.activity = activity;
-		this.resultView = releasesListViewAdapter;
 		// Run in global context
 		releasesService = new ReleasesServiceImpl(Application.getContext());
 	}
@@ -49,7 +50,6 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 	@Override
 	protected void onPreExecute() {
 		isExecuting = true;
-		result = null;
 		releasesService.addArtistProcessedListener(this);
 	}
 
@@ -101,17 +101,16 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 			case PROGRESS_FINISHED:
 				progressDialog.dismiss();
 				progressDialog = null;
-				setResult((List<Release>) objects[1]);
+				List<Release> results = (List<Release>) objects[1];
 				if (errorArtists.size() > 0) {
 					Application.toast(
 							R.string.LoadNewReleasesTask_finishedWithErrors,
-							getResult().size(), errorArtists.size());
+							results.size(), errorArtists.size());
 				}
 				break;
 			case PROGRESS_FAILED: {
 				progressDialog.dismiss();
 				progressDialog = null;
-				setResult((List<Release>) objects[2]);
 				ProgressUpdate progress = (ProgressUpdate) objects[1];
 				Throwable potentialException = progress.getPotentialException();
 				if (potentialException != null) {
@@ -120,8 +119,12 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 								.getLocalizedMessage());
 					} else {
 						Application
-								.toast(Application.getContext().getString(R.string.LoadNewReleasesTask_errorFindingReleases) 
-										+ potentialException.getClass().getSimpleName());
+								.toast(Application
+										.getContext()
+										.getString(
+												R.string.LoadNewReleasesTask_errorFindingReleases)
+										+ potentialException.getClass()
+												.getSimpleName());
 					}
 				}
 			}
@@ -134,29 +137,21 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 			}
 		} catch (ClassCastException e) {
 			Log.w(Constants.LOG,
-					"Can't update progressDialog. Unexpected type/order of arguments", e);
+					"Can't update progressDialog. Unexpected type/order of arguments",
+					e);
 			return;
-		}
-	}
-
-	private void setResult(List<Release> result) {
-		this.result = result;
-		if (resultView != null && activity != null) {
-			// Display result
-			resultView.show(result);
 		}
 	}
 
 	@Override
 	protected void onPostExecute(List<Release> result) {
-		this.result = result;
 		isExecuting = false;
 		releasesService.removeArtistProcessedListener(this);
 	}
 
-	public void updateActivity(Activity activity, ReleaseListAdapter releasesListViewAdapter) {
+	public void updateActivity(Activity activity,
+			ReleaseListAdapter releasesListViewAdapter) {
 		this.activity = activity;
-		this.resultView = releasesListViewAdapter;
 		/*
 		 * If progressDialog is displayed, show a new one with same settings,
 		 * belonging to the new activty
@@ -167,9 +162,9 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 		}
 	}
 
-	public List<Release> getResult() {
-		return result;
-	}
+//	public List<Release> getResult() {
+//		return result;
+//	}
 
 	public boolean isExecuting() {
 		return isExecuting;
@@ -216,22 +211,24 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 
 	@Override
 	public void onProgressFinished(List<Release> result) {
+		notifyListeners();
 		publishProgress(ProgressUpdateOperation.PROGRESS_FINISHED, result);
 	}
 
 	@Override
 	public void onProgressFailed(Artist entity, int progress, int max,
 			List<Release> resultOnFailure, Throwable potentialException) {
+		notifyListeners();
 		publishProgress(ProgressUpdateOperation.PROGRESS_FAILED,
 				new ProgressUpdate(entity, progress, max, potentialException),
 				resultOnFailure);
 	}
 
-	public enum ProgressUpdateOperation {
+	private enum ProgressUpdateOperation {
 		PROGRESS_STARTED, PROGRESS, PROGRESS_FINISHED, PROGRESS_FAILED
 	};
 
-	public class ProgressUpdate {
+	private class ProgressUpdate {
 
 		public ProgressUpdate(Artist entity, int progress, int max,
 				Throwable potentialException) {
@@ -250,32 +247,37 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 			return artist;
 		}
 
-		public void setEntity(Artist entity) {
-			this.artist = entity;
-		}
-
 		public int getProgress() {
 			return progress;
-		}
-
-		public void setProgress(int progress) {
-			this.progress = progress;
 		}
 
 		public int getMax() {
 			return max;
 		}
 
-		public void setMax(int max) {
-			this.max = max;
-		}
-
 		public Throwable getPotentialException() {
 			return potentialException;
 		}
+	}
 
-		public void setPotentialException(Throwable potentialException) {
-			this.potentialException = potentialException;
+	public interface FinishedLoadingListener {
+		void onFinishedLoading();
+	}
+
+	public void addFinishedLoadingListener(
+			FinishedLoadingListener dataChangedListener) {
+		listeners.add(dataChangedListener);
+
+	}
+
+	public boolean removeFinishedLoadingListener(
+			FinishedLoadingListener dataChangedListener) {
+		return listeners.remove(dataChangedListener);
+	}
+
+	protected void notifyListeners() {
+		for (FinishedLoadingListener listener : listeners) {
+			listener.onFinishedLoading();
 		}
 	}
 }

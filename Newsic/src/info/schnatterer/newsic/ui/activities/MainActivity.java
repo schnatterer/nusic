@@ -9,6 +9,7 @@ import info.schnatterer.newsic.service.PreferencesService.AppStart;
 import info.schnatterer.newsic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.newsic.ui.adapters.ReleaseListAdapter;
 import info.schnatterer.newsic.ui.tasks.LoadNewRelasesTask;
+import info.schnatterer.newsic.ui.tasks.LoadNewRelasesTask.FinishedLoadingListener;
 
 import java.util.List;
 
@@ -21,11 +22,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-public class MainActivity extends FragmentActivity implements
-		LoaderManager.LoaderCallbacks<AsyncResult<List<Release>>> {
+public class MainActivity extends FragmentActivity {
 	private static final int RELEASE_DB_LOADER = 0;
 
-	private static LoadNewRelasesTask asyncTask = null;
+	private static LoadNewRelasesTask loadReleasesTask = null;
+	/** Listens for internet query to end */
+	private ReleaseTaskFinishedLoadingListener releaseTaskFinishedLoadingListener = new ReleaseTaskFinishedLoadingListener();
 
 	private ListView releasesListView;
 
@@ -52,33 +54,36 @@ public class MainActivity extends FragmentActivity implements
 		releasesListViewAdapter = new ReleaseListAdapter(this);
 		releasesListView.setAdapter(releasesListViewAdapter);
 
+		// Load releases from local db
+		getSupportLoaderManager().initLoader(RELEASE_DB_LOADER, null,
+				new ReleaseLoaderCallbacks());
+
 		AppStart appStart = PreferencesServiceSharedPreferences.getInstance()
 				.checkAppStart();
+		
 		switch (appStart) {
-		// case FIRST_TIME_VERSION:
-		// break;
+		case FIRST_TIME_VERSION:
 		case FIRST_TIME:
-			firstAppStartEver();
+			startLoadingReleasesFromInternet();
 		default:
-			// Load releases from db
-			getSupportLoaderManager().initLoader(RELEASE_DB_LOADER, null, this);
 			break;
 		}
 	}
 
-	private void firstAppStartEver() {
+	private void startLoadingReleasesFromInternet() {
 		if (Application.isOnline()) {
-			if (asyncTask == null) {
+			if (loadReleasesTask == null) {
 				// Async task not started yet
-				asyncTask = new LoadNewRelasesTask(this,
-						releasesListViewAdapter);
-				asyncTask.execute();
+				loadReleasesTask = new LoadNewRelasesTask(this);
+				loadReleasesTask
+						.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
+				loadReleasesTask.execute();
 			} else {
 				// Set activity as new context of task
-				asyncTask.updateActivity(this, releasesListViewAdapter);
-				if (asyncTask.getResult() != null) {
-					// If async task is already finished
-					setReleases(asyncTask.getResult());
+				loadReleasesTask.updateActivity(this, releasesListViewAdapter);
+				if (loadReleasesTask.isExecuting()) {
+					loadReleasesTask
+							.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
 				}
 			}
 		} else {
@@ -89,9 +94,11 @@ public class MainActivity extends FragmentActivity implements
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		if (asyncTask != null) {
+		if (loadReleasesTask != null) {
 			// Preserve memory
-			asyncTask.updateActivity(null, null);
+			loadReleasesTask.updateActivity(null, null);
+			loadReleasesTask
+					.removeFinishedLoadingListener(releaseTaskFinishedLoadingListener);
 		}
 	}
 
@@ -99,33 +106,62 @@ public class MainActivity extends FragmentActivity implements
 		releasesListViewAdapter.show(result);
 	}
 
-	@Override
-	public ReleaseLoader onCreateLoader(int id, Bundle bundle) {
-		// if (id == RELEASE_DB_LOADER)
-		return new ReleaseLoader(this);
+	/**
+	 * Listens for the task that queries releases from the internet to end.
+	 * Notifies {@link ReleaseLoader} to reload the {@link Release} data for GUI
+	 * from local database.
+	 * 
+	 * @author schnatterer
+	 * 
+	 */
+	public class ReleaseTaskFinishedLoadingListener implements
+			FinishedLoadingListener {
+		@Override
+		public void onFinishedLoading() {
+			// Reload data
+			getSupportLoaderManager().getLoader(RELEASE_DB_LOADER)
+					.onContentChanged();
+		}
 	}
 
-	@Override
-	public void onLoadFinished(Loader<AsyncResult<List<Release>>> loader,
-			AsyncResult<List<Release>> result) {
-		if (result.getException() != null) {
-			Application.toast(R.string.MainActivity_errorLoadingReleases);
+	/**
+	 * Handles callbacks from {@link ReleaseLoader} that loads the
+	 * {@link Release}s from the local database.
+	 * 
+	 * @author schnatterer
+	 * 
+	 */
+	public class ReleaseLoaderCallbacks implements
+			LoaderManager.LoaderCallbacks<AsyncResult<List<Release>>> {
+
+		@Override
+		public ReleaseLoader onCreateLoader(int id, Bundle bundle) {
+			// if (id == RELEASE_DB_LOADER)
+			return new ReleaseLoader(MainActivity.this);
 		}
 
-		if (result.getData() != null && result.getData().isEmpty()) {
-			// // Set the empty text
-			// final TextView empty = (TextView) mRootView
-			// .findViewById(R.id.empty);
-			// empty.setText(getString(R.string.empty_music));
-			return;
+		@Override
+		public void onLoadFinished(Loader<AsyncResult<List<Release>>> loader,
+				AsyncResult<List<Release>> result) {
+			if (result.getException() != null) {
+				Application.toast(R.string.MainActivity_errorLoadingReleases);
+			}
+
+			if (result.getData() != null && result.getData().isEmpty()) {
+				// // Set the empty text
+				// final TextView empty = (TextView) mRootView
+				// .findViewById(R.id.empty);
+				// empty.setText(getString(R.string.empty_music));
+				return;
+			}
+
+			setReleases(result.getData());
 		}
 
-		setReleases(result.getData());
+		@Override
+		public void onLoaderReset(Loader<AsyncResult<List<Release>>> result) {
+			setReleases(null);
+		}
 
-	}
-
-	@Override
-	public void onLoaderReset(Loader<AsyncResult<List<Release>>> result) {
-		setReleases(null);
 	}
 }

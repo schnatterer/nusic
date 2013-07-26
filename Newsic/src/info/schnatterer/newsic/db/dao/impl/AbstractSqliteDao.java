@@ -28,13 +28,15 @@ import android.os.CancellationSignal;
  * 
  * @param <T>
  */
-public abstract class AbstractSqliteDao<T extends Entity> implements GenericDao<T> {
+public abstract class AbstractSqliteDao<T extends Entity> implements
+		GenericDao<T> {
 	// private Context context;
 	private SQLiteDatabase db;
 	private NewsicDatabase newsicDb = null;
 
 	private Cursor cursor = null;
 	private Context context;
+//	private Set<DataChangedListener> listeners = new HashSet<DataChangedListener>();
 
 	public AbstractSqliteDao(Context context) {
 		this.context = context;
@@ -90,7 +92,8 @@ public abstract class AbstractSqliteDao<T extends Entity> implements GenericDao<
 	@Override
 	public long save(T entity) throws DatabaseException {
 		try {
-			long id = db.insert(getTableName(), null, toContentValues(entity));
+			long id = db.insertOrThrow(getTableName(), null,
+					toContentValues(entity));
 			entity.setId(id);
 			return id;
 		} catch (Throwable t) {
@@ -108,6 +111,25 @@ public abstract class AbstractSqliteDao<T extends Entity> implements GenericDao<
 		}
 	}
 
+//	@Override
+//	public void addDataChangedListener(DataChangedListener dataChangedListener) {
+//		listeners.add(dataChangedListener);
+//
+//	}
+//
+//	@Override
+//	public boolean removeDataChangedListener(
+//			DataChangedListener dataChangedListener) {
+//		return listeners.remove(dataChangedListener);
+//	}
+//	
+//	protected void notifyListeners() {
+//	for (DataChangedListener listener : listeners) {
+//		listener.onDataChanged();
+//	}
+//}
+
+
 	protected Context getContext() {
 		return context;
 	}
@@ -124,7 +146,7 @@ public abstract class AbstractSqliteDao<T extends Entity> implements GenericDao<
 		this.cursor = cursor;
 		return cursor;
 	}
-
+	
 	// /**
 	// * Allows other DAOs to use this one's queries within the same database
 	// * connection.
