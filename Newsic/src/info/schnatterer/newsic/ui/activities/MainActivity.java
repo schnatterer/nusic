@@ -61,6 +61,13 @@ public class MainActivity extends FragmentActivity {
 		getSupportLoaderManager().initLoader(RELEASE_DB_LOADER, null,
 				new ReleaseLoaderCallbacks());
 
+		// Set activity as new context of task
+		if (loadReleasesTask != null) {
+			loadReleasesTask.updateActivity(this, releasesListViewAdapter);
+			loadReleasesTask
+					.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
+		}
+
 		AppStart appStart = PreferencesServiceSharedPreferences.getInstance()
 				.checkAppStart();
 
@@ -101,12 +108,8 @@ public class MainActivity extends FragmentActivity {
 				loadReleasesTask
 						.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
 				loadReleasesTask.execute();
-			} else {
-				// Set activity as new context of task
-				loadReleasesTask.updateActivity(this, releasesListViewAdapter);
-				loadReleasesTask
-						.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
 			}
+			// Else task is already running
 		} else {
 			Application.toast(R.string.Activity_notOnline);
 		}

@@ -82,13 +82,8 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 				break;
 			case PROGRESS: {
 				ProgressUpdate progress = (ProgressUpdate) objects[1];
-				if (progressDialog == null) {
-					// Make sure the dialog is shown
-					progressDialog = showDialog(progress.getProgress(),
-							progress.getMax());
-				}
 				if (progress.getArtist() != null) {
-					progressDialog.setProgress(progress.getProgress());
+					setProgress(progress);
 				}
 
 				Throwable potentialException = progress.getPotentialException();
@@ -147,6 +142,17 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 		}
 	}
 
+	private void setProgress(ProgressUpdate progress) {
+		if (progressDialog == null) {
+			// Try to show the dialog is shown
+			progressDialog = showDialog(progress.getProgress(),
+					progress.getMax());
+		}
+		if (progressDialog != null) {
+			progressDialog.setProgress(progress.getProgress());
+		}
+	}
+
 	@Override
 	protected void onPostExecute(List<Release> result) {
 		isExecuting = false;
@@ -156,11 +162,16 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 	public void updateActivity(Activity activity,
 			ReleaseListAdapter releasesListViewAdapter) {
 		this.activity = activity;
+
+		if (activity == null) {
+			progressDialog.dismiss();
+			progressDialog = null;
+		}
 		/*
 		 * If progressDialog is displayed, show a new one with same settings,
 		 * belonging to the new activty
 		 */
-		if (progressDialog != null) {
+		else if (progressDialog != null) {
 			progressDialog = showDialog(progressDialog.getProgress(),
 					progressDialog.getMax());
 		}
