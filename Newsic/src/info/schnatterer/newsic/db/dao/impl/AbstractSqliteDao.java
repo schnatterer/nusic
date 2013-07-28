@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.os.CancellationSignal;
+import android.provider.BaseColumns;
 
 /**
  * Wraps the {@link SQLiteDatabase} object as well as the {@link Cursor} and
@@ -33,7 +34,9 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
 
 	private Cursor cursor = null;
 	private Context context;
-//	private Set<DataChangedListener> listeners = new HashSet<DataChangedListener>();
+
+	// private Set<DataChangedListener> listeners = new
+	// HashSet<DataChangedListener>();
 
 	public AbstractSqliteDao(Context context) {
 		this.context = context;
@@ -95,33 +98,36 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
 		try {
 			Long id = getId(entity);
 			if (id == null) {
-				throw new DatabaseException("Unable to update because Id is null in entity: " + entity);
+				throw new DatabaseException(
+						"Unable to update because Id is null in entity: "
+								+ entity);
 			}
 			return db.update(getTableName(), toContentValues(entity),
-					id.toString(), null);
+					new StringBuffer(BaseColumns._ID).append("=").append(id)
+							.toString(), null);
 		} catch (Throwable t) {
 			throw new DatabaseException("Unable to update " + entity, t);
 		}
 	}
 
-//	@Override
-//	public void addDataChangedListener(DataChangedListener dataChangedListener) {
-//		listeners.add(dataChangedListener);
-//
-//	}
-//
-//	@Override
-//	public boolean removeDataChangedListener(
-//			DataChangedListener dataChangedListener) {
-//		return listeners.remove(dataChangedListener);
-//	}
-//	
-//	protected void notifyListeners() {
-//	for (DataChangedListener listener : listeners) {
-//		listener.onDataChanged();
-//	}
-//}
-
+	// @Override
+	// public void addDataChangedListener(DataChangedListener
+	// dataChangedListener) {
+	// listeners.add(dataChangedListener);
+	//
+	// }
+	//
+	// @Override
+	// public boolean removeDataChangedListener(
+	// DataChangedListener dataChangedListener) {
+	// return listeners.remove(dataChangedListener);
+	// }
+	//
+	// protected void notifyListeners() {
+	// for (DataChangedListener listener : listeners) {
+	// listener.onDataChanged();
+	// }
+	// }
 
 	protected Context getContext() {
 		return context;
@@ -139,7 +145,7 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
 		this.cursor = cursor;
 		return cursor;
 	}
-	
+
 	// /**
 	// * Allows other DAOs to use this one's queries within the same database
 	// * connection.

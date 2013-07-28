@@ -63,7 +63,7 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 		try {
 			cursor = query(
 					NewsicDatabase.TABLE_ARTIST,
-					new String[] { NewsicDatabase.COLUMN_ARTIST_DATE_CREATED },
+					new String[] { NewsicDatabase.COLUMN_ARTIST_ID },
 					NewsicDatabase.COLUMN_ARTIST_ANDROID_ID + " = " + androidId,
 					null, null, null, null);
 			if (!cursor.moveToFirst()) {
