@@ -162,9 +162,9 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 		}
 	}
 
-//	public List<Release> getResult() {
-//		return result;
-//	}
+	// public List<Release> getResult() {
+	// return result;
+	// }
 
 	public boolean isExecuting() {
 		return isExecuting;

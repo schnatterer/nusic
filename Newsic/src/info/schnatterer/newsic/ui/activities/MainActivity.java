@@ -17,6 +17,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -60,7 +63,7 @@ public class MainActivity extends FragmentActivity {
 
 		AppStart appStart = PreferencesServiceSharedPreferences.getInstance()
 				.checkAppStart();
-		
+
 		switch (appStart) {
 		case FIRST_TIME_VERSION:
 		case FIRST_TIME:
@@ -68,6 +71,26 @@ public class MainActivity extends FragmentActivity {
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.action_refresh:
+			startLoadingReleasesFromInternet();
+			break;
+		default:
+			break;
+		}
+
+		return true;
 	}
 
 	private void startLoadingReleasesFromInternet() {
@@ -81,10 +104,8 @@ public class MainActivity extends FragmentActivity {
 			} else {
 				// Set activity as new context of task
 				loadReleasesTask.updateActivity(this, releasesListViewAdapter);
-				if (loadReleasesTask.isExecuting()) {
-					loadReleasesTask
-							.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
-				}
+				loadReleasesTask
+						.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
 			}
 		} else {
 			Application.toast(R.string.Activity_notOnline);
@@ -118,6 +139,7 @@ public class MainActivity extends FragmentActivity {
 			FinishedLoadingListener {
 		@Override
 		public void onFinishedLoading() {
+			loadReleasesTask = null; // Task can only be executed once
 			// Reload data
 			getSupportLoaderManager().getLoader(RELEASE_DB_LOADER)
 					.onContentChanged();

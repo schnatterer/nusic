@@ -2,7 +2,10 @@
 <resources>
 
     <string name="app_name">newsic</string>
+    
+    <string name="action_refresh">Refresh releases</string>
     <string name="action_settings">Settings</string>
+    
     <string name="releaseListRow_RightArrow">Click to show details</string>
     <string name="releaseListRow_Thumbnail">Thumbnail of album art</string>
     <string name="LoadNewReleasesTask_CheckingArtists">Checking all artists for new releases</string>

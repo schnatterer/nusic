@@ -2,7 +2,10 @@
 <resources>
 
     <string name="app_name">newsic</string>
+    
+    <string name="action_refresh">Alben aktualisieren</string>
     <string name="action_settings">Einstellungen</string>
+    
     <string name="releaseListRow_RightArrow">Anklicken für mehr details</string>
     <string name="releaseListRow_Thumbnail">Vorschaubild des Albumcovers</string>
     <string name="LoadNewReleasesTask_CheckingArtists">Prüfe alle Interpreten auf neue Alben</string>
@@ -10,7 +13,7 @@
     <!-- Error message -->
     <string name="GenericError">Etwas beinahe unmögliches ist geschehen: %1s!</string>
     <string name="Activity_notOnline">Keine Verbindung zum Internet</string>
-        <string name="MainActivity_errorLoadingReleases">Fehler beim Laden der Alben vom Gerät</string>
+    <string name="MainActivity_errorLoadingReleases">Fehler beim Laden der Alben vom Gerät</string>
         
     <string name="ArtistQueryService_errorLoadingArtists">Fehler beim Laden der Interpreten vom Gerät</string>
     <string name="ReleasesService_errorPersistingData">Fehler beim Speichern der Daten auf dem Gerät</string>
