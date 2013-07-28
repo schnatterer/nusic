@@ -34,7 +34,7 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 			.append(NewsicDatabase.COLUMN_RELEASE_ARTWORK_PATH).append(",")
 			.append(NewsicDatabase.TABLE_RELEASE).append(".")
 			.append(NewsicDatabase.COLUMN_RELEASE_FK_ID_ARTIST).toString();
-	
+
 	public static final String ORDER_BY_RELEASE_DATE_ASC = new StringBuilder(
 			" ORDER BY ").append(NewsicDatabase.TABLE_RELEASE).append(".")
 			.append(NewsicDatabase.COLUMN_RELEASE_DATE_RELEASED)
@@ -48,7 +48,8 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 			.append(NewsicDatabase.TABLE_RELEASE).append(".")
 			.append(NewsicDatabase.COLUMN_RELEASE_FK_ID_ARTIST).append("=")
 			.append(NewsicDatabase.TABLE_ARTIST).append(".")
-			.append(NewsicDatabase.COLUMN_ARTIST_ID).append(ORDER_BY_RELEASE_DATE_ASC).toString();
+			.append(NewsicDatabase.COLUMN_ARTIST_ID)
+			.append(ORDER_BY_RELEASE_DATE_ASC).toString();
 
 	public ReleaseDaoSqlite(Context context) {
 		super(context);
@@ -75,18 +76,16 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 				}
 				/* Get existing artist */
 				if (saveArtist) {
-					Long existingArtist = getArtistDao().findByAndroidId(
-							release.getArtist().getAndroidAudioArtistId());
-					if (existingArtist == null) {
-						getArtistDao().save(release.getArtist());
+					if (release.getArtist().getId() == null) {
+						Long existingArtist = getArtistDao().findByAndroidId(
+								release.getArtist().getAndroidAudioArtistId());
+						if (existingArtist == null) {
+							getArtistDao().save(release.getArtist());
+						}
 					}
 				}
-				// Does release exist?
-				if (findByMusicBrainzId(release.getMusicBrainzId()) == null) {
-					save(release);
-				} else {
-					update(release);
-				}
+
+				saveOrUpdate(release);
 			} catch (DatabaseException databaseException) {
 				// Rethrow
 				throw databaseException;
@@ -95,6 +94,20 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 						"Unable to save release " + release, t);
 			}
 		}
+	}
+
+	@Override
+	public long saveOrUpdate(Release release) throws DatabaseException {
+		// Does release exist?
+		if (release.getId() == null) {
+			release.setId(findByMusicBrainzId(release.getMusicBrainzId()));
+		}
+		if (release.getId() == null) {
+			save(release);
+		} else {
+			update(release);
+		}
+		return release.getId();
 	}
 
 	@Override

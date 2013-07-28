@@ -44,14 +44,16 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 
 	@Override
 	public long saveOrUpdate(Artist artist) throws DatabaseException {
-		Long ret = artist.getId();
 		// Does artist exist?
-		if (findByAndroidId(artist.getAndroidAudioArtistId()) == null) {
-			ret = save(artist);
+		if (artist.getId() == null) {
+			artist.setId(findByAndroidId(artist.getAndroidAudioArtistId()));
+		}
+		if (artist.getId() == null) {
+			save(artist);
 		} else {
 			update(artist);
 		}
-		return ret;
+		return artist.getId();
 	}
 
 	@Override

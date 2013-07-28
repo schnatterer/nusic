@@ -35,6 +35,16 @@ public interface ReleaseDao extends GenericDao<Release> {
 			throws DatabaseException;
 
 	/**
+	 * Saves or updates only the {@link Release}, not any related {@link Artist}
+	 * .
+	 * 
+	 * @param release
+	 * @return 
+	 * @throws DatabaseException
+	 */
+	long saveOrUpdate(Release release) throws DatabaseException;
+
+	/**
 	 * Finds out of if release with a specific
 	 * {@link Release#getMusicBrainzId()} exists.
 	 * 

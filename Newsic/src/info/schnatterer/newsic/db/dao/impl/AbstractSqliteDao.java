@@ -104,8 +104,12 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
 	@Override
 	public int update(T entity) throws DatabaseException {
 		try {
+			Long id = getId(entity);
+			if (id == null) {
+				throw new DatabaseException("Unable to update because Id is null in entity: " + entity);
+			}
 			return db.update(getTableName(), toContentValues(entity),
-					getId(entity).toString(), null);
+					id.toString(), null);
 		} catch (Throwable t) {
 			throw new DatabaseException("Unable to update " + entity, t);
 		}
