@@ -2,7 +2,12 @@ package info.schnatterer.newsic.service.impl;
 
 import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.Constants;
+import info.schnatterer.newsic.db.model.Release;
 import info.schnatterer.newsic.service.PreferencesService;
+import info.schnatterer.newsic.util.DateUtils;
+
+import java.util.Date;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -25,6 +30,10 @@ public class PreferencesServiceSharedPreferences implements PreferencesService {
 	 * start of the app.
 	 */
 	private static final String LAST_APP_VERSION = "last_app_version";
+	/**
+	 * Last time the {@link Release}s have been loaded from the internet
+	 */
+	private static final String LAST_RELEASES_REFRESH = "last_release_refresh";
 
 	private final SharedPreferences sharedPreferences;
 	private final Context context;
@@ -111,6 +120,18 @@ public class PreferencesServiceSharedPreferences implements PreferencesService {
 		} else {
 			return AppStart.NORMAL;
 		}
+	}
+
+	@Override
+	public Date getLastReleaseRefresh() {
+		return DateUtils.loadDate(sharedPreferences.getLong(
+				LAST_RELEASES_REFRESH, 0));
+	}
+	
+	@Override
+	public void setLastReleaseRefresh(Date date) {
+		sharedPreferences.edit().putLong(LAST_RELEASES_REFRESH,
+				DateUtils.persistDate(date));
 	}
 
 	@Override

@@ -5,9 +5,11 @@ import info.schnatterer.newsic.Constants;
 import info.schnatterer.newsic.R;
 import info.schnatterer.newsic.db.model.Artist;
 import info.schnatterer.newsic.db.model.Release;
+import info.schnatterer.newsic.service.PreferencesService;
 import info.schnatterer.newsic.service.ReleasesService;
 import info.schnatterer.newsic.service.ServiceException;
 import info.schnatterer.newsic.service.event.ArtistProgressListener;
+import info.schnatterer.newsic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.newsic.service.impl.ReleasesServiceImpl;
 import info.schnatterer.newsic.ui.adapters.ReleaseListAdapter;
 
@@ -32,6 +34,8 @@ import android.util.Log;
 public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 		implements ArtistProgressListener {
 	private ReleasesService releasesService;
+	private PreferencesService preferencesService = PreferencesServiceSharedPreferences
+			.getInstance();
 
 	private ProgressDialog progressDialog;
 	private boolean isExecuting = false;
@@ -56,7 +60,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 	@Override
 	protected List<Release> doInBackground(Void... arg0) {
 		// Do it
-		return releasesService.getNewestReleases();
+		return releasesService.getNewestReleases(preferencesService);
 	}
 
 	@SuppressWarnings("unchecked")

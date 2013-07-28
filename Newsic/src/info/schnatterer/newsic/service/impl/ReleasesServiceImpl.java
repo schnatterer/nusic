@@ -8,6 +8,7 @@ import info.schnatterer.newsic.db.dao.impl.ArtistDaoSqlite;
 import info.schnatterer.newsic.db.model.Artist;
 import info.schnatterer.newsic.db.model.Release;
 import info.schnatterer.newsic.service.ArtistQueryService;
+import info.schnatterer.newsic.service.PreferencesService;
 import info.schnatterer.newsic.service.QueryMusicMetadataService;
 import info.schnatterer.newsic.service.ReleasesService;
 import info.schnatterer.newsic.service.ServiceException;
@@ -60,8 +61,8 @@ public class ReleasesServiceImpl implements ReleasesService {
 	 * info.schnatterer.testapp.service.impl.ReleasesService#getNewestReleases()
 	 */
 	@Override
-	public List<Release> getNewestReleases() {
-		return addNewestReleases(new LinkedList<Release>());
+	public List<Release> getNewestReleases(PreferencesService preferencesService) {
+		return addNewestReleases(new LinkedList<Release>(), preferencesService);
 	}
 
 	/*
@@ -71,7 +72,7 @@ public class ReleasesServiceImpl implements ReleasesService {
 	 * (java.util.List)
 	 */
 	@Override
-	public List<Release> addNewestReleases(List<Release> releases) {
+	public List<Release> addNewestReleases(List<Release> releases, PreferencesService preferencesService) {
 		List<Artist> artists;
 		try {
 			artists = getArtists();
@@ -123,6 +124,8 @@ public class ReleasesServiceImpl implements ReleasesService {
 				progressUpdater.progress(artist, artistCount++,
 						potentialException);
 			}
+			// Success
+			preferencesService.setLastReleaseRefresh(new Date());
 			progressUpdater.progressFinished(releases);
 			return sortReleasesByDate(releases);
 			// } catch (ServiceException e) {

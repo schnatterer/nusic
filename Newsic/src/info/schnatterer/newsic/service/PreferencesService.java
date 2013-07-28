@@ -1,5 +1,9 @@
 package info.schnatterer.newsic.service;
 
+import info.schnatterer.newsic.db.model.Release;
+
+import java.util.Date;
+
 /**
  * Provides access to the key-value-preferences of the app.
  * 
@@ -31,11 +35,23 @@ public interface PreferencesService {
 	 * 
 	 * @return the type of app start
 	 */
-	public AppStart checkAppStart();
+	AppStart checkAppStart();
 
 	/**
 	 * Resets all your preferences. Carefuly with that!
 	 */
-	public void clearPreferences();
+	void clearPreferences();
+
+	/**
+	 * Gets the last time the {@link Release}s have <b>successfully</b> been
+	 * loaded from the internet
+	 */
+	Date getLastReleaseRefresh();
+
+	/**
+	 * Last time the {@link Release}s have <b>successfully</b> been loaded from
+	 * the internet
+	 */
+	void setLastReleaseRefresh(Date date);
 
 }

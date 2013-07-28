@@ -8,15 +8,19 @@ import java.util.List;
 
 public interface ReleasesService {
 
-	List<Release> getNewestReleases();
+	List<Release> getNewestReleases(PreferencesService preferencesService);
 
 	/**
 	 * @param releases
+	 * @param preferencesService
+	 *            the preferences where to store the date of last successfull
+	 *            releases update
 	 * @throws ServiceException
 	 * @throws {@link NullPointerException} when artist is <code>null</code>
-	 *         @return
+	 * @return
 	 */
-	List<Release> addNewestReleases(List<Release> releases);
+	List<Release> addNewestReleases(List<Release> releases,
+			PreferencesService preferencesService);
 
 	/**
 	 * Adds an {@link ArtistProgressListener} to the Service. This is called
