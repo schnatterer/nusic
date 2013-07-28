@@ -5,6 +5,7 @@ import info.schnatterer.newsic.db.NewsicDatabase;
 import info.schnatterer.newsic.db.dao.ReleaseDao;
 import info.schnatterer.newsic.db.model.Artist;
 import info.schnatterer.newsic.db.model.Release;
+import info.schnatterer.newsic.util.DateUtils;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -171,11 +172,11 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 		release.setId(toId(cursor, startIndex));
 		release.setArtworkPath(cursor.getString(startIndex
 				+ NewsicDatabase.INDEX_COLUMN_RELEASE_ARTWORK_PATH));
-		release.setDateCreated(loadDate(cursor.getLong(startIndex
+		release.setDateCreated(DateUtils.loadDate(cursor.getLong(startIndex
 				+ NewsicDatabase.INDEX_COLUMN_RELEASE_DATE_CREATED)));
 		release.setMusicBrainzId(cursor.getString(startIndex
 				+ NewsicDatabase.INDEX_COLUMN_RELEASE_MB_ID));
-		release.setReleaseDate(loadDate(cursor.getLong(startIndex
+		release.setReleaseDate(DateUtils.loadDate(cursor.getLong(startIndex
 				+ NewsicDatabase.INDEX_COLUMN_RELEASE_DATE_RELEASED)));
 		release.setReleaseName(cursor.getString(startIndex
 				+ NewsicDatabase.INDEX_COLUMN_RELEASE_NAME));
@@ -190,9 +191,9 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 				release.getMusicBrainzId());
 		values.put(NewsicDatabase.COLUMN_RELEASE_NAME, release.getReleaseName());
 		values.put(NewsicDatabase.COLUMN_RELEASE_DATE_RELEASED,
-				persistDate(release.getReleaseDate()));
+				DateUtils.persistDate(release.getReleaseDate()));
 		values.put(NewsicDatabase.COLUMN_RELEASE_DATE_CREATED,
-				persistDate(release.getDateCreated()));
+				DateUtils.persistDate(release.getDateCreated()));
 		values.put(NewsicDatabase.COLUMN_RELEASE_ARTWORK_PATH,
 				release.getArtworkPath());
 		values.put(NewsicDatabase.COLUMN_RELEASE_FK_ID_ARTIST, release

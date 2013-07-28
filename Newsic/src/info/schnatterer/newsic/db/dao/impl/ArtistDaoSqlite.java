@@ -5,6 +5,7 @@ import info.schnatterer.newsic.db.NewsicDatabase;
 import info.schnatterer.newsic.db.dao.ArtistDao;
 import info.schnatterer.newsic.db.dao.ReleaseDao;
 import info.schnatterer.newsic.db.model.Artist;
+import info.schnatterer.newsic.util.DateUtils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -92,7 +93,7 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 				+ NewsicDatabase.INDEX_COLUMN_ARTIST_ANDROID_ID));
 		artist.setArtistName(cursor.getString(startIndex
 				+ NewsicDatabase.INDEX_COLUMN_ARTIST_NAME));
-		artist.setDateCreated(loadDate(cursor.getLong(startIndex
+		artist.setDateCreated(DateUtils.loadDate(cursor.getLong(startIndex
 				+ NewsicDatabase.INDEX_COLUMN_ARTIST_DATE_CREATED)));
 		return artist;
 	}
@@ -104,7 +105,7 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 				artist.getAndroidAudioArtistId());
 		values.put(NewsicDatabase.COLUMN_ARTIST_NAME, artist.getArtistName());
 		values.put(NewsicDatabase.COLUMN_ARTIST_DATE_CREATED,
-				persistDate(artist.getDateCreated()));
+				DateUtils.persistDate(artist.getDateCreated()));
 		return values;
 	}
 

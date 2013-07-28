@@ -4,9 +4,6 @@ import info.schnatterer.newsic.db.DatabaseException;
 import info.schnatterer.newsic.db.NewsicDatabase;
 import info.schnatterer.newsic.db.dao.GenericDao;
 import info.schnatterer.newsic.db.model.Entity;
-
-import java.util.Date;
-
 import android.content.AsyncTaskLoader;
 import android.content.ContentValues;
 import android.content.Context;
@@ -80,14 +77,6 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
 	public abstract String getTableName();
 
 	protected abstract Long getId(T entity);
-
-	protected long persistDate(Date date) {
-		return date.getTime();
-	}
-
-	protected Date loadDate(long date) {
-		return new Date(date);
-	}
 
 	@Override
 	public long save(T entity) throws DatabaseException {
