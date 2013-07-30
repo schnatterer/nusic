@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Preference details. Don't translate! -->
+<resources>
+
+    <string name="preferences_key_download_only_on_wifi">onWifiOnly</string>
+
+    <bool name="preferences_default_download_only_on_wifi">true</bool>
+
+</resources>

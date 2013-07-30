@@ -6,13 +6,16 @@
     <string name="action_refresh">Refresh releases</string>
     <string name="action_settings">Settings</string>
     
+    <string name="preferences_title_download_only_on_wifi">Download via Wi-Fi only</string>
+    <string name="preferences_summary_download_only_on_wifi">Don\'t use mobile networks</string>
+    
     <string name="releaseListRow_RightArrow">Click to show details</string>
     <string name="releaseListRow_Thumbnail">Thumbnail of album art</string>
     <string name="LoadNewReleasesTask_CheckingArtists">Checking all artists for new releases</string>
 
     <!-- Error message -->
     <string name="GenericError">Something almost impossible has happened: %1s!</string>
-    <string name="Activity_notOnline">No connection to the internet</string>
+    <string name="Activity_notOnline">No connection to the internet (Check settings to allow usage of mobile connection)</string>
     <string name="MainActivity_errorLoadingReleases">Error loading releases from the device</string>
     
     <string name="ArtistQueryService_errorLoadingArtists">Error loading artists from the device</string>

@@ -49,9 +49,16 @@ public interface PreferencesService {
 	Date getLastReleaseRefresh();
 
 	/**
-	 * Last time the {@link Release}s have <b>successfully</b> been loaded from
-	 * the internet
+	 * Set last time the {@link Release}s have <b>successfully</b> been loaded
+	 * from the internet
 	 */
 	void setLastReleaseRefresh(Date date);
+
+	/**
+	 * @return <code>true</code> if the user has checked to only download images
+	 *         on Wi-Fi. Otherwise <code>false</code>
+	 */
+	boolean isUseOnlyWifi();
+
 
 }

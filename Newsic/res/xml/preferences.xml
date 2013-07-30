@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<!-- Default values are defined in PreferencesServiceSharedPreferences -->
+    <CheckBoxPreference
+        android:defaultValue="@bool/preferences_default_download_only_on_wifi"
+        android:key="@string/preferences_key_download_only_on_wifi"
+        android:summary="@string/preferences_summary_download_only_on_wifi"
+        android:title="@string/preferences_title_download_only_on_wifi" />
+    <!--
+        <ListPreference
+        android:dependency="pref_sync"
+        android:key="pref_syncConnectionType"
+        android:title="@string/pref_syncConnectionType"
+        android:dialogTitle="@string/pref_syncConnectionType"
+        android:entries="@array/pref_syncConnectionTypes_entries"
+        android:entryValues="@array/pref_syncConnectionTypes_values"
+        android:defaultValue="@string/pref_syncConnectionTypes_default" />
+    -->
+
+</PreferenceScreen>

@@ -2,6 +2,7 @@ package info.schnatterer.newsic.service.impl;
 
 import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.Constants;
+import info.schnatterer.newsic.R;
 import info.schnatterer.newsic.db.model.Release;
 import info.schnatterer.newsic.service.PreferencesService;
 import info.schnatterer.newsic.util.DateUtils;
@@ -29,18 +30,24 @@ public class PreferencesServiceSharedPreferences implements PreferencesService {
 	 * The app version code (not the version name!) that was used on the last
 	 * start of the app.
 	 */
-	private static final String LAST_APP_VERSION = "last_app_version";
+	private static final String KEY_LAST_APP_VERSION = "last_app_version";
+	private static final int DEFAULT_LAST_APP_VERSION = -1;
+
 	/**
 	 * Last time the {@link Release}s have been loaded from the internet
 	 */
-	private static final String LAST_RELEASES_REFRESH = "last_release_refresh";
+	private static final String KEY_LAST_RELEASES_REFRESH = "last_release_refresh";
+	private static final int DEFAULT_LAST_RELEASES_REFRESH = 0;
+
+	private final String KEY_DOWLOAD_ONLY_ON_WIFI;
+	private final Boolean DEFAULT_DOWLOAD_ONLY_ON_WIFI;
 
 	private final SharedPreferences sharedPreferences;
-	private final Context context;
+	// private static Context context = null;
 	private static PreferencesService instance = null;
 
 	/**
-	 * Caches the result of {@link #checkAppStart()}. To allow idempotent mehtod
+	 * Caches the result of {@link #checkAppStart()}. To allow idempotent method
 	 * calls.
 	 */
 	private static AppStart appStart = null;
@@ -57,30 +64,38 @@ public class PreferencesServiceSharedPreferences implements PreferencesService {
 	}
 
 	/**
-	 * Creates a {@link PreferencesService} that uses the {@link Application}'s
-	 * context and the default shared preferences.
+	 * Creates a {@link PreferencesService} the default shared preferences.
 	 */
 	protected PreferencesServiceSharedPreferences() {
-		this(Application.getContext());
+		this(PreferenceManager.getDefaultSharedPreferences(getContext()));
 	}
 
 	/**
-	 * Creates a {@link PreferencesService} that uses a specific
-	 * <code>context</code> and the default shared preferences of that context.
+	 * Creates a {@link PreferencesService} that uses specific shared
+	 * preferences.
+	 * 
+	 * Useful for testing.
 	 */
-	protected PreferencesServiceSharedPreferences(Context context) {
-		this(context, PreferenceManager.getDefaultSharedPreferences(context));
-
-	}
-
-	/**
-	 * Creates a {@link PreferencesService} that uses a specific
-	 * <code>context</code> and specific shared preferences.
-	 */
-	protected PreferencesServiceSharedPreferences(Context context,
+	protected PreferencesServiceSharedPreferences(
 			SharedPreferences sharedPrefernces) {
-		this.context = context;
+		// PreferencesServiceSharedPreferences.context = context;
 		this.sharedPreferences = sharedPrefernces;
+
+		// // Initialize new preferences with defaults from xml
+		// PreferenceManager.setDefaultValues(getContext(), R.xml.preferences,
+		// false);
+
+		if (getContext() != null) {
+			KEY_DOWLOAD_ONLY_ON_WIFI = getContext().getString(
+					R.string.preferences_key_download_only_on_wifi);
+			DEFAULT_DOWLOAD_ONLY_ON_WIFI = getContext().getResources()
+					.getBoolean(
+							R.bool.preferences_default_download_only_on_wifi);
+		} else {
+			// e.g. for Testing
+			KEY_DOWLOAD_ONLY_ON_WIFI = null;
+			DEFAULT_DOWLOAD_ONLY_ON_WIFI = null;
+		}
 	}
 
 	@Override
@@ -88,16 +103,17 @@ public class PreferencesServiceSharedPreferences implements PreferencesService {
 		if (appStart == null) {
 			PackageInfo pInfo;
 			try {
-				pInfo = context.getPackageManager().getPackageInfo(
-						context.getPackageName(), 0);
+				pInfo = getContext().getPackageManager().getPackageInfo(
+						getContext().getPackageName(), 0);
 				int lastVersionCode = sharedPreferences.getInt(
-						LAST_APP_VERSION, -1);
+						KEY_LAST_APP_VERSION, DEFAULT_LAST_APP_VERSION);
 				// String versionName = pInfo.versionName;
 				int currentVersionCode = pInfo.versionCode;
 				appStart = checkAppStart(currentVersionCode, lastVersionCode);
 				// Update version in preferences
 				sharedPreferences.edit()
-						.putInt(LAST_APP_VERSION, currentVersionCode).commit();
+						.putInt(KEY_LAST_APP_VERSION, currentVersionCode)
+						.commit();
 			} catch (NameNotFoundException e) {
 				Log.w(Constants.LOG,
 						"Unable to determine current app version from pacakge manager. Defenisvely assuming normal app start.");
@@ -125,12 +141,12 @@ public class PreferencesServiceSharedPreferences implements PreferencesService {
 	@Override
 	public Date getLastReleaseRefresh() {
 		return DateUtils.loadDate(sharedPreferences.getLong(
-				LAST_RELEASES_REFRESH, 0));
+				KEY_LAST_RELEASES_REFRESH, DEFAULT_LAST_RELEASES_REFRESH));
 	}
-	
+
 	@Override
 	public void setLastReleaseRefresh(Date date) {
-		sharedPreferences.edit().putLong(LAST_RELEASES_REFRESH,
+		sharedPreferences.edit().putLong(KEY_LAST_RELEASES_REFRESH,
 				DateUtils.persistDate(date));
 	}
 
@@ -140,5 +156,19 @@ public class PreferencesServiceSharedPreferences implements PreferencesService {
 		editor.clear();
 		editor.commit();
 
+	}
+
+	@Override
+	public boolean isUseOnlyWifi() {
+		/*
+		 * Should never return null, as Preference is initialized from XML in
+		 * constructor.
+		 */
+		return sharedPreferences.getBoolean(KEY_DOWLOAD_ONLY_ON_WIFI,
+				DEFAULT_DOWLOAD_ONLY_ON_WIFI);
+	}
+
+	protected static Context getContext() {
+		return Application.getContext();
 	}
 }

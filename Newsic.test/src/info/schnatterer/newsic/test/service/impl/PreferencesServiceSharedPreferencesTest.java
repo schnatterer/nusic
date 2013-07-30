@@ -4,10 +4,9 @@ import info.schnatterer.newsic.service.PreferencesService.AppStart;
 import info.schnatterer.newsic.service.impl.PreferencesServiceSharedPreferences;
 import junit.framework.TestCase;
 
-
 public class PreferencesServiceSharedPreferencesTest extends TestCase {
 	private PreferencesServiceSharedPreferences service = new PreferencesServiceSharedPreferences(
-			null, null) {
+			null) {
 	};
 
 	public void testCheckAppStart() {

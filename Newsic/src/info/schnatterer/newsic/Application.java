@@ -1,5 +1,7 @@
 package info.schnatterer.newsic;
 
+import info.schnatterer.newsic.service.PreferencesService;
+import info.schnatterer.newsic.service.impl.PreferencesServiceSharedPreferences;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -26,14 +28,17 @@ public class Application extends android.app.Application {
 
 	/**
 	 * Used to determine if there is an active data connection and what type of
-	 * connection it is if there is one
+	 * connection it is if there is one.
 	 * 
-	 * @return True if there is an active data connection, false otherwise.
+	 * Queries {@link PreferencesService#isUseOnlyWifi()} to see if a mobile
+	 * data connection can be used.
+	 * 
+	 * @return <code>true</code> if there is an active data connection.
+	 *         Otherwise <code>false</code>.
 	 */
 	public static final boolean isOnline() {
 		boolean state = false;
-		// final boolean onlyOnWifi =
-		// PreferenceUtils.getInstance(context).onlyOnWifi();
+		final boolean isOnlyOnWifi = getPreferenceService().isUseOnlyWifi();
 
 		/* Monitor network connections */
 		final ConnectivityManager connectivityManager = (ConnectivityManager) context
@@ -50,19 +55,18 @@ public class Application extends android.app.Application {
 		final NetworkInfo mbobileNetwork = connectivityManager
 				.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 		if (mbobileNetwork != null) {
-			// TODO get onlyOnWifi from PreferenceService
-			// if (!onlyOnWifi) {
-			state = mbobileNetwork.isConnectedOrConnecting();
-			// }
+			if (!isOnlyOnWifi) {
+				state = mbobileNetwork.isConnectedOrConnecting();
+			}
 		}
 
 		/* Other networks */
 		final NetworkInfo activeNetwork = connectivityManager
 				.getActiveNetworkInfo();
 		if (activeNetwork != null) {
-			// if (!onlyOnWifi) {
-			state = activeNetwork.isConnectedOrConnecting();
-			// }
+			if (!isOnlyOnWifi) {
+				state = activeNetwork.isConnectedOrConnecting();
+			}
 		}
 
 		return state;
@@ -98,5 +102,9 @@ public class Application extends android.app.Application {
 
 	public static void toast(int stringId, Object... args) {
 		toast(String.format(context.getString(stringId), args));
+	}
+
+	private static PreferencesService getPreferenceService() {
+		return PreferencesServiceSharedPreferences.getInstance();
 	}
 }

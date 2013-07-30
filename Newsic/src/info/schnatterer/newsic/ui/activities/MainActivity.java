@@ -13,6 +13,9 @@ import info.schnatterer.newsic.ui.tasks.LoadNewRelasesTask.FinishedLoadingListen
 
 import java.util.List;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
@@ -87,11 +90,21 @@ public class MainActivity extends FragmentActivity {
 		return true;
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_refresh:
 			startLoadingReleasesFromInternet();
+			break;
+		case R.id.action_settings:
+			if (Build.VERSION.SDK_INT < 11) {
+				// Start fragment activity
+				startActivity(new Intent(this,
+						NewsicPreferencesActivityLegacy.class));
+			} else {
+				startActivity(new Intent(this, NewsicPreferencesActivity.class));
+			}
 			break;
 		default:
 			break;
