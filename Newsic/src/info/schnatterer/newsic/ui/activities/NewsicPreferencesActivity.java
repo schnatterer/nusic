@@ -12,17 +12,16 @@ public class NewsicPreferencesActivity extends PreferenceActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		if (Build.VERSION.SDK_INT < 11) {
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
 			onCreatePreferenceActivity();
 		} else {
 			onCreatePreferenceFragment();
-
 		}
 	}
 
 	/**
-	 * Wraps legacy {@link #onCreate(Bundle)} code for Android < 3 (ie API lvl <
-	 * 11).
+	 * Wraps legacy {@link #onCreate(Bundle)} code for Android < 3 (i.e. API lvl
+	 * < 11).
 	 */
 	@SuppressWarnings("deprecation")
 	private void onCreatePreferenceActivity() {
@@ -30,7 +29,8 @@ public class NewsicPreferencesActivity extends PreferenceActivity {
 	}
 
 	/**
-	 * Wraps {@link #onCreate(Bundle)} code for Android >= 3 (ie API lvl >= 11).
+	 * Wraps {@link #onCreate(Bundle)} code for Android >= 3 (i.e. API lvl >=
+	 * 11).
 	 */
 	@SuppressLint("NewApi")
 	private void onCreatePreferenceFragment() {
@@ -38,5 +38,4 @@ public class NewsicPreferencesActivity extends PreferenceActivity {
 				.replace(android.R.id.content, new NewsicPreferencesFragment())
 				.commit();
 	}
-
 }
