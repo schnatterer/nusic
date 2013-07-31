@@ -1,15 +1,39 @@
 package info.schnatterer.newsic.ui.activities;
 
+import info.schnatterer.newsic.R;
 import info.schnatterer.newsic.ui.fragments.NewsicPreferencesFragment;
-import android.app.Activity;
+import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 
-public class NewsicPreferencesActivity extends Activity {
+public class NewsicPreferencesActivity extends PreferenceActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// Display the fragment as the main content.
+		if (Build.VERSION.SDK_INT < 11) {
+			onCreatePreferenceActivity();
+		} else {
+			onCreatePreferenceFragment();
+
+		}
+	}
+
+	/**
+	 * Wraps legacy {@link #onCreate(Bundle)} code for Android < 3 (ie API lvl <
+	 * 11).
+	 */
+	@SuppressWarnings("deprecation")
+	private void onCreatePreferenceActivity() {
+		addPreferencesFromResource(R.xml.preferences);
+	}
+
+	/**
+	 * Wraps {@link #onCreate(Bundle)} code for Android >= 3 (ie API lvl >= 11).
+	 */
+	@SuppressLint("NewApi")
+	private void onCreatePreferenceFragment() {
 		getFragmentManager().beginTransaction()
 				.replace(android.R.id.content, new NewsicPreferencesFragment())
 				.commit();
