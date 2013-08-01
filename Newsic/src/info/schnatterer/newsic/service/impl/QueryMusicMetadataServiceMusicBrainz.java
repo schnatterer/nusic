@@ -19,7 +19,15 @@ import org.musicbrainz.model.searchresult.ReleaseResultWs2;
 
 import android.annotation.SuppressLint;
 
+import com.google.common.util.concurrent.RateLimiter;
+
 public class QueryMusicMetadataServiceMusicBrainz implements QueryMusicMetadataService {
+	/**
+	 * MusicBrainz allows at max 22 requests in 20 seconds. However, we still
+	 * get 503s then. Try 1 request per second.
+	 */
+	private static final double PERMITS_PER_SECOND = 1.0;
+	final RateLimiter rateLimiter = RateLimiter.create(PERMITS_PER_SECOND);
 	/**
 	 * See http://musicbrainz.org/doc/Development/XML_Web_Service/Version_2#
 	 * Release_Type_and_Status
@@ -48,11 +56,17 @@ public class QueryMusicMetadataServiceMusicBrainz implements QueryMusicMetadataS
 					.append(SEARCH_DATE_1).append(dateFormat.format(fromDate))
 					.append(SEARCH_DATE_2).append(SEARCH_ARTIST_1)
 					.append(artistName).append(SEARCH_ARTIST_2).toString());
+			
+			// Limit request rate to avoid server bans
+			rateLimiter.acquire();
 			processReleaseResults(artistName, artist, releases,
 					releaseSearch.getFirstSearchResultPage());
 
 			while (releaseSearch.hasMore()) {
 				// TODO check if internet connection still there?
+				
+				// Limit request rate to avoid server bans
+				rateLimiter.acquire();
 				processReleaseResults(artistName, artist, releases,
 						releaseSearch.getNextSearchResultPage());
 			}
