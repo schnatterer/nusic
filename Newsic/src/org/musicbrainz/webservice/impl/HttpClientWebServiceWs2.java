@@ -6,11 +6,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.GZIPInputStream;
 
 import javax.net.ssl.SSLHandshakeException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpRequest;
@@ -223,6 +225,9 @@ public class HttpClientWebServiceWs2 extends DefaultWebServiceWs2 {
 		paramsBean.setUserAgent(USERAGENT);
 		method.setParams(params);
 
+		// Try using compression
+		method.setHeader("Accept-Encoding", "gzip");
+		
 		try {
 			// Execute the method.
 			System.out.println("Hitting url: " + method.getURI().toString());
@@ -251,6 +256,13 @@ public class HttpClientWebServiceWs2 extends DefaultWebServiceWs2 {
 			}
 			case HttpStatus.SC_OK:
 				InputStream instream = response.getEntity().getContent();
+				// Check if content is compressed
+				Header contentEncoding = response
+						.getFirstHeader("Content-Encoding");
+				if (contentEncoding != null
+						&& contentEncoding.getValue().equalsIgnoreCase("gzip")) {
+					instream = new GZIPInputStream(instream);
+				}
 				Metadata mtd = getParser().parse(instream);
 				// Closing the input stream will trigger connection release
 				try {
