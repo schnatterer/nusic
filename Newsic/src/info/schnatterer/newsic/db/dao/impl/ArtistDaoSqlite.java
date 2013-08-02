@@ -93,8 +93,8 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 				+ NewsicDatabase.INDEX_COLUMN_ARTIST_ANDROID_ID));
 		artist.setArtistName(cursor.getString(startIndex
 				+ NewsicDatabase.INDEX_COLUMN_ARTIST_NAME));
-		artist.setDateCreated(DateUtils.loadDate(cursor.getLong(startIndex
-				+ NewsicDatabase.INDEX_COLUMN_ARTIST_DATE_CREATED)));
+		artist.setDateCreated(DateUtils.loadDate(cursor, startIndex
+				+ NewsicDatabase.INDEX_COLUMN_ARTIST_DATE_CREATED));
 		return artist;
 	}
 

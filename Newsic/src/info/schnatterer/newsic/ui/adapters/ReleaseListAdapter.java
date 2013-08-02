@@ -72,6 +72,8 @@ public class ReleaseListAdapter extends BaseAdapter {
 		if (releaseDate != null) {
 			releaseDateView.setText(DateFormat.getDateFormat(context).format(
 					releaseDate));
+		} else {
+			releaseDateView.setText("");
 		}
 		thumbnailView.setImageBitmap(release.getArtwork());
 		// thumbnailView.setImageDrawable(listData.get(position)

@@ -172,12 +172,12 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 		release.setId(toId(cursor, startIndex));
 		release.setArtworkPath(cursor.getString(startIndex
 				+ NewsicDatabase.INDEX_COLUMN_RELEASE_ARTWORK_PATH));
-		release.setDateCreated(DateUtils.loadDate(cursor.getLong(startIndex
-				+ NewsicDatabase.INDEX_COLUMN_RELEASE_DATE_CREATED)));
+		release.setDateCreated(DateUtils.loadDate(cursor, startIndex
+				+ NewsicDatabase.INDEX_COLUMN_RELEASE_DATE_CREATED));
 		release.setMusicBrainzId(cursor.getString(startIndex
 				+ NewsicDatabase.INDEX_COLUMN_RELEASE_MB_ID));
-		release.setReleaseDate(DateUtils.loadDate(cursor.getLong(startIndex
-				+ NewsicDatabase.INDEX_COLUMN_RELEASE_DATE_RELEASED)));
+		release.setReleaseDate(DateUtils.loadDate(cursor, startIndex
+				+ NewsicDatabase.INDEX_COLUMN_RELEASE_DATE_RELEASED));
 		release.setReleaseName(cursor.getString(startIndex
 				+ NewsicDatabase.INDEX_COLUMN_RELEASE_NAME));
 
