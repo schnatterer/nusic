@@ -8,7 +8,6 @@ import info.schnatterer.newsic.db.dao.impl.ArtistDaoSqlite;
 import info.schnatterer.newsic.db.model.Artist;
 import info.schnatterer.newsic.db.model.Release;
 import info.schnatterer.newsic.service.ArtistQueryService;
-import info.schnatterer.newsic.service.PreferencesService;
 import info.schnatterer.newsic.service.QueryMusicMetadataService;
 import info.schnatterer.newsic.service.ReleasesService;
 import info.schnatterer.newsic.service.ServiceException;
@@ -16,7 +15,6 @@ import info.schnatterer.newsic.service.event.ArtistProgressListener;
 import info.schnatterer.newsic.service.event.ProgressListener;
 import info.schnatterer.newsic.service.event.ProgressUpdater;
 
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -31,7 +29,7 @@ import android.util.Log;
 
 public class ReleasesServiceImpl implements ReleasesService {
 	private Context context;
-	private QueryMusicMetadataService QueryMusicMetadataService = new QueryMusicMetadataServiceMusicBrainz();
+	private QueryMusicMetadataService queryMusicMetadataService = new QueryMusicMetadataServiceMusicBrainz();
 	private ArtistQueryService artistQueryService = new ArtistQueryServiceImpl();
 
 	private ArtistDao artistDao = null;
@@ -41,28 +39,11 @@ public class ReleasesServiceImpl implements ReleasesService {
 			listenerList) {
 	};
 
-	private Date fromDate = null;
-
 	public ReleasesServiceImpl(Context context) {
 		this.context = context;
 		if (context != null) {
 			this.artistDao = new ArtistDaoSqlite(context);
 		}
-		Calendar cal = Calendar.getInstance();
-		// TODO extract number of months to PreferenceService
-		cal.add(Calendar.MONTH, -6);
-		fromDate = cal.getTime();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * info.schnatterer.testapp.service.impl.ReleasesService#getNewestReleases()
-	 */
-	@Override
-	public List<Release> getNewestReleases(PreferencesService preferencesService) {
-		return addNewestReleases(new LinkedList<Release>(), preferencesService);
 	}
 
 	/*
@@ -72,7 +53,14 @@ public class ReleasesServiceImpl implements ReleasesService {
 	 * (java.util.List)
 	 */
 	@Override
-	public List<Release> addNewestReleases(List<Release> releases, PreferencesService preferencesService) {
+	public List<Release> updateNewestReleases(Date startDate, Date endDate,
+			boolean sortResult) {
+
+		// TODO create service for checking wifi and available internet
+		// connection
+
+		// TODO don't store references to the release here to avoid outOfMemoryException
+		List<Release> releases = new LinkedList<Release>();
 		List<Artist> artists;
 		try {
 			artists = getArtists();
@@ -87,12 +75,12 @@ public class ReleasesServiceImpl implements ReleasesService {
 				 */
 				ServiceException potentialException = null;
 				try {
-					List<Release> artistReleases = QueryMusicMetadataService
-							.findReleases(artist, fromDate).getReleases();
+					List<Release> artistReleases = queryMusicMetadataService
+							.findReleases(artist, startDate, endDate)
+							.getReleases();
 					if (artistReleases.size() > 0) {
 						artist.setReleases(artistReleases);
 						releases.addAll(artistReleases);
-						// TODO find which releases are new to the device
 						artistDao.saveOrUpdate(artist);
 					}
 					// TODO query images from lastfm
@@ -118,16 +106,21 @@ public class ReleasesServiceImpl implements ReleasesService {
 					Log.w(Constants.LOG, t);
 					progressUpdater.progressFailed(artist, artistCount, t,
 							releases);
-					return sortReleasesByDate(releases);
+					if (sortResult) {
+						return sortReleasesByDate(releases);
+					}
 				}
 
 				progressUpdater.progress(artist, artistCount++,
 						potentialException);
 			}
 			// Success
-			preferencesService.setLastReleaseRefresh(new Date());
 			progressUpdater.progressFinished(releases);
-			return sortReleasesByDate(releases);
+			if (sortResult) {
+				return sortReleasesByDate(releases);
+			} else {
+				return releases;
+			}
 			// } catch (ServiceException e) {
 		} catch (Throwable t) {
 			Log.w(Constants.LOG, t);

@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-<!-- Default values are defined in PreferencesServiceSharedPreferences -->
-    <CheckBoxPreference
-        android:defaultValue="@bool/preferences_default_download_only_on_wifi"
-        android:key="@string/preferences_key_download_only_on_wifi"
-        android:summary="@string/preferences_summary_download_only_on_wifi"
-        android:title="@string/preferences_title_download_only_on_wifi" />
-    <!--
+
+    <PreferenceCategory android:title="@string/preferences_category_releases" >
         <ListPreference
-        android:dependency="pref_sync"
-        android:key="pref_syncConnectionType"
-        android:title="@string/pref_syncConnectionType"
-        android:dialogTitle="@string/pref_syncConnectionType"
-        android:entries="@array/pref_syncConnectionTypes_entries"
-        android:entryValues="@array/pref_syncConnectionTypes_values"
-        android:defaultValue="@string/pref_syncConnectionTypes_default" />
-    -->
+            android:defaultValue="@string/preferences_default_download_releases_time_period"
+            android:entries="@array/preferences_entries_download_releases_time_period"
+            android:entryValues="@array/preferences_entry_values_download_releases_time_period"
+            android:key="@string/preferences_key_download_releases_time_period"
+            android:summary="@string/preferences_summary_download_releases_time_period"
+            android:title="@string/preferences_title_download_releases_time_period" />
+
+        <CheckBoxPreference
+            android:defaultValue="@bool/preferences_default_include_future_releases"
+            android:key="@string/preferences_key_include_future_releases"
+            android:summary="@string/preferences_summary_include_future_releases"
+            android:title="@string/preferences_title_include_future_releases" />
+        <CheckBoxPreference
+            android:defaultValue="@bool/preferences_default_full_update"
+            android:key="@string/preferences_key_full_update"
+            android:summary="@string/preferences_summary_full_update"
+            android:title="@string/preferences_title_full_update" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/preferences_category_bandwitdth" >
+        <CheckBoxPreference
+            android:defaultValue="@bool/preferences_default_download_only_on_wifi"
+            android:key="@string/preferences_key_download_only_on_wifi"
+            android:summary="@string/preferences_summary_download_only_on_wifi"
+            android:title="@string/preferences_title_download_only_on_wifi" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

@@ -13,6 +13,8 @@ import info.schnatterer.newsic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.newsic.service.impl.ReleasesServiceImpl;
 import info.schnatterer.newsic.ui.adapters.ReleaseListAdapter;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,6 +41,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 
 	private ProgressDialog progressDialog;
 	private boolean isExecuting = false;
+	// private Boolean isSuccess = null;
 
 	private Activity activity;
 	private List<Artist> errorArtists;
@@ -54,13 +57,64 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 	@Override
 	protected void onPreExecute() {
 		isExecuting = true;
+		// isSuccess = null;
 		releasesService.addArtistProcessedListener(this);
 	}
 
 	@Override
 	protected List<Release> doInBackground(Void... arg0) {
 		// Do it
-		return releasesService.getNewestReleases(preferencesService);
+
+		// TODO extract this to a service and write test for logic!
+		Date startDate = createStartDate(preferencesService.isFullUpdate(),
+				preferencesService.getDownloadReleasesTimePeriod(),
+				preferencesService.getLastSuccessfullReleaseRefresh());
+		Date endDate = createEndDate(preferencesService
+				.isIncludeFutureReleases());
+		List<Release> result = releasesService.updateNewestReleases(startDate,
+				endDate, false);
+
+		// if (isSuccess != null && isSuccess.equals(true)) {
+		// // Success
+		// // if (errorArtists.size() > 0)
+		// // TODO Notify user, that some artist failed
+		//
+		// // TODO find which releases are new to the device and notify user
+		// preferencesService.setLastSuccessfullReleaseRefresh(new Date());
+		// } else {
+		// // TODO Notify user of failure
+		// }
+
+		return result;
+	}
+
+	private Date createEndDate(boolean includeFutureReleases) {
+		if (!includeFutureReleases) {
+			return new Date(); // Today
+		} else {
+			return null;
+		}
+	}
+
+	private Date createStartDate(boolean isFullUpdate, int months,
+			Date lastReleaseRefresh) {
+		if (lastReleaseRefresh == null) {
+			// Same as full Update
+			return createStartDateFullUpdate(months);
+		}
+		if (isFullUpdate) {
+			return createStartDateFullUpdate(months);
+		}
+		return lastReleaseRefresh;
+	}
+
+	private Date createStartDateFullUpdate(int months) {
+		if (months <= 0) {
+			return null;
+		}
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MONTH, -months);
+		return cal.getTime();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -105,6 +159,10 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 					Application.toast(
 							R.string.LoadNewReleasesTask_finishedWithErrors,
 							results.size(), errorArtists.size());
+				} else {
+					// TODO move this to separate service, see
+					preferencesService
+							.setLastSuccessfullReleaseRefresh(new Date());
 				}
 				break;
 			case PROGRESS_FAILED: {

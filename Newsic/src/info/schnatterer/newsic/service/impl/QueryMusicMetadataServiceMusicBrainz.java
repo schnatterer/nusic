@@ -21,7 +21,8 @@ import android.annotation.SuppressLint;
 
 import com.google.common.util.concurrent.RateLimiter;
 
-public class QueryMusicMetadataServiceMusicBrainz implements QueryMusicMetadataService {
+public class QueryMusicMetadataServiceMusicBrainz implements
+		QueryMusicMetadataService {
 	/**
 	 * MusicBrainz allows at max 22 requests in 20 seconds. However, we still
 	 * get 503s then. Try 1 request per second.
@@ -33,8 +34,10 @@ public class QueryMusicMetadataServiceMusicBrainz implements QueryMusicMetadataS
 	 * Release_Type_and_Status
 	 */
 	private static final String SEARCH_BASE = "type:album";
-	private static final String SEARCH_DATE_1 = " AND date:[";
-	private static final String SEARCH_DATE_2 = " TO ????-??-??]";
+	private static final String SEARCH_DATE_BASE = " AND date:[";
+	private static final String SEARCH_DATE_TO = " TO ";
+	private static final String SEARCH_DATE_OPEN_END = "?";
+	private static final String SEARCH_DATE_FINAL = "]";
 	private static final String SEARCH_ARTIST_1 = " AND artist:\"";
 	private static final String SEARCH_ARTIST_2 = "\"";
 
@@ -42,7 +45,7 @@ public class QueryMusicMetadataServiceMusicBrainz implements QueryMusicMetadataS
 	private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	@Override
-	public Artist findReleases(Artist artist, Date fromDate)
+	public Artist findReleases(Artist artist, Date fromDate, Date endDate)
 			throws ServiceException {
 		if (artist == null || artist.getArtistName() == null) {
 			return null;
@@ -52,11 +55,10 @@ public class QueryMusicMetadataServiceMusicBrainz implements QueryMusicMetadataS
 		try {
 			// List<ReleaseResultWs2> releaseResults = findReleases();
 			org.musicbrainz.controller.Release releaseSearch = createReleaseSearch();
-			releaseSearch.search(new StringBuffer(SEARCH_BASE)
-					.append(SEARCH_DATE_1).append(dateFormat.format(fromDate))
-					.append(SEARCH_DATE_2).append(SEARCH_ARTIST_1)
+			releaseSearch.search(appendDate(fromDate, endDate,
+					new StringBuffer(SEARCH_BASE)).append(SEARCH_ARTIST_1)
 					.append(artistName).append(SEARCH_ARTIST_2).toString());
-			
+
 			// Limit request rate to avoid server bans
 			rateLimiter.acquire();
 			processReleaseResults(artistName, artist, releases,
@@ -64,7 +66,7 @@ public class QueryMusicMetadataServiceMusicBrainz implements QueryMusicMetadataS
 
 			while (releaseSearch.hasMore()) {
 				// TODO check if internet connection still there?
-				
+
 				// Limit request rate to avoid server bans
 				rateLimiter.acquire();
 				processReleaseResults(artistName, artist, releases,
@@ -78,10 +80,32 @@ public class QueryMusicMetadataServiceMusicBrainz implements QueryMusicMetadataS
 			throw securityException;
 		} catch (Throwable t) {
 			throw new ServiceException(
-					R.string.QueryMusicMetadataService_errorFindingReleasesArtist, t,
-					artistName);
+					R.string.QueryMusicMetadataService_errorFindingReleasesArtist,
+					t, artistName);
 		}
 		return artist;
+	}
+
+	public StringBuffer appendDate(Date startDate, Date endDate, StringBuffer stringBuffer) {
+		if (startDate == null && endDate == null) {
+			// Don't append anything
+			return stringBuffer;
+		} 
+		 stringBuffer.append(SEARCH_DATE_BASE);
+		if (startDate != null) {
+			stringBuffer.append(dateFormat.format(startDate));
+		} else {
+			stringBuffer.append("0");
+		}
+		
+		stringBuffer.append(SEARCH_DATE_TO);
+		if (endDate != null) {
+			stringBuffer.append(dateFormat.format(endDate));
+		} else {
+			stringBuffer.append(SEARCH_DATE_OPEN_END);
+		}
+		stringBuffer.append(SEARCH_DATE_FINAL);
+		return stringBuffer;
 	}
 
 	protected org.musicbrainz.controller.Release createReleaseSearch() {
@@ -116,39 +140,5 @@ public class QueryMusicMetadataServiceMusicBrainz implements QueryMusicMetadataS
 				}
 			}
 		}
-
 	}
-
-	// /**
-	// * Calls MusicBrainz API.
-	// *
-	// * This search walks over the release page by page, returning all
-	// releases.
-	// * It might return different artist with similar name. It also returns
-	// * different release of the same name (i.e. releases of the same release
-	// * group in different countries). <b>Note: It is more effective to process
-	// * the releases page by page</b>
-	// *
-	// * @param searchText
-	// * @return
-	// * @throws ServiceException
-	// */
-	// protected List<ReleaseResultWs2> findReleases(String searchText) throws
-	// ServiceException {
-	// org.musicbrainz.controller.Release releaseSearch = new
-	// org.musicbrainz.controller.Release();
-	// releaseSearch.search(searchText);
-	// List<ReleaseResultWs2> releaseResults = null;
-	// try {
-	// releaseResults = releaseSearch.getFullSearchResultList();
-	// // while (releaseSearch.hasMore()) {
-	// // releaseResults.addAll(releaseSearch.getNextSearchResultPage());
-	// // }
-	// } catch (MBWS2Exception e) {
-	// throw new ServiceException(
-	// R.string.QueryMusicMetadataService_errorQueryingMusicBrainz, e);
-	// }
-	//
-	// return releaseResults;
-	// }
 }

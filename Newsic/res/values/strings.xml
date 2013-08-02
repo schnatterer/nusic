@@ -6,6 +6,23 @@
     <string name="action_refresh">Refresh releases</string>
     <string name="action_settings">Settings</string>
     
+     <string name="preferences_category_releases">Releases</string>
+    <string name="preferences_title_download_releases_time_period">Time period</string>
+	<string name="preferences_summary_download_releases_time_period">Time period (from today back in time) for which releases are downloaded and displayed</string>
+    <string-array name="preferences_entries_download_releases_time_period">
+        <item>One month</item>
+        <item>Three months</item>
+        <item>Six months</item>
+        <item>One year</item>
+        <item>Two years</item>
+        <item>Unlimited (download all release of each artist)</item>
+    </string-array>
+    <string name="preferences_title_include_future_releases">Include future releases</string>
+    <string name="preferences_summary_include_future_releases">Also download and display releases that are not available yet</string>
+    <string name="preferences_title_full_update">Full update</string>
+    <string name="preferences_summary_full_update">Always update the complete time period. Significantly higher bandwitdth consumption but finds also releases that are added to the database after they are release (if that ever happens))</string>
+    
+    <string name="preferences_category_bandwitdth">Bandwidth usage</string>
     <string name="preferences_title_download_only_on_wifi">Download via Wi-Fi only</string>
     <string name="preferences_summary_download_only_on_wifi">Don\'t use mobile networks</string>
     

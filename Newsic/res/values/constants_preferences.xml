@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Preference details. Don't translate! -->
 <resources>
+    
+     <string name="preferences_key_download_releases_time_period">downloadReleasesNumberOfMonths</string>
+    <string name="preferences_default_download_releases_time_period">6</string>
+    <string-array name="preferences_entry_values_download_releases_time_period">
+        <item>1</item>
+        <item>3</item>
+        <item>6</item>
+        <item>12</item>
+        <item>24</item>
+        <item>0</item>
+    </string-array>
+
+    <string name="preferences_key_include_future_releases">includeFutureReleases</string>
+    <bool name="preferences_default_include_future_releases">true</bool>
+   
+    <string name="preferences_key_full_update">fullUpdate</string>
+    <bool name="preferences_default_full_update">false</bool>
 
     <string name="preferences_key_download_only_on_wifi">onWifiOnly</string>
-
     <bool name="preferences_default_download_only_on_wifi">true</bool>
 
 </resources>

@@ -11,7 +11,6 @@ import java.util.Date;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.preference.PreferenceManager;
@@ -37,10 +36,20 @@ public class PreferencesServiceSharedPreferences implements PreferencesService {
 	 * Last time the {@link Release}s have been loaded from the internet
 	 */
 	private static final String KEY_LAST_RELEASES_REFRESH = "last_release_refresh";
-	private static final int DEFAULT_LAST_RELEASES_REFRESH = 0;
+	private static final Date DEFAULT_LAST_RELEASES_REFRESH = null;
 
 	private final String KEY_DOWLOAD_ONLY_ON_WIFI;
 	private final Boolean DEFAULT_DOWLOAD_ONLY_ON_WIFI;
+
+	private final String KEY_INCLUDE_FUTURE_RELEASES;
+	private final Boolean DEFAULT_INCLUDE_FUTURE_RELEASES;
+
+	private final String KEY_DOWNLOAD_RELEASES_TIME_PERIOD;
+	private final Integer DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD;
+	
+	private final String KEY_FULL_UPDATE;
+	private final Boolean DEFAULT_FULL_UPDATE;
+
 
 	private final SharedPreferences sharedPreferences;
 	// private static Context context = null;
@@ -91,10 +100,46 @@ public class PreferencesServiceSharedPreferences implements PreferencesService {
 			DEFAULT_DOWLOAD_ONLY_ON_WIFI = getContext().getResources()
 					.getBoolean(
 							R.bool.preferences_default_download_only_on_wifi);
+
+			KEY_INCLUDE_FUTURE_RELEASES = getContext().getString(
+					R.string.preferences_key_include_future_releases);
+			DEFAULT_INCLUDE_FUTURE_RELEASES = getContext().getResources()
+					.getBoolean(
+							R.bool.preferences_default_include_future_releases);
+
+			KEY_DOWNLOAD_RELEASES_TIME_PERIOD = getContext().getString(
+					R.string.preferences_key_download_releases_time_period);
+			String prefValue = getContext().getResources().getString(
+					R.string.preferences_default_download_releases_time_period);
+			try {
+				DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD = Integer
+						.parseInt(prefValue);
+			} catch (NumberFormatException e) {
+				throw new RuntimeException(
+						"Unable to parse integer from constant \""
+								+ R.string.preferences_default_download_releases_time_period
+								+ "\", value:" + prefValue, e);
+			}
+			
+			KEY_FULL_UPDATE = getContext().getString(
+					R.string.preferences_key_full_update);
+			DEFAULT_FULL_UPDATE = getContext().getResources()
+					.getBoolean(
+							R.bool.preferences_default_full_update);
+
 		} else {
 			// e.g. for Testing
 			KEY_DOWLOAD_ONLY_ON_WIFI = null;
 			DEFAULT_DOWLOAD_ONLY_ON_WIFI = null;
+
+			KEY_INCLUDE_FUTURE_RELEASES = null;
+			DEFAULT_INCLUDE_FUTURE_RELEASES = null;
+
+			KEY_DOWNLOAD_RELEASES_TIME_PERIOD = null;
+			DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD = null;
+			
+			KEY_FULL_UPDATE = null;
+			DEFAULT_FULL_UPDATE = null;
 		}
 	}
 
@@ -139,33 +184,57 @@ public class PreferencesServiceSharedPreferences implements PreferencesService {
 	}
 
 	@Override
-	public Date getLastReleaseRefresh() {
-		return DateUtils.loadDate(sharedPreferences.getLong(
-				KEY_LAST_RELEASES_REFRESH, DEFAULT_LAST_RELEASES_REFRESH));
+	public Date getLastSuccessfullReleaseRefresh() {
+		long lastReleaseRefreshMillis= sharedPreferences.getLong(
+				KEY_LAST_RELEASES_REFRESH, 0);
+		if (lastReleaseRefreshMillis == 0) {
+			return DEFAULT_LAST_RELEASES_REFRESH;
+		}
+		return DateUtils.loadDate(lastReleaseRefreshMillis);
 	}
 
 	@Override
-	public void setLastReleaseRefresh(Date date) {
-		sharedPreferences.edit().putLong(KEY_LAST_RELEASES_REFRESH,
-				DateUtils.persistDate(date));
+	public boolean setLastSuccessfullReleaseRefresh(Date date) {
+		return sharedPreferences.edit().putLong(KEY_LAST_RELEASES_REFRESH,
+				DateUtils.persistDate(date)).commit();
 	}
 
 	@Override
 	public void clearPreferences() {
-		Editor editor = sharedPreferences.edit();
-		editor.clear();
-		editor.commit();
-
+		sharedPreferences.edit().clear().commit();
 	}
 
 	@Override
 	public boolean isUseOnlyWifi() {
-		/*
-		 * Should never return null, as Preference is initialized from XML in
-		 * constructor.
-		 */
 		return sharedPreferences.getBoolean(KEY_DOWLOAD_ONLY_ON_WIFI,
 				DEFAULT_DOWLOAD_ONLY_ON_WIFI);
+	}
+
+	@Override
+	public boolean isIncludeFutureReleases() {
+		return sharedPreferences.getBoolean(KEY_INCLUDE_FUTURE_RELEASES,
+				DEFAULT_INCLUDE_FUTURE_RELEASES);
+	}
+
+	@Override
+	public int getDownloadReleasesTimePeriod() {
+		String prefValue = sharedPreferences.getString(
+				KEY_DOWNLOAD_RELEASES_TIME_PERIOD,
+				DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD.toString());
+		try {
+			return Integer.parseInt(prefValue);
+		} catch (NumberFormatException e) {
+			throw new RuntimeException(
+					"Unable to parse integer from property \""
+							+ KEY_DOWNLOAD_RELEASES_TIME_PERIOD + "\", value:"
+							+ prefValue, e);
+		}
+	}
+	
+	@Override
+	public boolean isFullUpdate() {
+		return sharedPreferences.getBoolean(KEY_FULL_UPDATE,
+				DEFAULT_FULL_UPDATE);
 	}
 
 	protected static Context getContext() {

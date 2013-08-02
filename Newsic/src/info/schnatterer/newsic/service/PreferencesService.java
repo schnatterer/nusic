@@ -44,15 +44,22 @@ public interface PreferencesService {
 
 	/**
 	 * Gets the last time the {@link Release}s have <b>successfully</b> been
-	 * loaded from the internet
+	 * loaded from the internet.
+	 * 
+	 * This is useful to determine the start date for the next refresh.
 	 */
-	Date getLastReleaseRefresh();
+	Date getLastSuccessfullReleaseRefresh();
 
 	/**
 	 * Set last time the {@link Release}s have <b>successfully</b> been loaded
-	 * from the internet
+	 * from the internet.
+	 * 
+	 * This is useful to determine the start date for the next refresh.
+	 * 
+	 * @return <code>true</code> if successfully written, otherwise
+	 *         <code>false</code>
 	 */
-	void setLastReleaseRefresh(Date date);
+	boolean setLastSuccessfullReleaseRefresh(Date date);
 
 	/**
 	 * @return <code>true</code> if the user has checked to only download images
@@ -60,5 +67,26 @@ public interface PreferencesService {
 	 */
 	boolean isUseOnlyWifi();
 
+	/**
+	 * >Also download and display releases that are not available yet.
+	 * 
+	 * @return
+	 */
+	boolean isIncludeFutureReleases();
+
+	/**
+	 * Returns time period in months (from today back in time) for which
+	 * releases are downloaded and displayed.
+	 * 
+	 * @return
+	 */
+	int getDownloadReleasesTimePeriod();
+
+	/**
+	 * Always update the complete time period.
+	 * 
+	 * @return
+	 */
+	boolean isFullUpdate();
 
 }
