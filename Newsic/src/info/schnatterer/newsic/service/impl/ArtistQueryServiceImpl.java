@@ -4,10 +4,6 @@ import info.schnatterer.newsic.R;
 import info.schnatterer.newsic.db.model.Artist;
 import info.schnatterer.newsic.service.ArtistQueryService;
 import info.schnatterer.newsic.service.ServiceException;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -30,19 +26,21 @@ public class ArtistQueryServiceImpl implements ArtistQueryService {
 	 * (android.content.ContentResolver)
 	 */
 	@Override
-	public List<Artist> getArtists(ContentResolver contentResolver)
+	public Artist[] getArtists(ContentResolver contentResolver)
 			throws ServiceException {
-		List<Artist> artists = new ArrayList<Artist>();
 		Cursor cursor = null;
+		Artist[] artists  = null;
 		try {
 			cursor = contentResolver.query(ARTIST_URI, ARTIST_PROJECTION, null,
 					null, ARTIST_SORT_ORDER);
+			artists = new Artist[cursor.getCount()];
+			int i = 0;
 			while (cursor.moveToNext()) {
 				Artist artist = new Artist();
 				artist.setAndroidAudioArtistId(cursor.getLong(ArtistProjection.ID.getIndex()));
 				artist.setArtistName(cursor.getString(ArtistProjection.ARTIST
 						.getIndex()));
-				artists.add(artist);
+				artists[i++] = artist;
 			}
 		} catch (Throwable t) {
 			throw new ServiceException(

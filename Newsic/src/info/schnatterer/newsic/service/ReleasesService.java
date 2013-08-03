@@ -1,11 +1,9 @@
 package info.schnatterer.newsic.service;
 
 import info.schnatterer.newsic.db.model.Artist;
-import info.schnatterer.newsic.db.model.Release;
 import info.schnatterer.newsic.service.event.ArtistProgressListener;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author schnatterer
@@ -25,15 +23,10 @@ public interface ReleasesService {
 	 * @param startDate
 	 *            can be <code>null</code>, which results in a search beginning
 	 *            at 0.
-	 * @param sortResult
-	 *            if <code>true</code>, the result is sorted by release date,
-	 *            descending.
 	 * @throws ServiceException
 	 * @throws {@link NullPointerException} when artist is <code>null</code>
-	 * @return
 	 */
-	List<Release> updateNewestReleases(Date startDate, Date endDate,
-			boolean sortResult);
+	void updateNewestReleases(Date startDate, Date endDate);
 
 	/**
 	 * Adds an {@link ArtistProgressListener} to the Service. This is called

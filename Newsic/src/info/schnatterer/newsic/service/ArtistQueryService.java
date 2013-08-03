@@ -1,9 +1,6 @@
 package info.schnatterer.newsic.service;
 
 import info.schnatterer.newsic.db.model.Artist;
-
-import java.util.List;
-
 import android.content.ContentResolver;
 
 public interface ArtistQueryService {
@@ -14,7 +11,7 @@ public interface ArtistQueryService {
 	 * @return
 	 * @throws ServiceException
 	 */
-	List<Artist> getArtists(ContentResolver contentResolver)
+	Artist[] getArtists(ContentResolver contentResolver)
 			throws ServiceException;
 
 }

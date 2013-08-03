@@ -14,8 +14,6 @@
         <item>Three months</item>
         <item>Six months</item>
         <item>One year</item>
-        <item>Two years</item>
-        <item>Unlimited (download all release of each artist)</item>
     </string-array>
     <string name="preferences_title_include_future_releases">Include future releases</string>
     <string name="preferences_summary_include_future_releases">Also download and display releases that are not available yet</string>
@@ -38,7 +36,7 @@
     <string name="ArtistQueryService_errorLoadingArtists">Error loading artists from the device</string>
     <string name="ReleasesService_errorPersistingData">Error saving data on the device</string>
     <string name="LoadNewReleasesTask_errorFindingReleases">Error finding releases on the internet: </string>
-    <string name="LoadNewReleasesTask_finishedWithErrors">Updated releases for %1$d artists successfully, update failed for %2$d</string>
+    <string name="LoadNewReleasesTask_finishedWithErrors">Updated releases failed for some (%1$d) artists</string>
     <string name="QueryMusicMetadataService_errorFindingReleasesArtist">Error finding releases for artist %1$s</string>
     <string name="QueryMusicMetadataService_errorQueryingMusicBrainz">Error querying releases for artist %1$s from the internet. No connection to the internet?</string>
 

@@ -86,18 +86,19 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 		return artist;
 	}
 
-	public StringBuffer appendDate(Date startDate, Date endDate, StringBuffer stringBuffer) {
+	public StringBuffer appendDate(Date startDate, Date endDate,
+			StringBuffer stringBuffer) {
 		if (startDate == null && endDate == null) {
 			// Don't append anything
 			return stringBuffer;
-		} 
-		 stringBuffer.append(SEARCH_DATE_BASE);
+		}
+		stringBuffer.append(SEARCH_DATE_BASE);
 		if (startDate != null) {
 			stringBuffer.append(dateFormat.format(startDate));
 		} else {
 			stringBuffer.append("0");
 		}
-		
+
 		stringBuffer.append(SEARCH_DATE_TO);
 		if (endDate != null) {
 			stringBuffer.append(dateFormat.format(endDate));
@@ -134,9 +135,13 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 					releases.put(releaseResult.getTitle().trim(), release);
 					artist.getReleases().add(release);
 					// TODO store all release dates and their countries?
-				} else if (existingRelease.getReleaseDate().after(newDate)) {
-					// Change date of existing release
-					existingRelease.setReleaseDate(newDate);
+				} else {
+					if (existingRelease.getReleaseDate() == null
+							|| (newDate != null && existingRelease
+									.getReleaseDate().after(newDate))) {
+						// Change date of existing release
+						existingRelease.setReleaseDate(newDate);
+					}
 				}
 			}
 		}

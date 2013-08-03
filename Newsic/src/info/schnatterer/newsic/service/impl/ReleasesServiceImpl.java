@@ -6,7 +6,6 @@ import info.schnatterer.newsic.db.DatabaseException;
 import info.schnatterer.newsic.db.dao.ArtistDao;
 import info.schnatterer.newsic.db.dao.impl.ArtistDaoSqlite;
 import info.schnatterer.newsic.db.model.Artist;
-import info.schnatterer.newsic.db.model.Release;
 import info.schnatterer.newsic.service.ArtistQueryService;
 import info.schnatterer.newsic.service.QueryMusicMetadataService;
 import info.schnatterer.newsic.service.ReleasesService;
@@ -15,12 +14,8 @@ import info.schnatterer.newsic.service.event.ArtistProgressListener;
 import info.schnatterer.newsic.service.event.ProgressListener;
 import info.schnatterer.newsic.service.event.ProgressUpdater;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import android.content.ContentResolver;
@@ -34,8 +29,8 @@ public class ReleasesServiceImpl implements ReleasesService {
 
 	private ArtistDao artistDao = null;
 
-	private Set<ProgressListener<Artist, List<Release>>> listenerList = new HashSet<ProgressListener<Artist, List<Release>>>();
-	private ProgressUpdater<Artist, List<Release>> progressUpdater = new ProgressUpdater<Artist, List<Release>>(
+	private Set<ProgressListener<Artist, Void>> listenerList = new HashSet<ProgressListener<Artist, Void>>();
+	private ProgressUpdater<Artist, Void> progressUpdater = new ProgressUpdater<Artist, Void>(
 			listenerList) {
 	};
 
@@ -53,21 +48,18 @@ public class ReleasesServiceImpl implements ReleasesService {
 	 * (java.util.List)
 	 */
 	@Override
-	public List<Release> updateNewestReleases(Date startDate, Date endDate,
-			boolean sortResult) {
+	public void updateNewestReleases(Date startDate, Date endDate) {
 
 		// TODO create service for checking wifi and available internet
 		// connection
 
-		// TODO don't store references to the release here to avoid outOfMemoryException
-		List<Release> releases = new LinkedList<Release>();
-		List<Artist> artists;
+		Artist[] artists;
 		try {
 			artists = getArtists();
 
-			progressUpdater.progressStarted(artists.size());
-			int artistCount = 1;
-			for (Artist artist : artists) {
+			progressUpdater.progressStarted(artists.length);
+			for (int i=0; i< artists.length; i++) {
+				Artist artist = artists[i];
 				/*
 				 * TODO find out if its more efficient to concat all artist in
 				 * one big query and then process it page by page (keep URL
@@ -75,18 +67,28 @@ public class ReleasesServiceImpl implements ReleasesService {
 				 */
 				ServiceException potentialException = null;
 				try {
-					List<Release> artistReleases = queryMusicMetadataService
+					queryMusicMetadataService
 							.findReleases(artist, startDate, endDate)
 							.getReleases();
-					if (artistReleases.size() > 0) {
-						artist.setReleases(artistReleases);
-						releases.addAll(artistReleases);
-						artistDao.saveOrUpdate(artist);
-					}
+					
 					// TODO query images from lastfm
 					// de.umass.lastfm.Artist artistInfo =
 					// de.umass.lastfm.Artist.getInfo(artist.getArtistName(),
 					// Constants.LASTFM_API_KEY);
+					
+					if (artist.getReleases().size() > 0) {
+						artistDao.saveOrUpdate(artist);
+						// After saving, release memory for releases
+						
+//						for (Release release : artist.getReleases()) {
+//							// clear reference from release to artist as well
+//							release.setArtist(null);
+//						}
+						artist.setReleases(null);
+					}
+					// Release memory for artist
+					artists[i] = null;
+					
 				} catch (ServiceException e) {
 					Log.w(Constants.LOG, e.getMessage(), e.getCause());
 					// Allow for displaying errors to the user.
@@ -97,35 +99,28 @@ public class ReleasesServiceImpl implements ReleasesService {
 					progressUpdater
 							.progressFailed(
 									artist,
-									artistCount,
+									i+1,
 									new ServiceException(
 											R.string.ReleasesService_errorPersistingData,
-											databaseException), releases);
-					return sortReleasesByDate(releases);
+											databaseException), null);
+					return;
 				} catch (Throwable t) {
 					Log.w(Constants.LOG, t);
-					progressUpdater.progressFailed(artist, artistCount, t,
-							releases);
-					if (sortResult) {
-						return sortReleasesByDate(releases);
-					}
+					progressUpdater.progressFailed(artist, i+1, t , null);
+					return;
 				}
 
-				progressUpdater.progress(artist, artistCount++,
+				progressUpdater.progress(artist, i+1,
 						potentialException);
 			}
 			// Success
-			progressUpdater.progressFinished(releases);
-			if (sortResult) {
-				return sortReleasesByDate(releases);
-			} else {
-				return releases;
-			}
+			progressUpdater.progressFinished(null);
+			return;
 			// } catch (ServiceException e) {
 		} catch (Throwable t) {
 			Log.w(Constants.LOG, t);
-			progressUpdater.progressFailed(null, 0, t, releases);
-			return new LinkedList<Release>();
+			progressUpdater.progressFailed(null, 0, t, null);
+			return;
 		}
 	}
 
@@ -144,24 +139,7 @@ public class ReleasesServiceImpl implements ReleasesService {
 		return listenerList.remove(artistProcessedListener);
 	}
 
-	public List<Artist> getArtists() throws ServiceException {
+	public Artist[] getArtists() throws ServiceException {
 		return artistQueryService.getArtists(getContentResolver());
-	}
-
-	/**
-	 * Sorts an instance of a list of releases.
-	 * 
-	 * @param releases
-	 * @return the same instance as <code>releases</code>
-	 */
-	public List<Release> sortReleasesByDate(List<Release> releases) {
-		Collections.sort(releases,
-				Collections.reverseOrder(new Comparator<Release>() {
-					public int compare(Release o1, Release o2) {
-						return o1.getReleaseDate().compareTo(
-								o2.getReleaseDate());
-					}
-				}));
-		return releases;
 	}
 }

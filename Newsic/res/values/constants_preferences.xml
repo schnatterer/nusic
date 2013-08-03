@@ -9,8 +9,6 @@
         <item>3</item>
         <item>6</item>
         <item>12</item>
-        <item>24</item>
-        <item>0</item>
     </string-array>
 
     <string name="preferences_key_include_future_releases">includeFutureReleases</string>

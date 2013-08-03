@@ -4,7 +4,6 @@ import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.Constants;
 import info.schnatterer.newsic.R;
 import info.schnatterer.newsic.db.model.Artist;
-import info.schnatterer.newsic.db.model.Release;
 import info.schnatterer.newsic.service.PreferencesService;
 import info.schnatterer.newsic.service.ReleasesService;
 import info.schnatterer.newsic.service.ServiceException;
@@ -33,8 +32,8 @@ import android.util.Log;
  * @author schnatterer
  * 
  */
-public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
-		implements ArtistProgressListener {
+public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
+		ArtistProgressListener {
 	private ReleasesService releasesService;
 	private PreferencesService preferencesService = PreferencesServiceSharedPreferences
 			.getInstance();
@@ -62,7 +61,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 	}
 
 	@Override
-	protected List<Release> doInBackground(Void... arg0) {
+	protected Void doInBackground(Void... arg0) {
 		// Do it
 
 		// TODO extract this to a service and write test for logic!
@@ -71,8 +70,8 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 				preferencesService.getLastSuccessfullReleaseRefresh());
 		Date endDate = createEndDate(preferencesService
 				.isIncludeFutureReleases());
-		List<Release> result = releasesService.updateNewestReleases(startDate,
-				endDate, false);
+		releasesService.updateNewestReleases(startDate, endDate);
+		return null;
 
 		// if (isSuccess != null && isSuccess.equals(true)) {
 		// // Success
@@ -84,8 +83,6 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 		// } else {
 		// // TODO Notify user of failure
 		// }
-
-		return result;
 	}
 
 	private Date createEndDate(boolean includeFutureReleases) {
@@ -117,7 +114,6 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 		return cal.getTime();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void onProgressUpdate(Object... objects) {
 		// Update GUI (ProgressDialog) in MainThread
@@ -154,11 +150,10 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 			case PROGRESS_FINISHED:
 				progressDialog.dismiss();
 				progressDialog = null;
-				List<Release> results = (List<Release>) objects[1];
 				if (errorArtists.size() > 0) {
 					Application.toast(
 							R.string.LoadNewReleasesTask_finishedWithErrors,
-							results.size(), errorArtists.size());
+							errorArtists.size());
 				} else {
 					// TODO move this to separate service, see
 					preferencesService
@@ -212,7 +207,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 	}
 
 	@Override
-	protected void onPostExecute(List<Release> result) {
+	protected void onPostExecute(Void result) {
 		isExecuting = false;
 		releasesService.removeArtistProcessedListener(this);
 	}
@@ -283,18 +278,17 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, List<Release>>
 	}
 
 	@Override
-	public void onProgressFinished(List<Release> result) {
+	public void onProgressFinished(Void result) {
 		notifyListeners();
-		publishProgress(ProgressUpdateOperation.PROGRESS_FINISHED, result);
+		publishProgress(ProgressUpdateOperation.PROGRESS_FINISHED);
 	}
 
 	@Override
 	public void onProgressFailed(Artist entity, int progress, int max,
-			List<Release> resultOnFailure, Throwable potentialException) {
+			Void resultOnFailure, Throwable potentialException) {
 		notifyListeners();
 		publishProgress(ProgressUpdateOperation.PROGRESS_FAILED,
-				new ProgressUpdate(entity, progress, max, potentialException),
-				resultOnFailure);
+				new ProgressUpdate(entity, progress, max, potentialException));
 	}
 
 	private enum ProgressUpdateOperation {
