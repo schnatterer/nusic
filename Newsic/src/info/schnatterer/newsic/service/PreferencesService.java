@@ -1,6 +1,7 @@
 package info.schnatterer.newsic.service;
 
 import info.schnatterer.newsic.db.model.Release;
+import info.schnatterer.newsic.service.event.PreferenceChangedListener;
 
 import java.util.Date;
 
@@ -88,5 +89,11 @@ public interface PreferencesService {
 	 * @return
 	 */
 	boolean isFullUpdate();
+
+	void registerOnSharedPreferenceChangeListener(
+			PreferenceChangedListener preferenceChangedListener);
+
+	void unregisterOnSharedPreferenceChangeListener(
+			PreferenceChangedListener preferenceChangedListener);
 
 }

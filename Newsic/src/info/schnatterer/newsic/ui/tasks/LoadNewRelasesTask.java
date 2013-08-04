@@ -46,9 +46,19 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 	private List<Artist> errorArtists;
 
 	private Set<FinishedLoadingListener> listeners = new HashSet<FinishedLoadingListener>();
+	private boolean forceFullUpdate = false;
 
-	public LoadNewRelasesTask(Activity activity) {
+	/**
+	 * @param activity
+	 * @param forceFullUpdate
+	 *            ignores the value of {@link PreferencesService#isFullUpdate()}
+	 *            and does a full update. Useful when
+	 *            {@link PreferencesService#getDownloadReleasesTimePeriod()}
+	 *            changed.
+	 */
+	public LoadNewRelasesTask(Activity activity, boolean forceFullUpdate) {
 		this.activity = activity;
+		this.forceFullUpdate = forceFullUpdate;
 		// Run in global context
 		releasesService = new ReleasesServiceImpl(Application.getContext());
 	}
@@ -65,7 +75,14 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 		// Do it
 
 		// TODO extract this to a service and write test for logic!
-		Date startDate = createStartDate(preferencesService.isFullUpdate(),
+		boolean fullUpdate;
+		if (forceFullUpdate) {
+			fullUpdate = true;
+		} else {
+			fullUpdate = preferencesService.isFullUpdate();
+		}
+
+		Date startDate = createStartDate(fullUpdate,
 				preferencesService.getDownloadReleasesTimePeriod(),
 				preferencesService.getLastSuccessfullReleaseRefresh());
 		Date endDate = createEndDate(preferencesService

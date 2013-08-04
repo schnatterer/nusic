@@ -5,12 +5,16 @@ import info.schnatterer.newsic.Constants;
 import info.schnatterer.newsic.R;
 import info.schnatterer.newsic.db.model.Release;
 import info.schnatterer.newsic.service.PreferencesService;
+import info.schnatterer.newsic.service.event.PreferenceChangedListener;
 import info.schnatterer.newsic.util.DateUtils;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.preference.PreferenceManager;
@@ -23,7 +27,8 @@ import android.util.Log;
  * @author schnatterer
  * 
  */
-public class PreferencesServiceSharedPreferences implements PreferencesService {
+public class PreferencesServiceSharedPreferences implements PreferencesService,
+		OnSharedPreferenceChangeListener {
 
 	/**
 	 * The app version code (not the version name!) that was used on the last
@@ -35,25 +40,24 @@ public class PreferencesServiceSharedPreferences implements PreferencesService {
 	/**
 	 * Last time the {@link Release}s have been loaded from the internet
 	 */
-	private static final String KEY_LAST_RELEASES_REFRESH = "last_release_refresh";
-	private static final Date DEFAULT_LAST_RELEASES_REFRESH = null;
+	public static final String KEY_LAST_RELEASES_REFRESH = "last_release_refresh";
+	public static final Date DEFAULT_LAST_RELEASES_REFRESH = null;
 
-	private final String KEY_DOWLOAD_ONLY_ON_WIFI;
-	private final Boolean DEFAULT_DOWLOAD_ONLY_ON_WIFI;
+	public final String KEY_DOWLOAD_ONLY_ON_WIFI;
+	public final Boolean DEFAULT_DOWLOAD_ONLY_ON_WIFI;
 
-	private final String KEY_INCLUDE_FUTURE_RELEASES;
-	private final Boolean DEFAULT_INCLUDE_FUTURE_RELEASES;
+	public final String KEY_INCLUDE_FUTURE_RELEASES;
+	public final Boolean DEFAULT_INCLUDE_FUTURE_RELEASES;
 
-	private final String KEY_DOWNLOAD_RELEASES_TIME_PERIOD;
-	private final Integer DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD;
-	
-	private final String KEY_FULL_UPDATE;
-	private final Boolean DEFAULT_FULL_UPDATE;
+	public final String KEY_DOWNLOAD_RELEASES_TIME_PERIOD;
+	public final Integer DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD;
 
+	public final String KEY_FULL_UPDATE;
+	public final Boolean DEFAULT_FULL_UPDATE;
 
 	private final SharedPreferences sharedPreferences;
 	// private static Context context = null;
-	private static PreferencesService instance = null;
+	private static PreferencesServiceSharedPreferences instance = null;
 
 	/**
 	 * Caches the result of {@link #checkAppStart()}. To allow idempotent method
@@ -61,11 +65,13 @@ public class PreferencesServiceSharedPreferences implements PreferencesService {
 	 */
 	private static AppStart appStart = null;
 
+	private Set<PreferenceChangedListener> preferenceChangedListeners = new HashSet<PreferenceChangedListener>();
+
 	/**
 	 * 
 	 * @return A singleton of this class
 	 */
-	public static final PreferencesService getInstance() {
+	public static final PreferencesServiceSharedPreferences getInstance() {
 		if (instance == null) {
 			instance = new PreferencesServiceSharedPreferences();
 		}
@@ -89,6 +95,7 @@ public class PreferencesServiceSharedPreferences implements PreferencesService {
 			SharedPreferences sharedPrefernces) {
 		// PreferencesServiceSharedPreferences.context = context;
 		this.sharedPreferences = sharedPrefernces;
+		sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
 		// // Initialize new preferences with defaults from xml
 		// PreferenceManager.setDefaultValues(getContext(), R.xml.preferences,
@@ -120,12 +127,11 @@ public class PreferencesServiceSharedPreferences implements PreferencesService {
 								+ R.string.preferences_default_download_releases_time_period
 								+ "\", value:" + prefValue, e);
 			}
-			
+
 			KEY_FULL_UPDATE = getContext().getString(
 					R.string.preferences_key_full_update);
-			DEFAULT_FULL_UPDATE = getContext().getResources()
-					.getBoolean(
-							R.bool.preferences_default_full_update);
+			DEFAULT_FULL_UPDATE = getContext().getResources().getBoolean(
+					R.bool.preferences_default_full_update);
 
 		} else {
 			// e.g. for Testing
@@ -137,7 +143,7 @@ public class PreferencesServiceSharedPreferences implements PreferencesService {
 
 			KEY_DOWNLOAD_RELEASES_TIME_PERIOD = null;
 			DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD = null;
-			
+
 			KEY_FULL_UPDATE = null;
 			DEFAULT_FULL_UPDATE = null;
 		}
@@ -185,7 +191,7 @@ public class PreferencesServiceSharedPreferences implements PreferencesService {
 
 	@Override
 	public Date getLastSuccessfullReleaseRefresh() {
-		long lastReleaseRefreshMillis= sharedPreferences.getLong(
+		long lastReleaseRefreshMillis = sharedPreferences.getLong(
 				KEY_LAST_RELEASES_REFRESH, 0);
 		if (lastReleaseRefreshMillis == 0) {
 			return DEFAULT_LAST_RELEASES_REFRESH;
@@ -195,8 +201,10 @@ public class PreferencesServiceSharedPreferences implements PreferencesService {
 
 	@Override
 	public boolean setLastSuccessfullReleaseRefresh(Date date) {
-		return sharedPreferences.edit().putLong(KEY_LAST_RELEASES_REFRESH,
-				DateUtils.persistDate(date)).commit();
+		return sharedPreferences
+				.edit()
+				.putLong(KEY_LAST_RELEASES_REFRESH, DateUtils.persistDate(date))
+				.commit();
 	}
 
 	@Override
@@ -230,7 +238,7 @@ public class PreferencesServiceSharedPreferences implements PreferencesService {
 							+ prefValue, e);
 		}
 	}
-	
+
 	@Override
 	public boolean isFullUpdate() {
 		return sharedPreferences.getBoolean(KEY_FULL_UPDATE,
@@ -240,4 +248,27 @@ public class PreferencesServiceSharedPreferences implements PreferencesService {
 	protected static Context getContext() {
 		return Application.getContext();
 	}
+
+	@Override
+	public void registerOnSharedPreferenceChangeListener(
+			PreferenceChangedListener preferenceChangedListener) {
+		preferenceChangedListeners.add(preferenceChangedListener);
+	}
+
+	@Override
+	public void unregisterOnSharedPreferenceChangeListener(
+			PreferenceChangedListener preferenceChangedListener) {
+		preferenceChangedListeners.remove(preferenceChangedListener);
+	}
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+			String key) {
+		for (PreferenceChangedListener preferenceChangedListener : preferenceChangedListeners) {
+			preferenceChangedListener.onPreferenceChanged(key,
+					sharedPreferences.getAll().get(key));
+		}
+
+	}
+
 }

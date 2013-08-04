@@ -1,13 +1,23 @@
 package info.schnatterer.newsic.ui.activities;
 
 import info.schnatterer.newsic.R;
+import info.schnatterer.newsic.service.event.PreferenceChangedListener;
+import info.schnatterer.newsic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.newsic.ui.fragments.NewsicPreferencesFragment;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
 public class NewsicPreferencesActivity extends PreferenceActivity {
+	public static final String RETURN_KEY_IS_REFRESH_NECESSARY = "isRefreshNecessary";
+
+	private TimePeriodPreferenceChangedListener timePeriodPreferenceChangedListener = new TimePeriodPreferenceChangedListener();
+	private PreferencesServiceSharedPreferences preferencesService = PreferencesServiceSharedPreferences
+			.getInstance();
+	private boolean isRefreshNecessary = false;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,5 +47,47 @@ public class NewsicPreferencesActivity extends PreferenceActivity {
 		getFragmentManager().beginTransaction()
 				.replace(android.R.id.content, new NewsicPreferencesFragment())
 				.commit();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		preferencesService
+				.registerOnSharedPreferenceChangeListener(timePeriodPreferenceChangedListener);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		preferencesService
+				.unregisterOnSharedPreferenceChangeListener(timePeriodPreferenceChangedListener);
+	}
+
+	@Override
+	public void finish() {
+		// Prepare data intent
+		Intent data = new Intent();
+		data.putExtra(RETURN_KEY_IS_REFRESH_NECESSARY, isRefreshNecessary);
+		setResult(RESULT_OK, data);
+		super.finish();
+	}
+
+	/**
+	 * Listens for a change in the
+	 * {@link PreferencesServiceSharedPreferences#KEY_DOWNLOAD_RELEASES_TIME_PERIOD}
+	 * preference and triggers an update of the releases.
+	 * 
+	 * @author schnatterer
+	 * 
+	 */
+	private class TimePeriodPreferenceChangedListener implements
+			PreferenceChangedListener {
+		@Override
+		public void onPreferenceChanged(String key, Object newValue) {
+			if (key.equals(preferencesService.KEY_DOWNLOAD_RELEASES_TIME_PERIOD)) {
+				// Trigger refresh
+				isRefreshNecessary = true;
+			}
+		}
 	}
 }

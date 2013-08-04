@@ -28,6 +28,7 @@ import android.widget.ListView;
 
 public class MainActivity extends FragmentActivity {
 	private static final int RELEASE_DB_LOADER = 0;
+	private static final int REQUEST_CODE_PREFERENCE_ACTIVITY = 0;
 
 	private static LoadNewRelasesTask loadReleasesTask = null;
 	/** Listens for internet query to end */
@@ -62,12 +63,7 @@ public class MainActivity extends FragmentActivity {
 		getSupportLoaderManager().initLoader(RELEASE_DB_LOADER, null,
 				new ReleaseLoaderCallbacks());
 
-		// Set activity as new context of task
-		if (loadReleasesTask != null) {
-			loadReleasesTask.updateActivity(this, releasesListViewAdapter);
-			loadReleasesTask
-					.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
-		}
+		registerListeners();
 
 		AppStart appStart = PreferencesServiceSharedPreferences.getInstance()
 				.checkAppStart();
@@ -75,9 +71,18 @@ public class MainActivity extends FragmentActivity {
 		switch (appStart) {
 		case FIRST_TIME_VERSION:
 		case FIRST_TIME:
-			startLoadingReleasesFromInternet();
+			startLoadingReleasesFromInternet(true);
 		default:
 			break;
+		}
+	}
+
+	private void registerListeners() {
+		// Set activity as new context of task
+		if (loadReleasesTask != null) {
+			loadReleasesTask.updateActivity(this, releasesListViewAdapter);
+			loadReleasesTask
+					.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
 		}
 	}
 
@@ -92,10 +97,12 @@ public class MainActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_refresh:
-			startLoadingReleasesFromInternet();
+			startLoadingReleasesFromInternet(false);
 			break;
 		case R.id.action_settings:
-			startActivity(new Intent(this, NewsicPreferencesActivity.class));
+			startActivityForResult(new Intent(this,
+					NewsicPreferencesActivity.class),
+					REQUEST_CODE_PREFERENCE_ACTIVITY);
 			break;
 		default:
 			break;
@@ -104,11 +111,25 @@ public class MainActivity extends FragmentActivity {
 		return true;
 	}
 
-	private void startLoadingReleasesFromInternet() {
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK
+				&& requestCode == REQUEST_CODE_PREFERENCE_ACTIVITY) {
+			if (data.hasExtra(NewsicPreferencesActivity.RETURN_KEY_IS_REFRESH_NECESSARY)) {
+				if (data.getExtras()
+						.getBoolean(
+								NewsicPreferencesActivity.RETURN_KEY_IS_REFRESH_NECESSARY)) {
+					startLoadingReleasesFromInternet(true);
+				}
+			}
+		}
+	}
+
+	private void startLoadingReleasesFromInternet(boolean forceFullUpdate) {
 		if (Application.isOnline()) {
 			if (loadReleasesTask == null) {
 				// Async task not started yet
-				loadReleasesTask = new LoadNewRelasesTask(this);
+				loadReleasesTask = new LoadNewRelasesTask(this, forceFullUpdate);
 				loadReleasesTask
 						.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
 				loadReleasesTask.execute();
@@ -120,8 +141,24 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	@Override
+	protected void onResume() {
+		super.onResume();
+		registerListeners();
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		unregisterListeners();
+	}
+
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		unregisterListeners();
+	}
+
+	private void unregisterListeners() {
 		if (loadReleasesTask != null) {
 			// Preserve memory
 			loadReleasesTask.updateActivity(null, null);
