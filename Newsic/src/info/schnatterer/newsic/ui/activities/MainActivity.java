@@ -14,6 +14,7 @@ import info.schnatterer.newsic.ui.tasks.LoadNewRelasesTask.FinishedLoadingListen
 import java.util.List;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
@@ -51,8 +52,9 @@ public class MainActivity extends FragmentActivity {
 					long id) {
 				Object o = releasesListView.getItemAtPosition(position);
 				Release release = (Release) o;
-				Application.toast("Selected :" + " " + release.getArtistName()
-						+ " - " + release.getReleaseName());
+				Intent launchBrowser = new Intent(Intent.ACTION_VIEW, Uri
+						.parse(release.getMusicBrainzUri()));
+				startActivity(launchBrowser);
 			}
 
 		});

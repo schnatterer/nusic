@@ -11,6 +11,14 @@ import android.graphics.BitmapFactory;
 public class Release implements Entity {
 	private static final int DEFAULT_ARTWORK = R.drawable.ic_launcher;
 
+	private static final String HTTP = "http://";
+	private static final String HTTPS = "https://";
+	private static final String MUSIC_BRAINZ_BASE_URI = "musicbrainz.org/release/";
+	private static final String MUSIC_BRAINZ_BASE_URI_HTTP = HTTP
+			+ MUSIC_BRAINZ_BASE_URI;
+	private static final String MUSIC_BRAINZ_BASE_URI_HTTPS = HTTPS
+			+ MUSIC_BRAINZ_BASE_URI;
+
 	private Long id;
 	private String musicBrainzId;
 
@@ -151,5 +159,13 @@ public class Release implements Entity {
 
 	public void setMusicBrainzId(String musicBrainzId) {
 		this.musicBrainzId = musicBrainzId;
+	}
+
+	public String getMusicBrainzUri() {
+		return MUSIC_BRAINZ_BASE_URI_HTTP + getMusicBrainzId();
+	}
+
+	public String getMusicBrainzUriHttps() {
+		return MUSIC_BRAINZ_BASE_URI_HTTPS + getMusicBrainzId();
 	}
 }
