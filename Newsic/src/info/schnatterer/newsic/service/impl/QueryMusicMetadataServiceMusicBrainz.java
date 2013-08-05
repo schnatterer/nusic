@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.musicbrainz.MBWS2Exception;
+import org.musicbrainz.model.ArtistCreditWs2;
+import org.musicbrainz.model.NameCreditWs2;
 import org.musicbrainz.model.entity.ReleaseWs2;
 import org.musicbrainz.model.searchresult.ReleaseResultWs2;
 
@@ -120,6 +122,9 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 			ReleaseWs2 releaseResult = releaseResultWs2.getRelease();
 			if (releaseResult.getArtistCredit().getArtistCreditString()
 					.equals(artistName)) {
+				if (artist.getMusicBrainzId() == null || artist.getMusicBrainzId().isEmpty()) {
+					artist.setMusicBrainzId(getMusicBrainzId(releaseResult.getArtistCredit()));
+				}
 				// Use only the release with the "oldest" date of a release
 				// group
 				Release existingRelease = releases.get(releaseResult.getTitle()
@@ -145,5 +150,14 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 				}
 			}
 		}
+	}
+
+	private String getMusicBrainzId(ArtistCreditWs2 artistCredit) {
+		String musicBrainzId = null;
+		List<NameCreditWs2> nameCredits = artistCredit.getNameCredits();
+		if (nameCredits.size() > 0 && nameCredits.get(0).getArtist() != null) {
+			musicBrainzId = nameCredits.get(0).getArtist().getId();
+		}
+		return musicBrainzId;
 	}
 }

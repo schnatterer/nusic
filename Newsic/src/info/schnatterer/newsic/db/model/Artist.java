@@ -5,9 +5,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Artist implements Entity {
+	private static final String HTTP = "http://";
+	private static final String HTTPS = "https://";
+	private static final String MUSIC_BRAINZ_BASE_URI = "musicbrainz.org/artist/";
+	private static final String MUSIC_BRAINZ_BASE_URI_HTTP = HTTP
+			+ MUSIC_BRAINZ_BASE_URI;
+	private static final String MUSIC_BRAINZ_BASE_URI_HTTPS = HTTPS
+			+ MUSIC_BRAINZ_BASE_URI;
+
 	private Long id;
 	private Long androidAudioArtistId;
-	// private String musicBrainzId;
+	private String musicBrainzId;
 	/**
 	 * Artist name from android db
 	 */
@@ -95,13 +103,13 @@ public class Artist implements Entity {
 		return true;
 	}
 
-	// public String getMusicBrainzId() {
-	// return musicBrainzId;
-	// }
-	//
-	// public void setMusicBrainzId(String musicBrainzId) {
-	// this.musicBrainzId = musicBrainzId;
-	// }
+	public String getMusicBrainzId() {
+		return musicBrainzId;
+	}
+
+	public void setMusicBrainzId(String musicBrainzId) {
+		this.musicBrainzId = musicBrainzId;
+	}
 
 	public Long getAndroidAudioArtistId() {
 		return androidAudioArtistId;
@@ -109,5 +117,13 @@ public class Artist implements Entity {
 
 	public void setAndroidAudioArtistId(Long androidAudioArtistId) {
 		this.androidAudioArtistId = androidAudioArtistId;
+	}
+
+	public String getMusicBrainzUri() {
+		return MUSIC_BRAINZ_BASE_URI_HTTP + getMusicBrainzId();
+	}
+
+	public String getMusicBrainzUriHttps() {
+		return MUSIC_BRAINZ_BASE_URI_HTTPS + getMusicBrainzId();
 	}
 }

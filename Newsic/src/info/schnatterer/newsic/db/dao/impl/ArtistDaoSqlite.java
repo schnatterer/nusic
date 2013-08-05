@@ -19,6 +19,8 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 			.append(NewsicDatabase.TABLE_ARTIST).append(".")
 			.append(NewsicDatabase.COLUMN_ARTIST_ANDROID_ID).append(",")
 			.append(NewsicDatabase.TABLE_ARTIST).append(".")
+			.append(NewsicDatabase.COLUMN_ARTIST_MB_ID).append(",")
+			.append(NewsicDatabase.TABLE_ARTIST).append(".")
 			.append(NewsicDatabase.COLUMN_ARTIST_NAME).append(",")
 			.append(NewsicDatabase.TABLE_ARTIST).append(".")
 			.append(NewsicDatabase.COLUMN_ARTIST_DATE_CREATED).toString();
@@ -91,6 +93,8 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 		artist.setId(toId(cursor, startIndex));
 		artist.setAndroidAudioArtistId(cursor.getLong(startIndex
 				+ NewsicDatabase.INDEX_COLUMN_ARTIST_ANDROID_ID));
+		artist.setMusicBrainzId(cursor.getString(startIndex
+				+ NewsicDatabase.INDEX_COLUMN_ARTIST_MB_ID));
 		artist.setArtistName(cursor.getString(startIndex
 				+ NewsicDatabase.INDEX_COLUMN_ARTIST_NAME));
 		artist.setDateCreated(DateUtils.loadDate(cursor, startIndex
@@ -103,6 +107,8 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 		ContentValues values = new ContentValues();
 		values.put(NewsicDatabase.COLUMN_ARTIST_ANDROID_ID,
 				artist.getAndroidAudioArtistId());
+		values.put(NewsicDatabase.COLUMN_ARTIST_MB_ID,
+				artist.getMusicBrainzId());
 		values.put(NewsicDatabase.COLUMN_ARTIST_NAME, artist.getArtistName());
 		values.put(NewsicDatabase.COLUMN_ARTIST_DATE_CREATED,
 				DateUtils.persistDate(artist.getDateCreated()));

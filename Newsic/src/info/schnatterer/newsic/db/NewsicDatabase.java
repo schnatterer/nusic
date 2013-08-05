@@ -26,17 +26,17 @@ public class NewsicDatabase extends SQLiteOpenHelper {
 	public static final String TYPE_COLUMN_ARTIST_ANDROID_ID = "INTEGER";
 	public static final int INDEX_COLUMN_ARTIST_ANDROID_ID = 1;
 
-	// public static final String COLUMN_ARTIST_MB_ID = "mbId";
-	// public static final String TYPE_COLUMN_ARTIST_MB_ID = "INTEGER";
-	// public static final int INDEX_COLUMN_ARTIST_MB_ID = ;
+	 public static final String COLUMN_ARTIST_MB_ID = "mbId";
+	 public static final String TYPE_COLUMN_ARTIST_MB_ID = "STRING";
+	 public static final int INDEX_COLUMN_ARTIST_MB_ID = 2;
 
 	public static final String COLUMN_ARTIST_NAME = "name";
 	public static final String TYPE_COLUMN_ARTIST_NAME = "TEXT NOT NULL";
-	public static final int INDEX_COLUMN_ARTIST_NAME = 2;
+	public static final int INDEX_COLUMN_ARTIST_NAME = 3;
 
 	public static final String COLUMN_ARTIST_DATE_CREATED = "dateCreated";
 	public static final String TYPE_COLUMN_ARTIST_DATE_CREATED = "INTEGER NOT NULL";
-	public static final int INDEX_COLUMN_ARTIST_DATE_CREATED = 3;
+	public static final int INDEX_COLUMN_ARTIST_DATE_CREATED = 4;
 	// public static final String[] TABLE_COLUMNS_ARTIST = {};
 	
 	/* Table Releases */
@@ -88,7 +88,7 @@ public class NewsicDatabase extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(createTable(TABLE_ARTIST, COLUMN_ARTIST_ID,
 				TYPE_COLUMN_ARTIST_ID, COLUMN_ARTIST_ANDROID_ID,
-				TYPE_COLUMN_ARTIST_ANDROID_ID, COLUMN_ARTIST_NAME,
+				TYPE_COLUMN_ARTIST_ANDROID_ID, COLUMN_ARTIST_MB_ID, TYPE_COLUMN_ARTIST_MB_ID, COLUMN_ARTIST_NAME,
 				TYPE_COLUMN_ARTIST_NAME, COLUMN_ARTIST_DATE_CREATED,
 				TYPE_COLUMN_ARTIST_DATE_CREATED));
 		db.execSQL(createTable(TABLE_RELEASE, COLUMN_RELEASE_ID,
