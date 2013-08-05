@@ -27,6 +27,7 @@
     <string name="releaseListRow_RightArrow">Click to show details</string>
     <string name="releaseListRow_Thumbnail">Thumbnail of album art</string>
     <string name="LoadNewReleasesTask_CheckingArtists">Checking all artists for new releases</string>
+    <string name="MainActivity_noReleasesFound">No releases were found for the artists on your device in the specified time period.</string>
 
     <!-- Error message -->
     <string name="GenericError">Something almost impossible has happened: %1s!</string>
@@ -36,7 +37,7 @@
     <string name="ArtistQueryService_errorLoadingArtists">Error loading artists from the device</string>
     <string name="ReleasesService_errorPersistingData">Error saving data on the device</string>
     <string name="LoadNewReleasesTask_errorFindingReleases">Error finding releases on the internet: </string>
-    <string name="LoadNewReleasesTask_finishedWithErrors">Updated releases failed for some (%1$d) artists</string>
+    <string name="LoadNewReleasesTask_finishedWithErrors">Updating releases failed for some %1$d artists</string>
     <string name="QueryMusicMetadataService_errorFindingReleasesArtist">Error finding releases for artist %1$s</string>
     <string name="QueryMusicMetadataService_errorQueryingMusicBrainz">Error querying releases for artist %1$s from the internet. No connection to the internet?</string>
 

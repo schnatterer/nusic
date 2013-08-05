@@ -172,7 +172,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 							R.string.LoadNewReleasesTask_finishedWithErrors,
 							errorArtists.size());
 				} else {
-					// TODO move this to separate service, see
+					// TODO move this to separate service, see doInBackground()
 					preferencesService
 							.setLastSuccessfullReleaseRefresh(new Date());
 				}

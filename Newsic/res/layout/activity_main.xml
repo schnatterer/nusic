@@ -15,10 +15,19 @@
         android:gravity="center" >
     </ProgressBar>
 
+    <TextView
+        android:id="@+id/releasesTextViewNoneFound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_below="@+id/releasesProgressBar" >
+    </TextView>
+
     <ListView
         android:id="@+id/releasesListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/releasesTextViewNoneFound" >
     </ListView>
 
 </RelativeLayout>

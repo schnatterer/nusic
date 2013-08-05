@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity {
 	private static final int RELEASE_DB_LOADER = 0;
@@ -40,6 +41,7 @@ public class MainActivity extends FragmentActivity {
 
 	private ReleaseListAdapter releasesListViewAdapter = null;
 	private ProgressBar progressBar;
+	private TextView releasesTextViewNoneFound;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,9 +50,10 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.activity_main);
 
 		progressBar = (ProgressBar) findViewById(R.id.releasesProgressBar);
-		
+		releasesTextViewNoneFound = (TextView) findViewById(R.id.releasesTextViewNoneFound);
+
 		releasesListView = (ListView) findViewById(R.id.releasesListView);
-		
+
 		releasesListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> a, View v, int position,
@@ -211,21 +214,26 @@ public class MainActivity extends FragmentActivity {
 		public ReleaseLoader onCreateLoader(int id, Bundle bundle) {
 			// if (id == RELEASE_DB_LOADER)
 			progressBar.setVisibility(View.VISIBLE);
+			releasesTextViewNoneFound.setVisibility(View.GONE);
 			return new ReleaseLoader(MainActivity.this);
 		}
 
 		@Override
 		public void onLoadFinished(Loader<AsyncResult<List<Release>>> loader,
 				AsyncResult<List<Release>> result) {
-			if (result.getException() != null) {
-				Application.toast(R.string.MainActivity_errorLoadingReleases);
-			}
 			progressBar.setVisibility(View.GONE);
-			if (result.getData() != null && result.getData().isEmpty()) {
-				// // Set the empty text
-				// final TextView empty = (TextView) mRootView
-				// .findViewById(R.id.empty);
-				// empty.setText(getString(R.string.empty_music));
+
+			if (result.getException() != null) {
+				releasesTextViewNoneFound
+						.setText(R.string.MainActivity_errorLoadingReleases);
+				return;
+			}
+			if (result.getData() == null
+					|| (result.getData() != null && result.getData().isEmpty())) {
+				// Set the empty text
+				releasesTextViewNoneFound.setVisibility(View.VISIBLE);
+				releasesTextViewNoneFound
+						.setText(R.string.MainActivity_noReleasesFound);
 				return;
 			}
 
