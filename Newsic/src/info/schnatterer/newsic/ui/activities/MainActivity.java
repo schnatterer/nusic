@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 public class MainActivity extends FragmentActivity {
 	private static final int RELEASE_DB_LOADER = 0;
@@ -38,6 +39,7 @@ public class MainActivity extends FragmentActivity {
 	private ListView releasesListView;
 
 	private ReleaseListAdapter releasesListViewAdapter = null;
+	private ProgressBar progressBar;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,10 @@ public class MainActivity extends FragmentActivity {
 
 		setContentView(R.layout.activity_main);
 
+		progressBar = (ProgressBar) findViewById(R.id.releasesProgressBar);
+		
 		releasesListView = (ListView) findViewById(R.id.releasesListView);
+		
 		releasesListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> a, View v, int position,
@@ -205,6 +210,7 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		public ReleaseLoader onCreateLoader(int id, Bundle bundle) {
 			// if (id == RELEASE_DB_LOADER)
+			progressBar.setVisibility(View.VISIBLE);
 			return new ReleaseLoader(MainActivity.this);
 		}
 
@@ -214,7 +220,7 @@ public class MainActivity extends FragmentActivity {
 			if (result.getException() != null) {
 				Application.toast(R.string.MainActivity_errorLoadingReleases);
 			}
-
+			progressBar.setVisibility(View.GONE);
 			if (result.getData() != null && result.getData().isEmpty()) {
 				// // Set the empty text
 				// final TextView empty = (TextView) mRootView

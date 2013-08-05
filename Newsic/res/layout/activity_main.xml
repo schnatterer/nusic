@@ -8,6 +8,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
+    <ProgressBar
+        android:id="@+id/releasesProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" >
+    </ProgressBar>
+
     <ListView
         android:id="@+id/releasesListView"
         android:layout_width="match_parent"
