@@ -51,6 +51,7 @@ public class MainActivity extends FragmentActivity {
 
 		progressBar = (ProgressBar) findViewById(R.id.releasesProgressBar);
 		releasesTextViewNoneFound = (TextView) findViewById(R.id.releasesTextViewNoneFound);
+		releasesTextViewNoneFound.setVisibility(View.GONE);
 
 		releasesListView = (ListView) findViewById(R.id.releasesListView);
 
