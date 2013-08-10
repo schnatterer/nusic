@@ -197,7 +197,7 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	}
 
 	@Override
-	public Date getLastSuccessfullReleaseRefresh() {
+	public Date getLastReleaseRefresh() {
 		long lastReleaseRefreshMillis = sharedPreferences.getLong(
 				KEY_LAST_RELEASES_REFRESH, 0);
 		if (lastReleaseRefreshMillis == 0) {
@@ -215,13 +215,13 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	}
 
 	@Override
-	public boolean isLastReleaseRefreshSuccessfull() {
+	public boolean isForceFullRefresh() {
 		return sharedPreferences.getBoolean(KEY_LAST_RELEASES_REFRESH_SUCCESSFULL,
 				DEFAULT_LAST_RELEASES_REFRESH_SUCCESSFULL);
 	}
 
 	@Override
-	public boolean setLastReleaseRefreshSuccessfull(boolean isSuccessfull) {
+	public boolean setForceFullRefresh(boolean isSuccessfull) {
 		return sharedPreferences
 				.edit()
 				.putBoolean(KEY_LAST_RELEASES_REFRESH_SUCCESSFULL,

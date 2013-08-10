@@ -49,7 +49,7 @@ public interface PreferencesService {
 	 * 
 	 * This is useful to determine the start date for the next refresh.
 	 */
-	Date getLastSuccessfullReleaseRefresh();
+	Date getLastReleaseRefresh();
 
 	/**
 	 * Set last time the {@link Release}s havebeen loaded from the internet.
@@ -95,8 +95,24 @@ public interface PreferencesService {
 	void unregisterOnSharedPreferenceChangeListener(
 			PreferenceChangedListener preferenceChangedListener);
 
-	boolean isLastReleaseRefreshSuccessfull();
+	/**
+	 * Ignores the value of {@link PreferencesService#isFullUpdate()} and does a
+	 * full update. Useful when
+	 * {@link PreferencesService#getDownloadReleasesTimePeriod()} changed, or
+	 * some artists were refreshed with errors.
+	 * 
+	 * @return
+	 */
+	boolean isForceFullRefresh();
 
-	boolean setLastReleaseRefreshSuccessfull(boolean isSuccessfull);
+	/**
+	 * Forces the next refresh of the releases to be a full refresh. That is,
+	 * ignores {@link PreferencesService#isFullUpdate()}. Useful when
+	 * {@link PreferencesService#getDownloadReleasesTimePeriod()} changed, or
+	 * some artists were refreshed with errors.
+	 * 
+	 * @return
+	 */
+	boolean setForceFullRefresh(boolean forceFullRefresh);
 
 }

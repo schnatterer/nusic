@@ -11,6 +11,7 @@ import info.schnatterer.newsic.ui.adapters.ReleaseListAdapter;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -87,10 +88,19 @@ public class ReleaseListFragment extends SherlockFragment {
 		releasesListViewAdapter = new ReleaseListAdapter(getActivity());
 		releasesListView.setAdapter(releasesListViewAdapter);
 
+		displayLoading();
 		// Load releases from local db
 		getActivity().getSupportLoaderManager().initLoader(loaderId, null,
 				new ReleaseLoaderCallbacks());
 		return view;
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (isVisible()) {
+			foreceLoad();
+		}
 	}
 
 	protected void setReleases(List<Release> result) {
@@ -111,13 +121,35 @@ public class ReleaseListFragment extends SherlockFragment {
 	}
 
 	/**
-	 * Triggers reloading the releases from database.
+	 * Triggers reloading the releases from database. If they didn't change
+	 * (that is {@link Loader#onContentChanged()} hasn't been called), no actual
+	 * load is performed.
 	 */
-	public void reloadFromDb() {
-		Loader<Object> loader = getActivity().getSupportLoaderManager()
-				.getLoader(loaderId);
-		loader.onContentChanged();
-		loader.forceLoad();
+	public void foreceLoad() {
+		displayLoading();
+		getActivity().getSupportLoaderManager().getLoader(loaderId).forceLoad();
+	}
+
+	/**
+	 * Marks content as changed, which leads to reloading on the next load.
+	 */
+	public void onContentChanged() {
+		getActivity().getSupportLoaderManager().getLoader(loaderId)
+				.onContentChanged();
+	}
+
+	/**
+	 * Shows the loading animation.
+	 */
+	private void displayLoading() {
+		getActivity().runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				progressBar.setVisibility(View.VISIBLE);
+				releasesTextViewNoneFound.setVisibility(View.GONE);
+			}
+		});
+
 	}
 
 	/**
@@ -129,18 +161,15 @@ public class ReleaseListFragment extends SherlockFragment {
 	 */
 	public class ReleaseLoaderCallbacks implements
 			LoaderManager.LoaderCallbacks<AsyncResult<List<Release>>> {
-
 		@Override
 		public ReleaseLoader onCreateLoader(int id, Bundle bundle) {
-			progressBar.setVisibility(View.VISIBLE);
-			releasesTextViewNoneFound.setVisibility(View.GONE);
 			// if (id == RELEASE_DB_LOADER)
 			switch (releaseQuery) {
 			case ALL:
 				return new ReleaseLoader(getActivity(), null);
 			case NEWLY_ADDED:
 				return new ReleaseLoader(getActivity(),
-						preferencesService.getLastSuccessfullReleaseRefresh());
+						preferencesService.getLastReleaseRefresh());
 			default:
 				Log.w(Constants.LOG,
 						"Unimplemented " + ReleaseQuery.class.getName()

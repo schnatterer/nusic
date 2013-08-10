@@ -45,19 +45,12 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 	private List<Artist> errorArtists;
 
 	private Set<FinishedLoadingListener> listeners = new HashSet<FinishedLoadingListener>();
-	private boolean forceFullUpdate = false;
 
 	/**
 	 * @param activity
-	 * @param forceFullUpdate
-	 *            ignores the value of {@link PreferencesService#isFullUpdate()}
-	 *            and does a full update. Useful when
-	 *            {@link PreferencesService#getDownloadReleasesTimePeriod()}
-	 *            changed.
 	 */
-	public LoadNewRelasesTask(Activity activity, boolean forceFullUpdate) {
+	public LoadNewRelasesTask(Activity activity) {
 		this.activity = activity;
-		this.forceFullUpdate = forceFullUpdate;
 		// Run in global context
 		releasesService = new ReleasesServiceImpl(Application.getContext());
 	}
@@ -75,9 +68,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 
 		// TODO extract this to a service and write test for logic!
 		boolean fullUpdate;
-		if (forceFullUpdate) {
-			fullUpdate = true;
-		} else if (!preferencesService.isLastReleaseRefreshSuccessfull())
+		if (preferencesService.isForceFullRefresh())
 			fullUpdate = true;
 		else {
 			fullUpdate = preferencesService.isFullUpdate();
@@ -85,7 +76,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 
 		Date startDate = createStartDate(fullUpdate,
 				preferencesService.getDownloadReleasesTimePeriod(),
-				preferencesService.getLastSuccessfullReleaseRefresh());
+				preferencesService.getLastReleaseRefresh());
 		Date endDate = createEndDate(preferencesService
 				.isIncludeFutureReleases());
 
@@ -179,10 +170,10 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 							R.string.LoadNewReleasesTask_finishedWithErrors,
 							errorArtists.size());
 					// TODO move this to separate service, see doInBackground()
-					preferencesService.setLastReleaseRefreshSuccessfull(false);
+					preferencesService.setForceFullRefresh(true);
 				} else {
 					// TODO move this to separate service, see doInBackground()
-					preferencesService.setLastReleaseRefreshSuccessfull(true);
+					preferencesService.setForceFullRefresh(false);
 				}
 				break;
 			case PROGRESS_FAILED: {
@@ -193,7 +184,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 				ProgressUpdate progress = (ProgressUpdate) objects[1];
 				Throwable potentialException = progress.getPotentialException();
 				// TODO move this to separate service, see doInBackground()
-				preferencesService.setLastReleaseRefreshSuccessfull(false);
+				preferencesService.setForceFullRefresh(true);
 				if (potentialException != null) {
 					if (potentialException instanceof ServiceException) {
 						Application.toast(potentialException

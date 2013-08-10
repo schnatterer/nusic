@@ -10,6 +10,10 @@ import info.schnatterer.newsic.ui.fragments.ReleaseListFragment;
 import info.schnatterer.newsic.ui.fragments.ReleaseListFragment.ReleaseQuery;
 import info.schnatterer.newsic.ui.tasks.LoadNewRelasesTask;
 import info.schnatterer.newsic.ui.tasks.LoadNewRelasesTask.FinishedLoadingListener;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,9 +34,13 @@ public class MainActivity extends SherlockFragmentActivity {
 	private static final int RELEASE_DB_LOADER_NEWLY_ADDED = 1;
 
 	private static LoadNewRelasesTask loadReleasesTask = null;
+	// Stores the selected tab, even when the configuration changes.
+	private static int currentTabPosition = 0;
 	/** Listens for internet query to end */
 	private ReleaseTaskFinishedLoadingListener releaseTaskFinishedLoadingListener = new ReleaseTaskFinishedLoadingListener();
-	private ReleaseListFragment currentTab = null;
+	private ReleaseListFragment currentTabFragment = null;
+
+	private Set<ReleaseTabListener> tabListeners = new HashSet<ReleaseTabListener>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,29 +49,16 @@ public class MainActivity extends SherlockFragmentActivity {
 		/* Init tab fragments */
 		// Create the Actionbar
 		ActionBar actionBar = getSupportActionBar();
-
 		// Create Actionbar Tabs
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		// Create first Tab
-		// Pragmatic approach: Use releaseQuery also as Tag to identify fragment
-		ReleaseQuery releaseQuery = ReleaseQuery.ALL;
-		actionBar.addTab(actionBar
-				.newTab()
-				.setText(R.string.MainActivity_TabAll)
-				.setTabListener(
-						new ReleaseTabListener(releaseQuery,
-								RELEASE_DB_LOADER_ALL, releaseQuery.name())));
+		createTab(actionBar, R.string.MainActivity_TabAll,
+				RELEASE_DB_LOADER_ALL, ReleaseQuery.ALL, 0);
 
 		// Create Second Tab
-		releaseQuery = ReleaseQuery.NEWLY_ADDED;
-		actionBar.addTab(actionBar
-				.newTab()
-				.setText(R.string.MainActivity_TabNewlyAdded)
-				.setTabListener(
-						new ReleaseTabListener(releaseQuery,
-								RELEASE_DB_LOADER_NEWLY_ADDED, releaseQuery
-										.name())));
+		createTab(actionBar, R.string.MainActivity_TabNewlyAdded,
+				RELEASE_DB_LOADER_NEWLY_ADDED, ReleaseQuery.NEWLY_ADDED, 1);
 
 		/* Init app */
 		registerListeners();
@@ -78,6 +73,39 @@ public class MainActivity extends SherlockFragmentActivity {
 		default:
 			break;
 		}
+	}
+
+	/**
+	 * Creates a tab and sets it active depending on {@link #currentTabPosition}
+	 * .
+	 * 
+	 * @param actionBar
+	 * @param titleId
+	 * @param loaderId
+	 * @param releaseQuery
+	 * @param position
+	 */
+	private void createTab(ActionBar actionBar, int titleId, int loaderId,
+			ReleaseQuery releaseQuery, int position) {
+		// Pragmatic approach: Use releaseQuery also as Tag to identify fragment
+		ReleaseTabListener listener = new ReleaseTabListener(releaseQuery,
+				loaderId, releaseQuery.name());
+		tabListeners.add(listener);
+		actionBar.addTab(
+				actionBar.newTab().setText(titleId).setTabListener(listener),
+				position, isTabSelected(position));
+	}
+
+	/**
+	 * @param position
+	 * @return <code>true</code> if <code>position</code> is selected, otherwise
+	 *         <code>false</code>
+	 */
+	private boolean isTabSelected(int position) {
+		if (currentTabPosition == position) {
+			return true;
+		}
+		return false;
 	}
 
 	private void registerListeners() {
@@ -128,7 +156,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		if (Application.isOnline()) {
 			if (loadReleasesTask == null) {
 				// Async task not started yet
-				loadReleasesTask = new LoadNewRelasesTask(this, forceFullUpdate);
+				loadReleasesTask = new LoadNewRelasesTask(this);
 				loadReleasesTask
 						.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
 				loadReleasesTask.execute();
@@ -179,9 +207,13 @@ public class MainActivity extends SherlockFragmentActivity {
 		@Override
 		public void onFinishedLoading() {
 			loadReleasesTask = null; // Task can only be executed once
-			// Reload data
-			if (currentTab != null) {
-				currentTab.reloadFromDb();
+			// Mark all loaders as changed
+			for (ReleaseTabListener listener : tabListeners) {
+				listener.fragment.onContentChanged();
+			}
+			// Reload data on current tab
+			if (currentTabFragment != null) {
+				currentTabFragment.foreceLoad();
 			}
 		}
 	}
@@ -195,7 +227,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	public class ReleaseTabListener implements TabListener {
 		private ReleaseQuery releaseQuery;
 		private int loaderId;
-		private Fragment fragment;
+		private ReleaseListFragment fragment;
 		private final String tag;
 
 		public ReleaseTabListener(ReleaseQuery releaseQuery, int loaderId,
@@ -203,25 +235,30 @@ public class MainActivity extends SherlockFragmentActivity {
 			this.releaseQuery = releaseQuery;
 			this.loaderId = loaderId;
 			this.tag = tag;
-			fragment = getSupportFragmentManager().findFragmentByTag(tag);
+			fragment = (ReleaseListFragment) getSupportFragmentManager()
+					.findFragmentByTag(tag);
 		}
 
 		@Override
 		public void onTabSelected(Tab tab, FragmentTransaction ft) {
 			// Avoid calling Fragment.onCreate() more than once
 			if (fragment == null) {
+				// Create fragment
 				Bundle bundle = new Bundle();
 				bundle.putString(ReleaseListFragment.ARG_RELEASE_QUERY,
 						releaseQuery.name());
 				bundle.putInt(ReleaseListFragment.ARG_LOADER_ID, loaderId);
-				fragment = Fragment.instantiate(MainActivity.this,
-						ReleaseListFragment.class.getName(), bundle);
+				fragment = (ReleaseListFragment) Fragment.instantiate(
+						MainActivity.this, ReleaseListFragment.class.getName(),
+						bundle);
 				ft.replace(android.R.id.content, fragment, tag);
 			} else {
 				if (fragment.isDetached()) {
 					ft.attach(fragment);
 				}
 			}
+			currentTabPosition = tab.getPosition();
+			currentTabFragment = fragment;
 		}
 
 		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
