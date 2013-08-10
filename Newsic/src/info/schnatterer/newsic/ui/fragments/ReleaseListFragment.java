@@ -33,13 +33,12 @@ public class ReleaseListFragment extends SherlockFragment {
 		ALL, NEWLY_ADDED;
 	}
 
+	public static final String ARG_RELEASE_QUERY = "releaseQuery";
+	public static final String ARG_LOADER_ID = "loaderId";
+
 	private ReleaseQuery releaseQuery;
 	private PreferencesService preferencesService = PreferencesServiceSharedPreferences
 			.getInstance();
-
-	public ReleaseListFragment() {
-		this.releaseQuery = ReleaseQuery.ALL;
-	}
 
 	private ListView releasesListView;
 	private ReleaseListAdapter releasesListViewAdapter = null;
@@ -51,6 +50,18 @@ public class ReleaseListFragment extends SherlockFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		try {
+
+			releaseQuery = ReleaseQuery.valueOf(getArguments().getString(
+					ARG_RELEASE_QUERY));
+			loaderId = getArguments().getInt(ARG_LOADER_ID);
+
+		} catch (Exception e) {
+			Log.w(Constants.LOG,
+					"Error reading arguments from bundle passed by parent activity",
+					e);
+		}
+
 		View view = inflater.inflate(R.layout.activity_main, container, false);
 		progressBar = (ProgressBar) view.findViewById(R.id.releasesProgressBar);
 		progressBar.setVisibility(View.GONE);
@@ -103,8 +114,10 @@ public class ReleaseListFragment extends SherlockFragment {
 	 * Triggers reloading the releases from database.
 	 */
 	public void reloadFromDb() {
-		getActivity().getSupportLoaderManager().getLoader(loaderId)
-				.onContentChanged();
+		Loader<Object> loader = getActivity().getSupportLoaderManager()
+				.getLoader(loaderId);
+		loader.onContentChanged();
+		loader.forceLoad();
 	}
 
 	/**
@@ -169,9 +182,5 @@ public class ReleaseListFragment extends SherlockFragment {
 		public void onLoaderReset(Loader<AsyncResult<List<Release>>> result) {
 			setReleases(null);
 		}
-	}
-
-	public void setLoaderId(int loaderId) {
-		this.loaderId = loaderId;
 	}
 }

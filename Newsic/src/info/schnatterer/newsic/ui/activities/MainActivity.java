@@ -12,6 +12,7 @@ import info.schnatterer.newsic.ui.tasks.LoadNewRelasesTask;
 import info.schnatterer.newsic.ui.tasks.LoadNewRelasesTask.FinishedLoadingListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -24,7 +25,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class MainActivity extends SherlockFragmentActivity {
 	private static final int REQUEST_CODE_PREFERENCE_ACTIVITY = 0;
-	
+
 	private static final int RELEASE_DB_LOADER_ALL = 0;
 	private static final int RELEASE_DB_LOADER_NEWLY_ADDED = 1;
 
@@ -45,16 +46,24 @@ public class MainActivity extends SherlockFragmentActivity {
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		// Create first Tab
-		actionBar.addTab(actionBar.newTab()
+		// Pragmatic approach: Use releaseQuery also as Tag to identify fragment
+		ReleaseQuery releaseQuery = ReleaseQuery.ALL;
+		actionBar.addTab(actionBar
+				.newTab()
 				.setText(R.string.MainActivity_TabAll)
-				.setTabListener(new ReleaseTabListener(ReleaseQuery.ALL, RELEASE_DB_LOADER_ALL)));
+				.setTabListener(
+						new ReleaseTabListener(releaseQuery,
+								RELEASE_DB_LOADER_ALL, releaseQuery.name())));
 
 		// Create Second Tab
+		releaseQuery = ReleaseQuery.NEWLY_ADDED;
 		actionBar.addTab(actionBar
 				.newTab()
 				.setText(R.string.MainActivity_TabNewlyAdded)
 				.setTabListener(
-						new ReleaseTabListener(ReleaseQuery.NEWLY_ADDED, RELEASE_DB_LOADER_NEWLY_ADDED)));
+						new ReleaseTabListener(releaseQuery,
+								RELEASE_DB_LOADER_NEWLY_ADDED, releaseQuery
+										.name())));
 
 		/* Init app */
 		registerListeners();
@@ -186,29 +195,44 @@ public class MainActivity extends SherlockFragmentActivity {
 	public class ReleaseTabListener implements TabListener {
 		private ReleaseQuery releaseQuery;
 		private int loaderId;
+		private Fragment fragment;
+		private final String tag;
 
-		public ReleaseTabListener(ReleaseQuery releaseQuery, int loaderId) {
+		public ReleaseTabListener(ReleaseQuery releaseQuery, int loaderId,
+				String tag) {
 			this.releaseQuery = releaseQuery;
 			this.loaderId = loaderId;
+			this.tag = tag;
+			fragment = getSupportFragmentManager().findFragmentByTag(tag);
 		}
 
 		@Override
 		public void onTabSelected(Tab tab, FragmentTransaction ft) {
-			// ft.replace(android.R.id.content,
-			// Fragment.instantiate(MainActivity.this,
-			// fragmentClass.getName()));
-			currentTab = new ReleaseListFragment();
-			currentTab.setReleaseQuery(releaseQuery);
-			currentTab.setLoaderId(loaderId);
-			ft.replace(android.R.id.content, currentTab);
+			// Avoid calling Fragment.onCreate() more than once
+			if (fragment == null) {
+				Bundle bundle = new Bundle();
+				bundle.putString(ReleaseListFragment.ARG_RELEASE_QUERY,
+						releaseQuery.name());
+				bundle.putInt(ReleaseListFragment.ARG_LOADER_ID, loaderId);
+				fragment = Fragment.instantiate(MainActivity.this,
+						ReleaseListFragment.class.getName(), bundle);
+				ft.replace(android.R.id.content, fragment, tag);
+			} else {
+				if (fragment.isDetached()) {
+					ft.attach(fragment);
+				}
+			}
 		}
 
-		@Override
 		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+			if (fragment != null) {
+				ft.detach(fragment);
+			}
 		}
 
 		@Override
 		public void onTabReselected(Tab tab, FragmentTransaction ft) {
+
 		}
 	}
 }
