@@ -43,6 +43,13 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	public static final String KEY_LAST_RELEASES_REFRESH = "last_release_refresh";
 	public static final Date DEFAULT_LAST_RELEASES_REFRESH = null;
 
+	/**
+	 * Last update of the {@link Release}s was completely successful. That is,
+	 * the next refresh does not have to be a full refresh, depending on
+	 */
+	public static final String KEY_LAST_RELEASES_REFRESH_SUCCESSFULL = "last_release_refresh_succesful";
+	public static final Boolean DEFAULT_LAST_RELEASES_REFRESH_SUCCESSFULL = false;
+
 	public final String KEY_DOWLOAD_ONLY_ON_WIFI;
 	public final Boolean DEFAULT_DOWLOAD_ONLY_ON_WIFI;
 
@@ -200,11 +207,25 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	}
 
 	@Override
-	public boolean setLastSuccessfullReleaseRefresh(Date date) {
+	public boolean setLastReleaseRefresh(Date date) {
 		return sharedPreferences
 				.edit()
 				.putLong(KEY_LAST_RELEASES_REFRESH, DateUtils.persistDate(date))
 				.commit();
+	}
+
+	@Override
+	public boolean isLastReleaseRefreshSuccessfull() {
+		return sharedPreferences.getBoolean(KEY_LAST_RELEASES_REFRESH_SUCCESSFULL,
+				DEFAULT_LAST_RELEASES_REFRESH_SUCCESSFULL);
+	}
+
+	@Override
+	public boolean setLastReleaseRefreshSuccessfull(boolean isSuccessfull) {
+		return sharedPreferences
+				.edit()
+				.putBoolean(KEY_LAST_RELEASES_REFRESH_SUCCESSFULL,
+						isSuccessfull).commit();
 	}
 
 	@Override

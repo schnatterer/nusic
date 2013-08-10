@@ -1,5 +1,6 @@
 package info.schnatterer.newsic.db.dao.impl;
 
+import info.schnatterer.newsic.Constants;
 import info.schnatterer.newsic.db.DatabaseException;
 import info.schnatterer.newsic.db.NewsicDatabase;
 import info.schnatterer.newsic.db.dao.GenericDao;
@@ -12,6 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.os.CancellationSignal;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 /**
  * Wraps the {@link SQLiteDatabase} object as well as the {@link Cursor} and
@@ -81,16 +83,64 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
 
 	protected abstract Long getId(T entity);
 
+	protected void putIfNotNull(ContentValues values, String column,
+			Object value) {
+		if (value == null || values == null) {
+			return;
+		}
+		/*
+		 * Thanks for not providing a put(String,Object) method to the
+		 * Map<String,Object>!!
+		 */
+		if (value instanceof Byte) {
+			values.put(column, (Byte) value);
+		} else if (value instanceof Short) {
+			values.put(column, (Short) value);
+		} else if (value instanceof Integer) {
+			values.put(column, (Integer) value);
+		} else if (value instanceof Long) {
+			values.put(column, (Long) value);
+		} else if (value instanceof Float) {
+			values.put(column, (Float) value);
+		} else if (value instanceof Double) {
+			values.put(column, (Double) value);
+		} else if (value instanceof Boolean) {
+			values.put(column, (Boolean) value);
+		} else if (value instanceof byte[]) {
+			values.put(column, (byte[]) value);
+		} else if (value instanceof String) {
+			values.put(column, (String) value);
+		} else {
+			// Hope for the best and convert it to a string
+			Log.w(Constants.LOG, "Column: " + column
+					+ "Trying to put non primitive value to ContentValues: "
+					+ value + ". Converting to string.");
+			values.put(column, value.toString());
+		}
+	}
+
 	@Override
 	public long save(T entity) throws DatabaseException {
 		try {
 			long id = db.insertOrThrow(getTableName(), null,
-					toContentValues(entity));
+					toContentValuesSave(entity));
 			entity.setId(id);
 			return id;
 		} catch (Throwable t) {
 			throw new DatabaseException("Unable to save " + entity, t);
 		}
+	}
+
+	/**
+	 * Calls {@link Entity#prePersist()} before converting to
+	 * {@link ContentValues}.
+	 * 
+	 * @param t
+	 * @return
+	 */
+	private ContentValues toContentValuesSave(T t) {
+		t.prePersist();
+		return toContentValues(t);
 	}
 
 	@Override

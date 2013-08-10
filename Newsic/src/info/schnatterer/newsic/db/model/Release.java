@@ -30,12 +30,7 @@ public class Release implements Entity {
 	private Bitmap artwork = null;
 	private String artworkPath = null;
 
-	/**
-	 * Creates a {@link Release} with the current timestamp as
-	 * {@link #getDateCreated()} .
-	 */
 	public Release() {
-		this(new Date());
 	}
 
 	public Release(Date dateCreated) {
@@ -133,7 +128,7 @@ public class Release implements Entity {
 		return dateCreated;
 	}
 
-	public void setDateCreated(Date dateCreated) {
+	protected void setDateCreated(Date dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
@@ -167,5 +162,12 @@ public class Release implements Entity {
 
 	public String getMusicBrainzUriHttps() {
 		return MUSIC_BRAINZ_BASE_URI_HTTPS + getMusicBrainzId();
+	}
+
+	@Override
+	public void prePersist() {
+		if (dateCreated == null)
+			setDateCreated(new Date());
+
 	}
 }

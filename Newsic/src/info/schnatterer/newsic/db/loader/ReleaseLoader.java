@@ -3,6 +3,7 @@ package info.schnatterer.newsic.db.loader;
 import info.schnatterer.newsic.db.dao.impl.ReleaseDaoSqlite;
 import info.schnatterer.newsic.db.model.Release;
 
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -10,8 +11,17 @@ import android.content.Context;
 public class ReleaseLoader extends
 		AbstractAsyncSqliteLoader<List<Release>, Release, ReleaseDaoSqlite> {
 
-	public ReleaseLoader(Context context) {
+	private Date dateCreatedGt;
+
+	/**
+	 * @param context
+	 * @param dateCreatedGt
+	 *            the releases should all have a date created that is greater
+	 *            than this
+	 */
+	public ReleaseLoader(Context context, Date dateCreatedGt) {
 		super(context);
+		this.dateCreatedGt = dateCreatedGt;
 	}
 
 	@Override
@@ -21,8 +31,10 @@ public class ReleaseLoader extends
 
 	@Override
 	public List<Release> doLoadInBackground() throws Exception {
-		// TODO use all newest
-		return getDao().findAll();
+		if (dateCreatedGt == null) {
+			return getDao().findAll();
+		} else {
+			return getDao().findNewlyCreated(dateCreatedGt);
+		}
 	}
-
 }

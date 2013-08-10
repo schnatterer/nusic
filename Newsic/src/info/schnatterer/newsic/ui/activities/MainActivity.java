@@ -2,78 +2,61 @@ package info.schnatterer.newsic.ui.activities;
 
 import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.R;
-import info.schnatterer.newsic.db.loader.AsyncResult;
 import info.schnatterer.newsic.db.loader.ReleaseLoader;
 import info.schnatterer.newsic.db.model.Release;
 import info.schnatterer.newsic.service.PreferencesService.AppStart;
 import info.schnatterer.newsic.service.impl.PreferencesServiceSharedPreferences;
-import info.schnatterer.newsic.ui.adapters.ReleaseListAdapter;
+import info.schnatterer.newsic.ui.fragments.ReleaseListFragment;
+import info.schnatterer.newsic.ui.fragments.ReleaseListFragment.ReleaseQuery;
 import info.schnatterer.newsic.ui.tasks.LoadNewRelasesTask;
 import info.schnatterer.newsic.ui.tasks.LoadNewRelasesTask.FinishedLoadingListener;
-
-import java.util.List;
-
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.support.v4.app.FragmentTransaction;
 
-public class MainActivity extends FragmentActivity {
-	private static final int RELEASE_DB_LOADER = 0;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.app.ActionBar.TabListener;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+
+public class MainActivity extends SherlockFragmentActivity {
 	private static final int REQUEST_CODE_PREFERENCE_ACTIVITY = 0;
+	
+	private static final int RELEASE_DB_LOADER_ALL = 0;
+	private static final int RELEASE_DB_LOADER_NEWLY_ADDED = 1;
 
 	private static LoadNewRelasesTask loadReleasesTask = null;
 	/** Listens for internet query to end */
 	private ReleaseTaskFinishedLoadingListener releaseTaskFinishedLoadingListener = new ReleaseTaskFinishedLoadingListener();
-
-	private ListView releasesListView;
-
-	private ReleaseListAdapter releasesListViewAdapter = null;
-	private ProgressBar progressBar;
-	private TextView releasesTextViewNoneFound;
+	private ReleaseListFragment currentTab = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_main);
+		/* Init tab fragments */
+		// Create the Actionbar
+		ActionBar actionBar = getSupportActionBar();
 
-		progressBar = (ProgressBar) findViewById(R.id.releasesProgressBar);
-		releasesTextViewNoneFound = (TextView) findViewById(R.id.releasesTextViewNoneFound);
-		releasesTextViewNoneFound.setVisibility(View.GONE);
+		// Create Actionbar Tabs
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		releasesListView = (ListView) findViewById(R.id.releasesListView);
+		// Create first Tab
+		actionBar.addTab(actionBar.newTab()
+				.setText(R.string.MainActivity_TabAll)
+				.setTabListener(new ReleaseTabListener(ReleaseQuery.ALL, RELEASE_DB_LOADER_ALL)));
 
-		releasesListView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> a, View v, int position,
-					long id) {
-				Object o = releasesListView.getItemAtPosition(position);
-				Release release = (Release) o;
-				Intent launchBrowser = new Intent(Intent.ACTION_VIEW, Uri
-						.parse(release.getMusicBrainzUri()));
-				startActivity(launchBrowser);
-			}
+		// Create Second Tab
+		actionBar.addTab(actionBar
+				.newTab()
+				.setText(R.string.MainActivity_TabNewlyAdded)
+				.setTabListener(
+						new ReleaseTabListener(ReleaseQuery.NEWLY_ADDED, RELEASE_DB_LOADER_NEWLY_ADDED)));
 
-		});
-		releasesListViewAdapter = new ReleaseListAdapter(this);
-		releasesListView.setAdapter(releasesListViewAdapter);
-
-		// Load releases from local db
-		getSupportLoaderManager().initLoader(RELEASE_DB_LOADER, null,
-				new ReleaseLoaderCallbacks());
-
+		/* Init app */
 		registerListeners();
 
 		AppStart appStart = PreferencesServiceSharedPreferences.getInstance()
@@ -91,7 +74,7 @@ public class MainActivity extends FragmentActivity {
 	private void registerListeners() {
 		// Set activity as new context of task
 		if (loadReleasesTask != null) {
-			loadReleasesTask.updateActivity(this, releasesListViewAdapter);
+			loadReleasesTask.updateActivity(this);
 			loadReleasesTask
 					.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
 		}
@@ -99,24 +82,19 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
+		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.main, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.action_refresh:
+		if (item.getItemId() == R.id.action_refresh) {
 			startLoadingReleasesFromInternet(false);
-			break;
-		case R.id.action_settings:
+		} else if (item.getItemId() == R.id.action_settings) {
 			startActivityForResult(new Intent(this,
 					NewsicPreferencesActivity.class),
 					REQUEST_CODE_PREFERENCE_ACTIVITY);
-			break;
-		default:
-			break;
 		}
 
 		return true;
@@ -126,6 +104,7 @@ public class MainActivity extends FragmentActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK
 				&& requestCode == REQUEST_CODE_PREFERENCE_ACTIVITY) {
+			// Change in preferences require a full refresh
 			if (data.hasExtra(NewsicPreferencesActivity.RETURN_KEY_IS_REFRESH_NECESSARY)) {
 				if (data.getExtras()
 						.getBoolean(
@@ -172,14 +151,10 @@ public class MainActivity extends FragmentActivity {
 	private void unregisterListeners() {
 		if (loadReleasesTask != null) {
 			// Preserve memory
-			loadReleasesTask.updateActivity(null, null);
+			loadReleasesTask.updateActivity(null);
 			loadReleasesTask
 					.removeFinishedLoadingListener(releaseTaskFinishedLoadingListener);
 		}
-	}
-
-	public void setReleases(List<Release> result) {
-		releasesListViewAdapter.show(result);
 	}
 
 	/**
@@ -196,55 +171,44 @@ public class MainActivity extends FragmentActivity {
 		public void onFinishedLoading() {
 			loadReleasesTask = null; // Task can only be executed once
 			// Reload data
-			getSupportLoaderManager().getLoader(RELEASE_DB_LOADER)
-					.onContentChanged();
+			if (currentTab != null) {
+				currentTab.reloadFromDb();
+			}
 		}
 	}
 
 	/**
-	 * Handles callbacks from {@link ReleaseLoader} that loads the
-	 * {@link Release}s from the local database.
+	 * Creates a new {@link ReleaseListFragment} on every tab change.
 	 * 
 	 * @author schnatterer
 	 * 
 	 */
-	public class ReleaseLoaderCallbacks implements
-			LoaderManager.LoaderCallbacks<AsyncResult<List<Release>>> {
+	public class ReleaseTabListener implements TabListener {
+		private ReleaseQuery releaseQuery;
+		private int loaderId;
 
-		@Override
-		public ReleaseLoader onCreateLoader(int id, Bundle bundle) {
-			// if (id == RELEASE_DB_LOADER)
-			progressBar.setVisibility(View.VISIBLE);
-			releasesTextViewNoneFound.setVisibility(View.GONE);
-			return new ReleaseLoader(MainActivity.this);
+		public ReleaseTabListener(ReleaseQuery releaseQuery, int loaderId) {
+			this.releaseQuery = releaseQuery;
+			this.loaderId = loaderId;
 		}
 
 		@Override
-		public void onLoadFinished(Loader<AsyncResult<List<Release>>> loader,
-				AsyncResult<List<Release>> result) {
-			progressBar.setVisibility(View.GONE);
-
-			if (result.getException() != null) {
-				releasesTextViewNoneFound
-						.setText(R.string.MainActivity_errorLoadingReleases);
-				return;
-			}
-			if (result.getData() == null
-					|| (result.getData() != null && result.getData().isEmpty())) {
-				// Set the empty text
-				releasesTextViewNoneFound.setVisibility(View.VISIBLE);
-				releasesTextViewNoneFound
-						.setText(R.string.MainActivity_noReleasesFound);
-				return;
-			}
-
-			setReleases(result.getData());
+		public void onTabSelected(Tab tab, FragmentTransaction ft) {
+			// ft.replace(android.R.id.content,
+			// Fragment.instantiate(MainActivity.this,
+			// fragmentClass.getName()));
+			currentTab = new ReleaseListFragment();
+			currentTab.setReleaseQuery(releaseQuery);
+			currentTab.setLoaderId(loaderId);
+			ft.replace(android.R.id.content, currentTab);
 		}
 
 		@Override
-		public void onLoaderReset(Loader<AsyncResult<List<Release>>> result) {
-			setReleases(null);
+		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 		}
 
+		@Override
+		public void onTabReselected(Tab tab, FragmentTransaction ft) {
+		}
 	}
 }

@@ -58,7 +58,7 @@ public class ReleasesServiceImpl implements ReleasesService {
 			artists = getArtists();
 
 			progressUpdater.progressStarted(artists.length);
-			for (int i=0; i< artists.length; i++) {
+			for (int i = 0; i < artists.length; i++) {
 				Artist artist = artists[i];
 				/*
 				 * TODO find out if its more efficient to concat all artist in
@@ -67,28 +67,27 @@ public class ReleasesServiceImpl implements ReleasesService {
 				 */
 				ServiceException potentialException = null;
 				try {
-					queryMusicMetadataService
-							.findReleases(artist, startDate, endDate)
-							.getReleases();
-					
+					queryMusicMetadataService.findReleases(artist, startDate,
+							endDate).getReleases();
+
 					// TODO query images from lastfm
 					// de.umass.lastfm.Artist artistInfo =
 					// de.umass.lastfm.Artist.getInfo(artist.getArtistName(),
 					// Constants.LASTFM_API_KEY);
-					
+
 					if (artist.getReleases().size() > 0) {
 						artistDao.saveOrUpdate(artist);
 						// After saving, release memory for releases
-						
-//						for (Release release : artist.getReleases()) {
-//							// clear reference from release to artist as well
-//							release.setArtist(null);
-//						}
+
+						// for (Release release : artist.getReleases()) {
+						// // clear reference from release to artist as well
+						// release.setArtist(null);
+						// }
 						artist.setReleases(null);
 					}
 					// Release memory for artist
 					artists[i] = null;
-					
+
 				} catch (ServiceException e) {
 					Log.w(Constants.LOG, e.getMessage(), e.getCause());
 					// Allow for displaying errors to the user.
@@ -99,19 +98,18 @@ public class ReleasesServiceImpl implements ReleasesService {
 					progressUpdater
 							.progressFailed(
 									artist,
-									i+1,
+									i + 1,
 									new ServiceException(
 											R.string.ReleasesService_errorPersistingData,
 											databaseException), null);
 					return;
 				} catch (Throwable t) {
 					Log.w(Constants.LOG, t);
-					progressUpdater.progressFailed(artist, i+1, t , null);
+					progressUpdater.progressFailed(artist, i + 1, t, null);
 					return;
 				}
 
-				progressUpdater.progress(artist, i+1,
-						potentialException);
+				progressUpdater.progress(artist, i + 1, potentialException);
 			}
 			// Success
 			progressUpdater.progressFinished(null);

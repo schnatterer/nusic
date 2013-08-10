@@ -39,28 +39,27 @@ public interface PreferencesService {
 	AppStart checkAppStart();
 
 	/**
-	 * Resets all your preferences. Carefuly with that!
+	 * Resets all your preferences. Careful with that!
 	 */
 	void clearPreferences();
 
 	/**
-	 * Gets the last time the {@link Release}s have <b>successfully</b> been
-	 * loaded from the internet.
+	 * Gets the last time the {@link Release}s have been loaded from the
+	 * internet.
 	 * 
 	 * This is useful to determine the start date for the next refresh.
 	 */
 	Date getLastSuccessfullReleaseRefresh();
 
 	/**
-	 * Set last time the {@link Release}s have <b>successfully</b> been loaded
-	 * from the internet.
+	 * Set last time the {@link Release}s havebeen loaded from the internet.
 	 * 
 	 * This is useful to determine the start date for the next refresh.
 	 * 
 	 * @return <code>true</code> if successfully written, otherwise
 	 *         <code>false</code>
 	 */
-	boolean setLastSuccessfullReleaseRefresh(Date date);
+	boolean setLastReleaseRefresh(Date date);
 
 	/**
 	 * @return <code>true</code> if the user has checked to only download images
@@ -95,5 +94,9 @@ public interface PreferencesService {
 
 	void unregisterOnSharedPreferenceChangeListener(
 			PreferenceChangedListener preferenceChangedListener);
+
+	boolean isLastReleaseRefreshSuccessfull();
+
+	boolean setLastReleaseRefreshSuccessfull(boolean isSuccessfull);
 
 }

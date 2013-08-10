@@ -7,6 +7,7 @@ import info.schnatterer.newsic.db.model.Artist;
 import info.schnatterer.newsic.db.model.Release;
 import info.schnatterer.newsic.util.DateUtils;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,8 +50,16 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 			.append(NewsicDatabase.TABLE_RELEASE).append(".")
 			.append(NewsicDatabase.COLUMN_RELEASE_FK_ID_ARTIST).append("=")
 			.append(NewsicDatabase.TABLE_ARTIST).append(".")
-			.append(NewsicDatabase.COLUMN_ARTIST_ID)
-			.append(ORDER_BY_RELEASE_DATE_ASC).toString();
+			.append(NewsicDatabase.COLUMN_ARTIST_ID).toString();
+
+	public static final String QUERY_ALL_ORDER_RELEASE_DATE_ASC = new StringBuilder(
+			QUERY_ALL).append(ORDER_BY_RELEASE_DATE_ASC).toString();
+
+	public static final String QUERY_BY_RELEASE_DATE_ORDER_BY_DATE_ASC = new StringBuilder(
+			QUERY_ALL).append(" WHERE ").append(NewsicDatabase.TABLE_RELEASE)
+			.append(".").append(NewsicDatabase.COLUMN_RELEASE_DATE_CREATED)
+			.append(">").append(" ?").append(ORDER_BY_RELEASE_DATE_ASC)
+			.toString();
 
 	public ReleaseDaoSqlite(Context context) {
 		super(context);
@@ -134,9 +143,20 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 
 	@Override
 	public List<Release> findAll() throws DatabaseException {
+		return executeQuey(QUERY_ALL_ORDER_RELEASE_DATE_ASC, null);
+	}
+
+	public List<Release> findNewlyCreated(Date gtDateCreated)
+			throws DatabaseException {
+		return executeQuey(QUERY_BY_RELEASE_DATE_ORDER_BY_DATE_ASC,
+				new String[] { String.valueOf(gtDateCreated.getTime()) });
+	}
+
+	private List<Release> executeQuey(String sql, String[] selectionArgs)
+			throws DatabaseException {
 		List<Release> releases = new LinkedList<Release>();
 		try {
-			Cursor cursor = rawQuery(QUERY_ALL, null);
+			Cursor cursor = rawQuery(sql, selectionArgs);
 			cursor.moveToFirst();
 			Map<Long, Artist> artists = new HashMap<Long, Artist>();
 			while (!cursor.isAfterLast()) {
@@ -168,12 +188,11 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 
 	@Override
 	public Release toEntity(Cursor cursor, int startIndex) {
-		Release release = new Release();
+		Release release = new Release(DateUtils.loadDate(cursor, startIndex
+				+ NewsicDatabase.INDEX_COLUMN_RELEASE_DATE_CREATED));
 		release.setId(toId(cursor, startIndex));
 		release.setArtworkPath(cursor.getString(startIndex
 				+ NewsicDatabase.INDEX_COLUMN_RELEASE_ARTWORK_PATH));
-		release.setDateCreated(DateUtils.loadDate(cursor, startIndex
-				+ NewsicDatabase.INDEX_COLUMN_RELEASE_DATE_CREATED));
 		release.setMusicBrainzId(cursor.getString(startIndex
 				+ NewsicDatabase.INDEX_COLUMN_RELEASE_MB_ID));
 		release.setReleaseDate(DateUtils.loadDate(cursor, startIndex
@@ -187,17 +206,18 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 	@Override
 	public ContentValues toContentValues(Release release) {
 		ContentValues values = new ContentValues();
-		values.put(NewsicDatabase.COLUMN_RELEASE_MB_ID,
+		putIfNotNull(values, NewsicDatabase.COLUMN_RELEASE_MB_ID,
 				release.getMusicBrainzId());
-		values.put(NewsicDatabase.COLUMN_RELEASE_NAME, release.getReleaseName());
-		values.put(NewsicDatabase.COLUMN_RELEASE_DATE_RELEASED,
+		putIfNotNull(values, NewsicDatabase.COLUMN_RELEASE_NAME,
+				release.getReleaseName());
+		putIfNotNull(values, NewsicDatabase.COLUMN_RELEASE_DATE_RELEASED,
 				DateUtils.persistDate(release.getReleaseDate()));
-		values.put(NewsicDatabase.COLUMN_RELEASE_DATE_CREATED,
+		putIfNotNull(values, NewsicDatabase.COLUMN_RELEASE_DATE_CREATED,
 				DateUtils.persistDate(release.getDateCreated()));
-		values.put(NewsicDatabase.COLUMN_RELEASE_ARTWORK_PATH,
+		putIfNotNull(values, NewsicDatabase.COLUMN_RELEASE_ARTWORK_PATH,
 				release.getArtworkPath());
-		values.put(NewsicDatabase.COLUMN_RELEASE_FK_ID_ARTIST, release
-				.getArtist().getId());
+		putIfNotNull(values, NewsicDatabase.COLUMN_RELEASE_FK_ID_ARTIST,
+				release.getArtist().getId());
 		return values;
 	}
 

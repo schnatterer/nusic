@@ -24,9 +24,14 @@ public interface ReleasesService {
 	 *            can be <code>null</code>, which results in a search beginning
 	 *            at 0.
 	 * @throws ServiceException
-	 * @throws {@link NullPointerException} when artist is <code>null</code>
+	 * @throws NullPointerException
+	 *             when artist is <code>null</code>
 	 */
 	void updateNewestReleases(Date startDate, Date endDate);
+//	 * @param useSpecificDateCreated
+//	 *            can be <code>null</code>, which results in the current date
+//	 *            being used as dateCreated of all {@link Artist}s and
+//	 *            {@link Release}s
 
 	/**
 	 * Adds an {@link ArtistProgressListener} to the Service. This is called

@@ -28,6 +28,9 @@
     <string name="releaseListRow_Thumbnail">Vorschaubild des Albumcovers</string>
     <string name="LoadNewReleasesTask_CheckingArtists">Prüfe alle Interpreten auf neue Alben</string>
     <string name="MainActivity_noReleasesFound">Keine Alben gefunden für die auf dem Gerät vorhandenen Interpreten und den angegebenen Zeitraum.</string>
+    <string name="MainActivity_noNewReleasesFound">Beim letzten Update wurden keine neuen Alben gefunden für die auf dem Gerät vorhandenen Interpreten und den angegebenen Zeitraum.</string>
+    <string name="MainActivity_TabAll">Alle</string>
+    <string name="MainActivity_TabNewlyAdded">Neu hinzugefügt</string>
 
     <!-- Error message -->
     <string name="GenericError">Etwas beinahe unmögliches ist geschehen: %1s!</string>

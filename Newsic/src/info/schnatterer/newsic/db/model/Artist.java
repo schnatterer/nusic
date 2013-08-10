@@ -23,12 +23,7 @@ public class Artist implements Entity {
 	private List<Release> releases = new LinkedList<Release>();
 	private Date dateCreated;
 
-	/**
-	 * Creates a {@link Artist} with the current timestamp as
-	 * {@link #getDateCreated()} .
-	 */
 	public Artist() {
-		this(new Date());
 	}
 
 	public Artist(Date dateCreated) {
@@ -70,7 +65,7 @@ public class Artist implements Entity {
 		return dateCreated;
 	}
 
-	public void setDateCreated(Date dateCreated) {
+	protected void setDateCreated(Date dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
@@ -125,5 +120,12 @@ public class Artist implements Entity {
 
 	public String getMusicBrainzUriHttps() {
 		return MUSIC_BRAINZ_BASE_URI_HTTPS + getMusicBrainzId();
+	}
+
+	@Override
+	public void prePersist() {
+		if (dateCreated == null)
+			setDateCreated(new Date());
+
 	}
 }

@@ -10,7 +10,6 @@ import info.schnatterer.newsic.service.ServiceException;
 import info.schnatterer.newsic.service.event.ArtistProgressListener;
 import info.schnatterer.newsic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.newsic.service.impl.ReleasesServiceImpl;
-import info.schnatterer.newsic.ui.adapters.ReleaseListAdapter;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -78,7 +77,9 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 		boolean fullUpdate;
 		if (forceFullUpdate) {
 			fullUpdate = true;
-		} else {
+		} else if (!preferencesService.isLastReleaseRefreshSuccessfull())
+			fullUpdate = true;
+		else {
 			fullUpdate = preferencesService.isFullUpdate();
 		}
 
@@ -87,7 +88,11 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 				preferencesService.getLastSuccessfullReleaseRefresh());
 		Date endDate = createEndDate(preferencesService
 				.isIncludeFutureReleases());
+
+		// Use a date before the refresh to store afterwards in order to
+		Date dateCreated = new Date();
 		releasesService.updateNewestReleases(startDate, endDate);
+		preferencesService.setLastReleaseRefresh(dateCreated);
 		return null;
 
 		// if (isSuccess != null && isSuccess.equals(true)) {
@@ -165,23 +170,30 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 			}
 				break;
 			case PROGRESS_FINISHED:
-				progressDialog.dismiss();
-				progressDialog = null;
+				if (progressDialog != null) {
+					progressDialog.dismiss();
+					progressDialog = null;
+				}
 				if (errorArtists.size() > 0) {
 					Application.toast(
 							R.string.LoadNewReleasesTask_finishedWithErrors,
 							errorArtists.size());
+					// TODO move this to separate service, see doInBackground()
+					preferencesService.setLastReleaseRefreshSuccessfull(false);
 				} else {
 					// TODO move this to separate service, see doInBackground()
-					preferencesService
-							.setLastSuccessfullReleaseRefresh(new Date());
+					preferencesService.setLastReleaseRefreshSuccessfull(true);
 				}
 				break;
 			case PROGRESS_FAILED: {
-				progressDialog.dismiss();
-				progressDialog = null;
+				if (progressDialog != null) {
+					progressDialog.dismiss();
+					progressDialog = null;
+				}
 				ProgressUpdate progress = (ProgressUpdate) objects[1];
 				Throwable potentialException = progress.getPotentialException();
+				// TODO move this to separate service, see doInBackground()
+				preferencesService.setLastReleaseRefreshSuccessfull(false);
 				if (potentialException != null) {
 					if (potentialException instanceof ServiceException) {
 						Application.toast(potentialException
@@ -229,8 +241,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 		releasesService.removeArtistProcessedListener(this);
 	}
 
-	public void updateActivity(Activity activity,
-			ReleaseListAdapter releasesListViewAdapter) {
+	public void updateActivity(Activity activity) {
 		this.activity = activity;
 
 		if (activity == null) {
@@ -297,7 +308,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 	@Override
 	public void onProgressFinished(Void result) {
 		notifyListeners();
-		publishProgress(ProgressUpdateOperation.PROGRESS_FINISHED);
+		publishProgress(ProgressUpdateOperation.PROGRESS_FINISHED, result);
 	}
 
 	@Override

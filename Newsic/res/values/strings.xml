@@ -28,6 +28,9 @@
     <string name="releaseListRow_Thumbnail">Thumbnail of album art</string>
     <string name="LoadNewReleasesTask_CheckingArtists">Checking all artists for new releases</string>
     <string name="MainActivity_noReleasesFound">No releases were found for the artists on your device in the specified time period.</string>
+    <string name="MainActivity_noNewReleasesFound">During the last refresh no new releases were found for the artists on your device in the specified time period</string>
+    <string name="MainActivity_TabAll">All</string>
+    <string name="MainActivity_TabNewlyAdded">Newly added</string>
 
     <!-- Error message -->
     <string name="GenericError">Something almost impossible has happened: %1s!</string>
