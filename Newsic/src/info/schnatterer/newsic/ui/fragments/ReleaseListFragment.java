@@ -63,7 +63,7 @@ public class ReleaseListFragment extends SherlockFragment {
 					e);
 		}
 
-		View view = inflater.inflate(R.layout.activity_main, container, false);
+		View view = inflater.inflate(R.layout.release_list_layout, container, false);
 		progressBar = (ProgressBar) view.findViewById(R.id.releasesProgressBar);
 		progressBar.setVisibility(View.GONE);
 
