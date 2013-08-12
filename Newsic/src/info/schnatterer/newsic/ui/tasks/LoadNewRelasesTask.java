@@ -4,15 +4,11 @@ import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.Constants;
 import info.schnatterer.newsic.R;
 import info.schnatterer.newsic.db.model.Artist;
-import info.schnatterer.newsic.service.PreferencesService;
-import info.schnatterer.newsic.service.ReleasesService;
 import info.schnatterer.newsic.service.ServiceException;
+import info.schnatterer.newsic.service.android.LoadNewReleasesService;
+import info.schnatterer.newsic.service.android.LoadNewReleasesService.LoadNewReleasesServiceBinder;
 import info.schnatterer.newsic.service.event.ArtistProgressListener;
-import info.schnatterer.newsic.service.impl.PreferencesServiceSharedPreferences;
-import info.schnatterer.newsic.service.impl.ReleasesServiceImpl;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +16,12 @@ import java.util.Set;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.AsyncTask;
+import android.os.IBinder;
 import android.util.Log;
 
 /**
@@ -31,101 +32,82 @@ import android.util.Log;
  * @author schnatterer
  * 
  */
-public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
-		ArtistProgressListener {
-	private ReleasesService releasesService;
-	private PreferencesService preferencesService = PreferencesServiceSharedPreferences
-			.getInstance();
+public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> {
+	private Context context;
 
-	private ProgressDialog progressDialog;
-	private boolean isExecuting = false;
-	// private Boolean isSuccess = null;
-
-	private Activity activity;
+	private ProgressDialog progressDialog = null;
 	private List<Artist> errorArtists;
 
 	private Set<FinishedLoadingListener> listeners = new HashSet<FinishedLoadingListener>();
 
+	private LoadNewReleasesServiceConnection loadNewReleasesServiceConnection = null;
+	private ProgressListener artistProcessedListener = null;
+	// private ReleasesService releasesService = null;
+
+	private boolean updateOnlyIfNeccesary;
+
 	/**
 	 * @param activity
+	 * @param updateNow
+	 *            directly start updating releases without checking necessity.
 	 */
-	public LoadNewRelasesTask(Activity activity) {
-		this.activity = activity;
-		// Run in global context
-		releasesService = new ReleasesServiceImpl(Application.getContext());
-	}
-
-	@Override
-	protected void onPreExecute() {
-		isExecuting = true;
-		// isSuccess = null;
-		releasesService.addArtistProcessedListener(this);
+	public LoadNewRelasesTask(Activity activity, boolean updateOnlyIfNeccesary) {
+		this.context = activity;
+		this.updateOnlyIfNeccesary = updateOnlyIfNeccesary;
 	}
 
 	@Override
 	protected Void doInBackground(Void... arg0) {
-		// Do it
-
-		// TODO extract this to a service and write test for logic!
-		boolean fullUpdate;
-		if (preferencesService.isForceFullRefresh())
-			fullUpdate = true;
-		else {
-			fullUpdate = preferencesService.isFullUpdate();
-		}
-
-		Date startDate = createStartDate(fullUpdate,
-				preferencesService.getDownloadReleasesTimePeriod(),
-				preferencesService.getLastReleaseRefresh());
-		Date endDate = createEndDate(preferencesService
-				.isIncludeFutureReleases());
-
-		// Use a date before the refresh to store afterwards in order to
-		Date dateCreated = new Date();
-		releasesService.updateNewestReleases(startDate, endDate);
-		preferencesService.setLastReleaseRefresh(dateCreated);
+		startAndBindService();
 		return null;
+	}
 
-		// if (isSuccess != null && isSuccess.equals(true)) {
-		// // Success
-		// // if (errorArtists.size() > 0)
-		// // TODO Notify user, that some artist failed
-		//
-		// // TODO find which releases are new to the device and notify user
-		// preferencesService.setLastSuccessfullReleaseRefresh(new Date());
-		// } else {
-		// // TODO Notify user of failure
+	private void startAndBindService() {
+		// if (loadNewReleasesServiceConnection != null) {
+		// unbindService();
 		// }
+		loadNewReleasesServiceConnection = new LoadNewReleasesServiceConnection();
+		artistProcessedListener = new ProgressListener();
+		// Start service (to make sure it can run independently from the app)
+		Intent service = new Intent(context, LoadNewReleasesService.class);
+		// service.putExtra(LoadNewReleasesService.ARG_UPDATE_ONLY_IF_NECESSARY,
+		// updateOnlyIfNeccesary);
+		context.startService(service);
+		// Now bind to service
+		Intent intent = new Intent(context, LoadNewReleasesService.class);
+		context.bindService(intent, loadNewReleasesServiceConnection,
+				Context.BIND_AUTO_CREATE);
 	}
 
-	private Date createEndDate(boolean includeFutureReleases) {
-		if (!includeFutureReleases) {
-			return new Date(); // Today
-		} else {
-			return null;
+	private void unbindService() {
+		if (loadNewReleasesServiceConnection != null) {
+			// if (releasesService != null) {
+			// releasesService
+			// .removeArtistProcessedListener(artistProcessedListener);
+			// }
+			context.unbindService(loadNewReleasesServiceConnection);
+			loadNewReleasesServiceConnection = null;
+			// releasesService = null;
+			artistProcessedListener = null;
 		}
+
 	}
 
-	private Date createStartDate(boolean isFullUpdate, int months,
-			Date lastReleaseRefresh) {
-		if (lastReleaseRefresh == null) {
-			// Same as full Update
-			return createStartDateFullUpdate(months);
+	/** Defines callbacks for service binding, passed to bindService() */
+	private class LoadNewReleasesServiceConnection implements ServiceConnection {
+		@Override
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			LoadNewReleasesServiceBinder binder = (LoadNewReleasesServiceBinder) service;
+			LoadNewReleasesService loadNewReleasesService = binder.getService();
+			loadNewReleasesService.refreshReleases(updateOnlyIfNeccesary,
+					artistProcessedListener);
+			// unbindService();
 		}
-		if (isFullUpdate) {
-			return createStartDateFullUpdate(months);
-		}
-		return lastReleaseRefresh;
-	}
 
-	private Date createStartDateFullUpdate(int months) {
-		if (months <= 0) {
-			return null;
+		@Override
+		public void onServiceDisconnected(ComponentName className) {
 		}
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.MONTH, -months);
-		return cal.getTime();
-	}
+	};
 
 	@Override
 	protected void onProgressUpdate(Object... objects) {
@@ -149,15 +131,6 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 					setProgress(progress);
 				}
 
-				Throwable potentialException = progress.getPotentialException();
-				if (potentialException != null) {
-					if (potentialException instanceof ServiceException) {
-						errorArtists.add(progress.getArtist());
-					} else {
-						Application.toast(Application
-								.createGenericErrorMessage(potentialException));
-					}
-				}
 			}
 				break;
 			case PROGRESS_FINISHED:
@@ -165,15 +138,10 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 					progressDialog.dismiss();
 					progressDialog = null;
 				}
-				if (errorArtists.size() > 0) {
+				if (errorArtists != null && errorArtists.size() > 0) {
 					Application.toast(
 							R.string.LoadNewReleasesTask_finishedWithErrors,
 							errorArtists.size());
-					// TODO move this to separate service, see doInBackground()
-					preferencesService.setForceFullRefresh(true);
-				} else {
-					// TODO move this to separate service, see doInBackground()
-					preferencesService.setForceFullRefresh(false);
 				}
 				break;
 			case PROGRESS_FAILED: {
@@ -183,8 +151,6 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 				}
 				ProgressUpdate progress = (ProgressUpdate) objects[1];
 				Throwable potentialException = progress.getPotentialException();
-				// TODO move this to separate service, see doInBackground()
-				preferencesService.setForceFullRefresh(true);
 				if (potentialException != null) {
 					if (potentialException instanceof ServiceException) {
 						Application.toast(potentialException
@@ -226,16 +192,16 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 		}
 	}
 
-	@Override
-	protected void onPostExecute(Void result) {
-		isExecuting = false;
-		releasesService.removeArtistProcessedListener(this);
-	}
+	// @Override
+	// protected void onPostExecute(Void result) {
+	// // Make sure we're unbound
+	// unbindService();
+	// }
 
 	public void updateActivity(Activity activity) {
-		this.activity = activity;
+		this.context = activity;
 
-		if (activity == null) {
+		if (activity == null && progressDialog != null) {
 			progressDialog.dismiss();
 			progressDialog = null;
 		}
@@ -253,14 +219,6 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 	// return result;
 	// }
 
-	public boolean isExecuting() {
-		return isExecuting;
-	}
-
-	public void setExecuting(boolean isExecuting) {
-		this.isExecuting = isExecuting;
-	}
-
 	/**
 	 * This should only be called from from the main thread (e.g. from
 	 * {@link #onProgressUpdate(Object...)}).
@@ -271,8 +229,8 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 	 */
 	private ProgressDialog showDialog(int progress, int max) {
 		ProgressDialog dialog = null;
-		if (activity != null) {
-			dialog = new ProgressDialog(activity);
+		if (context != null) {
+			dialog = new ProgressDialog(context);
 			dialog.setMessage(Application.getContext().getString(
 					R.string.LoadNewReleasesTask_CheckingArtists));
 			dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -284,30 +242,36 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 		return dialog;
 	}
 
-	@Override
-	public void onProgressStarted(int nEntities) {
-		publishProgress(ProgressUpdateOperation.PROGRESS_STARTED, nEntities);
-	}
+	private class ProgressListener implements ArtistProgressListener {
+		@Override
+		public void onProgressStarted(int nEntities) {
+			publishProgress(ProgressUpdateOperation.PROGRESS_STARTED, nEntities);
+		}
 
-	@Override
-	public void onProgress(Artist entity, int progress, int max,
-			Throwable potentialException) {
-		publishProgress(ProgressUpdateOperation.PROGRESS, new ProgressUpdate(
-				entity, progress, max, potentialException));
-	}
+		@Override
+		public void onProgress(Artist entity, int progress, int max,
+				Throwable potentialException) {
+			publishProgress(ProgressUpdateOperation.PROGRESS,
+					new ProgressUpdate(entity, progress, max,
+							potentialException));
+		}
 
-	@Override
-	public void onProgressFinished(Void result) {
-		notifyListeners();
-		publishProgress(ProgressUpdateOperation.PROGRESS_FINISHED, result);
-	}
+		@Override
+		public void onProgressFinished(Boolean result) {
+			publishProgress(ProgressUpdateOperation.PROGRESS_FINISHED, result);
+			notifyListeners(result);
+			unbindService();
+		}
 
-	@Override
-	public void onProgressFailed(Artist entity, int progress, int max,
-			Void resultOnFailure, Throwable potentialException) {
-		notifyListeners();
-		publishProgress(ProgressUpdateOperation.PROGRESS_FAILED,
-				new ProgressUpdate(entity, progress, max, potentialException));
+		@Override
+		public void onProgressFailed(Artist entity, int progress, int max,
+				Boolean result, Throwable potentialException) {
+			publishProgress(ProgressUpdateOperation.PROGRESS_FAILED,
+					new ProgressUpdate(entity, progress, max,
+							potentialException));
+			notifyListeners(result);
+			unbindService();
+		}
 	}
 
 	private enum ProgressUpdateOperation {
@@ -347,7 +311,7 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 	}
 
 	public interface FinishedLoadingListener {
-		void onFinishedLoading();
+		void onFinishedLoading(boolean resultChanged);
 	}
 
 	public void addFinishedLoadingListener(
@@ -361,9 +325,14 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> implements
 		return listeners.remove(dataChangedListener);
 	}
 
-	protected void notifyListeners() {
+	protected void notifyListeners(Boolean resultChanged) {
+		boolean primitiveResult = true;
+		// Be defensive: Only if explicitly nothing changed
+		if (resultChanged != null && resultChanged.equals(false)) {
+			primitiveResult = false;
+		}
 		for (FinishedLoadingListener listener : listeners) {
-			listener.onFinishedLoading();
+			listener.onFinishedLoading(primitiveResult);
 		}
 	}
 }

@@ -7,6 +7,8 @@ import info.schnatterer.newsic.db.dao.ArtistDao;
 import info.schnatterer.newsic.db.dao.impl.ArtistDaoSqlite;
 import info.schnatterer.newsic.db.model.Artist;
 import info.schnatterer.newsic.service.ArtistQueryService;
+import info.schnatterer.newsic.service.PreferencesService;
+import info.schnatterer.newsic.service.PreferencesService.AppStart;
 import info.schnatterer.newsic.service.QueryMusicMetadataService;
 import info.schnatterer.newsic.service.ReleasesService;
 import info.schnatterer.newsic.service.ServiceException;
@@ -14,6 +16,7 @@ import info.schnatterer.newsic.service.event.ArtistProgressListener;
 import info.schnatterer.newsic.service.event.ProgressListener;
 import info.schnatterer.newsic.service.event.ProgressUpdater;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,11 +29,13 @@ public class ReleasesServiceImpl implements ReleasesService {
 	private Context context;
 	private QueryMusicMetadataService queryMusicMetadataService = new QueryMusicMetadataServiceMusicBrainz();
 	private ArtistQueryService artistQueryService = new ArtistQueryServiceImpl();
+	private PreferencesService preferencesService = PreferencesServiceSharedPreferences
+			.getInstance();
 
 	private ArtistDao artistDao = null;
 
-	private Set<ProgressListener<Artist, Void>> listenerList = new HashSet<ProgressListener<Artist, Void>>();
-	private ProgressUpdater<Artist, Void> progressUpdater = new ProgressUpdater<Artist, Void>(
+	private Set<ProgressListener<Artist, Boolean>> listenerList = new HashSet<ProgressListener<Artist, Boolean>>();
+	private ProgressUpdater<Artist, Boolean> progressUpdater = new ProgressUpdater<Artist, Boolean>(
 			listenerList) {
 	};
 
@@ -41,14 +46,84 @@ public class ReleasesServiceImpl implements ReleasesService {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.schnatterer.newsic.service.ReleasesService#addNewestReleases
-	 * (java.util.List)
-	 */
+	private boolean isUpdateNeccesarry(boolean updateOnlyIfNeccesary) {
+		if (!updateOnlyIfNeccesary) {
+			return true;
+		}
+		AppStart appStart = PreferencesServiceSharedPreferences.getInstance()
+				.checkAppStart();
+
+		switch (appStart) {
+		case FIRST_TIME_VERSION:
+		case FIRST_TIME:
+			return true;
+		default:
+			break;
+		}
+		/*
+		 * TODO check if there are new artists on the device and refresh if
+		 * neccessary
+		 */
+		return false;
+	}
+
 	@Override
-	public void updateNewestReleases(Date startDate, Date endDate) {
+	public void refreshReleases(boolean updateOnlyIfNeccesary) {
+		if (!isUpdateNeccesarry(updateOnlyIfNeccesary)) {
+			progressUpdater.progressFinished(false);
+			return;
+		}
+
+		// TODO write test for logic!
+		boolean fullUpdate;
+		if (preferencesService.isForceFullRefresh())
+			fullUpdate = true;
+		else {
+			fullUpdate = preferencesService.isFullUpdate();
+		}
+
+		Date startDate = createStartDate(fullUpdate,
+				preferencesService.getDownloadReleasesTimePeriod(),
+				preferencesService.getLastReleaseRefresh());
+		Date endDate = createEndDate(preferencesService
+				.isIncludeFutureReleases());
+
+		// Use a date before the refresh to store afterwards in order to
+		Date dateCreated = new Date();
+		refreshReleases(startDate, endDate);
+		preferencesService.setLastReleaseRefresh(dateCreated);
+	}
+
+	private Date createEndDate(boolean includeFutureReleases) {
+		if (!includeFutureReleases) {
+			return new Date(); // Today
+		} else {
+			return null;
+		}
+	}
+
+	private Date createStartDate(boolean isFullUpdate, int months,
+			Date lastReleaseRefresh) {
+		if (lastReleaseRefresh == null) {
+			// Same as full Update
+			return createStartDateFullUpdate(months);
+		}
+		if (isFullUpdate) {
+			return createStartDateFullUpdate(months);
+		}
+		return lastReleaseRefresh;
+	}
+
+	private Date createStartDateFullUpdate(int months) {
+		if (months <= 0) {
+			return null;
+		}
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MONTH, -months);
+		return cal.getTime();
+	}
+
+	private void refreshReleases(Date startDate, Date endDate) {
 
 		// TODO create service for checking wifi and available internet
 		// connection
@@ -58,6 +133,7 @@ public class ReleasesServiceImpl implements ReleasesService {
 			artists = getArtists();
 
 			progressUpdater.progressStarted(artists.length);
+			ServiceException potentialException = null;
 			for (int i = 0; i < artists.length; i++) {
 				Artist artist = artists[i];
 				/*
@@ -65,7 +141,6 @@ public class ReleasesServiceImpl implements ReleasesService {
 				 * one big query and then process it page by page (keep URL
 				 * limit of 2048 chars in mind)
 				 */
-				ServiceException potentialException = null;
 				try {
 					queryMusicMetadataService.findReleases(artist, startDate,
 							endDate).getReleases();
@@ -106,13 +181,23 @@ public class ReleasesServiceImpl implements ReleasesService {
 				} catch (Throwable t) {
 					Log.w(Constants.LOG, t);
 					progressUpdater.progressFailed(artist, i + 1, t, null);
+					preferencesService.setForceFullRefresh(true);
 					return;
 				}
 
 				progressUpdater.progress(artist, i + 1, potentialException);
 			}
-			// Success
-			progressUpdater.progressFinished(null);
+			if (potentialException == null) {
+				// "Full" Success
+				preferencesService.setForceFullRefresh(false);
+			} else {
+				/*
+				 * "Partial" Success, some artists failed. Force a full refresh
+				 * next time. Maybe better luck then.
+				 */
+				preferencesService.setForceFullRefresh(false);
+			}
+			progressUpdater.progressFinished(true);
 			return;
 			// } catch (ServiceException e) {
 		} catch (Throwable t) {

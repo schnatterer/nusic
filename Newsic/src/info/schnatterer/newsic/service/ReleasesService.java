@@ -3,35 +3,25 @@ package info.schnatterer.newsic.service;
 import info.schnatterer.newsic.db.model.Artist;
 import info.schnatterer.newsic.service.event.ArtistProgressListener;
 
-import java.util.Date;
-
 /**
  * @author schnatterer
  * 
  */
 public interface ReleasesService {
+
 	/**
-	 * Updates the releases in the database. Queries only releases that are
-	 * within the date range of <code>startDate</code> and <code>endDate</code>
-	 * including the dates.
+	 * Updates the releases in the database from the internet. The time period
+	 * queried depends on
+	 * {@link PreferencesService#getDownloadReleasesTimePeriod()},
+	 * {@link PreferencesService#getLastReleaseRefresh()},
+	 * {@link PreferencesService#isIncludeFutureReleases()} and
+	 * {@link PreferencesService#isForceFullRefresh()}.
 	 * 
-	 * If both <code>startDate</code> and <code>endDate</code> are
-	 * <code>null</code>, no date is specified resulting in "all" results.
-	 * 
-	 * @param endDate
-	 *            can be <code>null</code>, which results in an "open" end.
-	 * @param startDate
-	 *            can be <code>null</code>, which results in a search beginning
-	 *            at 0.
-	 * @throws ServiceException
-	 * @throws NullPointerException
-	 *             when artist is <code>null</code>
+	 * @param updateOnlyIfNeccesary
+	 *            updates only if the app is started for the first time or the
+	 *            first start in the current version.
 	 */
-	void updateNewestReleases(Date startDate, Date endDate);
-//	 * @param useSpecificDateCreated
-//	 *            can be <code>null</code>, which results in the current date
-//	 *            being used as dateCreated of all {@link Artist}s and
-//	 *            {@link Release}s
+	void refreshReleases(boolean updateOnlyIfNeccesary);
 
 	/**
 	 * Adds an {@link ArtistProgressListener} to the Service. This is called

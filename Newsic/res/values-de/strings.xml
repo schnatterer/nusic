@@ -6,6 +6,16 @@
     <string name="action_refresh">Alben aktualisieren</string>
     <string name="action_settings">Einstellungen</string>
     
+    <!-- GUI captions -->
+    <string name="releaseListRow_RightArrow">Anklicken für mehr Details</string>
+    <string name="releaseListRow_Thumbnail">Vorschaubild des Albumcovers</string>
+    <string name="LoadNewReleasesTask_CheckingArtists">Prüfe alle Interpreten auf neue Alben</string>
+    <string name="MainActivity_noReleasesFound">Keine Alben gefunden für die auf dem Gerät vorhandenen Interpreten und den angegebenen Zeitraum.</string>
+    <string name="MainActivity_noNewReleasesFound">Beim letzten Update wurden keine neuen Alben gefunden für die auf dem Gerät vorhandenen Interpreten und den angegebenen Zeitraum.</string>
+    <string name="MainActivity_TabAll">Alle</string>
+    <string name="MainActivity_TabNewlyAdded">Neu hinzugefügt</string>
+    
+    <!-- Prefrences -->
     <string name="preferences_category_releases">Alben</string>
     <string name="preferences_title_download_releases_time_period">Zeitspanne</string>
     <string name="preferences_summary_download_releases_time_period">Zurückliegende Zeitspanne vom heutigen Datum aus, für die die Alben heruntergeladen und angezeigt werden sollen</string>
@@ -24,15 +34,7 @@
     <string name="preferences_title_download_only_on_wifi">Nur über WLAN herunterladen</string>
     <string name="preferences_summary_download_only_on_wifi">Keine Internetverbindung über Mobilfunknetzwerke verwenden</string>
     
-    <string name="releaseListRow_RightArrow">Anklicken für mehr Details</string>
-    <string name="releaseListRow_Thumbnail">Vorschaubild des Albumcovers</string>
-    <string name="LoadNewReleasesTask_CheckingArtists">Prüfe alle Interpreten auf neue Alben</string>
-    <string name="MainActivity_noReleasesFound">Keine Alben gefunden für die auf dem Gerät vorhandenen Interpreten und den angegebenen Zeitraum.</string>
-    <string name="MainActivity_noNewReleasesFound">Beim letzten Update wurden keine neuen Alben gefunden für die auf dem Gerät vorhandenen Interpreten und den angegebenen Zeitraum.</string>
-    <string name="MainActivity_TabAll">Alle</string>
-    <string name="MainActivity_TabNewlyAdded">Neu hinzugefügt</string>
-
-    <!-- Error message -->
+    <!-- Error messages -->
     <string name="GenericError">Etwas beinahe unmögliches ist geschehen: %1s!</string>
     <string name="Activity_notOnline">Keine Verbindung zum Internet (Einstellungen prüfen, um die Verwendung des mobilen Internet zu ermöglichen)</string>
     <string name="MainActivity_errorLoadingReleases">Fehler beim Laden der Alben vom Gerät</string>
@@ -43,5 +45,4 @@
     <string name="LoadNewReleasesTask_finishedWithErrors">Update der Alben für %1$d Interpreten fehlgeschlagen</string>
     <string name="QueryMusicMetadataService_errorFindingReleasesArtist">Fehler beim Finden von Alben für Interpret %1$s</string>
     <string name="QueryMusicMetadataService_errorQueryingMusicBrainz">Fehler beim Abfrage der Alben des Interpreten %1$s im Internet. Keine Verbindung zum Internet?</string>
-
 </resources>

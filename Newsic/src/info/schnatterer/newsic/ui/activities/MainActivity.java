@@ -1,11 +1,8 @@
 package info.schnatterer.newsic.ui.activities;
 
-import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.R;
 import info.schnatterer.newsic.db.loader.ReleaseLoader;
 import info.schnatterer.newsic.db.model.Release;
-import info.schnatterer.newsic.service.PreferencesService.AppStart;
-import info.schnatterer.newsic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.newsic.ui.fragments.ReleaseListFragment;
 import info.schnatterer.newsic.ui.fragments.ReleaseListFragment.ReleaseQuery;
 import info.schnatterer.newsic.ui.tasks.LoadNewRelasesTask;
@@ -63,16 +60,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		/* Init app */
 		registerListeners();
 
-		AppStart appStart = PreferencesServiceSharedPreferences.getInstance()
-				.checkAppStart();
-
-		switch (appStart) {
-		case FIRST_TIME_VERSION:
-		case FIRST_TIME:
-			startLoadingReleasesFromInternet(true);
-		default:
-			break;
-		}
+		startLoadingReleasesFromInternet(true);
 	}
 
 	/**
@@ -146,25 +134,27 @@ public class MainActivity extends SherlockFragmentActivity {
 				if (data.getExtras()
 						.getBoolean(
 								NewsicPreferencesActivity.RETURN_KEY_IS_REFRESH_NECESSARY)) {
-					startLoadingReleasesFromInternet(true);
+					startLoadingReleasesFromInternet(false);
 				}
 			}
 		}
 	}
 
-	private void startLoadingReleasesFromInternet(boolean forceFullUpdate) {
-		if (Application.isOnline()) {
-			if (loadReleasesTask == null) {
-				// Async task not started yet
-				loadReleasesTask = new LoadNewRelasesTask(this);
-				loadReleasesTask
-						.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
-				loadReleasesTask.execute();
-			}
-			// Else task is already running
-		} else {
-			Application.toast(R.string.Activity_notOnline);
+	private void startLoadingReleasesFromInternet(boolean updateOnlyIfNeccesary) {
+		// if (Application.isOnline()) {
+		if (loadReleasesTask == null) {
+			// Async task not started yet
+			loadReleasesTask = new LoadNewRelasesTask(this,
+					updateOnlyIfNeccesary);
+			loadReleasesTask
+					.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
+			loadReleasesTask.execute();
 		}
+		// Else task is already running
+		// TODO trigger restart? Show dialog?
+		// } else {
+		// Application.toast(R.string.Activity_notOnline);
+		// }f
 	}
 
 	@Override
@@ -205,15 +195,17 @@ public class MainActivity extends SherlockFragmentActivity {
 	public class ReleaseTaskFinishedLoadingListener implements
 			FinishedLoadingListener {
 		@Override
-		public void onFinishedLoading() {
+		public void onFinishedLoading(boolean resultChanged) {
 			loadReleasesTask = null; // Task can only be executed once
-			// Mark all loaders as changed
-			for (ReleaseTabListener listener : tabListeners) {
-				listener.fragment.onContentChanged();
-			}
-			// Reload data on current tab
-			if (currentTabFragment != null) {
-				currentTabFragment.foreceLoad();
+			if (resultChanged) {
+				// Mark all loaders as changed
+				for (ReleaseTabListener listener : tabListeners) {
+					listener.fragment.onContentChanged();
+				}
+				// Reload data on current tab
+				if (currentTabFragment != null) {
+					currentTabFragment.foreceLoad();
+				}
 			}
 		}
 	}
