@@ -115,4 +115,6 @@ public interface PreferencesService {
 	 */
 	boolean setForceFullRefresh(boolean forceFullRefresh);
 
+	int getRefreshPeriod();
+
 }

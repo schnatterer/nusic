@@ -20,8 +20,10 @@ public interface ReleasesService {
 	 * @param updateOnlyIfNeccesary
 	 *            updates only if the app is started for the first time or the
 	 *            first start in the current version.
+	 * @return <code>false</code> if no update was necessary. Otherwise
+	 *         <code>true</code>.
 	 */
-	void refreshReleases(boolean updateOnlyIfNeccesary);
+	boolean refreshReleases(boolean updateOnlyIfNeccesary);
 
 	/**
 	 * Adds an {@link ArtistProgressListener} to the Service. This is called

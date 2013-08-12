@@ -57,10 +57,13 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	public final Boolean DEFAULT_INCLUDE_FUTURE_RELEASES;
 
 	public final String KEY_DOWNLOAD_RELEASES_TIME_PERIOD;
-	public final Integer DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD;
+	public final String DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD;
 
 	public final String KEY_FULL_UPDATE;
 	public final Boolean DEFAULT_FULL_UPDATE;
+
+	public final String KEY_REFRESH_PERIOD;
+	public final String DEFAULT_REFRESH_PERIOD;
 
 	private final SharedPreferences sharedPreferences;
 	// private static Context context = null;
@@ -123,22 +126,27 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 
 			KEY_DOWNLOAD_RELEASES_TIME_PERIOD = getContext().getString(
 					R.string.preferences_key_download_releases_time_period);
-			String prefValue = getContext().getResources().getString(
-					R.string.preferences_default_download_releases_time_period);
-			try {
-				DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD = Integer
-						.parseInt(prefValue);
-			} catch (NumberFormatException e) {
-				throw new RuntimeException(
-						"Unable to parse integer from constant \""
-								+ R.string.preferences_default_download_releases_time_period
-								+ "\", value:" + prefValue, e);
-			}
+			DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD = getContext()
+					.getResources()
+					.getString(
+							R.string.preferences_default_download_releases_time_period);
+			// DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD =
+			// parseIntFromStringConstantOrThrow(
+			// R.string.preferences_key_download_releases_time_period,
+			// R.string.preferences_default_download_releases_time_period);
 
 			KEY_FULL_UPDATE = getContext().getString(
 					R.string.preferences_key_full_update);
 			DEFAULT_FULL_UPDATE = getContext().getResources().getBoolean(
 					R.bool.preferences_default_full_update);
+
+			KEY_REFRESH_PERIOD = getContext().getString(
+					R.string.preferences_key_refresh_period);
+			DEFAULT_REFRESH_PERIOD = getContext().getResources().getString(
+					R.string.preferences_default_refresh_period);
+			// DEFAULT_REFRESH_PERIOD = parseIntFromStringConstantOrThrow(
+			// R.string.preferences_key_refresh_period,
+			// R.string.preferences_default_refresh_period);
 
 		} else {
 			// e.g. for Testing
@@ -153,6 +161,33 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 
 			KEY_FULL_UPDATE = null;
 			DEFAULT_FULL_UPDATE = null;
+
+			KEY_REFRESH_PERIOD = null;
+			DEFAULT_REFRESH_PERIOD = null;
+		}
+	}
+
+	// private Integer parseIntFromStringConstantOrThrow(int key, int value) {
+	// String valueStr = getContext().getResources().getString(value);
+	// try {
+	// return Integer.parseInt(valueStr);
+	// } catch (NumberFormatException e) {
+	// throw new RuntimeException(
+	// "Unable to parse integer from constant \""
+	// + getContext().getResources().getString(key)
+	// + "\", value:" + valueStr, e);
+	// }
+	// }
+
+	private Integer parseIntFromPreferenceOrThrow(String key,
+			String defaultValue) {
+		String prefValue = sharedPreferences.getString(key, defaultValue);
+		try {
+			return Integer.parseInt(prefValue);
+		} catch (NumberFormatException e) {
+			throw new RuntimeException(
+					"Unable to parse integer from property \"" + key
+							+ "\", value:" + prefValue, e);
 		}
 	}
 
@@ -216,7 +251,8 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 
 	@Override
 	public boolean isForceFullRefresh() {
-		return sharedPreferences.getBoolean(KEY_LAST_RELEASES_REFRESH_SUCCESSFULL,
+		return sharedPreferences.getBoolean(
+				KEY_LAST_RELEASES_REFRESH_SUCCESSFULL,
 				DEFAULT_LAST_RELEASES_REFRESH_SUCCESSFULL);
 	}
 
@@ -247,17 +283,14 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 
 	@Override
 	public int getDownloadReleasesTimePeriod() {
-		String prefValue = sharedPreferences.getString(
-				KEY_DOWNLOAD_RELEASES_TIME_PERIOD,
-				DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD.toString());
-		try {
-			return Integer.parseInt(prefValue);
-		} catch (NumberFormatException e) {
-			throw new RuntimeException(
-					"Unable to parse integer from property \""
-							+ KEY_DOWNLOAD_RELEASES_TIME_PERIOD + "\", value:"
-							+ prefValue, e);
-		}
+		return parseIntFromPreferenceOrThrow(KEY_DOWNLOAD_RELEASES_TIME_PERIOD,
+				DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD);
+	}
+
+	@Override
+	public int getRefreshPeriod() {
+		return parseIntFromPreferenceOrThrow(KEY_REFRESH_PERIOD,
+				DEFAULT_REFRESH_PERIOD);
 	}
 
 	@Override

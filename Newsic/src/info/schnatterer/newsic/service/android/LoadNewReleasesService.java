@@ -3,17 +3,24 @@ package info.schnatterer.newsic.service.android;
 import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.Constants;
 import info.schnatterer.newsic.db.model.Artist;
+import info.schnatterer.newsic.service.PreferencesService;
 import info.schnatterer.newsic.service.ReleasesService;
 import info.schnatterer.newsic.service.ServiceException;
 import info.schnatterer.newsic.service.event.ArtistProgressListener;
+import info.schnatterer.newsic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.newsic.service.impl.ReleasesServiceImpl;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -26,13 +33,17 @@ import android.util.Log;
  * 
  */
 public class LoadNewReleasesService extends Service {
-	public static final String ARG_UPDATE_ONLY_IF_NECESSARY = "updateOnlyIfNeccesary";
+	// public static final String ARG_UPDATE_ONLY_IF_NECESSARY =
+	// "updateOnlyIfNeccesary";
+	public static final String ARG_REFRESH_ON_START = "refreshOnStart";
 
 	// public LoadNewReleasesService() {
 	// super(LoadNewReleasesService.class.getSimpleName() + "WorkerThread");
 	// }
-
+	private PreferencesService preferencesService = PreferencesServiceSharedPreferences
+			.getInstance();
 	private ReleasesService releasesService;
+
 	private List<Artist> errorArtists;
 	private ProgressListener progressListener = new ProgressListener();
 	private LoadNewReleasesServiceBinder binder = new LoadNewReleasesServiceBinder();
@@ -44,30 +55,32 @@ public class LoadNewReleasesService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.i(Constants.LOG, "Flags = " + flags + "; startId = " + startId
-				+ ". Intent = " + intent);
+				+ ". Intent = " + intent
+				+ (intent != null ? (", extras= " + intent.getExtras()) : ""));
+
 		if (intent == null) {
 			// When START_STICKY the intent will be null on "restart" after
 			// getting killed
-			// TODO resume download
+			// TODO RESUME download instead of starting new?
+			refreshReleases(false, null);
+		} else {
+			Bundle extras = intent.getExtras();
+			if (extras != null) {
+				// Get data via the key
+				if (extras.getBoolean(ARG_REFRESH_ON_START, false)) {
+					refreshReleases(false, null);
+				}
+			}
 		}
+
 		return Service.START_STICKY;
 
-//		if (flags == START_FLAG_REDELIVERY) {
-//			// When START_REDELIVER_INTENT this flag will be set and intent will
-//			// be the same as the original one
-//		}
-//		return Service.START_REDELIVER_INTENT;
+		// if (flags == START_FLAG_REDELIVERY) {
+		// // When START_REDELIVER_INTENT this flag will be set and intent will
+		// // be the same as the original one
+		// }
+		// return Service.START_REDELIVER_INTENT;
 	}
-
-	// @Override
-	// protected void onHandleIntent(Intent intent) {
-	// boolean updateOnlyIfNecessary = false;
-	// if (intent.getExtras() != null) {
-	// updateOnlyIfNecessary = intent.getExtras().getBoolean(
-	// ARG_UPDATE_ONLY_IF_NECESSARY);
-	// }
-	// refreshReleases(updateOnlyIfNecessary);
-	// }
 
 	public boolean refreshReleases(boolean updateOnlyIfNeccesary,
 			ArtistProgressListener artistProcessedListener) {
@@ -83,16 +96,6 @@ public class LoadNewReleasesService extends Service {
 		}
 	}
 
-	// private synchronized boolean setWorkerThread(WorkerThread
-	// newWorkerThread) {
-	// if (workerThread != null newWorkerThread != null) {
-	// return false;
-	// } else {
-	// workerThread = newWorkerThread;
-	// return true;
-	// }
-	// }
-
 	public class WorkerThread implements Runnable {
 		private boolean updateOnlyIfNeccesary;
 		private ArtistProgressListener artistProgressListener;
@@ -105,23 +108,48 @@ public class LoadNewReleasesService extends Service {
 
 		public void run() {
 			// TODO if not online postpone run
-			
-			// TODO schedule next run
 
 			getReleasesService().addArtistProcessedListener(
 					artistProgressListener);
-			getReleasesService().refreshReleases(updateOnlyIfNeccesary);
-			// TODO find which releases are new to the device and notify user
+			if (getReleasesService().refreshReleases(updateOnlyIfNeccesary)) {
+				// Schedule next run
+				schedule(LoadNewReleasesService.this,
+						preferencesService.getRefreshPeriod());
+				// TODO find which releases are new to the device and notify
+				// user
+			}
 
 			// TODO remove all
 			getReleasesService().removeArtistProcessedListener(
 					artistProgressListener);
 
-			// TODO check if scheduled next run is not in the past
 			// stop service!!
 			stopSelf();
 
 		}
+	}
+
+	/**
+	 * Schedule this task to run again in some days.
+	 * 
+	 * @param context
+	 * @param daysFromNow
+	 */
+	public void schedule(Context context, int daysFromNow) {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DAY_OF_MONTH, daysFromNow);
+		// cal.add(Calendar.SECOND, 60);
+
+		Intent intent = new Intent(this, LoadNewReleasesService.class);
+		intent.putExtra(ARG_REFRESH_ON_START, true);
+		PendingIntent pintent = PendingIntent.getService(this, 0, intent,
+				PendingIntent.FLAG_CANCEL_CURRENT);
+
+		AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
+				AlarmManager.INTERVAL_DAY * daysFromNow, pintent);
+		Log.i(Constants.LOG, "Scheduled task to run again every " + daysFromNow
+				+ " days, starting at " + cal.getTime());
 	}
 
 	@Override
@@ -131,6 +159,7 @@ public class LoadNewReleasesService extends Service {
 
 	@Override
 	public void onDestroy() {
+		Log.d(Constants.LOG, "onDestroy()");
 		if (releasesService != null) {
 			releasesService.removeArtistProcessedListener(progressListener);
 		}
@@ -205,4 +234,14 @@ public class LoadNewReleasesService extends Service {
 
 		return releasesService;
 	}
+
+	// @Override
+	// protected void onHandleIntent(Intent intent) {
+	// boolean updateOnlyIfNecessary = false;
+	// if (intent.getExtras() != null) {
+	// updateOnlyIfNecessary = intent.getExtras().getBoolean(
+	// ARG_UPDATE_ONLY_IF_NECESSARY);
+	// }
+	// refreshReleases(updateOnlyIfNecessary);
+	// }
 }

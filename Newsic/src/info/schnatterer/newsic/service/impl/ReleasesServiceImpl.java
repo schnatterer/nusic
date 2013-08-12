@@ -68,10 +68,10 @@ public class ReleasesServiceImpl implements ReleasesService {
 	}
 
 	@Override
-	public void refreshReleases(boolean updateOnlyIfNeccesary) {
+	public boolean refreshReleases(boolean updateOnlyIfNeccesary) {
 		if (!isUpdateNeccesarry(updateOnlyIfNeccesary)) {
 			progressUpdater.progressFinished(false);
-			return;
+			return false;
 		}
 
 		// TODO write test for logic!
@@ -92,6 +92,7 @@ public class ReleasesServiceImpl implements ReleasesService {
 		Date dateCreated = new Date();
 		refreshReleases(startDate, endDate);
 		preferencesService.setLastReleaseRefresh(dateCreated);
+		return true;
 	}
 
 	private Date createEndDate(boolean includeFutureReleases) {
@@ -213,13 +214,19 @@ public class ReleasesServiceImpl implements ReleasesService {
 
 	@Override
 	public void addArtistProcessedListener(ArtistProgressListener l) {
-		listenerList.add(l);
+		if (l != null) {
+			listenerList.add(l);
+		}
 	}
 
 	@Override
 	public boolean removeArtistProcessedListener(
 			ArtistProgressListener artistProcessedListener) {
-		return listenerList.remove(artistProcessedListener);
+		if (artistProcessedListener != null) {
+			return listenerList.remove(artistProcessedListener);
+		} else {
+			return false;
+		}
 	}
 
 	public Artist[] getArtists() throws ServiceException {

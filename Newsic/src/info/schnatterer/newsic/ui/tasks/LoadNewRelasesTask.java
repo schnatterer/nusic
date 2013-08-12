@@ -5,8 +5,7 @@ import info.schnatterer.newsic.Constants;
 import info.schnatterer.newsic.R;
 import info.schnatterer.newsic.db.model.Artist;
 import info.schnatterer.newsic.service.ServiceException;
-import info.schnatterer.newsic.service.android.LoadNewReleasesService;
-import info.schnatterer.newsic.service.android.LoadNewReleasesService.LoadNewReleasesServiceBinder;
+import info.schnatterer.newsic.service.android.LoadNewReleasesServiceConnection;
 import info.schnatterer.newsic.service.event.ArtistProgressListener;
 
 import java.util.HashSet;
@@ -16,12 +15,8 @@ import java.util.Set;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.AsyncTask;
-import android.os.IBinder;
 import android.util.Log;
 
 /**
@@ -66,48 +61,19 @@ public class LoadNewRelasesTask extends AsyncTask<Void, Object, Void> {
 		// if (loadNewReleasesServiceConnection != null) {
 		// unbindService();
 		// }
-		loadNewReleasesServiceConnection = new LoadNewReleasesServiceConnection();
 		artistProcessedListener = new ProgressListener();
-		// Start service (to make sure it can run independently from the app)
-		Intent service = new Intent(context, LoadNewReleasesService.class);
-		// service.putExtra(LoadNewReleasesService.ARG_UPDATE_ONLY_IF_NECESSARY,
-		// updateOnlyIfNeccesary);
-		context.startService(service);
-		// Now bind to service
-		Intent intent = new Intent(context, LoadNewReleasesService.class);
-		context.bindService(intent, loadNewReleasesServiceConnection,
-				Context.BIND_AUTO_CREATE);
+		loadNewReleasesServiceConnection = LoadNewReleasesServiceConnection
+				.startAndBind(context, artistProcessedListener,
+						updateOnlyIfNeccesary);
 	}
 
 	private void unbindService() {
 		if (loadNewReleasesServiceConnection != null) {
-			// if (releasesService != null) {
-			// releasesService
-			// .removeArtistProcessedListener(artistProcessedListener);
-			// }
-			context.unbindService(loadNewReleasesServiceConnection);
+			loadNewReleasesServiceConnection.unbind();
 			loadNewReleasesServiceConnection = null;
-			// releasesService = null;
 			artistProcessedListener = null;
 		}
-
 	}
-
-	/** Defines callbacks for service binding, passed to bindService() */
-	private class LoadNewReleasesServiceConnection implements ServiceConnection {
-		@Override
-		public void onServiceConnected(ComponentName className, IBinder service) {
-			LoadNewReleasesServiceBinder binder = (LoadNewReleasesServiceBinder) service;
-			LoadNewReleasesService loadNewReleasesService = binder.getService();
-			loadNewReleasesService.refreshReleases(updateOnlyIfNeccesary,
-					artistProcessedListener);
-			// unbindService();
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName className) {
-		}
-	};
 
 	@Override
 	protected void onProgressUpdate(Object... objects) {

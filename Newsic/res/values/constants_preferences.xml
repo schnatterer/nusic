@@ -20,4 +20,11 @@
     <string name="preferences_key_download_only_on_wifi">onWifiOnly</string>
     <bool name="preferences_default_download_only_on_wifi">true</bool>
 
+    <string name="preferences_key_refresh_period">refreshPeriod</string>
+    <string name="preferences_default_refresh_period">1</string>
+    <string-array name="preferences_entry_values_refresh_period">
+        <item>1</item>
+        <item>3</item>
+        <item>7</item>
+    </string-array>
 </resources>
