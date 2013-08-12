@@ -200,7 +200,9 @@ public class MainActivity extends SherlockFragmentActivity {
 			if (resultChanged) {
 				// Mark all loaders as changed
 				for (ReleaseTabListener listener : tabListeners) {
-					listener.fragment.onContentChanged();
+					if (listener.fragment != null) {
+						listener.fragment.onContentChanged();
+					}
 				}
 				// Reload data on current tab
 				if (currentTabFragment != null) {
