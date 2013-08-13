@@ -82,6 +82,16 @@ public class LoadNewReleasesService extends Service {
 		// return Service.START_REDELIVER_INTENT;
 	}
 
+	/**
+	 * Tries to start refreshing releases. If refresh is already in progress,
+	 * attaches <code>artistProcessedListener</code> to it and returns
+	 * <code>false</code>.
+	 * 
+	 * @param updateOnlyIfNeccesary
+	 * @param artistProcessedListener
+	 * @return <code>true</code> if refresh was started. <code>false</code> if
+	 *         already in progress.
+	 */
 	public boolean refreshReleases(boolean updateOnlyIfNeccesary,
 			ArtistProgressListener artistProcessedListener) {
 		if (workerThread == null || !workerThread.isAlive()) {
@@ -125,7 +135,6 @@ public class LoadNewReleasesService extends Service {
 
 			// stop service!!
 			stopSelf();
-
 		}
 	}
 
@@ -235,13 +244,7 @@ public class LoadNewReleasesService extends Service {
 		return releasesService;
 	}
 
-	// @Override
-	// protected void onHandleIntent(Intent intent) {
-	// boolean updateOnlyIfNecessary = false;
-	// if (intent.getExtras() != null) {
-	// updateOnlyIfNecessary = intent.getExtras().getBoolean(
-	// ARG_UPDATE_ONLY_IF_NECESSARY);
-	// }
-	// refreshReleases(updateOnlyIfNecessary);
-	// }
+	public boolean isRunning() {
+		return workerThread != null && workerThread.isAlive();
+	}
 }

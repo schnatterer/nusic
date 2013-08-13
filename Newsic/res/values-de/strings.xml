@@ -11,7 +11,7 @@
     <string name="releaseListRow_Thumbnail">Vorschaubild des Albumcovers</string>
     <string name="LoadNewReleasesTask_CheckingArtists">Prüfe alle Interpreten auf neue Alben</string>
     <string name="MainActivity_noReleasesFound">Keine Alben gefunden für die auf dem Gerät vorhandenen Interpreten und den angegebenen Zeitraum.</string>
-    <string name="MainActivity_noNewReleasesFound">Beim letzten Update wurden keine neuen Alben gefunden für die auf dem Gerät vorhandenen Interpreten und den angegebenen Zeitraum.</string>
+    <string name="MainActivity_noNewReleasesFound">Bei der letzten Aktualisierung wurden keine neuen Alben gefunden für die auf dem Gerät vorhandenen Interpreten und den angegebenen Zeitraum.</string>
     <string name="MainActivity_TabAll">Alle</string>
     <string name="MainActivity_TabNewlyAdded">Neu hinzugefügt</string>
     
@@ -34,10 +34,12 @@
     <string name="preferences_title_download_only_on_wifi">Nur über WLAN herunterladen</string>
     <string name="preferences_summary_download_only_on_wifi">Keine Internetverbindung über Mobilfunknetzwerke verwenden</string>
     
-    <!-- Error messages -->
+    <!-- (Error) messages -->
     <string name="GenericError">Etwas beinahe unmögliches ist geschehen: %1s!</string>
     <string name="Activity_notOnline">Keine Verbindung zum Internet (Einstellungen prüfen, um die Verwendung des mobilen Internet zu ermöglichen)</string>
     <string name="MainActivity_errorLoadingReleases">Fehler beim Laden der Alben vom Gerät</string>
+    <string name="MainActivity_refreshAlreadyInProgress">Aktualisierung bereits im Gange</string>
+    <string name="MainActivity_pleaseWaitUntilRefreshIsFinished">Bitte warten bis die Aktualisierung der Alben abgeschlossen ist.</string>
         
     <string name="ArtistQueryService_errorLoadingArtists">Fehler beim Laden der Interpreten vom Gerät</string>
     <string name="ReleasesService_errorPersistingData">Fehler beim Speichern der Daten auf dem Gerät</string>

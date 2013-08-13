@@ -11,7 +11,7 @@
     <string name="releaseListRow_Thumbnail">Thumbnail of album art</string>
     <string name="LoadNewReleasesTask_CheckingArtists">Checking all artists for new releases</string>
     <string name="MainActivity_noReleasesFound">No releases were found for the artists on your device in the specified time period.</string>
-    <string name="MainActivity_noNewReleasesFound">During the last refresh no new releases were found for the artists on your device in the specified time period</string>
+    <string name="MainActivity_noNewReleasesFound">During the last refresh of the releases, no new releases were found for the artists on your device in the specified time period</string>
     <string name="MainActivity_TabAll">All</string>
     <string name="MainActivity_TabNewlyAdded">Newly added</string>
     
@@ -34,10 +34,12 @@
     <string name="preferences_title_download_only_on_wifi">Download via Wi-Fi only</string>
     <string name="preferences_summary_download_only_on_wifi">Don\'t use mobile networks</string>
     
-    <!-- Error message -->
+    <!-- (Error) messages -->
     <string name="GenericError">Something almost impossible has happened: %1s!</string>
     <string name="Activity_notOnline">No connection to the internet (Check settings to allow usage of mobile connection)</string>
     <string name="MainActivity_errorLoadingReleases">Error loading releases from the device</string>
+    <string name="MainActivity_refreshAlreadyInProgress">Refresh already in progress.</string>
+    <string name="MainActivity_pleaseWaitUntilRefreshIsFinished">Please wait until refreshing releases has finished</string>
     
     <string name="ArtistQueryService_errorLoadingArtists">Error loading artists from the device</string>
     <string name="ReleasesService_errorPersistingData">Error saving data on the device</string>

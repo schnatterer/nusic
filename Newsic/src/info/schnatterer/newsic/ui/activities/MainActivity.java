@@ -1,12 +1,14 @@
 package info.schnatterer.newsic.ui.activities;
 
+import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.R;
 import info.schnatterer.newsic.db.loader.ReleaseLoader;
 import info.schnatterer.newsic.db.model.Release;
+import info.schnatterer.newsic.service.android.LoadNewReleasesService;
 import info.schnatterer.newsic.ui.fragments.ReleaseListFragment;
 import info.schnatterer.newsic.ui.fragments.ReleaseListFragment.ReleaseQuery;
-import info.schnatterer.newsic.ui.tasks.LoadNewRelasesTask;
-import info.schnatterer.newsic.ui.tasks.LoadNewRelasesTask.FinishedLoadingListener;
+import info.schnatterer.newsic.ui.tasks.LoadNewRelasesServiceBinding;
+import info.schnatterer.newsic.ui.tasks.LoadNewRelasesServiceBinding.FinishedLoadingListener;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,11 +32,15 @@ public class MainActivity extends SherlockFragmentActivity {
 	private static final int RELEASE_DB_LOADER_ALL = 0;
 	private static final int RELEASE_DB_LOADER_NEWLY_ADDED = 1;
 
-	private static LoadNewRelasesTask loadReleasesTask = null;
+	/**
+	 * Start and bind the {@link LoadNewReleasesService}.
+	 */
+	private static LoadNewRelasesServiceBinding loadReleasesTask = LoadNewRelasesServiceBinding
+			.getInstance();
 	// Stores the selected tab, even when the configuration changes.
 	private static int currentTabPosition = 0;
 	/** Listens for internet query to end */
-	private ReleaseTaskFinishedLoadingListener releaseTaskFinishedLoadingListener = new ReleaseTaskFinishedLoadingListener();
+	private ReleaseServiceFinishedLoadingListener releaseTaskFinishedLoadingListener = new ReleaseServiceFinishedLoadingListener();
 	private ReleaseListFragment currentTabFragment = null;
 
 	private Set<ReleaseTabListener> tabListeners = new HashSet<ReleaseTabListener>();
@@ -44,9 +50,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		super.onCreate(savedInstanceState);
 
 		/* Init tab fragments */
-		// Create the Actionbar
 		ActionBar actionBar = getSupportActionBar();
-		// Create Actionbar Tabs
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		// Create first Tab
@@ -57,9 +61,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		createTab(actionBar, R.string.MainActivity_TabNewlyAdded,
 				RELEASE_DB_LOADER_NEWLY_ADDED, ReleaseQuery.NEWLY_ADDED, 1);
 
-		/* Init app */
 		registerListeners();
-
 		startLoadingReleasesFromInternet(true);
 	}
 
@@ -98,11 +100,9 @@ public class MainActivity extends SherlockFragmentActivity {
 
 	private void registerListeners() {
 		// Set activity as new context of task
-		if (loadReleasesTask != null) {
-			loadReleasesTask.updateActivity(this);
-			loadReleasesTask
-					.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
-		}
+		loadReleasesTask.updateContext(this);
+		loadReleasesTask
+				.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
 	}
 
 	@Override
@@ -117,9 +117,21 @@ public class MainActivity extends SherlockFragmentActivity {
 		if (item.getItemId() == R.id.action_refresh) {
 			startLoadingReleasesFromInternet(false);
 		} else if (item.getItemId() == R.id.action_settings) {
-			startActivityForResult(new Intent(this,
-					NewsicPreferencesActivity.class),
-					REQUEST_CODE_PREFERENCE_ACTIVITY);
+			if (!loadReleasesTask.isRunning()) {
+				startActivityForResult(new Intent(this,
+						NewsicPreferencesActivity.class),
+						REQUEST_CODE_PREFERENCE_ACTIVITY);
+			} else {
+				/*
+				 * Refreshing releases is in progress, stop user from changing
+				 * service related preferences
+				 */
+				// TODO cancel service and restart if necessary after changing
+				// of preferences?
+				Application
+						.toast(R.string.MainActivity_pleaseWaitUntilRefreshIsFinished);
+				loadReleasesTask.showDialog();
+			}
 		}
 
 		return true;
@@ -141,20 +153,14 @@ public class MainActivity extends SherlockFragmentActivity {
 	}
 
 	private void startLoadingReleasesFromInternet(boolean updateOnlyIfNeccesary) {
-		// if (Application.isOnline()) {
-		if (loadReleasesTask == null) {
-			// Async task not started yet
-			loadReleasesTask = new LoadNewRelasesTask(this,
-					updateOnlyIfNeccesary);
-			loadReleasesTask
-					.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
-			loadReleasesTask.execute();
+		boolean isStarted = loadReleasesTask.refreshReleases(this,
+				updateOnlyIfNeccesary);
+
+		if (!isStarted && !updateOnlyIfNeccesary) {
+			// Task is already running, just show dialog
+			Application.toast(R.string.MainActivity_refreshAlreadyInProgress);
+			loadReleasesTask.showDialog();
 		}
-		// Else task is already running
-		// TODO trigger restart? Show dialog?
-		// } else {
-		// Application.toast(R.string.Activity_notOnline);
-		// }f
 	}
 
 	@Override
@@ -173,15 +179,13 @@ public class MainActivity extends SherlockFragmentActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 		unregisterListeners();
+		loadReleasesTask.unbindService();
 	}
 
 	private void unregisterListeners() {
-		if (loadReleasesTask != null) {
-			// Preserve memory
-			loadReleasesTask.updateActivity(null);
-			loadReleasesTask
-					.removeFinishedLoadingListener(releaseTaskFinishedLoadingListener);
-		}
+		loadReleasesTask.updateContext(null);
+		loadReleasesTask
+				.removeFinishedLoadingListener(releaseTaskFinishedLoadingListener);
 	}
 
 	/**
@@ -192,11 +196,10 @@ public class MainActivity extends SherlockFragmentActivity {
 	 * @author schnatterer
 	 * 
 	 */
-	public class ReleaseTaskFinishedLoadingListener implements
+	public class ReleaseServiceFinishedLoadingListener implements
 			FinishedLoadingListener {
 		@Override
 		public void onFinishedLoading(boolean resultChanged) {
-			loadReleasesTask = null; // Task can only be executed once
 			if (resultChanged) {
 				// Mark all loaders as changed
 				for (ReleaseTabListener listener : tabListeners) {
@@ -213,7 +216,8 @@ public class MainActivity extends SherlockFragmentActivity {
 	}
 
 	/**
-	 * Creates a new {@link ReleaseListFragment} on every tab change.
+	 * Creates a new {@link ReleaseListFragment} for ever tab which is
+	 * attached/detached on select/unselect.
 	 * 
 	 * @author schnatterer
 	 * 

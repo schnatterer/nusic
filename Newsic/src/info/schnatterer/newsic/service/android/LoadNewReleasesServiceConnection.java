@@ -18,11 +18,15 @@ public class LoadNewReleasesServiceConnection implements ServiceConnection {
 	private Context context = null;
 	private ArtistProgressListener artistProcessedListener = null;
 	private boolean updateOnlyIfNeccesary = false;
+	private LoadNewReleasesService loadNewReleasesService = null;
+	private boolean startRightAway;
 
 	private LoadNewReleasesServiceConnection(Context context,
+			boolean startRightAway,
 			ArtistProgressListener artistProcessedListener,
 			boolean updateOnlyIfNeccesary) {
 		this.context = context;
+		this.startRightAway = startRightAway;
 		this.artistProcessedListener = artistProcessedListener;
 		this.updateOnlyIfNeccesary = updateOnlyIfNeccesary;
 	}
@@ -31,19 +35,29 @@ public class LoadNewReleasesServiceConnection implements ServiceConnection {
 	 * Starts and binds the service, then executes the service method.
 	 * 
 	 * @param context
+	 * @param startRightAway
+	 *            calls
+	 *            {@link LoadNewReleasesService#refreshReleases(boolean, ArtistProgressListener)}
+	 *            right after the service is started and bound
 	 * @param artistProcessedListener
+	 *            does only matter if <code>startRightAway</code> is
+	 *            <code>true</code>
 	 * @param updateOnlyIfNeccesary
+	 *            does only matter if <code>startRightAway</code> is
+	 *            <code>true</code>
 	 * @return
 	 */
 	public static LoadNewReleasesServiceConnection startAndBind(
-			Context context, ArtistProgressListener artistProcessedListener,
+			Context context, boolean startRightAway,
+			ArtistProgressListener artistProcessedListener,
 			boolean updateOnlyIfNeccesary) {
 		// Start service (to make sure it can run independently from the app)
 		Intent intent = new Intent(context, LoadNewReleasesService.class);
 		context.startService(intent);
 		// Now bind to service
 		LoadNewReleasesServiceConnection connection = new LoadNewReleasesServiceConnection(
-				context, artistProcessedListener, updateOnlyIfNeccesary);
+				context, startRightAway, artistProcessedListener,
+				updateOnlyIfNeccesary);
 		context.bindService(intent, connection, Context.BIND_NOT_FOREGROUND);
 		return connection;
 	}
@@ -55,12 +69,27 @@ public class LoadNewReleasesServiceConnection implements ServiceConnection {
 	@Override
 	public void onServiceConnected(ComponentName className, IBinder service) {
 		LoadNewReleasesServiceBinder binder = (LoadNewReleasesServiceBinder) service;
-		LoadNewReleasesService loadNewReleasesService = binder.getService();
-		loadNewReleasesService.refreshReleases(updateOnlyIfNeccesary,
-				artistProcessedListener);
+		loadNewReleasesService = binder.getService();
+		if (startRightAway) {
+			loadNewReleasesService.refreshReleases(updateOnlyIfNeccesary,
+					artistProcessedListener);
+		}
 	}
 
 	@Override
 	public void onServiceDisconnected(ComponentName className) {
 	}
+
+	/**
+	 * @return the bound instance of the service. Might be <code>null</code> if
+	 *         not bound. See {@link #isBound()}.
+	 */
+	public LoadNewReleasesService getLoadNewReleasesService() {
+		return loadNewReleasesService;
+	}
+
+	public boolean isBound() {
+		return loadNewReleasesService != null;
+	}
+
 };
