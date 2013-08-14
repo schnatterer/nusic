@@ -9,6 +9,7 @@ import info.schnatterer.newsic.service.PreferencesService;
 import info.schnatterer.newsic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.newsic.ui.adapters.ReleaseListAdapter;
 
+import java.util.Calendar;
 import java.util.List;
 
 import android.app.Activity;
@@ -31,7 +32,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 
 public class ReleaseListFragment extends SherlockFragment {
 	public enum ReleaseQuery {
-		ALL, NEWLY_ADDED;
+		ALL, JUST_ADDED;
 	}
 
 	public static final String ARG_RELEASE_QUERY = "releaseQuery";
@@ -63,7 +64,8 @@ public class ReleaseListFragment extends SherlockFragment {
 					e);
 		}
 
-		View view = inflater.inflate(R.layout.release_list_layout, container, false);
+		View view = inflater.inflate(R.layout.release_list_layout, container,
+				false);
 		progressBar = (ProgressBar) view.findViewById(R.id.releasesProgressBar);
 		progressBar.setVisibility(View.GONE);
 
@@ -167,9 +169,11 @@ public class ReleaseListFragment extends SherlockFragment {
 			switch (releaseQuery) {
 			case ALL:
 				return new ReleaseLoader(getActivity(), null);
-			case NEWLY_ADDED:
-				return new ReleaseLoader(getActivity(),
-						preferencesService.getLastReleaseRefresh());
+			case JUST_ADDED:
+				Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.DAY_OF_MONTH,
+						-preferencesService.getJustAddedTimePeriod());
+				return new ReleaseLoader(getActivity(), cal.getTime());
 			default:
 				Log.w(Constants.LOG,
 						"Unimplemented " + ReleaseQuery.class.getName()
@@ -194,7 +198,7 @@ public class ReleaseListFragment extends SherlockFragment {
 					|| (result.getData() != null && result.getData().isEmpty())) {
 				// Set the empty text
 				releasesTextViewNoneFound.setVisibility(View.VISIBLE);
-				if (releaseQuery == ReleaseQuery.NEWLY_ADDED) {
+				if (releaseQuery == ReleaseQuery.JUST_ADDED) {
 					releasesTextViewNoneFound
 							.setText(R.string.MainActivity_noNewReleasesFound);
 				} else {
@@ -203,7 +207,14 @@ public class ReleaseListFragment extends SherlockFragment {
 				}
 				return;
 			}
+			// if (releaseQuery == ReleaseQuery.JUST_ADDED) {
+			// releasesTextViewNoneFound.setVisibility(View.VISIBLE);
+			// releasesTextViewNoneFound.setText(String.format(getActivity()
+			// .getString(R.string.MainActivity_JustAddedInformation),
+			// preferencesService.getJustAddedTimePeriod()));
+			// } else {
 			releasesTextViewNoneFound.setVisibility(View.GONE);
+			// }
 			setReleases(result.getData());
 		}
 

@@ -3,7 +3,6 @@ package info.schnatterer.newsic.service.impl;
 import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.Constants;
 import info.schnatterer.newsic.R;
-import info.schnatterer.newsic.db.model.Release;
 import info.schnatterer.newsic.service.PreferencesService;
 import info.schnatterer.newsic.service.event.PreferenceChangedListener;
 import info.schnatterer.newsic.util.DateUtils;
@@ -30,25 +29,17 @@ import android.util.Log;
 public class PreferencesServiceSharedPreferences implements PreferencesService,
 		OnSharedPreferenceChangeListener {
 
-	/**
-	 * The app version code (not the version name!) that was used on the last
-	 * start of the app.
-	 */
 	private static final String KEY_LAST_APP_VERSION = "last_app_version";
 	private static final int DEFAULT_LAST_APP_VERSION = -1;
 
-	/**
-	 * Last time the {@link Release}s have been loaded from the internet
-	 */
 	public static final String KEY_LAST_RELEASES_REFRESH = "last_release_refresh";
 	public static final Date DEFAULT_LAST_RELEASES_REFRESH = null;
 
-	/**
-	 * Last update of the {@link Release}s was completely successful. That is,
-	 * the next refresh does not have to be a full refresh, depending on
-	 */
 	public static final String KEY_LAST_RELEASES_REFRESH_SUCCESSFULL = "last_release_refresh_succesful";
 	public static final Boolean DEFAULT_LAST_RELEASES_REFRESH_SUCCESSFULL = false;
+	
+	private static final String KEY_JUST_ADDED_TIME_PERIOD = "just_added_time_period";
+	private static final int DEFAULT_JUST_ADDED_TIME_PERIOD = 7;
 
 	public final String KEY_DOWLOAD_ONLY_ON_WIFI;
 	public final Boolean DEFAULT_DOWLOAD_ONLY_ON_WIFI;
@@ -298,6 +289,13 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 		return sharedPreferences.getBoolean(KEY_FULL_UPDATE,
 				DEFAULT_FULL_UPDATE);
 	}
+	
+	@Override
+	public int getJustAddedTimePeriod() {
+		return sharedPreferences.getInt(KEY_JUST_ADDED_TIME_PERIOD,
+				DEFAULT_JUST_ADDED_TIME_PERIOD);
+	}
+
 
 	protected static Context getContext() {
 		return Application.getContext();
@@ -324,5 +322,4 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 		}
 
 	}
-
 }

@@ -34,7 +34,7 @@ public class ReleaseLoader extends
 		if (dateCreatedGt == null) {
 			return getDao().findAll();
 		} else {
-			return getDao().findNewlyCreated(dateCreatedGt);
+			return getDao().findJustCreated(dateCreatedGt);
 		}
 	}
 }

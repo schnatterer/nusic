@@ -30,7 +30,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	private static final int REQUEST_CODE_PREFERENCE_ACTIVITY = 0;
 
 	private static final int RELEASE_DB_LOADER_ALL = 0;
-	private static final int RELEASE_DB_LOADER_NEWLY_ADDED = 1;
+	private static final int RELEASE_DB_LOADER_JUST_ADDED = 1;
 
 	/**
 	 * Start and bind the {@link LoadNewReleasesService}.
@@ -58,8 +58,8 @@ public class MainActivity extends SherlockFragmentActivity {
 				RELEASE_DB_LOADER_ALL, ReleaseQuery.ALL, 0);
 
 		// Create Second Tab
-		createTab(actionBar, R.string.MainActivity_TabNewlyAdded,
-				RELEASE_DB_LOADER_NEWLY_ADDED, ReleaseQuery.NEWLY_ADDED, 1);
+		createTab(actionBar, R.string.MainActivity_TabJustAdded,
+				RELEASE_DB_LOADER_JUST_ADDED, ReleaseQuery.JUST_ADDED, 1);
 
 		registerListeners();
 		startLoadingReleasesFromInternet(true);
@@ -103,6 +103,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		loadReleasesTask.updateContext(this);
 		loadReleasesTask
 				.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
+		//loadReleasesTask.bindService();
 	}
 
 	@Override
@@ -164,11 +165,23 @@ public class MainActivity extends SherlockFragmentActivity {
 	}
 
 	@Override
+	protected void onStart() {
+		super.onStart();
+		registerListeners();
+	}
+
+	@Override
 	protected void onResume() {
 		super.onResume();
 		registerListeners();
 	}
 
+	@Override
+	protected void onStop() {
+		super.onStop();
+		unregisterListeners();
+	}
+	
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -179,13 +192,13 @@ public class MainActivity extends SherlockFragmentActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 		unregisterListeners();
-		loadReleasesTask.unbindService();
 	}
 
 	private void unregisterListeners() {
 		loadReleasesTask.updateContext(null);
 		loadReleasesTask
 				.removeFinishedLoadingListener(releaseTaskFinishedLoadingListener);
+		loadReleasesTask.unbindService();
 	}
 
 	/**

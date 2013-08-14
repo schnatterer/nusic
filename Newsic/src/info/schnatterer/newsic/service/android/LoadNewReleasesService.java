@@ -61,7 +61,7 @@ public class LoadNewReleasesService extends Service {
 		if (intent == null) {
 			// When START_STICKY the intent will be null on "restart" after
 			// getting killed
-			// TODO RESUME download instead of starting new?
+			// RESUME download instead of starting new?
 			refreshReleases(false, null);
 		} else {
 			Bundle extras = intent.getExtras();

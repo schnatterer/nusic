@@ -48,11 +48,17 @@ public class LoadNewRelasesServiceBinding {
 	private ProgressListener artistProcessedListener = new ProgressListener();
 
 	public LoadNewRelasesServiceBinding() {
-		// Bind in application's global context, don't run the service yet
-		loadNewReleasesServiceConnection = startAndBindService(
-				Application.getContext(), null);
+		// // Bind in application's global context, don't run the service yet
+		// loadNewReleasesServiceConnection = startAndBindService(
+		// Application.getContext(), null);
 	}
 
+	/**
+	 * Returns the singleton instance. Keep in mind that
+	 * {@link #unbindService()} must be called on pause/stop/destroy.
+	 * 
+	 * @return
+	 */
 	public static LoadNewRelasesServiceBinding getInstance() {
 		if (instance == null) {
 			instance = new LoadNewRelasesServiceBinding();
@@ -72,7 +78,8 @@ public class LoadNewRelasesServiceBinding {
 	 */
 	public boolean refreshReleases(Activity activity,
 			boolean updateOnlyIfNeccesary) {
-		if (loadNewReleasesServiceConnection.isBound()) {
+		if (loadNewReleasesServiceConnection != null
+				&& loadNewReleasesServiceConnection.isBound()) {
 			boolean isStarted = loadNewReleasesServiceConnection
 					.getLoadNewReleasesService().refreshReleases(
 							updateOnlyIfNeccesary, artistProcessedListener);
@@ -81,9 +88,9 @@ public class LoadNewRelasesServiceBinding {
 			}
 			return isStarted;
 		} else {
-			Log.w(Constants.LOG,
-					"Service not bound, triggering binding and start asynchronously");
-			startAndBindService(activity, updateOnlyIfNeccesary);
+			// Log.w(Constants.LOG,
+			// "Service not bound, triggering binding and start asynchronously");
+			loadNewReleasesServiceConnection = startAndBindService(activity, updateOnlyIfNeccesary);
 			this.context = activity;
 			return true;
 		}
@@ -125,16 +132,31 @@ public class LoadNewRelasesServiceBinding {
 	}
 
 	/**
-	 * This should be called at least when the application is destroyed by the
-	 * system.
+	 * This should be called whenever when the application is
+	 * paused/destroyed/stopped by the system. Don't forget to call
+	 * {@link #bindService()}.
 	 */
 	public void unbindService() {
 		if (loadNewReleasesServiceConnection != null) {
 			loadNewReleasesServiceConnection.unbind();
 			loadNewReleasesServiceConnection = null;
-			artistProcessedListener = null;
+			// artistProcessedListener = null;
 		}
 	}
+
+	// /**
+	// * This should be called whenever when the application is resumed/started
+	// by
+	// * the system. Don't forget to call {@link #unbindService()} if you don't
+	// * want to leak a service.
+	// */
+	// public void bindService() {
+	// if (loadNewReleasesServiceConnection == null) {
+	// // Bind in application's global context, don't run the service yet
+	// loadNewReleasesServiceConnection = startAndBindService(
+	// Application.getContext(), null);
+	// }
+	// }
 
 	/**
 	 * Sets a new {@link Context} for the {@link ProgressDialog}.
@@ -197,7 +219,7 @@ public class LoadNewRelasesServiceBinding {
 		if (context != null) {
 			dialog = new ProgressDialog(context);
 			dialog.setMessage(Application.getContext().getString(
-					R.string.LoadNewReleasesTask_CheckingArtists));
+					R.string.LoadNewReleasesBinding_CheckingArtists));
 			dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			// dialog.setCancelable(false);
 			dialog.setMax(max);
@@ -250,7 +272,7 @@ public class LoadNewRelasesServiceBinding {
 					hideProgressDialog();
 					if (errorArtists != null && errorArtists.size() > 0) {
 						Application
-								.toast(R.string.LoadNewReleasesTask_finishedWithErrors,
+								.toast(R.string.LoadNewReleasesBinding_finishedWithErrors,
 										errorArtists.size());
 					}
 				}
@@ -276,7 +298,7 @@ public class LoadNewRelasesServiceBinding {
 									.toast(Application
 											.getContext()
 											.getString(
-													R.string.LoadNewReleasesTask_errorFindingReleases)
+													R.string.LoadNewReleasesBinding_errorFindingReleases)
 											+ potentialException.getClass()
 													.getSimpleName());
 						}

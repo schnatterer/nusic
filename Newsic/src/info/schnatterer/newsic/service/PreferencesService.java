@@ -115,6 +115,20 @@ public interface PreferencesService {
 	 */
 	boolean setForceFullRefresh(boolean forceFullRefresh);
 
+	/**
+	 * Amount of days between two scheduled (as opposed to manual) refreshs of
+	 * the releases.
+	 * 
+	 * @return
+	 */
 	int getRefreshPeriod();
+
+	/**
+	 * Time period in days beginning now, which defines the "just" in
+	 * "just added".
+	 * 
+	 * @return
+	 */
+	int getJustAddedTimePeriod();
 
 }
