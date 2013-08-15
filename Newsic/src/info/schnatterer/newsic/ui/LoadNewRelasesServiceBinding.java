@@ -1,4 +1,4 @@
-package info.schnatterer.newsic.ui.tasks;
+package info.schnatterer.newsic.ui;
 
 import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.Constants;
@@ -31,10 +31,6 @@ import android.util.Log;
  */
 public class LoadNewRelasesServiceBinding {
 	/**
-	 * Singleton instance.
-	 */
-	private static LoadNewRelasesServiceBinding instance = null;
-	/**
 	 * Context in which the {@link #progressDialog} is displayed
 	 */
 	private Activity context;
@@ -47,28 +43,9 @@ public class LoadNewRelasesServiceBinding {
 	private LoadNewReleasesServiceConnection loadNewReleasesServiceConnection = null;
 	private ProgressListener artistProcessedListener = new ProgressListener();
 
-	public LoadNewRelasesServiceBinding() {
-		// // Bind in application's global context, don't run the service yet
-		// loadNewReleasesServiceConnection = startAndBindService(
-		// Application.getContext(), null);
-	}
-
-	/**
-	 * Returns the singleton instance. Keep in mind that
-	 * {@link #unbindService()} must be called on pause/stop/destroy.
-	 * 
-	 * @return
-	 */
-	public static LoadNewRelasesServiceBinding getInstance() {
-		if (instance == null) {
-			instance = new LoadNewRelasesServiceBinding();
-		}
-		return instance;
-	}
-
 	/**
 	 * Executes {@link ReleasesService#refreshReleases(boolean)} within
-	 * {@link LoadNewReleasesService} in a spearate thread.
+	 * {@link LoadNewReleasesService} in a sepearate thread.
 	 * 
 	 * @param activity
 	 *            activity that is used to display the {@link ProgressDialog}

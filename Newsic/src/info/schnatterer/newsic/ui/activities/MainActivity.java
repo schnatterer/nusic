@@ -5,10 +5,10 @@ import info.schnatterer.newsic.R;
 import info.schnatterer.newsic.db.loader.ReleaseLoader;
 import info.schnatterer.newsic.db.model.Release;
 import info.schnatterer.newsic.service.android.LoadNewReleasesService;
+import info.schnatterer.newsic.ui.LoadNewRelasesServiceBinding;
+import info.schnatterer.newsic.ui.LoadNewRelasesServiceBinding.FinishedLoadingListener;
 import info.schnatterer.newsic.ui.fragments.ReleaseListFragment;
 import info.schnatterer.newsic.ui.fragments.ReleaseListFragment.ReleaseQuery;
-import info.schnatterer.newsic.ui.tasks.LoadNewRelasesServiceBinding;
-import info.schnatterer.newsic.ui.tasks.LoadNewRelasesServiceBinding.FinishedLoadingListener;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -35,8 +35,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	/**
 	 * Start and bind the {@link LoadNewReleasesService}.
 	 */
-	private static LoadNewRelasesServiceBinding loadReleasesTask = LoadNewRelasesServiceBinding
-			.getInstance();
+	private static LoadNewRelasesServiceBinding loadNewRelasesServiceBinding = new LoadNewRelasesServiceBinding();
 	// Stores the selected tab, even when the configuration changes.
 	private static int currentTabPosition = 0;
 	/** Listens for internet query to end */
@@ -100,8 +99,8 @@ public class MainActivity extends SherlockFragmentActivity {
 
 	private void registerListeners() {
 		// Set activity as new context of task
-		loadReleasesTask.updateContext(this);
-		loadReleasesTask
+		loadNewRelasesServiceBinding.updateContext(this);
+		loadNewRelasesServiceBinding
 				.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
 		//loadReleasesTask.bindService();
 	}
@@ -118,7 +117,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		if (item.getItemId() == R.id.action_refresh) {
 			startLoadingReleasesFromInternet(false);
 		} else if (item.getItemId() == R.id.action_settings) {
-			if (!loadReleasesTask.isRunning()) {
+			if (!loadNewRelasesServiceBinding.isRunning()) {
 				startActivityForResult(new Intent(this,
 						NewsicPreferencesActivity.class),
 						REQUEST_CODE_PREFERENCE_ACTIVITY);
@@ -131,7 +130,7 @@ public class MainActivity extends SherlockFragmentActivity {
 				// of preferences?
 				Application
 						.toast(R.string.MainActivity_pleaseWaitUntilRefreshIsFinished);
-				loadReleasesTask.showDialog();
+				loadNewRelasesServiceBinding.showDialog();
 			}
 		}
 
@@ -154,13 +153,13 @@ public class MainActivity extends SherlockFragmentActivity {
 	}
 
 	private void startLoadingReleasesFromInternet(boolean updateOnlyIfNeccesary) {
-		boolean isStarted = loadReleasesTask.refreshReleases(this,
+		boolean isStarted = loadNewRelasesServiceBinding.refreshReleases(this,
 				updateOnlyIfNeccesary);
 
 		if (!isStarted && !updateOnlyIfNeccesary) {
 			// Task is already running, just show dialog
 			Application.toast(R.string.MainActivity_refreshAlreadyInProgress);
-			loadReleasesTask.showDialog();
+			loadNewRelasesServiceBinding.showDialog();
 		}
 	}
 
@@ -195,10 +194,10 @@ public class MainActivity extends SherlockFragmentActivity {
 	}
 
 	private void unregisterListeners() {
-		loadReleasesTask.updateContext(null);
-		loadReleasesTask
+		loadNewRelasesServiceBinding.updateContext(null);
+		loadNewRelasesServiceBinding
 				.removeFinishedLoadingListener(releaseTaskFinishedLoadingListener);
-		loadReleasesTask.unbindService();
+		loadNewRelasesServiceBinding.unbindService();
 	}
 
 	/**
