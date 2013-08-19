@@ -37,6 +37,7 @@ public class LoadNewRelasesServiceBinding {
 
 	private ProgressDialog progressDialog = null;
 	private List<Artist> errorArtists;
+	private int totalArtists = 0;
 
 	private Set<FinishedLoadingListener> listeners = new HashSet<FinishedLoadingListener>();
 
@@ -67,14 +68,16 @@ public class LoadNewRelasesServiceBinding {
 		} else {
 			// Log.w(Constants.LOG,
 			// "Service not bound, triggering binding and start asynchronously");
-			loadNewReleasesServiceConnection = startAndBindService(activity, updateOnlyIfNeccesary);
+			loadNewReleasesServiceConnection = startAndBindService(activity,
+					updateOnlyIfNeccesary);
 			this.context = activity;
 			return true;
 		}
 	}
 
 	public boolean isRunning() {
-		if (loadNewReleasesServiceConnection.isBound()) {
+		if (loadNewReleasesServiceConnection != null
+				&& loadNewReleasesServiceConnection.isBound()) {
 			return loadNewReleasesServiceConnection.getLoadNewReleasesService()
 					.isRunning();
 		} else {
@@ -102,6 +105,9 @@ public class LoadNewRelasesServiceBinding {
 			startRightAway = true;
 			updateOnlyIfNeccesaryPrimitive = updateOnlyIfNeccesary;
 		}
+
+		errorArtists = new LinkedList<Artist>();
+		totalArtists = 0;
 
 		return LoadNewReleasesServiceConnection.startAndBind(packageContext,
 				startRightAway, artistProcessedListener,
@@ -221,7 +227,6 @@ public class LoadNewRelasesServiceBinding {
 					progressDialog = showDialog(0, nEntities);
 				}
 			});
-			errorArtists = new LinkedList<Artist>();
 		}
 
 		@Override
@@ -250,7 +255,7 @@ public class LoadNewRelasesServiceBinding {
 					if (errorArtists != null && errorArtists.size() > 0) {
 						Application
 								.toast(R.string.LoadNewReleasesBinding_finishedWithErrors,
-										errorArtists.size());
+										errorArtists.size(), totalArtists);
 					}
 				}
 			});
@@ -268,14 +273,19 @@ public class LoadNewRelasesServiceBinding {
 					hideProgressDialog();
 					if (potentialException != null) {
 						if (potentialException instanceof ServiceException) {
-							Application.toast(potentialException
-									.getLocalizedMessage());
-						} else {
 							Application
 									.toast(Application
 											.getContext()
 											.getString(
 													R.string.LoadNewReleasesBinding_errorFindingReleases)
+											+ potentialException
+													.getLocalizedMessage());
+						} else {
+							Application
+									.toast(Application
+											.getContext()
+											.getString(
+													R.string.LoadNewReleasesBinding_errorFindingReleasesGeneric)
 											+ potentialException.getClass()
 													.getSimpleName());
 						}

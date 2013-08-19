@@ -2,6 +2,7 @@ package info.schnatterer.newsic.service.android;
 
 import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.Constants;
+import info.schnatterer.newsic.R;
 import info.schnatterer.newsic.db.model.Artist;
 import info.schnatterer.newsic.service.PreferencesService;
 import info.schnatterer.newsic.service.ReleasesService;
@@ -45,6 +46,7 @@ public class LoadNewReleasesService extends Service {
 	private ReleasesService releasesService;
 
 	private List<Artist> errorArtists;
+	private int totalArtists = 0;
 	private ProgressListener progressListener = new ProgressListener();
 	private LoadNewReleasesServiceBinder binder = new LoadNewReleasesServiceBinder();
 	/**
@@ -62,6 +64,8 @@ public class LoadNewReleasesService extends Service {
 			// When START_STICKY the intent will be null on "restart" after
 			// getting killed
 			// RESUME download instead of starting new?
+			Log.d(Constants.LOG,
+					"Services restarted after being destroyed while workerThread was running.");
 			refreshReleases(false, null);
 		} else {
 			Bundle extras = intent.getExtras();
@@ -95,6 +99,8 @@ public class LoadNewReleasesService extends Service {
 	public boolean refreshReleases(boolean updateOnlyIfNeccesary,
 			ArtistProgressListener artistProcessedListener) {
 		if (workerThread == null || !workerThread.isAlive()) {
+			errorArtists = new LinkedList<Artist>();
+			totalArtists = 0;
 			workerThread = new Thread(new WorkerThread(updateOnlyIfNeccesary,
 					artistProcessedListener));
 			workerThread.start();
@@ -121,6 +127,7 @@ public class LoadNewReleasesService extends Service {
 
 			getReleasesService().addArtistProcessedListener(
 					artistProgressListener);
+			getReleasesService().addArtistProcessedListener(progressListener);
 			if (getReleasesService().refreshReleases(updateOnlyIfNeccesary)) {
 				// Schedule next run
 				schedule(LoadNewReleasesService.this,
@@ -168,7 +175,10 @@ public class LoadNewReleasesService extends Service {
 
 	@Override
 	public void onDestroy() {
-		Log.d(Constants.LOG, "onDestroy()");
+		if (workerThread != null && workerThread.isAlive()) {
+			Log.d(Constants.LOG,
+					"Services destroyed while workerThread is running.");
+		}
 		if (releasesService != null) {
 			releasesService.removeArtistProcessedListener(progressListener);
 		}
@@ -178,7 +188,6 @@ public class LoadNewReleasesService extends Service {
 	 * Class used for the client Binder. Because we know this service always
 	 * runs in the same process as its clients, we don't need to deal with IPC.
 	 */
-
 	public class LoadNewReleasesServiceBinder extends Binder {
 		public LoadNewReleasesService getService() {
 			return LoadNewReleasesService.this;
@@ -190,6 +199,7 @@ public class LoadNewReleasesService extends Service {
 		@Override
 		public void onProgressStarted(int nEntities) {
 			errorArtists = new LinkedList<Artist>();
+			totalArtists = nEntities;
 		}
 
 		@Override
@@ -198,9 +208,6 @@ public class LoadNewReleasesService extends Service {
 			if (potentialException != null) {
 				if (potentialException instanceof ServiceException) {
 					errorArtists.add(entity);
-				} else {
-					Application.toast(Application
-							.createGenericErrorMessage(potentialException));
 				}
 			}
 		}
@@ -208,12 +215,15 @@ public class LoadNewReleasesService extends Service {
 		@Override
 		public void onProgressFinished(Boolean result) {
 			if (errorArtists != null && errorArtists.size() > 0) {
-				// TODO write status bar message
-				/*
-				 * R.string.LoadNewReleasesTask_finishedWithErrors,
-				 * errorArtists.size();
-				 */
+				Application.notifyWarning(
+						R.string.LoadNewReleasesBinding_finishedWithErrors,
+						errorArtists.size(), totalArtists);
 			}
+			// On success, keep quiet
+			// } else if (totalArtists > 0) {
+			// Application.notifyInfo("!!SUCESSFULLY FINISHED REFRESHING "
+			// + totalArtists + " ARTISTS!!");
+			// }
 		}
 
 		@Override
@@ -221,15 +231,21 @@ public class LoadNewReleasesService extends Service {
 				Boolean result, Throwable potentialException) {
 			if (potentialException != null) {
 				if (potentialException instanceof ServiceException) {
-					// TODO write status bar message
-					// potentialException.getLocalizedMessage());
+					Application
+							.notifyWarning(Application
+									.getContext()
+									.getString(
+											R.string.LoadNewReleasesBinding_errorFindingReleases)
+									+ potentialException.getLocalizedMessage());
 				} else {
-					// TODO write status bar message
-					/*
-					 * Application.getContext().getString(
-					 * R.string.LoadNewReleasesTask_errorFindingReleases) +
-					 * potentialException.getClass().getSimpleName();
-					 */
+					Application
+							.notifyWarning(Application
+									.getContext()
+									.getString(
+											R.string.LoadNewReleasesBinding_errorFindingReleasesGeneric)
+									+ potentialException.getClass()
+											.getSimpleName());
+
 				}
 			}
 		}
@@ -238,7 +254,6 @@ public class LoadNewReleasesService extends Service {
 	protected ReleasesService getReleasesService() {
 		if (releasesService == null) {
 			releasesService = new ReleasesServiceImpl(this);
-			getReleasesService().addArtistProcessedListener(progressListener);
 		}
 
 		return releasesService;

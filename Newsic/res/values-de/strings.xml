@@ -44,8 +44,9 @@
         
     <string name="ArtistQueryService_errorLoadingArtists">Fehler beim Laden der Interpreten vom Gerät</string>
     <string name="ReleasesService_errorPersistingData">Fehler beim Speichern der Daten auf dem Gerät</string>
-    <string name="LoadNewReleasesBinding_errorFindingReleases">Fehler beim Finden von Alben im Internet: </string>
-    <string name="LoadNewReleasesBinding_finishedWithErrors">Update der Alben für %1$d Interpreten fehlgeschlagen</string>
+    <string name="LoadNewReleasesBinding_errorFindingReleases">Aktualisieren der Alben fehlgeschlagen: </string>
+    <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">Unfassbarer Fehler beim Aktualiseren der Alben: </string>
+    <string name="LoadNewReleasesBinding_finishedWithErrors">Update der Alben für %1$d Interpreten von %2$d fehlgeschlagen</string>
     <string name="QueryMusicMetadataService_errorFindingReleasesArtist">Fehler beim Finden von Alben für Interpret %1$s</string>
     <string name="QueryMusicMetadataService_errorQueryingMusicBrainz">Fehler beim Abfrage der Alben des Interpreten %1$s im Internet. Keine Verbindung zum Internet?</string>
 </resources>

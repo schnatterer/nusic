@@ -35,7 +35,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	/**
 	 * Start and bind the {@link LoadNewReleasesService}.
 	 */
-	private static LoadNewRelasesServiceBinding loadNewRelasesServiceBinding = new LoadNewRelasesServiceBinding();
+	private static LoadNewRelasesServiceBinding loadNewRelasesServiceBinding = null;
 	// Stores the selected tab, even when the configuration changes.
 	private static int currentTabPosition = 0;
 	/** Listens for internet query to end */
@@ -60,8 +60,13 @@ public class MainActivity extends SherlockFragmentActivity {
 		createTab(actionBar, R.string.MainActivity_TabJustAdded,
 				RELEASE_DB_LOADER_JUST_ADDED, ReleaseQuery.JUST_ADDED, 1);
 
-		registerListeners();
-		startLoadingReleasesFromInternet(true);
+		if (loadNewRelasesServiceBinding == null) {
+			loadNewRelasesServiceBinding = new LoadNewRelasesServiceBinding();
+			registerListeners();
+			startLoadingReleasesFromInternet(true);
+		} else {
+			registerListeners();
+		}
 	}
 
 	/**
@@ -102,7 +107,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		loadNewRelasesServiceBinding.updateContext(this);
 		loadNewRelasesServiceBinding
 				.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
-		//loadReleasesTask.bindService();
+		// loadReleasesTask.bindService();
 	}
 
 	@Override
@@ -180,7 +185,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		super.onStop();
 		unregisterListeners();
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
