@@ -53,12 +53,12 @@ public class MainActivity extends SherlockFragmentActivity {
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		// Create first Tab
-		createTab(actionBar, R.string.MainActivity_TabAll,
-				RELEASE_DB_LOADER_ALL, ReleaseQuery.ALL, 0);
+		createTab(actionBar, R.string.MainActivity_TabJustAdded,
+				RELEASE_DB_LOADER_JUST_ADDED, ReleaseQuery.JUST_ADDED, 0);
 
 		// Create Second Tab
-		createTab(actionBar, R.string.MainActivity_TabJustAdded,
-				RELEASE_DB_LOADER_JUST_ADDED, ReleaseQuery.JUST_ADDED, 1);
+		createTab(actionBar, R.string.MainActivity_TabAll,
+				RELEASE_DB_LOADER_ALL, ReleaseQuery.ALL, 1);
 
 		if (loadNewRelasesServiceBinding == null) {
 			loadNewRelasesServiceBinding = new LoadNewRelasesServiceBinding();
