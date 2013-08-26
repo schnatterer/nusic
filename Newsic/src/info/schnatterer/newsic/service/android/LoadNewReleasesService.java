@@ -4,14 +4,17 @@ import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.Constants;
 import info.schnatterer.newsic.R;
 import info.schnatterer.newsic.db.model.Artist;
+import info.schnatterer.newsic.service.ConnectivityService;
 import info.schnatterer.newsic.service.PreferencesService;
 import info.schnatterer.newsic.service.ReleasesService;
 import info.schnatterer.newsic.service.ServiceException;
 import info.schnatterer.newsic.service.event.ArtistProgressListener;
+import info.schnatterer.newsic.service.impl.ConnectivityServiceAndroid;
 import info.schnatterer.newsic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.newsic.service.impl.ReleasesServiceImpl;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,7 +36,7 @@ import android.util.Log;
  * @author schnatterer
  * 
  */
-public class LoadNewReleasesService extends Service {
+public class LoadNewReleasesService extends WakefulService {
 	// public static final String ARG_UPDATE_ONLY_IF_NECESSARY =
 	// "updateOnlyIfNeccesary";
 	public static final String ARG_REFRESH_ON_START = "refreshOnStart";
@@ -41,13 +44,15 @@ public class LoadNewReleasesService extends Service {
 	// public LoadNewReleasesService() {
 	// super(LoadNewReleasesService.class.getSimpleName() + "WorkerThread");
 	// }
-	private PreferencesService preferencesService = PreferencesServiceSharedPreferences
+	private static PreferencesService preferencesService = PreferencesServiceSharedPreferences
+			.getInstance();
+	private ConnectivityService connectivityService = ConnectivityServiceAndroid
 			.getInstance();
 	private ReleasesService releasesService;
 
 	private List<Artist> errorArtists;
 	private int totalArtists = 0;
-	private ProgressListener progressListener = new ProgressListener();
+	private ProgressListenerNotifications progressListenerNotifications = new ProgressListenerNotifications();
 	private LoadNewReleasesServiceBinder binder = new LoadNewReleasesServiceBinder();
 	/**
 	 * We're only going to allow one execution at a time.
@@ -55,7 +60,7 @@ public class LoadNewReleasesService extends Service {
 	private Thread workerThread = null;
 
 	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
+	public int onStartCommandWakeful(Intent intent, int flags, int startId) {
 		Log.i(Constants.LOG, "Flags = " + flags + "; startId = " + startId
 				+ ". Intent = " + intent
 				+ (intent != null ? (", extras= " + intent.getExtras()) : ""));
@@ -123,49 +128,101 @@ public class LoadNewReleasesService extends Service {
 		}
 
 		public void run() {
-			// TODO if not online postpone run
 
-			getReleasesService().addArtistProcessedListener(
-					artistProgressListener);
-			getReleasesService().addArtistProcessedListener(progressListener);
-			if (getReleasesService().refreshReleases(updateOnlyIfNeccesary)) {
-				// Schedule next run
-				schedule(LoadNewReleasesService.this,
-						preferencesService.getRefreshPeriod());
-				// TODO find which releases are new to the device and notify
-				// user
+			if (!connectivityService.isOnline()) {
+				// If not online and update necessary, postpone run
+				if (!updateOnlyIfNeccesary
+						|| getReleasesService().isUpdateNeccesarry()) {
+					Log.d(Constants.LOG,
+							"Postponing service until online or next schedule");
+					LoadNewReleasesServiceConnectivityReceiver
+							.enableReceiver(LoadNewReleasesService.this);
+
+					// Send status "not online" back to listener?
+					if (artistProgressListener != null) {
+						artistProgressListener.onProgressFailed(null, 0, 0,
+								null, new ServiceException(R.string.NotOnline));
+					}
+				} else {
+					// Make sure any changes to the online state are ignored
+					LoadNewReleasesServiceConnectivityReceiver
+							.disableReceiver(LoadNewReleasesService.this);
+				}
+
+			} else {
+				// Make sure any changes to the online state are ignored
+				LoadNewReleasesServiceConnectivityReceiver
+						.disableReceiver(LoadNewReleasesService.this);
+
+				getReleasesService().addArtistProcessedListener(
+						artistProgressListener);
+				getReleasesService().addArtistProcessedListener(
+						progressListenerNotifications);
+				if (getReleasesService().refreshReleases(updateOnlyIfNeccesary)) {
+					// Schedule next run
+					schedule(LoadNewReleasesService.this,
+							preferencesService.getRefreshPeriod(), null);
+					// TODO find which releases are new to the device and notify
+					// user
+				}
+
+				// TODO remove all
+				getReleasesService().removeArtistProcessedListener(
+						artistProgressListener);
 			}
 
-			// TODO remove all
-			getReleasesService().removeArtistProcessedListener(
-					artistProgressListener);
-
-			// stop service!!
+			// stop service
 			stopSelf();
 		}
 	}
 
 	/**
-	 * Schedule this task to run again in some days.
+	 * Schedule this task to run regularly.
 	 * 
 	 * @param context
-	 * @param daysFromNow
+	 * @param intervalDays
+	 * @param triggerAt
+	 *            if <code>null</code>, the first start will be now +
+	 *            <code>intervalDays</code>
 	 */
-	public void schedule(Context context, int daysFromNow) {
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DAY_OF_MONTH, daysFromNow);
-		// cal.add(Calendar.SECOND, 60);
+	public static void schedule(Context context, int intervalDays,
+			Date triggerAt) {
+		Date triggerAtDate = triggerAt;
+		if (triggerAt == null) {
+			Calendar triggerAtCal = Calendar.getInstance();
+			triggerAtCal.add(Calendar.DAY_OF_MONTH, intervalDays);
+			// cal.add(Calendar.SECOND, 60);
+			triggerAtDate = triggerAtCal.getTime();
+		}
 
-		Intent intent = new Intent(this, LoadNewReleasesService.class);
-		intent.putExtra(ARG_REFRESH_ON_START, true);
-		PendingIntent pintent = PendingIntent.getService(this, 0, intent,
+		PendingIntent pintent = PendingIntent.getService(context, 0,
+				createIntentRefreshReleases(context),
 				PendingIntent.FLAG_CANCEL_CURRENT);
 
-		AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
-				AlarmManager.INTERVAL_DAY * daysFromNow, pintent);
-		Log.i(Constants.LOG, "Scheduled task to run again every " + daysFromNow
-				+ " days, starting at " + cal.getTime());
+		AlarmManager alarm = (AlarmManager) context
+				.getSystemService(Context.ALARM_SERVICE);
+		/*
+		 * Set a repeating schedule, so there always is a next alarm even when
+		 * one alarm should fail for some reason
+		 */
+		alarm.setRepeating(AlarmManager.RTC_WAKEUP,
+				triggerAt.getTime(), AlarmManager.INTERVAL_DAY
+						* intervalDays, pintent);
+		preferencesService.setNextReleaseRefresh(triggerAtDate);
+		Log.i(Constants.LOG, "Scheduled task to run again every "
+				+ intervalDays + " days, starting at " + triggerAtDate);
+	}
+
+	/**
+	 * Creates an intent that, when started as service, directly calls
+	 * {@link #refreshReleases(boolean, ArtistProgressListener)}.
+	 * 
+	 * @return
+	 */
+	public static Intent createIntentRefreshReleases(Context context) {
+		Intent intent = new Intent(context, LoadNewReleasesService.class);
+		intent.putExtra(ARG_REFRESH_ON_START, true);
+		return intent;
 	}
 
 	@Override
@@ -180,7 +237,8 @@ public class LoadNewReleasesService extends Service {
 					"Services destroyed while workerThread is running.");
 		}
 		if (releasesService != null) {
-			releasesService.removeArtistProcessedListener(progressListener);
+			releasesService
+					.removeArtistProcessedListener(progressListenerNotifications);
 		}
 	}
 
@@ -194,7 +252,15 @@ public class LoadNewReleasesService extends Service {
 		}
 	}
 
-	private class ProgressListener implements ArtistProgressListener {
+	/**
+	 * Progress listeners that displays any crucial info as android
+	 * notification.
+	 * 
+	 * @author schnatterer
+	 * 
+	 */
+	private class ProgressListenerNotifications implements
+			ArtistProgressListener {
 
 		@Override
 		public void onProgressStarted(int nEntities) {

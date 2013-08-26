@@ -131,4 +131,8 @@ public interface PreferencesService {
 	 */
 	int getJustAddedTimePeriod();
 
+	Date getNextReleaseRefresh();
+
+	boolean setNextReleaseRefresh(Date date);
+
 }

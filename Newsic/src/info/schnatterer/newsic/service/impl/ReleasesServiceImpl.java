@@ -46,10 +46,8 @@ public class ReleasesServiceImpl implements ReleasesService {
 		}
 	}
 
-	private boolean isUpdateNeccesarry(boolean updateOnlyIfNeccesary) {
-		if (!updateOnlyIfNeccesary) {
-			return true;
-		}
+	@Override
+	public boolean isUpdateNeccesarry() {
 		AppStart appStart = PreferencesServiceSharedPreferences.getInstance()
 				.checkAppStart();
 
@@ -69,11 +67,10 @@ public class ReleasesServiceImpl implements ReleasesService {
 
 	@Override
 	public boolean refreshReleases(boolean updateOnlyIfNeccesary) {
-		if (!isUpdateNeccesarry(updateOnlyIfNeccesary)) {
+		if (updateOnlyIfNeccesary && !isUpdateNeccesarry()) {
 			progressUpdater.progressFinished(false);
 			return false;
 		}
-
 		// TODO write test for logic!
 		boolean fullUpdate;
 		if (preferencesService.isForceFullRefresh())

@@ -37,7 +37,7 @@
     
     <!-- (Error) messages -->
     <string name="GenericError">Something almost impossible has happened: %1s!</string>
-    <string name="Activity_notOnline">No connection to the internet (Check settings to allow usage of mobile connection)</string>
+    <string name="NotOnline">No connection to the internet (Check settings to allow usage of mobile connection)</string>
     <string name="MainActivity_errorLoadingReleases">Error loading releases from the device</string>
     <string name="MainActivity_refreshAlreadyInProgress">Refresh already in progress.</string>
     <string name="MainActivity_pleaseWaitUntilRefreshIsFinished">Please wait until refreshing releases has finished</string>

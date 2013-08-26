@@ -51,7 +51,7 @@ public class LoadNewReleasesServiceConnection implements ServiceConnection {
 			Context context, boolean startRightAway,
 			ArtistProgressListener artistProcessedListener,
 			boolean updateOnlyIfNeccesary) {
-		// Start service (to make sure it can run independently from the app)
+		// Start service (to make sure it can run independent of the app)
 		Intent intent = new Intent(context, LoadNewReleasesService.class);
 		context.startService(intent);
 		// Now bind to service

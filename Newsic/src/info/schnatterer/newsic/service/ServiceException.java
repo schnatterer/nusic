@@ -74,12 +74,11 @@ public class ServiceException extends Exception {
 	 * technical exception message is put out in the default locale.
 	 * 
 	 * @param messageId
-	 * @param localizedMessageId
 	 * @param t
 	 */
-	public ServiceException(int messageId, int localizedMessageId) {
+	public ServiceException(int messageId) {
 		this(DefaultLocale.getStringInDefaultLocale(messageId),
-				localizedMessageId);
+				messageId);
 	}
 
 	/**

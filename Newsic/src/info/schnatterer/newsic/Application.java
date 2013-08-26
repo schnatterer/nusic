@@ -1,14 +1,10 @@
 package info.schnatterer.newsic;
 
-import info.schnatterer.newsic.service.PreferencesService;
-import info.schnatterer.newsic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.newsic.ui.activities.MainActivity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -33,52 +29,6 @@ public class Application extends android.app.Application {
 	 */
 	public static Context getContext() {
 		return Application.context;
-	}
-
-	/**
-	 * Used to determine if there is an active data connection and what type of
-	 * connection it is if there is one.
-	 * 
-	 * Queries {@link PreferencesService#isUseOnlyWifi()} to see if a mobile
-	 * data connection can be used.
-	 * 
-	 * @return <code>true</code> if there is an active data connection.
-	 *         Otherwise <code>false</code>.
-	 */
-	public static final boolean isOnline() {
-		boolean state = false;
-		final boolean isOnlyOnWifi = getPreferenceService().isUseOnlyWifi();
-
-		/* Monitor network connections */
-		final ConnectivityManager connectivityManager = (ConnectivityManager) context
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-		/* Wi-Fi connection */
-		final NetworkInfo wifiNetwork = connectivityManager
-				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-		if (wifiNetwork != null) {
-			state = wifiNetwork.isConnectedOrConnecting();
-		}
-
-		/* Mobile data connection */
-		final NetworkInfo mbobileNetwork = connectivityManager
-				.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-		if (mbobileNetwork != null) {
-			if (!isOnlyOnWifi) {
-				state = mbobileNetwork.isConnectedOrConnecting();
-			}
-		}
-
-		/* Other networks */
-		final NetworkInfo activeNetwork = connectivityManager
-				.getActiveNetworkInfo();
-		if (activeNetwork != null) {
-			if (!isOnlyOnWifi) {
-				state = activeNetwork.isConnectedOrConnecting();
-			}
-		}
-
-		return state;
 	}
 
 	/**
@@ -111,10 +61,6 @@ public class Application extends android.app.Application {
 
 	public static void toast(int stringId, Object... args) {
 		toast(String.format(context.getString(stringId), args));
-	}
-
-	private static PreferencesService getPreferenceService() {
-		return PreferencesServiceSharedPreferences.getInstance();
 	}
 
 	/**

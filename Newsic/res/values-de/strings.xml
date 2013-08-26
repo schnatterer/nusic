@@ -37,7 +37,7 @@
     
     <!-- (Error) messages -->
     <string name="GenericError">Etwas beinahe unmögliches ist geschehen: %1s!</string>
-    <string name="Activity_notOnline">Keine Verbindung zum Internet (Einstellungen prüfen, um die Verwendung des mobilen Internet zu ermöglichen)</string>
+    <string name="NotOnline">Keine Verbindung zum Internet (Einstellungen prüfen, um die Verwendung des mobilen Internet zu ermöglichen)</string>
     <string name="MainActivity_errorLoadingReleases">Fehler beim Laden der Alben vom Gerät</string>
     <string name="MainActivity_refreshAlreadyInProgress">Aktualisierung bereits im Gange</string>
     <string name="MainActivity_pleaseWaitUntilRefreshIsFinished">Bitte warten bis die Aktualisierung der Alben abgeschlossen ist.</string>

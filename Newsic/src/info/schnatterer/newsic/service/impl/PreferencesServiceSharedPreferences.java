@@ -35,6 +35,9 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	public static final String KEY_LAST_RELEASES_REFRESH = "last_release_refresh";
 	public static final Date DEFAULT_LAST_RELEASES_REFRESH = null;
 
+	public static final String KEY_NEXT_RELEASES_REFRESH = "next_release_refresh";
+	public static final Date DEFAULT_NEXT_RELEASES_REFRESH = null;
+	
 	public static final String KEY_LAST_RELEASES_REFRESH_SUCCESSFULL = "last_release_refresh_succesful";
 	public static final Boolean DEFAULT_LAST_RELEASES_REFRESH_SUCCESSFULL = false;
 	
@@ -237,6 +240,24 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 		return sharedPreferences
 				.edit()
 				.putLong(KEY_LAST_RELEASES_REFRESH, DateUtils.persistDate(date))
+				.commit();
+	}
+	
+	@Override
+	public Date getNextReleaseRefresh() {
+		long nextReleaseRefreshMillis = sharedPreferences.getLong(
+				KEY_NEXT_RELEASES_REFRESH, 0);
+		if (nextReleaseRefreshMillis == 0) {
+			return DEFAULT_NEXT_RELEASES_REFRESH;
+		}
+		return DateUtils.loadDate(nextReleaseRefreshMillis);
+	}
+	
+	@Override
+	public boolean setNextReleaseRefresh(Date date) {
+		return sharedPreferences
+				.edit()
+				.putLong(KEY_NEXT_RELEASES_REFRESH, DateUtils.persistDate(date))
 				.commit();
 	}
 
