@@ -3,7 +3,10 @@ package info.schnatterer.newsic.service.android;
 import info.schnatterer.newsic.Application;
 import info.schnatterer.newsic.Constants;
 import info.schnatterer.newsic.R;
+import info.schnatterer.newsic.db.DatabaseException;
+import info.schnatterer.newsic.db.dao.impl.ReleaseDaoSqlite;
 import info.schnatterer.newsic.db.model.Artist;
+import info.schnatterer.newsic.db.model.Release;
 import info.schnatterer.newsic.service.ConnectivityService;
 import info.schnatterer.newsic.service.PreferencesService;
 import info.schnatterer.newsic.service.ReleasesService;
@@ -158,22 +161,44 @@ public class LoadNewReleasesService extends WakefulService {
 						artistProgressListener);
 				getReleasesService().addArtistProcessedListener(
 						progressListenerNotifications);
+
+				Date beforeRefresh = new Date();
 				if (getReleasesService().refreshReleases(updateOnlyIfNeccesary)) {
 					// Schedule next run
 					schedule(LoadNewReleasesService.this,
 							preferencesService.getRefreshPeriod(), null);
-					// TODO find which releases are new to the device and notify
-					// user
+					try {
+						notifyNewReleases(beforeRefresh);
+					} catch (DatabaseException e) {
+						// Refresh succeeded, so don't tell user
+						Log.w(Constants.LOG,
+								"Refresh succeeded, but databse error when trying to find out about new releases",
+								e);
+					}
 				}
 
-				// TODO remove all
-				getReleasesService().removeArtistProcessedListener(
-						artistProgressListener);
+				// Remove all listeners
+				getReleasesService().removeArtistProcessedListeners();
 			}
 
 			// stop service
 			stopSelf();
 		}
+	}
+
+	/**
+	 * Finds which releases are new to the device and notifies user.
+	 * 
+	 * @param beforeRefresh
+	 * @throws DatabaseException
+	 */
+	private void notifyNewReleases(Date beforeRefresh) throws DatabaseException {
+		List<Release> newReleases = new ReleaseDaoSqlite(this)
+				.findJustCreated(beforeRefresh);
+		Application.notifyInfo(
+				R.string.LoadNewReleasesService_foundNewReleases,
+				newReleases.size());
+		Log.d(Constants.LOG, "Found new releases: " + newReleases);
 	}
 
 	/**
@@ -205,9 +230,8 @@ public class LoadNewReleasesService extends WakefulService {
 		 * Set a repeating schedule, so there always is a next alarm even when
 		 * one alarm should fail for some reason
 		 */
-		alarm.setRepeating(AlarmManager.RTC_WAKEUP,
-				triggerAt.getTime(), AlarmManager.INTERVAL_DAY
-						* intervalDays, pintent);
+		alarm.setRepeating(AlarmManager.RTC_WAKEUP, triggerAtDate.getTime(),
+				AlarmManager.INTERVAL_DAY * intervalDays, pintent);
 		preferencesService.setNextReleaseRefresh(triggerAtDate);
 		Log.i(Constants.LOG, "Scheduled task to run again every "
 				+ intervalDays + " days, starting at " + triggerAtDate);

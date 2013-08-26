@@ -38,5 +38,7 @@ public interface ReleasesService {
 	boolean removeArtistProcessedListener(
 			ArtistProgressListener artistProcessedListener);
 
+	void removeArtistProcessedListeners();
+
 	boolean isUpdateNeccesarry();
 }

@@ -4,6 +4,7 @@ import info.schnatterer.newsic.db.DatabaseException;
 import info.schnatterer.newsic.db.model.Artist;
 import info.schnatterer.newsic.db.model.Release;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ReleaseDao extends GenericDao<Release> {
@@ -60,5 +61,8 @@ public interface ReleaseDao extends GenericDao<Release> {
 	 * @return
 	 */
 	List<Release> findAll() throws DatabaseException;
+
+	List<Release> findJustCreated(Date gtDateCreated)
+			throws DatabaseException;
 
 }

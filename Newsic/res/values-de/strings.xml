@@ -11,7 +11,7 @@
     <string name="releaseListRow_Thumbnail">Vorschaubild des Albumcovers</string>
     <string name="LoadNewReleasesBinding_CheckingArtists">Prüfe alle Interpreten auf neue Alben</string>
     <string name="MainActivity_noReleasesFound">Keine Alben gefunden für die auf dem Gerät vorhandenen Interpreten und den angegebenen Zeitraum.</string>
-    <string name="MainActivity_noNewReleasesFound">Bei der letzten Aktualisierung wurden keine neuen Alben gefunden für die auf dem Gerät vorhandenen Interpreten und den angegebenen Zeitraum.</string>
+    <string name="MainActivity_noNewReleasesFound">In der letzten Zeit wurden keine neuen Alben gefunden für die auf dem Gerät vorhandenen Interpreten und den angegebenen Zeitraum.</string>
     <string name="MainActivity_TabAll">Alle</string>
     <string name="MainActivity_TabJustAdded">Neu hinzugefügt</string>
     <!-- <string name="MainActivity_JustAddedInformation">Alle Alben, die in den letzten %1$d Tagen hinzugefügt wurden</string> -->
@@ -47,6 +47,8 @@
     <string name="LoadNewReleasesBinding_errorFindingReleases">Aktualisieren der Alben fehlgeschlagen: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">Unfassbarer Fehler beim Aktualiseren der Alben: </string>
     <string name="LoadNewReleasesBinding_finishedWithErrors">Update der Alben für %1$d Interpreten von %2$d fehlgeschlagen</string>
+    <string name="LoadNewReleasesService_foundNewReleases">%1$d neue Alben gefunden</string>
+    
     <string name="QueryMusicMetadataService_errorFindingReleasesArtist">Fehler beim Finden von Alben für Interpret %1$s</string>
     <string name="QueryMusicMetadataService_errorQueryingMusicBrainz">Fehler beim Abfrage der Alben des Interpreten %1$s im Internet. Keine Verbindung zum Internet?</string>
 </resources>

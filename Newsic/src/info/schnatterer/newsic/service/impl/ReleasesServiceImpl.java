@@ -226,7 +226,13 @@ public class ReleasesServiceImpl implements ReleasesService {
 		}
 	}
 
+	@Override
+	public void removeArtistProcessedListeners() {
+		listenerList.clear();
+	}
+
 	public Artist[] getArtists() throws ServiceException {
 		return artistQueryService.getArtists(getContentResolver());
 	}
+
 }

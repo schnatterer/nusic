@@ -146,6 +146,7 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 		return executeQuey(QUERY_ALL_ORDER_RELEASE_DATE_ASC, null);
 	}
 
+	@Override
 	public List<Release> findJustCreated(Date gtDateCreated)
 			throws DatabaseException {
 		return executeQuey(QUERY_BY_RELEASE_DATE_ORDER_BY_DATE_ASC,
