@@ -37,10 +37,10 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 
 	public static final String KEY_NEXT_RELEASES_REFRESH = "next_release_refresh";
 	public static final Date DEFAULT_NEXT_RELEASES_REFRESH = null;
-	
+
 	public static final String KEY_LAST_RELEASES_REFRESH_SUCCESSFULL = "last_release_refresh_succesful";
 	public static final Boolean DEFAULT_LAST_RELEASES_REFRESH_SUCCESSFULL = false;
-	
+
 	private static final String KEY_JUST_ADDED_TIME_PERIOD = "just_added_time_period";
 	private static final int DEFAULT_JUST_ADDED_TIME_PERIOD = 7;
 
@@ -99,7 +99,9 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 			SharedPreferences sharedPrefernces) {
 		// PreferencesServiceSharedPreferences.context = context;
 		this.sharedPreferences = sharedPrefernces;
-		sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+		if (sharedPrefernces != null) {
+			sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+		}
 
 		// // Initialize new preferences with defaults from xml
 		// PreferenceManager.setDefaultValues(getContext(), R.xml.preferences,
@@ -242,7 +244,7 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 				.putLong(KEY_LAST_RELEASES_REFRESH, DateUtils.persistDate(date))
 				.commit();
 	}
-	
+
 	@Override
 	public Date getNextReleaseRefresh() {
 		long nextReleaseRefreshMillis = sharedPreferences.getLong(
@@ -252,7 +254,7 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 		}
 		return DateUtils.loadDate(nextReleaseRefreshMillis);
 	}
-	
+
 	@Override
 	public boolean setNextReleaseRefresh(Date date) {
 		return sharedPreferences
@@ -310,13 +312,12 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 		return sharedPreferences.getBoolean(KEY_FULL_UPDATE,
 				DEFAULT_FULL_UPDATE);
 	}
-	
+
 	@Override
 	public int getJustAddedTimePeriod() {
 		return sharedPreferences.getInt(KEY_JUST_ADDED_TIME_PERIOD,
 				DEFAULT_JUST_ADDED_TIME_PERIOD);
 	}
-
 
 	protected static Context getContext() {
 		return Application.getContext();
