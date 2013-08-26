@@ -1,12 +1,12 @@
-package info.schnatterer.newsic.test.db;
+package info.schnatterer.nusic.test.db;
 
-import info.schnatterer.newsic.db.NewsicDatabase;
+import info.schnatterer.nusic.db.NusicDatabase;
 import junit.framework.TestCase;
 
-public class NewsicDatabaseTest extends TestCase {
+public class NusicDatabaseTest extends TestCase {
 
-	private class TestNewsicDatabase extends NewsicDatabase {
-		public TestNewsicDatabase() {
+	private class TestNusicDatabase extends NusicDatabase {
+		public TestNusicDatabase() {
 			super(null);
 		}
 
@@ -17,7 +17,7 @@ public class NewsicDatabaseTest extends TestCase {
 		}
 	};
 
-	private TestNewsicDatabase db = new TestNewsicDatabase();
+	private TestNusicDatabase db = new TestNusicDatabase();
 
 	public void testCreateTable() {
 		String expected = "CREATE TABLE testdb(id INTEGER PRIMARY KEY AUTOINCREMENT, someText TEXT NOT NULL);";

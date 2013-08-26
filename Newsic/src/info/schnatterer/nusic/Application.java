@@ -1,6 +1,7 @@
-package info.schnatterer.newsic;
+package info.schnatterer.nusic;
 
-import info.schnatterer.newsic.ui.activities.MainActivity;
+import info.schnatterer.nusic.ui.activities.MainActivity;
+import info.schnatterer.nusic.R;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -85,7 +86,7 @@ public class Application extends android.app.Application {
 	 * @param text
 	 */
 	public static void notifyInfo(String text, Object... args) {
-		// TODO create and use a newsic icon here
+		// TODO create and use a nusic icon here
 		notify(NOTIFICATION_ID_INFO, String.format(text, args),
 				android.R.drawable.ic_dialog_info, MainActivity.class);
 	}

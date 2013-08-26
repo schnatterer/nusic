@@ -1,6 +1,6 @@
-package info.schnatterer.newsic.test.service.impl;
+package info.schnatterer.nusic.test.service.impl;
 
-import info.schnatterer.newsic.service.impl.QueryMusicMetadataServiceMusicBrainz;
+import info.schnatterer.nusic.service.impl.QueryMusicMetadataServiceMusicBrainz;
 
 import java.util.LinkedList;
 import java.util.List;

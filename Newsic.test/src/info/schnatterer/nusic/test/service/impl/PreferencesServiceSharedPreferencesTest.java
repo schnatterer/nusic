@@ -1,7 +1,7 @@
-package info.schnatterer.newsic.test.service.impl;
+package info.schnatterer.nusic.test.service.impl;
 
-import info.schnatterer.newsic.service.PreferencesService.AppStart;
-import info.schnatterer.newsic.service.impl.PreferencesServiceSharedPreferences;
+import info.schnatterer.nusic.service.PreferencesService.AppStart;
+import info.schnatterer.nusic.service.impl.PreferencesServiceSharedPreferences;
 import junit.framework.TestCase;
 
 public class PreferencesServiceSharedPreferencesTest extends TestCase {

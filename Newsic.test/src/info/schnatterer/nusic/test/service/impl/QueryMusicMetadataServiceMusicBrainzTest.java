@@ -1,4 +1,4 @@
-package info.schnatterer.newsic.test.service.impl;
+package info.schnatterer.nusic.test.service.impl;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

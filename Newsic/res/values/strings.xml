@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">newsic</string>
+    <string name="app_name">nusic</string>
     
     <string name="action_refresh">Refresh releases</string>
     <string name="action_settings">Settings</string>
