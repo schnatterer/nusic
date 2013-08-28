@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+ http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>info.schnatterer.nusic</groupId>
+	<artifactId>nusic</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	<packaging>apk</packaging>
+	<name>nusic</name>
+
+	<properties>
+		<abs.version>4.4.0</abs.version>
+	</properties>
+
+	<!-- Use Profiles to distinguish between the "implicit" builds of the eclipse 
+		plugin and "explicit" builds triggered by calling mvn install -->
+	<profiles>
+		<profile>
+			<id>default</id>
+			<activation>
+				<property>
+					<name>!m2e.version</name>
+				</property>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>com.actionbarsherlock</groupId>
+					<artifactId>actionbarsherlock</artifactId>
+					<version>${abs.version}</version>
+					<type>apklib</type>
+					<exclusions>
+						<exclusion>
+							<groupId>com.google.android</groupId>
+							<artifactId>support-v4</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
+		</profile>
+
+		<profile>
+			<id>m2e</id>
+			<activation>
+				<property>
+					<name>m2e.version</name>
+				</property>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>com.actionbarsherlock</groupId>
+					<artifactId>actionbarsherlock</artifactId>
+					<version>${abs.version}</version>
+					<type>jar</type>
+					<exclusions>
+						<exclusion>
+							<groupId>com.google.android</groupId>
+							<artifactId>support-v4</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+
+	<dependencies>
+
+		<!-- Android dependecies -->
+		<!-- Before building make sure to copy the android JARs to your local repo 
+			using the mave-android-sdk-deployer: https://github.com/mosabua/maven-android-sdk-deployer -->
+		<dependency>
+			<groupId>android</groupId>
+			<artifactId>android</artifactId>
+			<version>4.3_r1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>android.support</groupId>
+			<artifactId>compatibility-v4</artifactId>
+			<version>18</version>
+		</dependency>
+
+		<!-- Nusic dependencies -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>14.0.1</version>
+		</dependency>
+
+		<!-- For musicbrainzws2-java (not available on maven repos) -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>jdom</groupId>
+			<artifactId>jdom</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<sourceDirectory>src</sourceDirectory>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+					<artifactId>android-maven-plugin</artifactId>
+					<version>3.6.0</version>
+					<extensions>true</extensions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+				<artifactId>android-maven-plugin</artifactId>
+				<configuration>
+					<sdk>
+						<!-- targetSdkVersion -->
+						<platform>18</platform>
+					</sdk>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project> 
