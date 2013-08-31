@@ -11,15 +11,16 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:name="info.schnatterer.nusic.Application"
+        android:name=".Application"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="info.schnatterer.nusic.ui.activities.MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="info.schnatterer.nusic.ui.activities.NusicPreferencesActivity" >
+        <activity android:name=".ui.activities.NusicPreferencesActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
 
@@ -35,19 +36,20 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="info.schnatterer.nusic.service.android.LoadNewReleasesServiceConnectivityReceiver" >
+        <receiver android:name=".service.android.LoadNewReleasesServiceConnectivityReceiver" >
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+                <!-- <action android:name="android.net.wifi.WIFI_STATE_CHANGED" /> -->
             </intent-filter>
         </receiver>
-        <receiver android:name="info.schnatterer.nusic.service.android.LoadNewReleasesServiceBootReceiver" >
+        <receiver android:name=".service.android.LoadNewReleasesServiceBootReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
 
-        <service android:name="info.schnatterer.nusic.service.android.LoadNewReleasesService" />
+        <service android:name=".service.android.LoadNewReleasesService" />
     </application>
 
 </manifest>

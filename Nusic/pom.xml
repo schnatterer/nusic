@@ -117,16 +117,6 @@
 	<build>
 		<finalName>${project.artifactId}</finalName>
 		<sourceDirectory>src</sourceDirectory>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>com.jayway.maven.plugins.android.generation2</groupId>
-					<artifactId>android-maven-plugin</artifactId>
-					<version>3.6.0</version>
-					<extensions>true</extensions>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -140,11 +130,19 @@
 			<plugin>
 				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 				<artifactId>android-maven-plugin</artifactId>
+				<version>3.6.0</version>
+				<extensions>true</extensions>
 				<configuration>
 					<sdk>
 						<!-- targetSdkVersion -->
 						<platform>18</platform>
 					</sdk>
+					<proguard>
+						<skip>false</skip>
+					</proguard>
+	<!-- 				<zipalign>
+						<skip>false</skip>
+					</zipalign> -->
 				</configuration>
 			</plugin>
 		</plugins>
