@@ -64,7 +64,7 @@ public class LoadNewReleasesService extends WakefulService {
 
 	@Override
 	public int onStartCommandWakeful(Intent intent, int flags, int startId) {
-		Log.i(Constants.LOG, "Flags = " + flags + "; startId = " + startId
+		Log.d(Constants.LOG, "Flags = " + flags + "; startId = " + startId
 				+ ". Intent = " + intent
 				+ (intent != null ? (", extras= " + intent.getExtras()) : ""));
 
@@ -131,6 +131,8 @@ public class LoadNewReleasesService extends WakefulService {
 		}
 
 		public void run() {
+			// TODO remove me!
+			Application.notifyInfo("Trying to refresh releases");
 
 			if (!connectivityService.isOnline()) {
 				// If not online and update necessary, postpone run
@@ -139,7 +141,8 @@ public class LoadNewReleasesService extends WakefulService {
 					Log.d(Constants.LOG,
 							"Postponing service until online or next schedule");
 					// TODO remove me!
-					Application.notifyWarning("Postponing service until online or next schedule");
+					Application
+							.notifyWarning("Postponing service until online or next schedule");
 					LoadNewReleasesServiceConnectivityReceiver
 							.enableReceiver(LoadNewReleasesService.this);
 
@@ -197,10 +200,11 @@ public class LoadNewReleasesService extends WakefulService {
 	private void notifyNewReleases(Date beforeRefresh) throws DatabaseException {
 		List<Release> newReleases = new ReleaseDaoSqlite(this)
 				.findJustCreated(beforeRefresh);
-		Application.notifyInfo(
-				R.string.LoadNewReleasesService_foundNewReleases,
-				newReleases.size());
-		Log.d(Constants.LOG, "Found new releases: " + newReleases);
+		if (newReleases.size() > 0) {
+			Application.notifyInfo(
+					R.string.LoadNewReleasesService_foundNewReleases,
+					newReleases.size());
+		}
 	}
 
 	/**
@@ -322,6 +326,8 @@ public class LoadNewReleasesService extends WakefulService {
 		public void onProgressFailed(Artist entity, int progress, int max,
 				Boolean result, Throwable potentialException) {
 			if (potentialException != null) {
+				Log.e(Constants.LOG, potentialException.getMessage(),
+						potentialException);
 				if (potentialException instanceof ServiceException) {
 					Application
 							.notifyWarning(Application

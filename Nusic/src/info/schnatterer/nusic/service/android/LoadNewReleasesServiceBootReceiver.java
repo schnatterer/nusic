@@ -23,6 +23,14 @@ public class LoadNewReleasesServiceBootReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
 		Date nextReleaseRefresh = preferencesService.getNextReleaseRefresh();
+
+		// if (nextReleaseRefresh == null) {
+		// Application.notifyInfo("Starting release refresh");
+		// } else {
+		// Application.notifyInfo("Scheduling release refresh to "
+		// + nextReleaseRefresh);
+		// }
+
 		if (nextReleaseRefresh == null || isHistorical(nextReleaseRefresh)) {
 			// Start service right away
 			context.startService(LoadNewReleasesService
