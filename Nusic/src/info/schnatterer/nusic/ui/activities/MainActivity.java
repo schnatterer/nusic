@@ -174,11 +174,11 @@ public class MainActivity extends SherlockFragmentActivity {
 		registerListeners();
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		registerListeners();
-	}
+//	@Override
+//	protected void onResume() {
+//		super.onResume();
+//		registerListeners();
+//	}
 
 	@Override
 	protected void onStop() {
@@ -186,11 +186,11 @@ public class MainActivity extends SherlockFragmentActivity {
 		unregisterListeners();
 	}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		unregisterListeners();
-	}
+//	@Override
+//	protected void onPause() {
+//		super.onPause();
+//		unregisterListeners();
+//	}
 
 	@Override
 	protected void onDestroy() {
