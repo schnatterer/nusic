@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>info.schnatterer.nusic</groupId>
 	<artifactId>nusic</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.1</version>
 	<packaging>apk</packaging>
 	<name>nusic</name>
 
@@ -115,7 +115,7 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>${project.artifactId}</finalName>
+		<finalName>${project.artifactId}-${version}</finalName>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>

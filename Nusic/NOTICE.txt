@@ -11,3 +11,6 @@ http://actionbarsherlock.com/
 
 musicbrainzws2-java  (published under GNU General Public License (GPL), Version 3.0)
 http://code.google.com/p/musicbrainzws2-java/
+
+The nusic logo bases on Wikitracks Vinyl by Fleshgrinder (released under the Public domain) 
+https://en.wikipedia.org/wiki/File:Wikitracks_Vinyl.svg
