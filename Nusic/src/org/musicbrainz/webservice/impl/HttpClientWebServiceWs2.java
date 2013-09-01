@@ -230,7 +230,7 @@ public class HttpClientWebServiceWs2 extends DefaultWebServiceWs2 {
 		
 		try {
 			// Execute the method.
-			System.out.println("Hitting url: " + method.getURI().toString());
+			log.debug("Hitting url: " + method.getURI().toString());
 			HttpResponse response = this.httpClient.execute(method);
 
 			lastHitTime = System.currentTimeMillis();
