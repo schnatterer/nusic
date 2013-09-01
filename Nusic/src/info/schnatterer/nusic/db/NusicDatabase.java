@@ -1,3 +1,23 @@
+/* Copyright (C) 2013 Johannes Schnatterer
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *  
+ * This file is part of nusic.
+ * 
+ * nusic is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * nusic is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package info.schnatterer.nusic.db;
 
 import android.content.Context;
@@ -5,6 +25,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+/**
+ * Basic database abstraction. Handles execution of DDL scripts.
+ * 
+ * @author schnatterer
+ * 
+ */
 public class NusicDatabase extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "nusic";
 	private static final int DATABASE_VERSION = 1;
@@ -13,7 +39,6 @@ public class NusicDatabase extends SQLiteOpenHelper {
 
 	private static final String DATABASE_FOREIGN_KEY = ", FOREIGN KEY(";
 	private static final String DATABASE_REFERENCES = ") REFERENCES ";
-	// private static final String DATABASE_REFERENCES = ") REFERENCES ";
 
 	/* Table Artist */
 	public static final String TABLE_ARTIST = "artist";
@@ -26,9 +51,9 @@ public class NusicDatabase extends SQLiteOpenHelper {
 	public static final String TYPE_COLUMN_ARTIST_ANDROID_ID = "INTEGER";
 	public static final int INDEX_COLUMN_ARTIST_ANDROID_ID = 1;
 
-	 public static final String COLUMN_ARTIST_MB_ID = "mbId";
-	 public static final String TYPE_COLUMN_ARTIST_MB_ID = "STRING";
-	 public static final int INDEX_COLUMN_ARTIST_MB_ID = 2;
+	public static final String COLUMN_ARTIST_MB_ID = "mbId";
+	public static final String TYPE_COLUMN_ARTIST_MB_ID = "STRING";
+	public static final int INDEX_COLUMN_ARTIST_MB_ID = 2;
 
 	public static final String COLUMN_ARTIST_NAME = "name";
 	public static final String TYPE_COLUMN_ARTIST_NAME = "TEXT NOT NULL";
@@ -37,8 +62,7 @@ public class NusicDatabase extends SQLiteOpenHelper {
 	public static final String COLUMN_ARTIST_DATE_CREATED = "dateCreated";
 	public static final String TYPE_COLUMN_ARTIST_DATE_CREATED = "INTEGER NOT NULL";
 	public static final int INDEX_COLUMN_ARTIST_DATE_CREATED = 4;
-	// public static final String[] TABLE_COLUMNS_ARTIST = {};
-	
+
 	/* Table Releases */
 	public static final String TABLE_RELEASE = "release";
 
@@ -73,12 +97,11 @@ public class NusicDatabase extends SQLiteOpenHelper {
 			+ COLUMN_RELEASE_FK_ID_ARTIST
 			+ DATABASE_REFERENCES + TABLE_ARTIST + "(" + COLUMN_ARTIST_ID + ")";
 	public static final int INDEX_COLUMN_RELEASE_FK_ID_ARTIST = 6;
-	
-	public static final String[] TABLE_RELEASE_COLUMNS = { COLUMN_RELEASE_ID,
-	COLUMN_RELEASE_MB_ID, COLUMN_RELEASE_NAME,
-	COLUMN_RELEASE_DATE_RELEASED, COLUMN_RELEASE_DATE_CREATED,
-	COLUMN_RELEASE_ARTWORK_PATH, COLUMN_RELEASE_FK_ID_ARTIST };
 
+	public static final String[] TABLE_RELEASE_COLUMNS = { COLUMN_RELEASE_ID,
+			COLUMN_RELEASE_MB_ID, COLUMN_RELEASE_NAME,
+			COLUMN_RELEASE_DATE_RELEASED, COLUMN_RELEASE_DATE_CREATED,
+			COLUMN_RELEASE_ARTWORK_PATH, COLUMN_RELEASE_FK_ID_ARTIST };
 
 	public NusicDatabase(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -88,7 +111,8 @@ public class NusicDatabase extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(createTable(TABLE_ARTIST, COLUMN_ARTIST_ID,
 				TYPE_COLUMN_ARTIST_ID, COLUMN_ARTIST_ANDROID_ID,
-				TYPE_COLUMN_ARTIST_ANDROID_ID, COLUMN_ARTIST_MB_ID, TYPE_COLUMN_ARTIST_MB_ID, COLUMN_ARTIST_NAME,
+				TYPE_COLUMN_ARTIST_ANDROID_ID, COLUMN_ARTIST_MB_ID,
+				TYPE_COLUMN_ARTIST_MB_ID, COLUMN_ARTIST_NAME,
 				TYPE_COLUMN_ARTIST_NAME, COLUMN_ARTIST_DATE_CREATED,
 				TYPE_COLUMN_ARTIST_DATE_CREATED));
 		db.execSQL(createTable(TABLE_RELEASE, COLUMN_RELEASE_ID,
@@ -97,8 +121,7 @@ public class NusicDatabase extends SQLiteOpenHelper {
 				TYPE_COLUMN_RELEASE_NAME, COLUMN_RELEASE_DATE_RELEASED,
 				TYPE_COLUMN_RELEASE_DATE_RELEASED, COLUMN_RELEASE_DATE_CREATED,
 				TYPE_COLUMN_RELEASE_DATE_CREATED, COLUMN_RELEASE_ARTWORK_PATH,
-				TYPE_COLUMN_RELEASE_ARTWORK_PATH,
-				COLUMN_RELEASE_FK_ID_ARTIST,
+				TYPE_COLUMN_RELEASE_ARTWORK_PATH, COLUMN_RELEASE_FK_ID_ARTIST,
 				TYPE_COLUMN_RELEASE_FK_ID_ARTIST_FK));
 	}
 
@@ -132,22 +155,4 @@ public class NusicDatabase extends SQLiteOpenHelper {
 		sql.append(");");
 		return sql.toString();
 	}
-
-	// /**
-	// * Creates a foreign key SQL String. E.g.
-	// *
-	// * <code>FOREIGN KEY(columnName) REFERENCES pkTable(pkColumn)</code>
-	// *
-	// * @param columnName
-	// * @param pkTable
-	// * @param pkColumn
-	// * @return
-	// */
-	// protected String foreignKey(String columnName, String pkTable,
-	// String pkColumn) {
-	// return new StringBuffer(DATABASE_FOREIGN_KEY).append(columnName)
-	// .append(DATABASE_REFERENCES).append(pkTable).append("(")
-	// .append(pkColumn).append(")").toString();
-	// }
 }
-

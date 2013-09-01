@@ -1,7 +1,26 @@
+/* Copyright (C) 2013 Johannes Schnatterer
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *  
+ * This file is part of nusic.
+ * 
+ * nusic is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * nusic is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package info.schnatterer.nusic;
 
 import info.schnatterer.nusic.ui.activities.MainActivity;
-import info.schnatterer.nusic.R;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -114,11 +133,11 @@ public class Application extends android.app.Application {
 		// Creates an explicit intent for an Activity in your app
 		Intent resultIntent = new Intent(getContext(), context);
 
-		// The stack builder object will contain an artificial back stack for
-		// the
-		// started Activity.
-		// This ensures that navigating backward from the Activity leads out of
-		// your application to the Home screen.
+		/*
+		 * The stack builder object will contain an artificial back stack for
+		 * the started Activity. This ensures that navigating backward from the
+		 * Activity leads out of your application to the home screen.
+		 */
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(getContext());
 		// Adds the back stack for the Intent (but not the Intent itself)
 		stackBuilder.addParentStack(context);
@@ -132,6 +151,6 @@ public class Application extends android.app.Application {
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		// mId allows you to update the notification later on.
 		mNotificationManager.notify(id, notificationBuilder.build());
-		Log.i(Constants.LOG,"Notifcation: "+ text);
+		Log.i(Constants.LOG, "Notifcation: " + text);
 	}
 }

@@ -1,8 +1,28 @@
+/* Copyright (C) 2013 Johannes Schnatterer
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *  
+ * This file is part of nusic.
+ * 
+ * nusic is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * nusic is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package info.schnatterer.nusic.db.loader;
 
+import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.db.dao.impl.AbstractSqliteDao;
 import info.schnatterer.nusic.db.model.Entity;
-import info.schnatterer.nusic.Constants;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
@@ -99,64 +119,4 @@ public abstract class AbstractAsyncSqliteLoader<RESULT, ENTITY extends Entity, D
 		// Make sure not to leak a cursor
 		dao.closeCursor();
 	}
-
-	//
-	// @Override
-	// public void deliverResult(RESULT newData) {
-	// if (isReset()) {
-	// releaseResources();
-	// return;
-	// }
-	//
-	// // Hold a reference to the old data so it doesn't get garbage collected.
-	// // We must protect it until the new data has been delivered.
-	// RESULT oldData = result;
-	// result = newData;
-	//
-	// if (isStarted()) {
-	// super.deliverResult(result);
-	// }
-	//
-	// // Invalidate the old data as we don't need it any more.
-	// if (oldData != null && oldData != result) {
-	// releaseResources(oldData);
-	// }
-	// }
-	//
-	// @Override
-	// protected void onStartLoading() {
-	// if (mData != null) {
-	// // Deliver any previously loaded data immediately.
-	// deliverResult(mData);
-	// }
-	//
-	// // Begin monitoring the underlying data source.
-	// if (mObserver == null) {
-	// mObserver = new SampleObserver();
-	// // TODO: register the observer
-	// }
-	//
-	// if (takeContentChanged() || mData == null) {
-	// // When the observer detects a change, it should call
-	// // onContentChanged()
-	// // on the Loader, which will cause the next call to
-	// // takeContentChanged()
-	// // to return true. If this is ever the case (or if the current data
-	// // is
-	// // null), we force a new load.
-	// forceLoad();
-	// }
-	// }
-	//
-	// @Override
-	// protected void onStopLoading() {
-	// cancelLoad();
-	// }
-	//
-	// @Override
-	// protected void onReset() {
-	// // Ensure the loader has been stopped.
-	// onStopLoading();
-	// }
-
 }

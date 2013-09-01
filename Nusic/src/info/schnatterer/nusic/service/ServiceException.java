@@ -1,8 +1,28 @@
+/* Copyright (C) 2013 Johannes Schnatterer
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *  
+ * This file is part of nusic.
+ * 
+ * nusic is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * nusic is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package info.schnatterer.nusic.service;
 
-import info.schnatterer.nusic.util.DefaultLocale;
 import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
+import info.schnatterer.nusic.util.DefaultLocale;
 
 import java.util.Locale;
 
@@ -10,7 +30,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 /**
- * Wrapper class for all Exceptions thrown by services. Adds
+ * Wrapper class for all exceptions thrown by services. Adds
  * internationalization features, facilitating the message handling for display
  * messages.
  * 
@@ -25,14 +45,7 @@ public class ServiceException extends Exception {
 
 	@Override
 	public String getLocalizedMessage() {
-		// if (localizedMessageKey == null) {// ||
-		// localizedMessageKey.isEmpty()) {
-		// Log.e(Constants.LOG, "Localized message is empty");
-		// return getMessage();
-		// }
 		try {
-			// return Application.getContext().getString(
-			// R.string.class.getField(getMessage()).getInt(null));
 			String localizedString = Application.getContext().getString(
 					localizedMessageId);
 			if (args != null) {
@@ -160,5 +173,4 @@ public class ServiceException extends Exception {
 	public ServiceException(int messageId, Throwable cause, Object... args) {
 		this(String.format(Locale.US, DefaultLocale.getStringInDefaultLocale(messageId), args), messageId, cause, args);
 	}
-
 }

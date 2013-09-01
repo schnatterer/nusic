@@ -1,3 +1,23 @@
+/* Copyright (C) 2013 Johannes Schnatterer
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *  
+ * This file is part of nusic.
+ * 
+ * nusic is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * nusic is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package info.schnatterer.nusic.service.android;
 
 import info.schnatterer.nusic.Application;
@@ -131,18 +151,12 @@ public class LoadNewReleasesService extends WakefulService {
 		}
 
 		public void run() {
-			// TODO remove me!
-			Application.notifyInfo("Trying to refresh releases");
-
 			if (!connectivityService.isOnline()) {
 				// If not online and update necessary, postpone run
 				if (!updateOnlyIfNeccesary
 						|| getReleasesService().isUpdateNeccesarry()) {
 					Log.d(Constants.LOG,
 							"Postponing service until online or next schedule");
-					// TODO remove me!
-					Application
-							.notifyWarning("Postponing service until online or next schedule");
 					LoadNewReleasesServiceConnectivityReceiver
 							.enableReceiver(LoadNewReleasesService.this);
 

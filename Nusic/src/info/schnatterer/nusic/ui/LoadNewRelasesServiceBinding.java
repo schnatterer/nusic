@@ -1,3 +1,23 @@
+/* Copyright (C) 2013 Johannes Schnatterer
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *  
+ * This file is part of nusic.
+ * 
+ * nusic is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * nusic is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package info.schnatterer.nusic.ui;
 
 import info.schnatterer.nusic.Application;
@@ -66,8 +86,6 @@ public class LoadNewRelasesServiceBinding {
 			}
 			return isStarted;
 		} else {
-			// Log.w(Constants.LOG,
-			// "Service not bound, triggering binding and start asynchronously");
 			loadNewReleasesServiceConnection = startAndBindService(activity,
 					updateOnlyIfNeccesary);
 			this.context = activity;
@@ -123,23 +141,8 @@ public class LoadNewRelasesServiceBinding {
 		if (loadNewReleasesServiceConnection != null) {
 			loadNewReleasesServiceConnection.unbind();
 			loadNewReleasesServiceConnection = null;
-			// artistProcessedListener = null;
 		}
 	}
-
-	// /**
-	// * This should be called whenever when the application is resumed/started
-	// by
-	// * the system. Don't forget to call {@link #unbindService()} if you don't
-	// * want to leak a service.
-	// */
-	// public void bindService() {
-	// if (loadNewReleasesServiceConnection == null) {
-	// // Bind in application's global context, don't run the service yet
-	// loadNewReleasesServiceConnection = startAndBindService(
-	// Application.getContext(), null);
-	// }
-	// }
 
 	/**
 	 * Sets a new {@link Context} for the {@link ProgressDialog}.
@@ -204,7 +207,6 @@ public class LoadNewRelasesServiceBinding {
 			dialog.setMessage(Application.getContext().getString(
 					R.string.LoadNewReleasesBinding_CheckingArtists));
 			dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			// dialog.setCancelable(false);
 			dialog.setMax(max);
 			dialog.setProgress(progress);
 			dialog.show();
@@ -259,7 +261,6 @@ public class LoadNewRelasesServiceBinding {
 					}
 				}
 			});
-			// unbindService();
 		}
 
 		@Override
@@ -292,8 +293,6 @@ public class LoadNewRelasesServiceBinding {
 					}
 				}
 			});
-
-			// unbindService();
 		}
 
 		private void runOnUiThread(Runnable runnable) {

@@ -1,8 +1,28 @@
+/* Copyright (C) 2013 Johannes Schnatterer
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *  
+ * This file is part of nusic.
+ * 
+ * nusic is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * nusic is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package info.schnatterer.nusic.service.impl;
 
+import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.service.ConnectivityService;
 import info.schnatterer.nusic.service.PreferencesService;
-import info.schnatterer.nusic.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -66,34 +86,4 @@ public class ConnectivityServiceAndroid implements ConnectivityService {
 
 		return state;
 	}
-
-//	@Override
-//	public void registerConnectivityChangeListener(
-//			ConnectivityChangedListener connectivtyChangedListener) {
-//		connectivityChangedListeners.add(connectivtyChangedListener);
-//	}
-//
-//	@Override
-//	public void unregisterConnectivityChangeListener(
-//			ConnectivityChangedListener connectivtyChangedListener) {
-//		connectivityChangedListeners.remove(connectivtyChangedListener);
-//	}
-
-//	private void onConnectivtyChanged(boolean isOnline) {
-//		for (ConnectivityChangedListener connectivtyChangedListener : connectivityChangedListeners) {
-//			if (isOnline) {
-//				connectivtyChangedListener.onConnectionEstablished();
-//			} else {
-//				connectivtyChangedListener.onConnectionLost();
-//			}
-//		}
-//	}
-//
-//	public class ConnectivityChangedReceiver extends BroadcastReceiver {
-//
-//		@Override
-//		public void onReceive(final Context context, final Intent intent) {
-//			onConnectivtyChanged(isOnline());
-//		}
-//	}
 }

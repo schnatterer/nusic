@@ -1,0 +1,13 @@
+nusic - you new music
+Copyright 2013 Johannes Schnatterer
+
+This product depends on the following libraries.
+
+Google guava (published under The Apache Software License, Version 2.0)
+http://code.google.com/p/guava-libraries/
+
+ActionBarSherlock (published under The Apache Software License, Version 2.0)
+http://actionbarsherlock.com/
+
+musicbrainzws2-java  (published under GNU General Public License (GPL), Version 3.0)
+http://code.google.com/p/musicbrainzws2-java/

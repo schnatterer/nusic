@@ -1,3 +1,23 @@
+/* Copyright (C) 2013 Johannes Schnatterer
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *  
+ * This file is part of nusic.
+ * 
+ * nusic is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * nusic is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package info.schnatterer.nusic.util;
 
 import info.schnatterer.nusic.Application;
@@ -15,35 +35,6 @@ public final class DefaultLocale {
 	}
 
 	public static final Locale DEFAULT_LOCALE = Locale.US;
-
-	// private static Resources resourcesUs = createDefaultResources();
-	//
-	// /**
-	// * Creates a resource instance in the "default" resources (device
-	// * independent) that can be used to log error message (R.string.*)
-	// * independent of the current locale of the device.
-	// *
-	// * @return
-	// */
-	// private static Resources createDefaultResources() {
-	// Resources standardResources = Application.getContext().getResources();
-	// AssetManager assets = standardResources.getAssets();
-	// DisplayMetrics metrics = standardResources.getDisplayMetrics();
-	// Configuration config = new Configuration(
-	// standardResources.getConfiguration());
-	// config.locale = Locale.US;
-	// Resources resources = new Resources(assets, metrics, config);
-	// return resources;
-	// }
-	//
-	// private static Resources createDeviceSpecificResources() {
-	// Resources standardResources = Application.getContext().getResources();
-	// AssetManager assets = standardResources.getAssets();
-	// DisplayMetrics metrics = standardResources.getDisplayMetrics();
-	// Resources resources = new Resources(assets, metrics,
-	// standardResources.getConfiguration());
-	// return resources;
-	// }
 
 	/**
 	 * Returns a string in the "default" resources (device independent) that can
@@ -78,9 +69,6 @@ public final class DefaultLocale {
 		// Restore device-specific locale
 		new Resources(assets, metrics, currentResources.getConfiguration());
 		return string;
-		// String string = createDefaultResources().getString(resId);
-		// createDeviceSpecificResources();
-		// return string;
 	}
 
 }

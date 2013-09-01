@@ -1,10 +1,30 @@
+/* Copyright (C) 2013 Johannes Schnatterer
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *  
+ * This file is part of nusic.
+ * 
+ * nusic is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * nusic is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package info.schnatterer.nusic.db.dao.impl;
 
+import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.db.DatabaseException;
 import info.schnatterer.nusic.db.NusicDatabase;
 import info.schnatterer.nusic.db.dao.GenericDao;
 import info.schnatterer.nusic.db.model.Entity;
-import info.schnatterer.nusic.Constants;
 import android.content.AsyncTaskLoader;
 import android.content.ContentValues;
 import android.content.Context;
@@ -159,25 +179,6 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
 			throw new DatabaseException("Unable to update " + entity, t);
 		}
 	}
-
-	// @Override
-	// public void addDataChangedListener(DataChangedListener
-	// dataChangedListener) {
-	// listeners.add(dataChangedListener);
-	//
-	// }
-	//
-	// @Override
-	// public boolean removeDataChangedListener(
-	// DataChangedListener dataChangedListener) {
-	// return listeners.remove(dataChangedListener);
-	// }
-	//
-	// protected void notifyListeners() {
-	// for (DataChangedListener listener : listeners) {
-	// listener.onDataChanged();
-	// }
-	// }
 
 	protected Context getContext() {
 		return context;
