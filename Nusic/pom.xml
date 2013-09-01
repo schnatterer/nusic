@@ -128,21 +128,63 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jarsigner-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<id>signing</id>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+						<phase>package</phase>
+						<inherited>true</inherited>
+						<configuration>
+							<includes>
+								<include>target/*.apk</include>
+							</includes>
+							<keystore>${sign.keystore}</keystore>
+							<alias>${sign.alias}</alias>
+							<storepass>${sign.storepass}</storepass>
+							<keypass>${sign.keypass}</keypass>
+							<verbose>true</verbose>
+							<arguments>
+								<!-- Fix for JDK 1.7 -->
+								<argument>-sigalg</argument>
+								<argument>MD5withRSA</argument>
+								<argument>-digestalg</argument>
+								<argument>SHA1</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
 				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 				<artifactId>android-maven-plugin</artifactId>
 				<version>3.6.0</version>
+				<inherited>true</inherited>
 				<extensions>true</extensions>
 				<configuration>
 					<sdk>
 						<!-- targetSdkVersion -->
 						<platform>18</platform>
 					</sdk>
+					<manifest>
+						<debuggable>false</debuggable>
+					</manifest>
+					<release>true</release>
+					<sign>
+						<debug>false</debug>
+					</sign>
 					<proguard>
 						<skip>false</skip>
 					</proguard>
-	<!-- 				<zipalign>
+					<zipalign>
 						<skip>false</skip>
-					</zipalign> -->
+						<verbose>true</verbose>
+					</zipalign>
 				</configuration>
 			</plugin>
 		</plugins>
