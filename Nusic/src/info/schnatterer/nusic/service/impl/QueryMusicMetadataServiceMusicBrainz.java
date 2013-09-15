@@ -140,8 +140,8 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 		for (ReleaseResultWs2 releaseResultWs2 : releaseResults) {
 			// Make sure not to add other artists albums
 			ReleaseWs2 releaseResult = releaseResultWs2.getRelease();
-			if (releaseResult.getArtistCredit().getArtistCreditString()
-					.equals(artistName)) {
+			if (releaseResult.getArtistCredit().getArtistCreditString().trim()
+					.equalsIgnoreCase(artistName.trim())) {
 				if (artist.getMusicBrainzId() == null || artist.getMusicBrainzId().isEmpty()) {
 					artist.setMusicBrainzId(getMusicBrainzId(releaseResult.getArtistCredit()));
 				}
