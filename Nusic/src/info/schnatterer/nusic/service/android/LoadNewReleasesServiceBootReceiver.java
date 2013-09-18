@@ -20,14 +20,17 @@
  */
 package info.schnatterer.nusic.service.android;
 
+import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.service.PreferencesService;
 import info.schnatterer.nusic.service.impl.PreferencesServiceSharedPreferences;
+import info.schnatterer.nusic.util.DateUtils;
 
 import java.util.Date;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 /**
  * Broadcast receiver that schedules execution of {@link LoadNewReleasesService}
@@ -37,12 +40,14 @@ import android.content.Intent;
  * 
  */
 public class LoadNewReleasesServiceBootReceiver extends BroadcastReceiver {
+	private static final int BOOT_DELAY_MINUTES = 10;
 	private static PreferencesService preferencesService = PreferencesServiceSharedPreferences
 			.getInstance();
 
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
 		Date nextReleaseRefresh = preferencesService.getNextReleaseRefresh();
+		Log.d(Constants.LOG, "Boot Receiver: Boot completed!");
 
 		// if (nextReleaseRefresh == null) {
 		// Application.notifyInfo("Starting release refresh");
@@ -52,11 +57,18 @@ public class LoadNewReleasesServiceBootReceiver extends BroadcastReceiver {
 		// }
 
 		if (nextReleaseRefresh == null || isHistorical(nextReleaseRefresh)) {
-			// Start service right away
-			context.startService(LoadNewReleasesService
-					.createIntentRefreshReleases(context));
+			// Delay start of service in order not to slow down device boot up
+			Date delayedRefresh = DateUtils
+					.addMinutes(BOOT_DELAY_MINUTES);
+			Log.d(Constants.LOG, "Boot Receiver: Delaying service to start at "
+					+ delayedRefresh);
+			LoadNewReleasesService
+					.schedule(context, preferencesService.getRefreshPeriod(),
+							delayedRefresh);
 		} else {
 			// Schedule service
+			Log.d(Constants.LOG, "Boot Receiver: Scheduling service to "
+					+ nextReleaseRefresh);
 			LoadNewReleasesService.schedule(context,
 					preferencesService.getRefreshPeriod(), nextReleaseRefresh);
 		}

@@ -25,6 +25,8 @@ import java.util.Date;
 import android.database.Cursor;
 
 public final class DateUtils {
+	public static final int MILLIS_TO_MINUTES = 60000;
+
 	private DateUtils() {
 	}
 
@@ -67,5 +69,15 @@ public final class DateUtils {
 			return null;
 		}
 		return loadDate(cursor.getLong(index));
+	}
+
+	/**
+	 * Returns the current date + a number of <code>minutes</code>.
+	 * 
+	 * @param minutes
+	 * @return
+	 */
+	public static Date addMinutes(int minutes) {
+		return new Date(System.currentTimeMillis() + minutes * MILLIS_TO_MINUTES);
 	}
 }

@@ -20,6 +20,7 @@
  */
 package info.schnatterer.nusic.service.android;
 
+import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.service.ConnectivityService;
 import info.schnatterer.nusic.service.impl.ConnectivityServiceAndroid;
 import android.content.BroadcastReceiver;
@@ -27,6 +28,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 /**
  * Broadcast receiver that starts the {@link LoadNewReleasesService} when the
@@ -70,8 +72,10 @@ public class LoadNewReleasesServiceConnectivityReceiver extends BroadcastReceive
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
 		if (connectivityService.isOnline()) {
+			Log.d(Constants.LOG, "Connectivity receiver: Device online");
 			onConnectionEstablished(context);
 		} else {
+			Log.d(Constants.LOG, "Connectivity receiver: Device offline");
 			onConnectionLost(context);
 		}
 	}
