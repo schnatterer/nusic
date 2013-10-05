@@ -52,7 +52,6 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
 		GenericDao<T> {
 	// private Context context;
 	private SQLiteDatabase db;
-	private NusicDatabase nusicDb = null;
 
 	private Cursor cursor = null;
 	private Context context;
@@ -63,8 +62,7 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
 	public AbstractSqliteDao(Context context) {
 		this.context = context;
 		// Opens database connection
-		nusicDb = new NusicDatabase(context);
-		db = nusicDb.getWritableDatabase();
+		db = NusicDatabase.getInstance().getWritableDatabase();
 	}
 
 	/**

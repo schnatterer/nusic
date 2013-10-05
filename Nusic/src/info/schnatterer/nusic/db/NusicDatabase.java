@@ -20,10 +20,13 @@
  */
 package info.schnatterer.nusic.db;
 
+import info.schnatterer.nusic.Application;
+import info.schnatterer.nusic.Constants;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 /**
  * Basic database abstraction. Handles execution of DDL scripts.
@@ -32,6 +35,7 @@ import android.provider.BaseColumns;
  * 
  */
 public class NusicDatabase extends SQLiteOpenHelper {
+
 	private static final String DATABASE_NAME = "nusic";
 	private static final int DATABASE_VERSION = 1;
 
@@ -103,8 +107,21 @@ public class NusicDatabase extends SQLiteOpenHelper {
 			COLUMN_RELEASE_DATE_RELEASED, COLUMN_RELEASE_DATE_CREATED,
 			COLUMN_RELEASE_ARTWORK_PATH, COLUMN_RELEASE_FK_ID_ARTIST };
 
-	public NusicDatabase(Context context) {
+	private static final NusicDatabase instance = new NusicDatabase(
+			Application.getContext());
+
+	private NusicDatabase(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+	}
+
+	public static NusicDatabase getInstance() {
+		return instance;
+	}
+
+	@Override
+	public synchronized void close() {
+		Log.d(Constants.LOG, "Closing database");
+		super.close();
 	}
 
 	@Override
