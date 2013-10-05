@@ -47,8 +47,10 @@
     <string name="LoadNewReleasesBinding_errorFindingReleases">Aktualisieren der Alben fehlgeschlagen: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">Unfassbarer Fehler beim Aktualiseren der Alben: </string>
     <string name="LoadNewReleasesBinding_finishedWithErrors">Update der Alben für %1$d Interpreten von %2$d fehlgeschlagen</string>
-    <string name="LoadNewReleasesService_foundNewReleases">%1$d neue Alben gefunden</string>
-    
+    <plurals name="LoadNewReleasesService_foundNewReleases">
+        <item quantity="one">%1$d neues Album gefunden.</item>
+        <item quantity="other">%1$d neue Alben gefunden</item>
+    </plurals>
     <string name="QueryMusicMetadataService_errorFindingReleasesArtist">Fehler beim Finden von Alben für Interpret %1$s</string>
     <string name="QueryMusicMetadataService_errorQueryingMusicBrainz">Fehler beim Abfrage der Alben des Interpreten %1$s im Internet. Keine Verbindung zum Internet?</string>
 </resources>

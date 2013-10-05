@@ -47,7 +47,10 @@
     <string name="LoadNewReleasesBinding_errorFindingReleases">Refreshing releases failed: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">Unbelievable error while trying to refresh releases: </string>
     <string name="LoadNewReleasesBinding_finishedWithErrors">Updating releases failed for %1$d of %2$d artists</string>
-    <string name="LoadNewReleasesService_foundNewReleases">Found %1$d new releases</string>
+        <plurals name="LoadNewReleasesService_foundNewReleases">
+        <item quantity="one">Found %1$d new release</item>
+        <item quantity="other">Found %1$d new releases</item>
+    </plurals>
     <string name="QueryMusicMetadataService_errorFindingReleasesArtist">Error finding releases for artist %1$s</string>
     <string name="QueryMusicMetadataService_errorQueryingMusicBrainz">Error querying releases for artist %1$s from the internet. No connection to the internet?</string>
 </resources>

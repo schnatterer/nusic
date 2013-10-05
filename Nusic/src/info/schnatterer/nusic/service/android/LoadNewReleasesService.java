@@ -218,9 +218,9 @@ public class LoadNewReleasesService extends WakefulService {
 		List<Release> newReleases = new ReleaseDaoSqlite(this)
 				.findJustCreated(beforeRefresh);
 		if (newReleases.size() > 0) {
-			Application.notifyInfo(
-					R.string.LoadNewReleasesService_foundNewReleases,
-					newReleases.size());
+			Application.notifyInfo(getResources().getQuantityString(
+					R.plurals.LoadNewReleasesService_foundNewReleases,
+					newReleases.size(), newReleases.size()));
 		}
 	}
 
@@ -244,7 +244,7 @@ public class LoadNewReleasesService extends WakefulService {
 		}
 
 		// debug: Starts service once per minute
-		//triggerAtDate = DateUtils.addMinutes(1);
+		// triggerAtDate = DateUtils.addMinutes(1);
 
 		PendingIntent pintent = PendingIntent.getService(context, 0,
 				createIntentRefreshReleases(context),
