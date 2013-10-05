@@ -110,7 +110,7 @@ public class NusicDatabase extends SQLiteOpenHelper {
 	private static final NusicDatabase instance = new NusicDatabase(
 			Application.getContext());
 
-	private NusicDatabase(Context context) {
+	protected NusicDatabase(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
