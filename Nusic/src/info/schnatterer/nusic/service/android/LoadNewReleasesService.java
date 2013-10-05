@@ -105,6 +105,14 @@ public class LoadNewReleasesService extends WakefulService {
 			}
 		}
 
+		/*
+		 * Don't release wake lock after this method ends, as the logic runs in
+		 * a separate thread.
+		 * 
+		 * The lock is release onDestroy().
+		 */
+		keepLock = true;
+
 		return Service.START_STICKY;
 
 		// if (flags == START_FLAG_REDELIVERY) {
@@ -290,6 +298,7 @@ public class LoadNewReleasesService extends WakefulService {
 			releasesService
 					.removeArtistProcessedListener(progressListenerNotifications);
 		}
+		releaseLock();
 	}
 
 	/**

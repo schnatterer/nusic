@@ -46,10 +46,17 @@ public abstract class WakefulService extends Service {
 
 	private static volatile PowerManager.WakeLock lockStatic = null;
 
+	/**
+	 * Keeps the lock after {@link #onStartCommand(Intent, int, int)} has been
+	 * finished. <b> Note: </b> The derived class that sets this to
+	 * <code>true</code> is responsible for calling {@link #releaseLock()} itself!
+	 */
+	protected boolean keepLock = false;
+
 	abstract protected int onStartCommandWakeful(Intent intent, int flags,
 			int startId);
 
-	synchronized private static PowerManager.WakeLock getLock(Context context) {
+	synchronized protected static PowerManager.WakeLock getLock(Context context) {
 		if (lockStatic == null) {
 			PowerManager mgr = (PowerManager) context
 					.getSystemService(Context.POWER_SERVICE);
@@ -75,10 +82,15 @@ public abstract class WakefulService extends Service {
 			Log.d(Constants.LOG, "Lock acquired, calling service method");
 			return onStartCommandWakeful(intent, flags, startId);
 		} finally {
-			if (lock.isHeld()) {
-				Log.d(Constants.LOG, "Lock released");
-				lock.release();
-			}
+			releaseLock();
+		}
+	}
+
+	protected void releaseLock() {
+		PowerManager.WakeLock lock = getLock(this.getApplicationContext());
+		if (lock.isHeld()) {
+			Log.d(Constants.LOG, "Lock released");
+			lock.release();
 		}
 	}
 
