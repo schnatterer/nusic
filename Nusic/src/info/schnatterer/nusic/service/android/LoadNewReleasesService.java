@@ -120,6 +120,9 @@ public class LoadNewReleasesService extends WakefulService {
 	 * <code>false</code>.
 	 * 
 	 * @param updateOnlyIfNeccesary
+	 *            if <code>true</code> the refresh is only done when
+	 *            {@link ReleasesService#isUpdateNeccesarry()} returns
+	 *            <code>true</code>. Otherwise, the refresh is done at any case.
 	 * @param artistProcessedListener
 	 * @return <code>true</code> if refresh was started. <code>false</code> if
 	 *         already in progress.
@@ -236,13 +239,16 @@ public class LoadNewReleasesService extends WakefulService {
 		if (triggerAt == null) {
 			Calendar triggerAtCal = Calendar.getInstance();
 			triggerAtCal.add(Calendar.DAY_OF_MONTH, intervalDays);
-			// cal.add(Calendar.SECOND, 60);
+			// triggerAtCal.add(Calendar.SECOND, 60);
 			triggerAtDate = triggerAtCal.getTime();
 		}
 
+		// debug: Starts service once per minute
+		//triggerAtDate = DateUtils.addMinutes(1);
+
 		PendingIntent pintent = PendingIntent.getService(context, 0,
 				createIntentRefreshReleases(context),
-				PendingIntent.FLAG_CANCEL_CURRENT);
+				PendingIntent.FLAG_UPDATE_CURRENT);
 
 		AlarmManager alarm = (AlarmManager) context
 				.getSystemService(Context.ALARM_SERVICE);

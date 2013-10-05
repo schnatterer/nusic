@@ -20,6 +20,7 @@
  */
 package info.schnatterer.nusic.service.android;
 
+import info.schnatterer.nusic.service.ReleasesService;
 import info.schnatterer.nusic.service.android.LoadNewReleasesService.LoadNewReleasesServiceBinder;
 import info.schnatterer.nusic.service.event.ArtistProgressListener;
 import android.content.ComponentName;
@@ -61,10 +62,15 @@ public class LoadNewReleasesServiceConnection implements ServiceConnection {
 	 *            right after the service is started and bound
 	 * @param artistProcessedListener
 	 *            does only matter if <code>startRightAway</code> is
-	 *            <code>true</code>
+	 *            <code>true</code><br/>
 	 * @param updateOnlyIfNeccesary
-	 *            does only matter if <code>startRightAway</code> is
-	 *            <code>true</code>
+	 *            (does only matter if <code>startRightAway</code> is
+	 *            <code>true</code>)<br/>
+	 * 
+	 *            if <code>true</code> the refresh is only done when
+	 *            {@link ReleasesService#isUpdateNeccesarry()} returns
+	 *            <code>true</code>. Otherwise, the refresh is done at any case.
+	 * 
 	 * @return
 	 */
 	public static LoadNewReleasesServiceConnection startAndBind(

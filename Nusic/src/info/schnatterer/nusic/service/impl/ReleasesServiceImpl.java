@@ -80,7 +80,7 @@ public class ReleasesServiceImpl implements ReleasesService {
 		}
 		/*
 		 * TODO check if there are new artists on the device and refresh if
-		 * neccessary
+		 * neccessary. Then update interface comment for this method!
 		 */
 		return false;
 	}

@@ -53,7 +53,7 @@ public class LoadNewRelasesServiceBinding {
 	/**
 	 * Context in which the {@link #progressDialog} is displayed
 	 */
-	private Activity context;
+	private Activity activity;
 
 	private ProgressDialog progressDialog = null;
 	private List<Artist> errorArtists;
@@ -66,29 +66,33 @@ public class LoadNewRelasesServiceBinding {
 
 	/**
 	 * Executes {@link ReleasesService#refreshReleases(boolean)} within
-	 * {@link LoadNewReleasesService} in a sepearate thread.
+	 * {@link LoadNewReleasesService} in a separate thread.
 	 * 
 	 * @param activity
 	 *            activity that is used to display the {@link ProgressDialog}
 	 * @param updateOnlyIfNeccesary
+	 *            launch the service but do the update only
 	 * @return <code>true</code> if refresh was started. <code>false</code> if
 	 *         already in progress.
 	 */
 	public boolean refreshReleases(Activity activity,
 			boolean updateOnlyIfNeccesary) {
+		// Make sure the progress dialog is bound to any new activty
+		updateActivity(activity);
+
 		if (loadNewReleasesServiceConnection != null
 				&& loadNewReleasesServiceConnection.isBound()) {
-			boolean isStarted = loadNewReleasesServiceConnection
-					.getLoadNewReleasesService().refreshReleases(
-							updateOnlyIfNeccesary, artistProcessedListener);
-			if (isStarted) {
-				this.context = activity;
-			}
-			return isStarted;
+			/*
+			 * Execute the service method, if not running already. Pass/update
+			 * listener.
+			 */
+			return loadNewReleasesServiceConnection.getLoadNewReleasesService()
+					.refreshReleases(updateOnlyIfNeccesary,
+							artistProcessedListener);
 		} else {
+			// Start service and bind to it
 			loadNewReleasesServiceConnection = startAndBindService(activity,
 					updateOnlyIfNeccesary);
-			this.context = activity;
 			return true;
 		}
 	}
@@ -145,16 +149,14 @@ public class LoadNewRelasesServiceBinding {
 	}
 
 	/**
-	 * Sets a new {@link Context} for the {@link ProgressDialog}.
+	 * Sets a new {@link Activity} for the {@link ProgressDialog}.
 	 * 
 	 * @param newActivity
-	 *            can be <code>null</code>, which results in hiding the dialog
+	 *            can be <code>null</code>
 	 */
-	public void updateContext(Activity newActivity) {
-		this.context = newActivity;
-
-		if (newActivity == null) {
-
+	public void updateActivity(Activity newActivity) {
+		if (this.activity != newActivity) {
+			this.activity = newActivity;
 			hideProgressDialog();
 		}
 	}
@@ -202,8 +204,8 @@ public class LoadNewRelasesServiceBinding {
 	 */
 	private ProgressDialog showDialog(int progress, int max) {
 		ProgressDialog dialog = null;
-		if (context != null) {
-			dialog = new ProgressDialog(context);
+		if (activity != null) {
+			dialog = new ProgressDialog(activity);
 			dialog.setMessage(Application.getContext().getString(
 					R.string.LoadNewReleasesBinding_CheckingArtists));
 			dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -296,8 +298,8 @@ public class LoadNewRelasesServiceBinding {
 		}
 
 		private void runOnUiThread(Runnable runnable) {
-			if (context != null) {
-				context.runOnUiThread(runnable);
+			if (activity != null) {
+				activity.runOnUiThread(runnable);
 			}
 
 		}

@@ -20,11 +20,13 @@
  */
 package info.schnatterer.nusic.service.android;
 
+import info.schnatterer.nusic.Constants;
 import android.app.IntentService;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
+import android.util.Log;
 
 /**
  * {@link Service} that locks the CPU before running the service.
@@ -62,6 +64,7 @@ public abstract class WakefulService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		Log.d(Constants.LOG, "Trying to acquire wake lock for service");
 		PowerManager.WakeLock lock = getLock(this.getApplicationContext());
 
 		if (!lock.isHeld() || (flags & START_FLAG_REDELIVERY) != 0) {
@@ -69,9 +72,11 @@ public abstract class WakefulService extends Service {
 		}
 
 		try {
+			Log.d(Constants.LOG, "Lock acquired, calling service method");
 			return onStartCommandWakeful(intent, flags, startId);
 		} finally {
 			if (lock.isHeld()) {
+				Log.d(Constants.LOG, "Lock released");
 				lock.release();
 			}
 		}

@@ -124,7 +124,7 @@ public class MainActivity extends SherlockFragmentActivity {
 
 	private void registerListeners() {
 		// Set activity as new context of task
-		loadNewRelasesServiceBinding.updateContext(this);
+		loadNewRelasesServiceBinding.updateActivity(this);
 		loadNewRelasesServiceBinding
 				.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
 		// loadReleasesTask.bindService();
@@ -219,7 +219,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	}
 
 	private void unregisterListeners() {
-		loadNewRelasesServiceBinding.updateContext(null);
+		loadNewRelasesServiceBinding.updateActivity(null);
 		loadNewRelasesServiceBinding
 				.removeFinishedLoadingListener(releaseTaskFinishedLoadingListener);
 		loadNewRelasesServiceBinding.unbindService();
