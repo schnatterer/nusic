@@ -15,7 +15,7 @@
     <bool name="preferences_default_include_future_releases">true</bool>
    
     <string name="preferences_key_full_update">fullUpdate</string>
-    <bool name="preferences_default_full_update">false</bool>
+    <bool name="preferences_default_full_update">true</bool>
 
     <string name="preferences_key_download_only_on_wifi">onWifiOnly</string>
     <bool name="preferences_default_download_only_on_wifi">true</bool>

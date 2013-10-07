@@ -10,16 +10,20 @@
             android:summary="@string/preferences_summary_download_releases_time_period"
             android:title="@string/preferences_title_download_releases_time_period" />
 
-        <CheckBoxPreference
+         <CheckBoxPreference
             android:defaultValue="@bool/preferences_default_include_future_releases"
             android:key="@string/preferences_key_include_future_releases"
             android:summary="@string/preferences_summary_include_future_releases"
             android:title="@string/preferences_title_include_future_releases" />
-        <CheckBoxPreference
+         
+        <!-- TODO Before enabling this as a preference, implement logic to do full updates whenever necessary.
+        That is, for example when there are new artists, when the time period changed, when ?, ...
+          -->
+        <!--<CheckBoxPreference
             android:defaultValue="@bool/preferences_default_full_update"
             android:key="@string/preferences_key_full_update"
             android:summary="@string/preferences_summary_full_update"
-            android:title="@string/preferences_title_full_update" />
+            android:title="@string/preferences_title_full_update" /> -->
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/preferences_category_bandwitdth" >
         <CheckBoxPreference
