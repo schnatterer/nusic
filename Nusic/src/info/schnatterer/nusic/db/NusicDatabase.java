@@ -119,6 +119,12 @@ public class NusicDatabase extends SQLiteOpenHelper {
 	}
 
 	@Override
+	protected void finalize() throws Throwable {
+		close();
+		super.finalize();
+	}
+
+	@Override
 	public synchronized void close() {
 		Log.d(Constants.LOG, "Closing database");
 		super.close();

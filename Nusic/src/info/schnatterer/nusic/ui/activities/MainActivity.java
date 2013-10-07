@@ -22,7 +22,6 @@ package info.schnatterer.nusic.ui.activities;
 
 import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.R;
-import info.schnatterer.nusic.db.NusicDatabase;
 import info.schnatterer.nusic.db.loader.ReleaseLoader;
 import info.schnatterer.nusic.db.model.Release;
 import info.schnatterer.nusic.service.android.LoadNewReleasesService;
@@ -217,7 +216,8 @@ public class MainActivity extends SherlockFragmentActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 		unregisterListeners();
-		NusicDatabase.getInstance().close();
+		// No good idea if service is running...
+		//NusicDatabase.getInstance().close();
 	}
 
 	private void unregisterListeners() {
