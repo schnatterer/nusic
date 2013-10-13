@@ -35,6 +35,7 @@ import info.schnatterer.nusic.service.event.ArtistProgressListener;
 import info.schnatterer.nusic.service.impl.ConnectivityServiceAndroid;
 import info.schnatterer.nusic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.nusic.service.impl.ReleasesServiceImpl;
+import info.schnatterer.nusic.util.DateUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -44,10 +45,10 @@ import java.util.List;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -84,25 +85,29 @@ public class LoadNewReleasesService extends WakefulService {
 
 	@Override
 	public int onStartCommandWakeful(Intent intent, int flags, int startId) {
-		Log.d(Constants.LOG, "Flags = " + flags + "; startId = " + startId
-				+ ". Intent = " + intent
-				+ (intent != null ? (", extras= " + intent.getExtras()) : ""));
+		Log.d(Constants.LOG,
+				"Flags = "
+						+ flags
+						+ "; startId = "
+						+ startId
+						+ ". Intent = "
+						+ intent
+						+ (intent != null ? (", extra " + ARG_REFRESH_ON_START
+								+ " = " + intent.getBooleanExtra(
+								ARG_REFRESH_ON_START, false)) : ""));
+		boolean refreshing = true;
 
 		if (intent == null) {
 			// When START_STICKY the intent will be null on "restart" after
 			// getting killed
-			// RESUME download instead of starting new?
+			// TODO RESUME download instead of starting new?
 			Log.d(Constants.LOG,
 					"Services restarted after being destroyed while workerThread was running.");
 			refreshReleases(false, null);
+		} else if (intent.getBooleanExtra(ARG_REFRESH_ON_START, false)) {
+			refreshReleases(false, null);
 		} else {
-			Bundle extras = intent.getExtras();
-			if (extras != null) {
-				// Get data via the key
-				if (extras.getBoolean(ARG_REFRESH_ON_START, false)) {
-					refreshReleases(false, null);
-				}
-			}
+			refreshing = false;
 		}
 
 		/*
@@ -111,7 +116,9 @@ public class LoadNewReleasesService extends WakefulService {
 		 * 
 		 * The lock is release onDestroy().
 		 */
-		keepLock = true;
+		if (refreshing) {
+			keepLock = true;
+		}
 
 		return Service.START_STICKY;
 
@@ -137,18 +144,38 @@ public class LoadNewReleasesService extends WakefulService {
 	 */
 	public boolean refreshReleases(boolean updateOnlyIfNeccesary,
 			ArtistProgressListener artistProcessedListener) {
-		if (workerThread == null || !workerThread.isAlive()) {
+		if (tryCreateThread(updateOnlyIfNeccesary, artistProcessedListener)) {
+			return true;
+		} else {
+			Log.d(Constants.LOG,
+					"Service thread already working, only adding process listener");
+			getReleasesService().addArtistProcessedListener(
+					artistProcessedListener);
+			return false;
+		}
+	}
+
+	/**
+	 * Synchronizes the creation and starting of new {@link #workerThread}s.
+	 * 
+	 * @param updateOnlyIfNeccesary
+	 * @param artistProcessedListener
+	 * @return <code>true</code> if thread was started, <code>false</code>
+	 *         otherwise.
+	 */
+	private synchronized boolean tryCreateThread(boolean updateOnlyIfNeccesary,
+			ArtistProgressListener artistProcessedListener) {
+		// if (workerThread == null || !workerThread.isAlive()) {
+		if (workerThread == null) {
+			Log.d(Constants.LOG, "Service thread not working yet, starting.");
 			errorArtists = new LinkedList<Artist>();
 			totalArtists = 0;
 			workerThread = new Thread(new WorkerThread(updateOnlyIfNeccesary,
 					artistProcessedListener));
 			workerThread.start();
 			return true;
-		} else {
-			getReleasesService().addArtistProcessedListener(
-					artistProcessedListener);
-			return false;
 		}
+		return false;
 	}
 
 	public class WorkerThread implements Runnable {
@@ -162,7 +189,9 @@ public class LoadNewReleasesService extends WakefulService {
 		}
 
 		public void run() {
+			Log.d(Constants.LOG, "Service thread starting work");
 			if (!connectivityService.isOnline()) {
+				Log.d(Constants.LOG, "Service thread: Not online!");
 				// If not online and update necessary, postpone run
 				if (!updateOnlyIfNeccesary
 						|| getReleasesService().isUpdateNeccesarry()) {
@@ -193,6 +222,8 @@ public class LoadNewReleasesService extends WakefulService {
 						progressListenerNotifications);
 
 				Date beforeRefresh = new Date();
+				Log.d(Constants.LOG,
+						"Service thread: Calling refreshReleases()");
 				if (getReleasesService().refreshReleases(updateOnlyIfNeccesary)) {
 					// Schedule next run
 					schedule(LoadNewReleasesService.this,
@@ -212,6 +243,7 @@ public class LoadNewReleasesService extends WakefulService {
 			}
 
 			// stop service
+			Log.d(Constants.LOG, "Service: Explicit stop self");
 			stopSelf();
 		}
 	}
@@ -252,11 +284,21 @@ public class LoadNewReleasesService extends WakefulService {
 		}
 
 		// debug: Starts service once per minute
-		// triggerAtDate = DateUtils.addMinutes(1);
+		triggerAtDate = DateUtils.addMinutes(60);
 
-		PendingIntent pintent = PendingIntent.getService(context, 0,
-				createIntentRefreshReleases(context),
-				PendingIntent.FLAG_UPDATE_CURRENT);
+		// // Start service directly, on alarm
+		// PendingIntent pintent = PendingIntent.getService(context, 0,
+		// createIntentRefreshReleases(context),
+		// PendingIntent.FLAG_UPDATE_CURRENT);
+
+		/*
+		 * Start service directly via receiver that acquires a wake lock, in
+		 * order to avoid the device falling back to sleep before service is
+		 * started
+		 */
+		PendingIntent pintent = PendingIntent.getBroadcast(context, 0,
+				new Intent(context, LoadNewReleasesServiceAlarmReceiver.class),
+				0);
 
 		AlarmManager alarm = (AlarmManager) context
 				.getSystemService(Context.ALARM_SERVICE);
@@ -264,7 +306,7 @@ public class LoadNewReleasesService extends WakefulService {
 		 * Set a repeating schedule, so there always is a next alarm even when
 		 * one alarm should fail for some reason
 		 */
-		alarm.setRepeating(AlarmManager.RTC_WAKEUP, triggerAtDate.getTime(),
+		alarm.setRepeating(AlarmManager.RTC, triggerAtDate.getTime(),
 				AlarmManager.INTERVAL_DAY * intervalDays, pintent);
 		preferencesService.setNextReleaseRefresh(triggerAtDate);
 		Log.i(Constants.LOG, "Scheduled task to run again every "
@@ -290,15 +332,18 @@ public class LoadNewReleasesService extends WakefulService {
 
 	@Override
 	public void onDestroy() {
+		Log.d(Constants.LOG, "Nusic service: onDestroy()");
+
 		if (workerThread != null && workerThread.isAlive()) {
 			Log.d(Constants.LOG,
 					"Services destroyed while workerThread is running.");
 		}
+		workerThread = null;
 		if (releasesService != null) {
 			releasesService
 					.removeArtistProcessedListener(progressListenerNotifications);
 		}
-		releaseLock();
+		releaseLock(this.getApplicationContext());
 	}
 
 	/**
@@ -308,6 +353,25 @@ public class LoadNewReleasesService extends WakefulService {
 	public class LoadNewReleasesServiceBinder extends Binder {
 		public LoadNewReleasesService getService() {
 			return LoadNewReleasesService.this;
+		}
+	}
+
+	/**
+	 * Broadcast receiver that triggers execution of
+	 * {@link LoadNewReleasesService} after a scheduled alarm.
+	 * 
+	 * @author schnatterer
+	 * 
+	 */
+	public static class LoadNewReleasesServiceAlarmReceiver extends
+			BroadcastReceiver {
+		@Override
+		public void onReceive(final Context context, final Intent intent) {
+			Log.d(Constants.LOG, "Alarm Receiver: Alarm received!");
+			// Acquire lock, making sure device is not going to sleep again
+			acquireLock(context);
+			context.startService(LoadNewReleasesService
+					.createIntentRefreshReleases(context));
 		}
 	}
 

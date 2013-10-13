@@ -20,6 +20,7 @@
  */
 package info.schnatterer.nusic.service.android;
 
+import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.service.ReleasesService;
 import info.schnatterer.nusic.service.android.LoadNewReleasesService.LoadNewReleasesServiceBinder;
 import info.schnatterer.nusic.service.event.ArtistProgressListener;
@@ -28,6 +29,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.util.Log;
 
 /**
  * Defines callbacks for service binding, passed to bindService().
@@ -94,6 +96,7 @@ public class LoadNewReleasesServiceConnection implements ServiceConnection {
 
 	@Override
 	public void onServiceConnected(ComponentName className, IBinder service) {
+		Log.d(Constants.LOG,"Service connected.");
 		LoadNewReleasesServiceBinder binder = (LoadNewReleasesServiceBinder) service;
 		loadNewReleasesService = binder.getService();
 		if (startRightAway) {

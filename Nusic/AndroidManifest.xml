@@ -48,6 +48,7 @@
                  <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".service.android.LoadNewReleasesService$LoadNewReleasesServiceAlarmReceiver" />
 
         <service android:name=".service.android.LoadNewReleasesService" />
     </application>

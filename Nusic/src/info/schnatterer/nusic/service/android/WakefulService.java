@@ -21,7 +21,6 @@
 package info.schnatterer.nusic.service.android;
 
 import info.schnatterer.nusic.Constants;
-import android.app.IntentService;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -41,15 +40,20 @@ import android.util.Log;
  * @author schnatterer
  * 
  */
+/**
+ * @author schnatterer
+ * 
+ */
 public abstract class WakefulService extends Service {
-	static final String LOCK_NAME = "info.schnatterer.nusic.service.android.WakefulService";
+	private static final String LOCK_NAME = "info.schnatterer.nusic.service.android.WakefulService";
 
 	private static volatile PowerManager.WakeLock lockStatic = null;
 
 	/**
 	 * Keeps the lock after {@link #onStartCommand(Intent, int, int)} has been
 	 * finished. <b> Note: </b> The derived class that sets this to
-	 * <code>true</code> is responsible for calling {@link #releaseLock()} itself!
+	 * <code>true</code> is responsible for calling {@link #releaseLock()}
+	 * itself!
 	 */
 	protected boolean keepLock = false;
 
@@ -71,26 +75,38 @@ public abstract class WakefulService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.d(Constants.LOG, "Trying to acquire wake lock for service");
-		PowerManager.WakeLock lock = getLock(this.getApplicationContext());
-
-		if (!lock.isHeld() || (flags & START_FLAG_REDELIVERY) != 0) {
-			lock.acquire();
-		}
+		acquireLock(this.getApplicationContext());
 
 		try {
-			Log.d(Constants.LOG, "Lock acquired, calling service method");
+			Log.d(Constants.LOG, "Calling service method");
 			return onStartCommandWakeful(intent, flags, startId);
 		} finally {
-			releaseLock();
+			if (!keepLock) {
+				releaseLock(this.getApplicationContext());
+			}
 		}
 	}
 
-	protected void releaseLock() {
-		PowerManager.WakeLock lock = getLock(this.getApplicationContext());
+	/**
+	 * Tries to acquire the lock, if not held.
+	 */
+	protected static void acquireLock(Context context) {
+		PowerManager.WakeLock lock = getLock(context);
+
+		if (!lock.isHeld()) {
+			lock.acquire();
+			Log.d(Constants.LOG, "Lock acquired");
+		}
+	}
+
+	/**
+	 * Releases the lock, if held.
+	 */
+	protected static void releaseLock(Context context) {
+		PowerManager.WakeLock lock = getLock(context);
 		if (lock.isHeld()) {
-			Log.d(Constants.LOG, "Lock released");
 			lock.release();
+			Log.d(Constants.LOG, "Lock released");
 		}
 	}
 
