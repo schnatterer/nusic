@@ -53,23 +53,24 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	 * Preferences that are not accessible through preferences menu
 	 * (preferences.xml)
 	 */
-	private static final String KEY_LAST_APP_VERSION = "last_app_version";
-	private static final int DEFAULT_LAST_APP_VERSION = -1;
+	private final String KEY_LAST_APP_VERSION = "last_app_version";
+	private final int DEFAULT_LAST_APP_VERSION = -1;
 
-	public static final String KEY_LAST_RELEASES_REFRESH = "last_release_refresh";
-	public static final Date DEFAULT_LAST_RELEASES_REFRESH = null;
+	public final String KEY_LAST_RELEASES_REFRESH = "last_release_refresh";
+	public final Date DEFAULT_LAST_RELEASES_REFRESH = null;
 
-	public static final String KEY_NEXT_RELEASES_REFRESH = "next_release_refresh";
-	public static final Date DEFAULT_NEXT_RELEASES_REFRESH = null;
+	public final String KEY_NEXT_RELEASES_REFRESH = "next_release_refresh";
+	public final Date DEFAULT_NEXT_RELEASES_REFRESH = null;
 
-	public static final String KEY_LAST_RELEASES_REFRESH_SUCCESSFULL = "last_release_refresh_succesful";
-	public static final Boolean DEFAULT_LAST_RELEASES_REFRESH_SUCCESSFULL = false;
+	public final String KEY_LAST_RELEASES_REFRESH_SUCCESSFULL = "last_release_refresh_succesful";
+	public final Boolean DEFAULT_LAST_RELEASES_REFRESH_SUCCESSFULL = Boolean.FALSE;
 
-	private static final String KEY_JUST_ADDED_TIME_PERIOD = "just_added_time_period";
-	private static final int DEFAULT_JUST_ADDED_TIME_PERIOD = 7;
+	private final String KEY_JUST_ADDED_TIME_PERIOD = "just_added_time_period";
+	// Define in constructor!
+	private final Integer DEFAULT_JUST_ADDED_TIME_PERIOD;
 
 	public final String KEY_ENABLED_CONNECTIVITY_RECEIVER = "connectivityReceiver";
-	public final Boolean DEFAULT_ENABLED_CONNECTIVITY_RECEIVER = false;
+	public final Boolean DEFAULT_ENABLED_CONNECTIVITY_RECEIVER = Boolean.FALSE;
 
 	/*
 	 * Preferences that are defined in constants_prefernces.xml -> accessible
@@ -164,6 +165,9 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 					R.string.preferences_key_refresh_period);
 			DEFAULT_REFRESH_PERIOD = getContext().getResources().getString(
 					R.string.preferences_default_refresh_period);
+
+			DEFAULT_JUST_ADDED_TIME_PERIOD = parseIntOrThrow(
+					KEY_REFRESH_PERIOD, DEFAULT_REFRESH_PERIOD);
 		} else {
 			// e.g. for Testing
 			KEY_DOWLOAD_ONLY_ON_WIFI = null;
@@ -180,12 +184,18 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 
 			KEY_REFRESH_PERIOD = null;
 			DEFAULT_REFRESH_PERIOD = null;
+
+			DEFAULT_JUST_ADDED_TIME_PERIOD = null;
 		}
 	}
 
 	private Integer parseIntFromPreferenceOrThrow(String key,
 			String defaultValue) {
 		String prefValue = sharedPreferences.getString(key, defaultValue);
+		return parseIntOrThrow(key, prefValue);
+	}
+
+	private Integer parseIntOrThrow(String key, String prefValue) {
 		try {
 			return Integer.parseInt(prefValue);
 		} catch (NumberFormatException e) {
