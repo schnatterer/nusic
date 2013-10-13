@@ -64,6 +64,8 @@ public class LoadNewRelasesServiceBinding {
 	private LoadNewReleasesServiceConnection loadNewReleasesServiceConnection = null;
 	private ProgressListener artistProcessedListener = new ProgressListener();
 
+	private boolean isDataChanged = false;
+
 	/**
 	 * Executes {@link ReleasesService#refreshReleases(boolean)} within
 	 * {@link LoadNewReleasesService} in a separate thread.
@@ -86,11 +88,14 @@ public class LoadNewRelasesServiceBinding {
 			 * Execute the service method, if not running already. Pass/update
 			 * listener.
 			 */
+			Log.d(Constants.LOG,
+					"Service already bound. Calling refreshReleases()");
 			return loadNewReleasesServiceConnection.getLoadNewReleasesService()
 					.refreshReleases(updateOnlyIfNeccesary,
 							artistProcessedListener);
 		} else {
 			// Start service and bind to it
+			Log.d(Constants.LOG, "Service not bound. Binding");
 			loadNewReleasesServiceConnection = startAndBindService(activity,
 					updateOnlyIfNeccesary);
 			return true;
@@ -143,6 +148,7 @@ public class LoadNewRelasesServiceBinding {
 	 */
 	public void unbindService() {
 		if (loadNewReleasesServiceConnection != null) {
+			Log.d(Constants.LOG, "Undinding service");
 			loadNewReleasesServiceConnection.unbind();
 			loadNewReleasesServiceConnection = null;
 		}
@@ -319,7 +325,26 @@ public class LoadNewRelasesServiceBinding {
 	public void addFinishedLoadingListener(
 			FinishedLoadingListener dataChangedListener) {
 		listeners.add(dataChangedListener);
+	}
 
+	/**
+	 * Checks if the service has finished and changed data since the last call
+	 * of this method. If so returns <code>true</code> and resets the variable.
+	 * So all subsequent calls to the method will return <code>false</code>
+	 * until the next change of data.
+	 * 
+	 * This is somewhat opposed to the listener mechanism, however this can be
+	 * useful to check if the service has been active while the activity was
+	 * paused.
+	 * 
+	 * @return
+	 */
+	public boolean checkDataChanged() {
+		if (isDataChanged) {
+			isDataChanged = false;
+			return true;
+		}
+		return false;
 	}
 
 	public boolean removeFinishedLoadingListener(
@@ -329,10 +354,13 @@ public class LoadNewRelasesServiceBinding {
 
 	protected void notifyListeners(Boolean resultChanged) {
 		boolean primitiveResult = true;
+		Log.d(Constants.LOG, "Service: Notifying listeners. ResultChanged="
+				+ resultChanged + ". Listeners=" + listeners);
 		// Be defensive: Only if explicitly nothing changed
 		if (resultChanged != null && resultChanged.equals(false)) {
 			primitiveResult = false;
 		}
+		isDataChanged = primitiveResult;
 		for (FinishedLoadingListener listener : listeners) {
 			listener.onFinishedLoading(primitiveResult);
 		}

@@ -21,6 +21,7 @@
 package info.schnatterer.nusic.ui.activities;
 
 import info.schnatterer.nusic.Application;
+import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.db.loader.ReleaseLoader;
 import info.schnatterer.nusic.db.model.Release;
@@ -37,6 +38,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
@@ -167,21 +169,21 @@ public class MainActivity extends SherlockFragmentActivity {
 		if (resultCode == RESULT_OK
 				&& requestCode == REQUEST_CODE_PREFERENCE_ACTIVITY) {
 			// Change in preferences require a full refresh
-			if (data.hasExtra(NusicPreferencesActivity.RETURN_KEY_IS_REFRESH_NECESSARY)) {
-				if (data.getExtras()
-						.getBoolean(
-								NusicPreferencesActivity.RETURN_KEY_IS_REFRESH_NECESSARY)) {
-					startLoadingReleasesFromInternet(false);
-				}
+			if (data.getBooleanExtra(
+					NusicPreferencesActivity.RETURN_KEY_IS_REFRESH_NECESSARY,
+					false)) {
+				startLoadingReleasesFromInternet(false);
 			}
 		}
 	}
 
 	private void startLoadingReleasesFromInternet(boolean updateOnlyIfNeccesary) {
-		boolean isStarted = loadNewRelasesServiceBinding.refreshReleases(this,
-				updateOnlyIfNeccesary);
+		boolean wasRunning = !loadNewRelasesServiceBinding.refreshReleases(
+				this, updateOnlyIfNeccesary);
+		Log.d(Constants.LOG, "Explicit refresh triggered. Service was "
+				+ (wasRunning ? "" : " not ") + "running before");
 
-		if (!isStarted && !updateOnlyIfNeccesary) {
+		if (wasRunning && !updateOnlyIfNeccesary) {
 			// Task is already running, just show dialog
 			Application.toast(R.string.MainActivity_refreshAlreadyInProgress);
 			loadNewRelasesServiceBinding.showDialog();
@@ -192,13 +194,33 @@ public class MainActivity extends SherlockFragmentActivity {
 	protected void onStart() {
 		super.onStart();
 		registerListeners();
+		if (loadNewRelasesServiceBinding.checkDataChanged()) {
+			triggerContentChanged();
+		}
 	}
 
-//	@Override
-//	protected void onResume() {
-//		super.onResume();
-//		registerListeners();
-//	}
+	/**
+	 * Marks all loaders as changed and forces reloading of the current
+	 * fragment.
+	 */
+	private void triggerContentChanged() {
+		// Mark all loaders as changed
+		for (ReleaseTabListener listener : tabListeners) {
+			if (listener.fragment != null) {
+				listener.fragment.onContentChanged();
+			}
+		}
+		// Reload data on current tab
+		if (currentTabFragment != null) {
+			currentTabFragment.foreceLoad();
+		}
+	}
+
+	// @Override
+	// protected void onResume() {
+	// super.onResume();
+	// registerListeners();
+	// }
 
 	@Override
 	protected void onStop() {
@@ -206,18 +228,18 @@ public class MainActivity extends SherlockFragmentActivity {
 		unregisterListeners();
 	}
 
-//	@Override
-//	protected void onPause() {
-//		super.onPause();
-//		unregisterListeners();
-//	}
+	// @Override
+	// protected void onPause() {
+	// super.onPause();
+	// unregisterListeners();
+	// }
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		unregisterListeners();
 		// No good idea if service is running...
-		//NusicDatabase.getInstance().close();
+		// NusicDatabase.getInstance().close();
 	}
 
 	private void unregisterListeners() {
@@ -240,16 +262,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		@Override
 		public void onFinishedLoading(boolean resultChanged) {
 			if (resultChanged) {
-				// Mark all loaders as changed
-				for (ReleaseTabListener listener : tabListeners) {
-					if (listener.fragment != null) {
-						listener.fragment.onContentChanged();
-					}
-				}
-				// Reload data on current tab
-				if (currentTabFragment != null) {
-					currentTabFragment.foreceLoad();
-				}
+				triggerContentChanged();
 			}
 		}
 	}
