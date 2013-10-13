@@ -22,12 +22,12 @@ package info.schnatterer.nusic.service.android;
 
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.service.ConnectivityService;
+import info.schnatterer.nusic.service.PreferencesService;
 import info.schnatterer.nusic.service.impl.ConnectivityServiceAndroid;
+import info.schnatterer.nusic.service.impl.PreferencesServiceSharedPreferences;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.util.Log;
 
 /**
@@ -37,8 +37,12 @@ import android.util.Log;
  * @author schnatterer
  * 
  */
-public class LoadNewReleasesServiceConnectivityReceiver extends BroadcastReceiver {
+public class LoadNewReleasesServiceConnectivityReceiver extends
+		BroadcastReceiver {
 	private ConnectivityService connectivityService = ConnectivityServiceAndroid
+			.getInstance();
+
+	private static PreferencesService preferencesService = PreferencesServiceSharedPreferences
 			.getInstance();
 
 	/**
@@ -47,12 +51,13 @@ public class LoadNewReleasesServiceConnectivityReceiver extends BroadcastReceive
 	 * @param context
 	 */
 	public static void enableReceiver(Context context) {
-		ComponentName component = new ComponentName(context,
-				LoadNewReleasesServiceConnectivityReceiver.class);
-
-		context.getPackageManager().setComponentEnabledSetting(component,
-				PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-				PackageManager.DONT_KILL_APP);
+		// ComponentName component = new ComponentName(context,
+		// LoadNewReleasesServiceConnectivityReceiver.class);
+		//
+		// context.getPackageManager().setComponentEnabledSetting(component,
+		// PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+		// PackageManager.DONT_KILL_APP);
+		preferencesService.setEnabledConnectivityReceiver(true);
 	}
 
 	/**
@@ -61,12 +66,13 @@ public class LoadNewReleasesServiceConnectivityReceiver extends BroadcastReceive
 	 * @param context
 	 */
 	public static void disableReceiver(Context context) {
-		ComponentName component = new ComponentName(context,
-				LoadNewReleasesServiceConnectivityReceiver.class);
-
-		context.getPackageManager().setComponentEnabledSetting(component,
-				PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-				PackageManager.DONT_KILL_APP);
+		// ComponentName component = new ComponentName(context,
+		// LoadNewReleasesServiceConnectivityReceiver.class);
+		//
+		// context.getPackageManager().setComponentEnabledSetting(component,
+		// PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+		// PackageManager.DONT_KILL_APP);
+		preferencesService.setEnabledConnectivityReceiver(false);
 	}
 
 	@Override
@@ -86,8 +92,10 @@ public class LoadNewReleasesServiceConnectivityReceiver extends BroadcastReceive
 	 * @param context
 	 */
 	public void onConnectionEstablished(Context context) {
-		context.startService(LoadNewReleasesService
-				.createIntentRefreshReleases(context));
+		if (preferencesService.isEnabledConnectivityReceiver()) {
+			context.startService(LoadNewReleasesService
+					.createIntentRefreshReleases(context));
+		}
 		// refreshReleases(updateOnlyIfNeccesary, null);
 	}
 

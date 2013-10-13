@@ -35,7 +35,6 @@ import info.schnatterer.nusic.service.event.ArtistProgressListener;
 import info.schnatterer.nusic.service.impl.ConnectivityServiceAndroid;
 import info.schnatterer.nusic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.nusic.service.impl.ReleasesServiceImpl;
-import info.schnatterer.nusic.util.DateUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -284,7 +283,7 @@ public class LoadNewReleasesService extends WakefulService {
 		}
 
 		// debug: Starts service once per minute
-		triggerAtDate = DateUtils.addMinutes(60);
+		// triggerAtDate = DateUtils.addMinutes(60);
 
 		// // Start service directly, on alarm
 		// PendingIntent pintent = PendingIntent.getService(context, 0,

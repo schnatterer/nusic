@@ -28,8 +28,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 public class ConnectivityServiceAndroid implements ConnectivityService {
-	private static ConnectivityServiceAndroid instance;
-	//private Set<ConnectivityChangedListener> connectivityChangedListeners = new HashSet<ConnectivityChangedListener>();
+	private static ConnectivityServiceAndroid instance = new ConnectivityServiceAndroid();
+	// private Set<ConnectivityChangedListener> connectivityChangedListeners =
+	// new HashSet<ConnectivityChangedListener>();
 	private PreferencesService preferencesService = PreferencesServiceSharedPreferences
 			.getInstance();
 
@@ -44,9 +45,6 @@ public class ConnectivityServiceAndroid implements ConnectivityService {
 	 * @return A singleton of this class
 	 */
 	public static final ConnectivityServiceAndroid getInstance() {
-		if (instance == null) {
-			instance = new ConnectivityServiceAndroid();
-		}
 		return instance;
 	}
 

@@ -49,6 +49,10 @@ import android.util.Log;
 public class PreferencesServiceSharedPreferences implements PreferencesService,
 		OnSharedPreferenceChangeListener {
 
+	/*
+	 * Preferences that are not accessible through preferences menu
+	 * (preferences.xml)
+	 */
 	private static final String KEY_LAST_APP_VERSION = "last_app_version";
 	private static final int DEFAULT_LAST_APP_VERSION = -1;
 
@@ -64,6 +68,13 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	private static final String KEY_JUST_ADDED_TIME_PERIOD = "just_added_time_period";
 	private static final int DEFAULT_JUST_ADDED_TIME_PERIOD = 7;
 
+	public final String KEY_ENABLED_CONNECTIVITY_RECEIVER = "connectivityReceiver";
+	public final Boolean DEFAULT_ENABLED_CONNECTIVITY_RECEIVER = false;
+
+	/*
+	 * Preferences that are defined in constants_prefernces.xml -> accessible
+	 * for preferences.xml
+	 */
 	public final String KEY_DOWLOAD_ONLY_ON_WIFI;
 	public final Boolean DEFAULT_DOWLOAD_ONLY_ON_WIFI;
 
@@ -81,7 +92,7 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 
 	private final SharedPreferences sharedPreferences;
 	// private static Context context = null;
-	private static PreferencesServiceSharedPreferences instance = null;
+	private static PreferencesServiceSharedPreferences instance = new PreferencesServiceSharedPreferences();
 
 	/**
 	 * Caches the result of {@link #checkAppStart()}. To allow idempotent method
@@ -96,9 +107,6 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	 * @return A singleton of this class
 	 */
 	public static final PreferencesServiceSharedPreferences getInstance() {
-		if (instance == null) {
-			instance = new PreferencesServiceSharedPreferences();
-		}
 		return instance;
 	}
 
@@ -156,7 +164,6 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 					R.string.preferences_key_refresh_period);
 			DEFAULT_REFRESH_PERIOD = getContext().getResources().getString(
 					R.string.preferences_default_refresh_period);
-
 		} else {
 			// e.g. for Testing
 			KEY_DOWLOAD_ONLY_ON_WIFI = null;
@@ -320,10 +327,6 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 				DEFAULT_JUST_ADDED_TIME_PERIOD);
 	}
 
-	protected static Context getContext() {
-		return Application.getContext();
-	}
-
 	@Override
 	public void registerOnSharedPreferenceChangeListener(
 			PreferenceChangedListener preferenceChangedListener) {
@@ -343,6 +346,22 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 			preferenceChangedListener.onPreferenceChanged(key,
 					sharedPreferences.getAll().get(key));
 		}
+	}
 
+	@Override
+	public boolean isEnabledConnectivityReceiver() {
+		return sharedPreferences.getBoolean(KEY_ENABLED_CONNECTIVITY_RECEIVER,
+				DEFAULT_ENABLED_CONNECTIVITY_RECEIVER);
+	}
+
+	@Override
+	public boolean setEnabledConnectivityReceiver(boolean enabled) {
+		return sharedPreferences.edit()
+				.putBoolean(KEY_ENABLED_CONNECTIVITY_RECEIVER, enabled)
+				.commit();
+	}
+
+	protected static Context getContext() {
+		return Application.getContext();
 	}
 }

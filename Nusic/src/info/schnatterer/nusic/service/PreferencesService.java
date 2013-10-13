@@ -21,6 +21,8 @@
 package info.schnatterer.nusic.service;
 
 import info.schnatterer.nusic.db.model.Release;
+import info.schnatterer.nusic.service.android.LoadNewReleasesService;
+import info.schnatterer.nusic.service.android.LoadNewReleasesServiceConnectivityReceiver;
 import info.schnatterer.nusic.service.event.PreferenceChangedListener;
 
 import java.util.Date;
@@ -155,4 +157,23 @@ public interface PreferencesService {
 
 	boolean setNextReleaseRefresh(Date date);
 
+	/**
+	 * @return <code>true</code> when
+	 *         {@link LoadNewReleasesServiceConnectivityReceiver} is enabled,
+	 *         that is starting {@link LoadNewReleasesService} when receiving
+	 *         broadcast. Otherwise <code>false</code>.
+	 * 
+	 */
+	boolean isEnabledConnectivityReceiver();
+
+	/**
+	 * Setting to <code>true</code> enables
+	 * {@link LoadNewReleasesServiceConnectivityReceiver}, that is starting
+	 * {@link LoadNewReleasesService} when receiving broadcast.
+	 * <code>false</code> disables receiver.
+	 * 
+	 * @param enabled
+	 * @return
+	 */
+	boolean setEnabledConnectivityReceiver(boolean enabled);
 }
