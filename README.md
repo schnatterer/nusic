@@ -14,6 +14,9 @@ You can download the APK from [here] (http://nusic.schnatterer.info/release/curr
 Copyright © 2013 Johannes Schnatterer. Licensed under the GNU General Public License Version 3.
 See the [License](https://github.com/schnatterer/nusic/blob/master/Nusic/LICENSE.txt) and the [licenses of dependencies](https://github.com/schnatterer/nusic/blob/master/Nusic/NOTICE.txt)
 
+## Release notes
+See [Releases] (https://github.com/schnatterer/nusic/releases)
+
 ## Build
 ### Maven
 In order to build the APK use the [SDK manager](https://developer.android.com/tools/help/sdk-manager.html) to download the SDK Version specified in the [POM](https://github.com/schnatterer/nusic/blob/master/Nusic/pom.xml) and deploy android and the the support API to your local maven repo using [maven-android-sdk-deployer](https://github.com/mosabua/maven-android-sdk-deployerjust).
