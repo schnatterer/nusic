@@ -37,9 +37,12 @@ import android.util.Log;
 public class NusicDatabase extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "nusic";
-	private static final int DATABASE_VERSION = 1;
 
-	private static final String DATABASE_CREATE = "CREATE TABLE ";
+	/** Last app version that needed a database update. */
+	private static final int DATABASE_VERSION = Constants.APP_VERSION_0_2_1;
+
+	private static final String DATABASE_TABLE_CREATE = "CREATE TABLE ";
+	private static final String DATABASE_TABLE_DROP = "DROP TABLE ";
 
 	private static final String DATABASE_FOREIGN_KEY = ", FOREIGN KEY(";
 	private static final String DATABASE_REFERENCES = ") REFERENCES ";
@@ -150,6 +153,27 @@ public class NusicDatabase extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		if (oldVersion == Constants.APP_VERSION_0_1) {
+			/*
+			 * In v.2.1: Column releases.TYPE_COLUMN_RELEASE_MB_ID now
+			 * corresponds to MusicBrainz's "release group ID" instead of the
+			 * "release id". In order to make sure to avoid inconsistencies and
+			 * because a real migration is way too much effort at this early
+			 * point, we're just going for a clean slate.
+			 */
+			db.execSQL(DATABASE_TABLE_DROP + TABLE_RELEASE);
+			db.execSQL(createTable(TABLE_RELEASE, COLUMN_RELEASE_ID,
+					TYPE_COLUMN_RELEASE_ID, COLUMN_RELEASE_MB_ID,
+					TYPE_COLUMN_RELEASE_MB_ID, COLUMN_RELEASE_NAME,
+					TYPE_COLUMN_RELEASE_NAME, COLUMN_RELEASE_DATE_RELEASED,
+					TYPE_COLUMN_RELEASE_DATE_RELEASED,
+					COLUMN_RELEASE_DATE_CREATED,
+					TYPE_COLUMN_RELEASE_DATE_CREATED,
+					COLUMN_RELEASE_ARTWORK_PATH,
+					TYPE_COLUMN_RELEASE_ARTWORK_PATH,
+					COLUMN_RELEASE_FK_ID_ARTIST,
+					TYPE_COLUMN_RELEASE_FK_ID_ARTIST_FK));
+		}
 		// Nothing yet
 	}
 
@@ -165,8 +189,8 @@ public class NusicDatabase extends SQLiteOpenHelper {
 	 */
 	protected String createTable(String tableName,
 			String... columnsAndTypeTuples) {
-		StringBuffer sql = new StringBuffer(DATABASE_CREATE).append(tableName)
-				.append("(");
+		StringBuffer sql = new StringBuffer(DATABASE_TABLE_CREATE).append(
+				tableName).append("(");
 		int index = 0;
 		sql.append(columnsAndTypeTuples[index++]).append(" ")
 				.append(columnsAndTypeTuples[index++]);

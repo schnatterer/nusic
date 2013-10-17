@@ -142,22 +142,26 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 			ReleaseWs2 releaseResult = releaseResultWs2.getRelease();
 			if (releaseResult.getArtistCredit().getArtistCreditString().trim()
 					.equalsIgnoreCase(artistName.trim())) {
-				if (artist.getMusicBrainzId() == null || artist.getMusicBrainzId().isEmpty()) {
-					artist.setMusicBrainzId(getMusicBrainzId(releaseResult.getArtistCredit()));
+				if (artist.getMusicBrainzId() == null
+						|| artist.getMusicBrainzId().isEmpty()) {
+					artist.setMusicBrainzId(getMusicBrainzId(releaseResult
+							.getArtistCredit()));
 				}
+
 				// Use only the release with the "oldest" date of a release
 				// group
-				Release existingRelease = releases.get(releaseResult.getTitle()
-						.trim());
+				String releaseGroupId = releaseResult.getReleaseGroup().getId()
+						.trim();
+				Release existingRelease = releases.get(releaseGroupId);
 				Date newDate = releaseResult.getDate();
 				if (existingRelease == null) {
 					Release release = new Release();
 					release.setArtist(artist);
 					release.setReleaseName(releaseResult.getTitle());
 					release.setReleaseDate(newDate);
-					release.setMusicBrainzId(releaseResult.getId());
+					release.setMusicBrainzId(releaseGroupId);
 
-					releases.put(releaseResult.getTitle().trim(), release);
+					releases.put(releaseGroupId, release);
 					artist.getReleases().add(release);
 					// TODO store all release dates and their countries?
 				} else {

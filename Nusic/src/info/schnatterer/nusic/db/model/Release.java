@@ -33,13 +33,14 @@ public class Release implements Entity {
 
 	private static final String HTTP = "http://";
 	private static final String HTTPS = "https://";
-	private static final String MUSIC_BRAINZ_BASE_URI = "musicbrainz.org/release/";
+	private static final String MUSIC_BRAINZ_BASE_URI = "musicbrainz.org/release-group/";
 	private static final String MUSIC_BRAINZ_BASE_URI_HTTP = HTTP
 			+ MUSIC_BRAINZ_BASE_URI;
 	private static final String MUSIC_BRAINZ_BASE_URI_HTTPS = HTTPS
 			+ MUSIC_BRAINZ_BASE_URI;
 
 	private Long id;
+	/** MusicBrainz Id of the release group */
 	private String musicBrainzId;
 
 	private Artist artist;
