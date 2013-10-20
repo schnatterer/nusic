@@ -5,12 +5,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>info.schnatterer.nusic</groupId>
 	<artifactId>nusic</artifactId>
-	<version>0.2.1</version>
+	<version>0.2.2</version>
 	<packaging>apk</packaging>
 	<name>nusic</name>
 
 	<properties>
 		<abs.version>4.4.0</abs.version>
+		<final.name>${project.artifactId}-${project.version}</final.name>
 	</properties>
 
 	<!-- Use Profiles to distinguish between the "implicit" builds of the eclipse 
@@ -115,7 +116,7 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>${project.artifactId}-${project.version}</finalName>
+		<finalName>${final.name}</finalName>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
@@ -141,7 +142,7 @@
 						<inherited>true</inherited>
 						<configuration>
 							<includes>
-								<include>target/*.apk</include>
+								<include>${project.build.directory}/${project.artifactId}.apk</include>
 							</includes>
 							<keystore>${sign.keystore}</keystore>
 							<alias>${sign.alias}</alias>
@@ -166,6 +167,15 @@
 				<version>3.6.0</version>
 				<inherited>true</inherited>
 				<extensions>true</extensions>
+				<executions>
+					<execution>
+						<id>alignApk</id>
+						<phase>install</phase>
+						<goals>
+							<goal>zipalign</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
 					<sdk>
 						<!-- targetSdkVersion -->
@@ -184,6 +194,8 @@
 					<zipalign>
 						<skip>false</skip>
 						<verbose>true</verbose>
+						<inputApk>${project.build.directory}/${final.name}.apk</inputApk>
+						<outputApk>${project.build.directory}/${final.name}.apk</outputApk>
 					</zipalign>
 				</configuration>
 			</plugin>

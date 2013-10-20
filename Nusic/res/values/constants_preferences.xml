@@ -18,7 +18,7 @@
     <bool name="preferences_default_full_update">true</bool>
 
     <string name="preferences_key_download_only_on_wifi">onWifiOnly</string>
-    <bool name="preferences_default_download_only_on_wifi">true</bool>
+    <bool name="preferences_default_download_only_on_wifi">false</bool>
 
     <string name="preferences_key_refresh_period">refreshPeriod</string>
     <string name="preferences_default_refresh_period">1</string>
