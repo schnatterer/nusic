@@ -8,7 +8,8 @@ Note that this app is not optimized for tablets, yet. Please be patient.
 Please report any issues [here] (https://github.com/schnatterer/nusic/issues).
 
 ## Download
-You can download the APK from [here] (https://schnatterer.github.com/nusic/release/current)
+You can download the APK from [GitHub] (https://schnatterer.github.com/nusic/release/current) or from [Google Play](https://play.google.com/store/apps/details?id=info.schnatterer.nusic)
+[![Google Play Logo](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=info.schnatterer.nusic)
 
 ## Licenses
 Copyright © 2013 Johannes Schnatterer. Licensed under the GNU General Public License Version 3.
