@@ -1,22 +1,28 @@
 nusic - your new music
 =====
 Never again miss a new album release of your favorite artists - always stay informed by nusic.
+
 nusic uses [MusicBrainz](http://musicbrainz.org/) - the free music encyclopedia - to find out about new releases of the artists on your phone.
+
 No account necessary.
+
 Note that this app is not optimized for tablets, yet. Please be patient.
 
 Please report any issues [here] (https://github.com/schnatterer/nusic/issues).
 
 ## Download
-You can download the APK from [GitHub] (https://schnatterer.github.com/nusic/release/current) or from [Google Play](https://play.google.com/store/apps/details?id=info.schnatterer.nusic)
+You can download the lates version as APK from [GitHub] (https://schnatterer.github.com/nusic/release/current) or get the app directly from [Google Play](https://play.google.com/store/apps/details?id=info.schnatterer.nusic).
+
 [![Google Play Logo](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=info.schnatterer.nusic)
 
 ## Licenses
-Copyright © 2013 Johannes Schnatterer. Licensed under the GNU General Public License Version 3.
-See the [License](https://github.com/schnatterer/nusic/blob/master/Nusic/LICENSE.txt) and the [licenses of dependencies](https://github.com/schnatterer/nusic/blob/master/Nusic/NOTICE.txt)
+Copyright © 2013 Johannes Schnatterer.
+
+Licensed under the GNU General Public License Version 3.
+See the [License](https://github.com/schnatterer/nusic/blob/master/Nusic/LICENSE.txt) and the [licenses of dependencies](https://github.com/schnatterer/nusic/blob/master/Nusic/NOTICE.txt).
 
 ## Release notes
-See [Releases] (https://github.com/schnatterer/nusic/releases)
+See [Releases] (https://github.com/schnatterer/nusic/releases).
 
 ## Build
 ### Maven
