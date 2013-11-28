@@ -11,7 +11,7 @@ Note that this app is not optimized for tablets, yet. Please be patient.
 Please report any issues [here] (https://github.com/schnatterer/nusic/issues).
 
 ## Download
-You can download the lates version as APK from [GitHub] (https://schnatterer.github.com/nusic/release/current) or get the app directly from [Google Play](https://play.google.com/store/apps/details?id=info.schnatterer.nusic).
+You can download the lates version as APK from [GitHub] (releases/latest) or get the app directly from [Google Play](https://play.google.com/store/apps/details?id=info.schnatterer.nusic).
 
 [![Google Play Logo](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=info.schnatterer.nusic)
 
