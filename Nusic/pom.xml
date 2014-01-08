@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>info.schnatterer.nusic</groupId>
 	<artifactId>nusic</artifactId>
-	<version>0.3</version>
+	<version>0.3.1</version>
 	<packaging>apk</packaging>
 	<name>nusic</name>
 
@@ -53,6 +53,7 @@
 					<artifactId>actionbarsherlock</artifactId>
 					<version>${abs.version}</version>
 					<type>jar</type>
+					<scope>provided</scope>
 					<exclusions>
 						<exclusion>
 							<groupId>com.google.android</groupId>
