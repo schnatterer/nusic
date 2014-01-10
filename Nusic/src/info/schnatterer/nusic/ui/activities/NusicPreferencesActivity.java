@@ -24,7 +24,7 @@ import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.service.event.PreferenceChangedListener;
 import info.schnatterer.nusic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.nusic.ui.fragments.NusicPreferencesFragment;
-import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -62,7 +62,7 @@ public class NusicPreferencesActivity extends PreferenceActivity {
 	 * Wraps {@link #onCreate(Bundle)} code for Android >= 3 (i.e. API lvl >=
 	 * 11).
 	 */
-	@SuppressLint("NewApi")
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void onCreatePreferenceFragment() {
 		getFragmentManager().beginTransaction()
 				.replace(android.R.id.content, new NusicPreferencesFragment())
