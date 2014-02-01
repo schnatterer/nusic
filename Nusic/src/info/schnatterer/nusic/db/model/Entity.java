@@ -20,7 +20,7 @@
  */
 package info.schnatterer.nusic.db.model;
 
-import info.schnatterer.nusic.db.dao.impl.AbstractSqliteDao;
+import info.schnatterer.nusic.db.dao.sqlite.AbstractSqliteDao;
 
 public interface Entity {
 	Long getId();

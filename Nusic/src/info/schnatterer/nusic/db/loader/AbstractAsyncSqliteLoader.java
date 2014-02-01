@@ -21,7 +21,7 @@
 package info.schnatterer.nusic.db.loader;
 
 import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.db.dao.impl.AbstractSqliteDao;
+import info.schnatterer.nusic.db.dao.sqlite.AbstractSqliteDao;
 import info.schnatterer.nusic.db.model.Entity;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;

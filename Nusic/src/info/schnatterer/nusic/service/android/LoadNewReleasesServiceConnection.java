@@ -21,7 +21,7 @@
 package info.schnatterer.nusic.service.android;
 
 import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.service.ReleasesService;
+import info.schnatterer.nusic.service.ReleaseRefreshService;
 import info.schnatterer.nusic.service.android.LoadNewReleasesService.LoadNewReleasesServiceBinder;
 import info.schnatterer.nusic.service.event.ArtistProgressListener;
 import android.content.ComponentName;
@@ -70,7 +70,7 @@ public class LoadNewReleasesServiceConnection implements ServiceConnection {
 	 *            <code>true</code>)<br/>
 	 * 
 	 *            if <code>true</code> the refresh is only done when
-	 *            {@link ReleasesService#isUpdateNeccesarry()} returns
+	 *            {@link ReleaseRefreshService#isUpdateNeccesarry()} returns
 	 *            <code>true</code>. Otherwise, the refresh is done at any case.
 	 * 
 	 * @return

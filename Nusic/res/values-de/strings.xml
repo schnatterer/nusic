@@ -19,7 +19,7 @@
     <!-- Prefrences -->
     <string name="preferences_category_releases">Alben</string>
     <string name="preferences_title_download_releases_time_period">Zeitspanne</string>
-    <string name="preferences_summary_download_releases_time_period">Zurückliegende Zeitspanne vom heutigen Datum aus, für die die Alben heruntergeladen und angezeigt werden sollen</string>
+    <string name="preferences_summary_download_releases_time_period">Zurückliegende Zeitspanne vom heutigen Datum aus, für die Alben heruntergeladen und angezeigt werden sollen</string>
     <string-array name="preferences_entries_download_releases_time_period">
         <item>Ein Monat</item>
         <item>Drei Monate</item>
@@ -42,7 +42,6 @@
     <string name="MainActivity_refreshAlreadyInProgress">Aktualisierung bereits im Gange</string>
     <string name="MainActivity_pleaseWaitUntilRefreshIsFinished">Bitte warten bis die Aktualisierung der Alben abgeschlossen ist.</string>
         
-    <string name="ArtistQueryService_errorLoadingArtists">Fehler beim Laden der Interpreten vom Gerät</string>
     <string name="ReleasesService_errorPersistingData">Fehler beim Speichern der Daten auf dem Gerät</string>
     <string name="LoadNewReleasesBinding_errorFindingReleases">Aktualisieren der Alben fehlgeschlagen: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">Unfassbarer Fehler beim Aktualiseren der Alben: </string>
@@ -51,6 +50,11 @@
         <item quantity="one">%1$d neues Album gefunden.</item>
         <item quantity="other">%1$d neue Alben gefunden</item>
     </plurals>
-    <string name="QueryMusicMetadataService_errorFindingReleasesArtist">Fehler beim Finden von Alben für Interpret %1$s</string>
-    <string name="QueryMusicMetadataService_errorQueryingMusicBrainz">Fehler beim Abfrage der Alben des Interpreten %1$s im Internet. Keine Verbindung zum Internet?</string>
+    
+    <string name="ServiceException_errorLoadingArtists">Fehler beim Laden der Interpreten vom Gerät</string>
+    <string name="ServiceException_errorFindingReleasesArtist">Fehler beim Finden von Alben für Interpret %1$s</string>
+    <string name="ServiceException_errorQueryingMusicBrainz">Fehler beim Abfrage der Alben des Interpreten %1$s im Internet. Keine Verbindung zum Internet?</string>
+    <string name="ServiceException_errorReadingFromDb">Fehler beim Lesen von der Anwendungsdatenbank</string>
+    <string name="ServiceException_errorWritingToDb">Fehler beim Schreiben in die Anwendungsdatenbank</string>
+    
 </resources>

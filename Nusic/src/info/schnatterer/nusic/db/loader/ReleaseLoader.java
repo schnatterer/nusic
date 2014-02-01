@@ -20,7 +20,7 @@
  */
 package info.schnatterer.nusic.db.loader;
 
-import info.schnatterer.nusic.db.dao.impl.ReleaseDaoSqlite;
+import info.schnatterer.nusic.db.dao.sqlite.ReleaseDaoSqlite;
 import info.schnatterer.nusic.db.model.Release;
 
 import java.util.Date;

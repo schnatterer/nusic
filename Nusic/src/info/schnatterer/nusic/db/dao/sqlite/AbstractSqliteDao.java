@@ -18,11 +18,10 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.db.dao.impl;
+package info.schnatterer.nusic.db.dao.sqlite;
 
-import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.db.DatabaseException;
-import info.schnatterer.nusic.db.NusicDatabase;
+import info.schnatterer.nusic.db.NusicDatabaseSqlite;
 import info.schnatterer.nusic.db.dao.GenericDao;
 import info.schnatterer.nusic.db.model.Entity;
 import android.content.AsyncTaskLoader;
@@ -33,7 +32,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.os.CancellationSignal;
 import android.provider.BaseColumns;
-import android.util.Log;
 
 /**
  * Wraps the {@link SQLiteDatabase} object as well as the {@link Cursor} and
@@ -50,19 +48,15 @@ import android.util.Log;
  */
 public abstract class AbstractSqliteDao<T extends Entity> implements
 		GenericDao<T> {
-	// private Context context;
 	private SQLiteDatabase db;
 
 	private Cursor cursor = null;
 	private Context context;
 
-	// private Set<DataChangedListener> listeners = new
-	// HashSet<DataChangedListener>();
-
 	public AbstractSqliteDao(Context context) {
 		this.context = context;
 		// Opens database connection
-		db = NusicDatabase.getInstance().getWritableDatabase();
+		db = NusicDatabaseSqlite.getInstance().getWritableDatabase();
 	}
 
 	/**
@@ -100,42 +94,6 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
 	public abstract String getTableName();
 
 	protected abstract Long getId(T entity);
-
-	protected void putIfNotNull(ContentValues values, String column,
-			Object value) {
-		if (value == null || values == null) {
-			return;
-		}
-		/*
-		 * Thanks for not providing a put(String,Object) method to the
-		 * Map<String,Object>!!
-		 */
-		if (value instanceof Byte) {
-			values.put(column, (Byte) value);
-		} else if (value instanceof Short) {
-			values.put(column, (Short) value);
-		} else if (value instanceof Integer) {
-			values.put(column, (Integer) value);
-		} else if (value instanceof Long) {
-			values.put(column, (Long) value);
-		} else if (value instanceof Float) {
-			values.put(column, (Float) value);
-		} else if (value instanceof Double) {
-			values.put(column, (Double) value);
-		} else if (value instanceof Boolean) {
-			values.put(column, (Boolean) value);
-		} else if (value instanceof byte[]) {
-			values.put(column, (byte[]) value);
-		} else if (value instanceof String) {
-			values.put(column, (String) value);
-		} else {
-			// Hope for the best and convert it to a string
-			Log.w(Constants.LOG, "Column: " + column
-					+ "Trying to put non primitive value to ContentValues: "
-					+ value + ". Converting to string.");
-			values.put(column, value.toString());
-		}
-	}
 
 	@Override
 	public long save(T entity) throws DatabaseException {
@@ -194,35 +152,6 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
 		this.cursor = cursor;
 		return cursor;
 	}
-
-	// /**
-	// * Allows other DAOs to use this one's queries within the same database
-	// * connection.
-	// *
-	// * @param db
-	// */
-	// public AbstractSqliteDao(SQLiteDatabase db) {
-	// this.db = db;
-	// }
-	//
-	// /**
-	// * Opens the database for writing.
-	// */
-	// public void openDb() {
-	// if (nusicDb != null && db != null) {
-	// db = nusicDb.getWritableDatabase();
-	// }
-	// }
-	//
-	// /**
-	// * Closes the database. Note: This might be expensive!
-	// */
-	// public void closeDb() {
-	// if (nusicDb != null && db != null) {
-	// nusicDb.close();
-	// db = null;
-	// }
-	// }
 
 	/**
 	 * Delegates to

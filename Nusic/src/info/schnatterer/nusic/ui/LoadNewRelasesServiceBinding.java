@@ -24,7 +24,7 @@ import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.db.model.Artist;
-import info.schnatterer.nusic.service.ReleasesService;
+import info.schnatterer.nusic.service.ReleaseRefreshService;
 import info.schnatterer.nusic.service.ServiceException;
 import info.schnatterer.nusic.service.android.LoadNewReleasesService;
 import info.schnatterer.nusic.service.android.LoadNewReleasesServiceConnection;
@@ -43,8 +43,8 @@ import android.util.Log;
 /**
  * Holds the binding to the {@link LoadNewReleasesService} via
  * {@link LoadNewReleasesServiceConnection}. Allows for executing the service
- * method {@link ReleasesService#refreshReleases(boolean)} and visualizes its
- * result in a {@link ProgressDialog}.
+ * method {@link ReleaseRefreshService#refreshReleases(boolean)} and visualizes
+ * its result in a {@link ProgressDialog}.
  * 
  * @author schnatterer
  * 
@@ -67,7 +67,7 @@ public class LoadNewRelasesServiceBinding {
 	private boolean isDataChanged = false;
 
 	/**
-	 * Executes {@link ReleasesService#refreshReleases(boolean)} within
+	 * Executes {@link ReleaseRefreshService#refreshReleases(boolean)} within
 	 * {@link LoadNewReleasesService} in a separate thread.
 	 * 
 	 * @param activity
@@ -148,7 +148,7 @@ public class LoadNewRelasesServiceBinding {
 	 */
 	public void unbindService() {
 		if (loadNewReleasesServiceConnection != null) {
-			Log.d(Constants.LOG, "Undinding service");
+			Log.d(Constants.LOG, "Unbinding service");
 			loadNewReleasesServiceConnection.unbind();
 			loadNewReleasesServiceConnection = null;
 		}

@@ -20,12 +20,12 @@
  */
 package info.schnatterer.nusic.test.db;
 
-import info.schnatterer.nusic.db.NusicDatabase;
+import info.schnatterer.nusic.db.NusicDatabaseSqlite;
 import junit.framework.TestCase;
 
 public class NusicDatabaseTest extends TestCase {
 
-	private class TestNusicDatabase extends NusicDatabase {
+	private class TestNusicDatabase extends NusicDatabaseSqlite {
 		public TestNusicDatabase() {
 			super(null);
 		}

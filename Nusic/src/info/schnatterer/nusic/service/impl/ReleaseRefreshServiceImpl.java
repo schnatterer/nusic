@@ -23,14 +23,13 @@ package info.schnatterer.nusic.service.impl;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.db.DatabaseException;
-import info.schnatterer.nusic.db.dao.ArtistDao;
-import info.schnatterer.nusic.db.dao.impl.ArtistDaoSqlite;
 import info.schnatterer.nusic.db.model.Artist;
 import info.schnatterer.nusic.service.ArtistQueryService;
+import info.schnatterer.nusic.service.ArtistService;
 import info.schnatterer.nusic.service.PreferencesService;
 import info.schnatterer.nusic.service.PreferencesService.AppStart;
 import info.schnatterer.nusic.service.QueryMusicMetadataService;
-import info.schnatterer.nusic.service.ReleasesService;
+import info.schnatterer.nusic.service.ReleaseRefreshService;
 import info.schnatterer.nusic.service.ServiceException;
 import info.schnatterer.nusic.service.event.ArtistProgressListener;
 import info.schnatterer.nusic.service.event.ProgressListener;
@@ -45,24 +44,24 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.util.Log;
 
-public class ReleasesServiceImpl implements ReleasesService {
+public class ReleaseRefreshServiceImpl implements ReleaseRefreshService {
 	private Context context;
 	private QueryMusicMetadataService queryMusicMetadataService = new QueryMusicMetadataServiceMusicBrainz();
 	private ArtistQueryService artistQueryService = new ArtistQueryServiceImpl();
 	private PreferencesService preferencesService = PreferencesServiceSharedPreferences
 			.getInstance();
 
-	private ArtistDao artistDao = null;
+	private ArtistService artistService = null;
 
 	private Set<ProgressListener<Artist, Boolean>> listenerList = new HashSet<ProgressListener<Artist, Boolean>>();
 	private ProgressUpdater<Artist, Boolean> progressUpdater = new ProgressUpdater<Artist, Boolean>(
 			listenerList) {
 	};
 
-	public ReleasesServiceImpl(Context context) {
+	public ReleaseRefreshServiceImpl(Context context) {
 		this.context = context;
 		if (context != null) {
-			this.artistDao = new ArtistDaoSqlite(context);
+			this.artistService = new ArtistServiceImpl(context);
 		}
 	}
 
@@ -169,7 +168,7 @@ public class ReleasesServiceImpl implements ReleasesService {
 					// Constants.LASTFM_API_KEY);
 
 					if (artist.getReleases().size() > 0) {
-						artistDao.saveOrUpdate(artist);
+						artistService.saveOrUpdate(artist);
 						// After saving, release memory for releases
 
 						// for (Release release : artist.getReleases()) {
@@ -184,18 +183,17 @@ public class ReleasesServiceImpl implements ReleasesService {
 				} catch (ServiceException e) {
 					Log.w(Constants.LOG, e.getMessage(), e.getCause());
 					// Allow for displaying errors to the user.
+					if (e.getCause() instanceof DatabaseException) {
+						progressUpdater
+								.progressFailed(
+										artist,
+										i + 1,
+										new ServiceException(
+												R.string.ReleasesService_errorPersistingData,
+												e), null);
+						return;
+					}
 					potentialException = e;
-				} catch (DatabaseException databaseException) {
-					Log.w(Constants.LOG, databaseException.getMessage(),
-							databaseException.getCause());
-					progressUpdater
-							.progressFailed(
-									artist,
-									i + 1,
-									new ServiceException(
-											R.string.ReleasesService_errorPersistingData,
-											databaseException), null);
-					return;
 				} catch (Throwable t) {
 					Log.w(Constants.LOG, t);
 					progressUpdater.progressFailed(artist, i + 1, t, null);

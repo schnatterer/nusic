@@ -24,17 +24,18 @@ import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.db.DatabaseException;
-import info.schnatterer.nusic.db.dao.impl.ReleaseDaoSqlite;
 import info.schnatterer.nusic.db.model.Artist;
 import info.schnatterer.nusic.db.model.Release;
 import info.schnatterer.nusic.service.ConnectivityService;
 import info.schnatterer.nusic.service.PreferencesService;
-import info.schnatterer.nusic.service.ReleasesService;
+import info.schnatterer.nusic.service.ReleaseRefreshService;
+import info.schnatterer.nusic.service.ReleaseService;
 import info.schnatterer.nusic.service.ServiceException;
 import info.schnatterer.nusic.service.event.ArtistProgressListener;
 import info.schnatterer.nusic.service.impl.ConnectivityServiceAndroid;
 import info.schnatterer.nusic.service.impl.PreferencesServiceSharedPreferences;
-import info.schnatterer.nusic.service.impl.ReleasesServiceImpl;
+import info.schnatterer.nusic.service.impl.ReleaseRefreshServiceImpl;
+import info.schnatterer.nusic.service.impl.ReleaseServiceImpl;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -53,25 +54,21 @@ import android.util.Log;
 
 /**
  * Wraps the android implementation of the business logic service
- * {@link ReleasesService} in an android {@link Service} in order to allow
+ * {@link ReleaseRefreshService} in an android {@link Service} in order to allow
  * running outside of the application. In addition takes care of the scheduling.
  * 
  * @author schnatterer
  * 
  */
 public class LoadNewReleasesService extends WakefulService {
-	// public static final String ARG_UPDATE_ONLY_IF_NECESSARY =
-	// "updateOnlyIfNeccesary";
 	public static final String ARG_REFRESH_ON_START = "refreshOnStart";
 
-	// public LoadNewReleasesService() {
-	// super(LoadNewReleasesService.class.getSimpleName() + "WorkerThread");
-	// }
 	private static PreferencesService preferencesService = PreferencesServiceSharedPreferences
 			.getInstance();
 	private ConnectivityService connectivityService = ConnectivityServiceAndroid
 			.getInstance();
-	private ReleasesService releasesService;
+	private ReleaseRefreshService releasesService;
+	private ReleaseService releaseService = new ReleaseServiceImpl(this);
 
 	private List<Artist> errorArtists;
 	private int totalArtists = 0;
@@ -135,7 +132,7 @@ public class LoadNewReleasesService extends WakefulService {
 	 * 
 	 * @param updateOnlyIfNeccesary
 	 *            if <code>true</code> the refresh is only done when
-	 *            {@link ReleasesService#isUpdateNeccesarry()} returns
+	 *            {@link ReleaseRefreshService#isUpdateNeccesarry()} returns
 	 *            <code>true</code>. Otherwise, the refresh is done at any case.
 	 * @param artistProcessedListener
 	 * @return <code>true</code> if refresh was started. <code>false</code> if
@@ -229,7 +226,7 @@ public class LoadNewReleasesService extends WakefulService {
 							preferencesService.getRefreshPeriod(), null);
 					try {
 						notifyNewReleases(beforeRefresh);
-					} catch (DatabaseException e) {
+					} catch (ServiceException e) {
 						// Refresh succeeded, so don't tell user
 						Log.w(Constants.LOG,
 								"Refresh succeeded, but databse error when trying to find out about new releases",
@@ -253,8 +250,8 @@ public class LoadNewReleasesService extends WakefulService {
 	 * @param beforeRefresh
 	 * @throws DatabaseException
 	 */
-	private void notifyNewReleases(Date beforeRefresh) throws DatabaseException {
-		List<Release> newReleases = new ReleaseDaoSqlite(this)
+	private void notifyNewReleases(Date beforeRefresh) throws ServiceException {
+		List<Release> newReleases = releaseService
 				.findJustCreated(beforeRefresh);
 		if (newReleases.size() > 0) {
 			Application.notifyInfo(getResources().getQuantityString(
@@ -441,9 +438,9 @@ public class LoadNewReleasesService extends WakefulService {
 		}
 	}
 
-	protected ReleasesService getReleasesService() {
+	protected ReleaseRefreshService getReleasesService() {
 		if (releasesService == null) {
-			releasesService = new ReleasesServiceImpl(this);
+			releasesService = new ReleaseRefreshServiceImpl(this);
 		}
 
 		return releasesService;

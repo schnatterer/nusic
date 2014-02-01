@@ -96,13 +96,13 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 			}
 		} catch (MBWS2Exception mBWS2Exception) {
 			throw new ServiceException(
-					R.string.QueryMusicMetadataService_errorQueryingMusicBrainz,
+					R.string.ServiceException_errorQueryingMusicBrainz,
 					mBWS2Exception, artistName);
 		} catch (SecurityException securityException) {
 			throw securityException;
 		} catch (Throwable t) {
 			throw new ServiceException(
-					R.string.QueryMusicMetadataService_errorFindingReleasesArtist,
+					R.string.ServiceException_errorFindingReleasesArtist,
 					t, artistName);
 		}
 		return artist;

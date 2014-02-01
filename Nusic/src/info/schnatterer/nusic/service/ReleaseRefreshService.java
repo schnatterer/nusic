@@ -27,7 +27,7 @@ import info.schnatterer.nusic.service.event.ArtistProgressListener;
  * @author schnatterer
  * 
  */
-public interface ReleasesService {
+public interface ReleaseRefreshService {
 
 	/**
 	 * Updates the releases in the database from the internet. The time period
@@ -39,7 +39,7 @@ public interface ReleasesService {
 	 * 
 	 * @param updateOnlyIfNeccesary
 	 *            if <code>true</code> the refresh is only done when
-	 *            {@link ReleasesService#isUpdateNeccesarry()} returns
+	 *            {@link ReleaseRefreshService#isUpdateNeccesarry()} returns
 	 *            <code>true</code>. Otherwise, the refresh is done at any case.
 	 * @return <code>false</code> if no update was necessary. Otherwise
 	 *         <code>true</code>.
