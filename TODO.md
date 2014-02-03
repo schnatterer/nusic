@@ -1,20 +1,17 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Feature: Swipen between Tabs
+- Feature: Swipe between Tabs
 - Feature: Info dialog
 - Feature: Tabs: Available, Announced
 - Feature: Use WeakReferences to improve performance while scrolling list: http://stackoverflow.com/questions/3243215/how-to-use-weakreference-in-java-and-android-development
-=== RELEASE v.0.4
+=== RELEASE v.0.5
 
 - Feature: Query and display album covers: Last fm? (See Apollo Music player) or Discogs? Store covers in sqlite oder in file system? Get Last.FM ID/Discogs ID from MusicBrainz?
 === Release v1.0
 
 
 ................... More TODOs
-- Feature: Context menu: Hide Release
-  Manually remove "duplicate" releases (different release group, but same title, e.g. "Deluxe Editions)?
-  -> Context menu, hide album, Hide all by this artists
-  
+- Refactor testing: Maven? JUnit4, separtion of "normal" and android tests?
 - Feature: Tablet optimization: Layout + Screens for 7" + 10"
 
 .....Build
