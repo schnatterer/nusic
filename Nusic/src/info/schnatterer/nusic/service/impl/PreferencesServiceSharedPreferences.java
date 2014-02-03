@@ -115,20 +115,11 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	 * Creates a {@link PreferencesService} the default shared preferences.
 	 */
 	protected PreferencesServiceSharedPreferences() {
-		this(PreferenceManager.getDefaultSharedPreferences(getContext()));
-	}
-
-	/**
-	 * Creates a {@link PreferencesService} that uses specific shared
-	 * preferences.
-	 * 
-	 * Useful for testing.
-	 */
-	protected PreferencesServiceSharedPreferences(
-			SharedPreferences sharedPrefernces) {
 		// PreferencesServiceSharedPreferences.context = context;
-		this.sharedPreferences = sharedPrefernces;
-		if (sharedPrefernces != null) {
+		this.sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(getContext());
+
+		if (sharedPreferences != null) {
 			sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 		}
 
@@ -257,8 +248,7 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 
 	@Override
 	public boolean setLastReleaseRefresh(Date date) {
-		return sharedPreferences
-				.edit()
+		return sharedPreferences.edit()
 				.putLong(KEY_LAST_RELEASES_REFRESH, DateUtil.toLong(date))
 				.commit();
 	}
@@ -275,8 +265,7 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 
 	@Override
 	public boolean setNextReleaseRefresh(Date date) {
-		return sharedPreferences
-				.edit()
+		return sharedPreferences.edit()
 				.putLong(KEY_NEXT_RELEASES_REFRESH, DateUtil.toLong(date))
 				.commit();
 	}
