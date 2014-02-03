@@ -22,10 +22,28 @@ package info.schnatterer.nusic.db.dao;
 
 import info.schnatterer.nusic.db.DatabaseException;
 import info.schnatterer.nusic.db.model.Entity;
+import android.content.ContentValues;
 
 public interface GenericDao<T extends Entity> {
 
 	long save(T entity) throws DatabaseException;
 
 	int update(T entity) throws DatabaseException;
+
+	/**
+	 * Convenience method for updating rows in the database. This is useful when
+	 * updating more than one row at a time. To update only one row, consider
+	 * using {@link #update(Entity)}.
+	 * 
+	 * @param values
+	 *            a map from column names to new column values. null is a valid
+	 *            value that will be translated to NULL.
+	 * @param whereClause
+	 *            the optional WHERE clause to apply when updating. Passing null
+	 *            will update all rows.
+	 * @return the number of rows affected
+	 * @throws DatabaseException
+	 */
+	int update(ContentValues values, String whereClause, String[] whereArgs)
+			throws DatabaseException;
 }

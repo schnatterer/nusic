@@ -90,8 +90,7 @@ public class ServiceException extends Exception {
 	 * @param t
 	 */
 	public ServiceException(int messageId) {
-		this(DefaultLocale.getStringInDefaultLocale(messageId),
-				messageId);
+		this(DefaultLocale.getStringInDefaultLocale(messageId), messageId);
 	}
 
 	/**
@@ -171,6 +170,12 @@ public class ServiceException extends Exception {
 	 * @param t
 	 */
 	public ServiceException(int messageId, Throwable cause, Object... args) {
-		this(String.format(Locale.US, DefaultLocale.getStringInDefaultLocale(messageId), args), messageId, cause, args);
+		this(String.format(Locale.US,
+				DefaultLocale.getStringInDefaultLocale(messageId), args),
+				messageId, cause, args);
+	}
+
+	public int getLocalizedMessageId() {
+		return localizedMessageId;
 	}
 }

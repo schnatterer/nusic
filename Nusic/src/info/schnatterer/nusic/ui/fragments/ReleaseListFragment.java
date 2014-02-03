@@ -20,29 +20,42 @@
  */
 package info.schnatterer.nusic.ui.fragments;
 
+import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.db.loader.AsyncResult;
 import info.schnatterer.nusic.db.loader.ReleaseLoader;
+import info.schnatterer.nusic.db.model.Artist;
 import info.schnatterer.nusic.db.model.Release;
+import info.schnatterer.nusic.service.ArtistService;
 import info.schnatterer.nusic.service.PreferencesService;
+import info.schnatterer.nusic.service.ReleaseRefreshService;
+import info.schnatterer.nusic.service.ReleaseService;
+import info.schnatterer.nusic.service.ServiceException;
+import info.schnatterer.nusic.service.impl.ArtistServiceImpl;
 import info.schnatterer.nusic.service.impl.PreferencesServiceSharedPreferences;
+import info.schnatterer.nusic.service.impl.ReleaseRefreshServiceImpl;
+import info.schnatterer.nusic.service.impl.ReleaseServiceImpl;
 import info.schnatterer.nusic.ui.adapters.ReleaseListAdapter;
 
 import java.util.Calendar;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -68,6 +81,9 @@ public class ReleaseListFragment extends SherlockFragment {
 	/** Progress animation when loading releases from db */
 	private ProgressBar progressBar;
 	private int loaderId;
+	private ReleaseRefreshService releaseRefreshService;
+	private ReleaseService releaseService;
+	private ArtistService artistService;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -95,12 +111,13 @@ public class ReleaseListFragment extends SherlockFragment {
 
 		releasesListView = (ListView) view.findViewById(R.id.releasesListView);
 
+		registerForContextMenu(releasesListView);
 		releasesListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> a, View v, int position,
 					long id) {
-				Object o = releasesListView.getItemAtPosition(position);
-				Release release = (Release) o;
+				Release release = (Release) releasesListView
+						.getItemAtPosition(position);
 				Intent launchBrowser = new Intent(Intent.ACTION_VIEW, Uri
 						.parse(release.getMusicBrainzUri()));
 				startActivity(launchBrowser);
@@ -118,11 +135,47 @@ public class ReleaseListFragment extends SherlockFragment {
 	}
 
 	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		if (isVisible()) {
-			foreceLoad();
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		// if (v.getId() == R.id.releasesListView) {
+		MenuInflater inflater = getSherlockActivity().getMenuInflater();
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+		Release release = (Release) releasesListView
+				.getItemAtPosition(info.position);
+		menu.setHeaderTitle(release.getArtistName() + " - "
+				+ release.getReleaseName());
+
+		inflater.inflate(R.menu.release_list_menu, menu);
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+				.getMenuInfo();
+		Release release = (Release) releasesListView
+				.getItemAtPosition(info.position);
+		try {
+			switch (item.getItemId()) {
+			case R.id.releaseListMenuHideRelease:
+				release.setHidden(true);
+				getReleaseService().update(release);
+				getActivity().onContentChanged();
+				break;
+			case R.id.releaseListMenuHideAllByArtist:
+				Artist artist = release.getArtist();
+				artist.setHidden(true);
+				getArtistService().update(artist);
+				getActivity().onContentChanged();
+				break;
+			default:
+				return super.onContextItemSelected(item);
+			}
+		} catch (ServiceException e) {
+			Log.w(Constants.LOG, "Error hiding release/artist", e);
+			Application.toast(e.getLocalizedMessageId());
 		}
+		return false;
 	}
 
 	protected void setReleases(List<Release> result) {
@@ -143,21 +196,39 @@ public class ReleaseListFragment extends SherlockFragment {
 	}
 
 	/**
-	 * Triggers reloading the releases from database. If they didn't change
-	 * (that is {@link Loader#onContentChanged()} hasn't been called), no actual
-	 * load is performed.
-	 */
-	public void foreceLoad() {
-		displayLoading();
-		getActivity().getSupportLoaderManager().getLoader(loaderId).forceLoad();
-	}
-
-	/**
 	 * Marks content as changed, which leads to reloading on the next load.
 	 */
 	public void onContentChanged() {
+		if (isVisible()) {
+			displayLoading();
+		}
 		getActivity().getSupportLoaderManager().getLoader(loaderId)
 				.onContentChanged();
+	}
+
+	protected ReleaseRefreshService getReleaseRefreshService() {
+		if (releaseRefreshService == null) {
+			releaseRefreshService = new ReleaseRefreshServiceImpl(
+					getSherlockActivity());
+		}
+
+		return releaseRefreshService;
+	}
+
+	protected ReleaseService getReleaseService() {
+		if (releaseService == null) {
+			releaseService = new ReleaseServiceImpl(getSherlockActivity());
+		}
+
+		return releaseService;
+	}
+
+	protected ArtistService getArtistService() {
+		if (artistService == null) {
+			artistService = new ArtistServiceImpl(getSherlockActivity());
+		}
+
+		return artistService;
 	}
 
 	/**

@@ -25,7 +25,7 @@ import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.service.PreferencesService;
 import info.schnatterer.nusic.service.event.PreferenceChangedListener;
-import info.schnatterer.nusic.util.DateUtils;
+import info.schnatterer.nusic.util.DateUtil;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -252,14 +252,14 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 		if (lastReleaseRefreshMillis == 0) {
 			return DEFAULT_LAST_RELEASES_REFRESH;
 		}
-		return DateUtils.loadDate(lastReleaseRefreshMillis);
+		return DateUtil.toDate(lastReleaseRefreshMillis);
 	}
 
 	@Override
 	public boolean setLastReleaseRefresh(Date date) {
 		return sharedPreferences
 				.edit()
-				.putLong(KEY_LAST_RELEASES_REFRESH, DateUtils.persistDate(date))
+				.putLong(KEY_LAST_RELEASES_REFRESH, DateUtil.toLong(date))
 				.commit();
 	}
 
@@ -270,14 +270,14 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 		if (nextReleaseRefreshMillis == 0) {
 			return DEFAULT_NEXT_RELEASES_REFRESH;
 		}
-		return DateUtils.loadDate(nextReleaseRefreshMillis);
+		return DateUtil.toDate(nextReleaseRefreshMillis);
 	}
 
 	@Override
 	public boolean setNextReleaseRefresh(Date date) {
 		return sharedPreferences
 				.edit()
-				.putLong(KEY_NEXT_RELEASES_REFRESH, DateUtils.persistDate(date))
+				.putLong(KEY_NEXT_RELEASES_REFRESH, DateUtil.toLong(date))
 				.commit();
 	}
 

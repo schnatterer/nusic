@@ -24,17 +24,16 @@ import java.util.Date;
 
 import junit.framework.TestCase;
 
-public final class DateUtilsTest extends TestCase {
+public final class DateUtilTest extends TestCase {
 	public static final int ADD_MINUTES = 42;
 	private static final int MILLIS_TO_MINUTES = 1000 * 60;
 
 	public void testAddMinutes() {
 		long testStartMillis = new Date().getTime();
-		long actualTime = DateUtils.addMinutes(ADD_MINUTES).getTime();
-		long expectedTime = testStartMillis + (ADD_MINUTES
-				* MILLIS_TO_MINUTES);
+		long actualTime = DateUtil.addMinutes(ADD_MINUTES).getTime();
+		long expectedTime = testStartMillis + (ADD_MINUTES * MILLIS_TO_MINUTES);
 
-		assertTrue("Added time amout is not great enough",
+		assertTrue("Added time amount is not great enough",
 				actualTime >= expectedTime);
 	}
 }

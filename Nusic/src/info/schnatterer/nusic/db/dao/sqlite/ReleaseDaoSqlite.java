@@ -26,6 +26,7 @@ import info.schnatterer.nusic.db.NusicDatabaseSqlite.TableRelease;
 import info.schnatterer.nusic.db.dao.ReleaseDao;
 import info.schnatterer.nusic.db.model.Artist;
 import info.schnatterer.nusic.db.model.Release;
+import info.schnatterer.nusic.db.util.SqliteUtil;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -54,13 +55,25 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 			.append(TableArtist.NAME).append(".").append(TableArtist.COLUMN_ID)
 			.toString();
 
-	public static final String QUERY_ALL_ORDER_RELEASE_DATE_ASC = new StringBuilder(
-			QUERY_ALL).append(ORDER_BY_RELEASE_DATE_ASC).toString();
+	public static final String QUERY_NOT_HIDDEN = new StringBuilder(QUERY_ALL)
+			.append(" WHERE (").append(TableRelease.NAME).append(".")
+			.append(TableRelease.COLUMN_IS_HIDDEN).append(" IS NULL OR ")
+			.append(TableRelease.NAME).append(".")
+			.append(TableRelease.COLUMN_IS_HIDDEN).append("!=")
+			.append(SqliteUtil.TRUE).append(") AND (").append(TableArtist.NAME)
+			.append(".").append(TableArtist.COLUMN_IS_HIDDEN)
+			.append(" IS NULL OR ").append(TableArtist.NAME).append(".")
+			.append(TableArtist.COLUMN_IS_HIDDEN).append("!=")
+			.append(SqliteUtil.TRUE).append(")").toString();
+
+	public static final String QUERY_NOT_HIDDEN_ORDER_RELEASE_DATE_ASC = new StringBuilder(
+			QUERY_NOT_HIDDEN).append(ORDER_BY_RELEASE_DATE_ASC).toString();
 
 	public static final String QUERY_BY_RELEASE_DATE_ORDER_BY_DATE_ASC = new StringBuilder(
-			QUERY_ALL).append(" WHERE ").append(TableRelease.NAME).append(".")
-			.append(TableRelease.COLUMN_RELEASEDATE_CREATED).append(">")
-			.append(" ?").append(ORDER_BY_RELEASE_DATE_ASC).toString();
+			QUERY_NOT_HIDDEN).append(" AND ").append(TableRelease.NAME)
+			.append(".").append(TableRelease.COLUMN_RELEASEDATE_CREATED)
+			.append(">").append(" ?").append(ORDER_BY_RELEASE_DATE_ASC)
+			.toString();
 
 	public ReleaseDaoSqlite(Context context) {
 		super(context);
@@ -88,8 +101,8 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 	}
 
 	@Override
-	public List<Release> findAll() throws DatabaseException {
-		return executeQuery(QUERY_ALL_ORDER_RELEASE_DATE_ASC, null);
+	public List<Release> findNotHidden() throws DatabaseException {
+		return executeQuery(QUERY_NOT_HIDDEN_ORDER_RELEASE_DATE_ASC, null);
 	}
 
 	@Override
@@ -150,6 +163,13 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 	@Override
 	protected Long getId(Release release) {
 		return release.getId();
+	}
+
+	@Override
+	public void showAll() throws DatabaseException {
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(TableRelease.COLUMN_IS_HIDDEN, SqliteUtil.FALSE);
+		update(contentValues, null, null);
 	}
 
 }

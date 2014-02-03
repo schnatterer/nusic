@@ -18,30 +18,15 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.test.db;
+package info.schnatterer.nusic.db;
 
-import info.schnatterer.nusic.db.NusicDatabaseSqlite;
 import junit.framework.TestCase;
 
 public class NusicDatabaseTest extends TestCase {
 
-	private class TestNusicDatabase extends NusicDatabaseSqlite {
-		public TestNusicDatabase() {
-			super(null);
-		}
-
-		@Override
-		public String createTable(String tableName,
-				String... columnsAndTypeTuples) {
-			return super.createTable(tableName, columnsAndTypeTuples);
-		}
-	};
-
-	private TestNusicDatabase db = new TestNusicDatabase();
-
 	public void testCreateTable() {
 		String expected = "CREATE TABLE testdb(id INTEGER PRIMARY KEY AUTOINCREMENT, someText TEXT NOT NULL);";
-		String actual = db.createTable("testdb", "id",
+		String actual = NusicDatabaseSqlite.createTable("testdb", "id",
 				"INTEGER PRIMARY KEY AUTOINCREMENT", "someText",
 				"TEXT NOT NULL");
 		assertEquals("Unexpected sql query returned", expected, actual);

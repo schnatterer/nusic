@@ -136,6 +136,18 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
 		}
 	}
 
+	@Override
+	public int update(ContentValues values, String whereClause,
+			String[] whereArgs) throws DatabaseException {
+		try {
+			return db.update(getTableName(), values, whereClause, whereArgs);
+		} catch (Throwable t) {
+			throw new DatabaseException("Unable execute update for columns: "
+					+ values + "; Where: " + whereClause + ", Args: "
+					+ whereArgs, t);
+		}
+	}
+
 	protected Context getContext() {
 		return context;
 	}

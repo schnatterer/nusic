@@ -50,6 +50,7 @@ public class Release implements Entity {
 	// private ? releaseType;
 	private Bitmap artwork = null;
 	private String artworkPath = null;
+	private Boolean isHidden;
 
 	public Release() {
 	}
@@ -153,14 +154,6 @@ public class Release implements Entity {
 		this.dateCreated = dateCreated;
 	}
 
-	@Override
-	public String toString() {
-		return "Release [artist=" + artist.getArtistName() + ", releaseName="
-				+ releaseName + ", releaseDate=" + releaseDate
-				+ ", dateCreated=" + dateCreated + ", thumbnail=" + artwork
-				+ "]";
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -177,6 +170,14 @@ public class Release implements Entity {
 		this.musicBrainzId = musicBrainzId;
 	}
 
+	public Boolean isHidden() {
+		return isHidden;
+	}
+
+	public void setHidden(Boolean isHidden) {
+		this.isHidden = isHidden;
+	}
+
 	public String getMusicBrainzUri() {
 		return MUSIC_BRAINZ_BASE_URI_HTTP + getMusicBrainzId();
 	}
@@ -191,4 +192,15 @@ public class Release implements Entity {
 			setDateCreated(new Date());
 
 	}
+
+	@Override
+	public String toString() {
+		return "Release [id=" + id + ", musicBrainzId=" + musicBrainzId
+				+ ", artist=" + getArtistName() + ", releaseName="
+				+ releaseName + ", releaseDate=" + releaseDate
+				+ ", dateCreated=" + dateCreated + ", artwork=" + artwork
+				+ ", artworkPath=" + artworkPath + ", isHidden=" + isHidden
+				+ "]";
+	}
+
 }

@@ -30,10 +30,8 @@ import info.schnatterer.nusic.service.android.LoadNewReleasesService;
 import info.schnatterer.nusic.service.android.LoadNewReleasesServiceConnection;
 import info.schnatterer.nusic.service.event.ArtistProgressListener;
 
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -58,8 +56,6 @@ public class LoadNewRelasesServiceBinding {
 	private ProgressDialog progressDialog = null;
 	private List<Artist> errorArtists;
 	private int totalArtists = 0;
-
-	private Set<FinishedLoadingListener> listeners = new HashSet<FinishedLoadingListener>();
 
 	private LoadNewReleasesServiceConnection loadNewReleasesServiceConnection = null;
 	private ProgressListener artistProcessedListener = new ProgressListener();
@@ -312,22 +308,6 @@ public class LoadNewRelasesServiceBinding {
 	}
 
 	/**
-	 * Notifies others that the service finished and that there might be new
-	 * data.
-	 * 
-	 * @author schnatterer
-	 * 
-	 */
-	public interface FinishedLoadingListener {
-		void onFinishedLoading(boolean resultChanged);
-	}
-
-	public void addFinishedLoadingListener(
-			FinishedLoadingListener dataChangedListener) {
-		listeners.add(dataChangedListener);
-	}
-
-	/**
 	 * Checks if the service has finished and changed data since the last call
 	 * of this method. If so returns <code>true</code> and resets the variable.
 	 * So all subsequent calls to the method will return <code>false</code>
@@ -347,22 +327,18 @@ public class LoadNewRelasesServiceBinding {
 		return false;
 	}
 
-	public boolean removeFinishedLoadingListener(
-			FinishedLoadingListener dataChangedListener) {
-		return listeners.remove(dataChangedListener);
-	}
-
 	protected void notifyListeners(Boolean resultChanged) {
 		boolean primitiveResult = true;
-		Log.d(Constants.LOG, "Service: Notifying listeners. ResultChanged="
-				+ resultChanged + ". Listeners=" + listeners);
+		Log.d(Constants.LOG,
+				"Service: Notifying activity if result changed. ResultChanged="
+						+ resultChanged + ". Activity=" + activity);
 		// Be defensive: Only if explicitly nothing changed
 		if (resultChanged != null && resultChanged.equals(false)) {
 			primitiveResult = false;
 		}
 		isDataChanged = primitiveResult;
-		for (FinishedLoadingListener listener : listeners) {
-			listener.onFinishedLoading(primitiveResult);
+		if (isDataChanged && activity != null) {
+			activity.onContentChanged();
 		}
 	}
 }

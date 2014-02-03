@@ -1,5 +1,6 @@
 package info.schnatterer.nusic.service;
 
+import info.schnatterer.nusic.db.model.Artist;
 import info.schnatterer.nusic.db.model.Release;
 
 import java.util.Date;
@@ -13,6 +14,8 @@ import java.util.List;
  * 
  */
 public interface ReleaseService {
+
+	int update(Release release) throws ServiceException;
 
 	/**
 	 * Convenience method for {@link #saveOrUpdate(List)}, that checks if the
@@ -51,7 +54,8 @@ public interface ReleaseService {
 	long saveOrUpdate(Release release) throws ServiceException;
 
 	/**
-	 * Finds all releases that were created after a specific date.
+	 * Finds all releases that were created after a specific date and that are
+	 * visible.
 	 * 
 	 * @param gtDateCreated
 	 *            all releases whose creation data is greater than this date are
@@ -61,5 +65,11 @@ public interface ReleaseService {
 	 * @throws ServiceException
 	 */
 	List<Release> findJustCreated(Date beforeRefresh) throws ServiceException;
+
+	/**
+	 * Set <code>isHidden</code> to <code>false</code> for all {@link Release}s
+	 * <b>and {@link Artist}s</b>.
+	 */
+	void showAll() throws ServiceException;
 
 }

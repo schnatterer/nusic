@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.test.service.impl;
+package info.schnatterer.nusic.service.impl;
 
 import info.schnatterer.nusic.service.impl.QueryMusicMetadataServiceMusicBrainz;
 

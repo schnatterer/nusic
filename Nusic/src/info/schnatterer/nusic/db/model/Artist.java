@@ -42,6 +42,7 @@ public class Artist implements Entity {
 	private String artistName;
 	private List<Release> releases = new LinkedList<Release>();
 	private Date dateCreated;
+	private Boolean isHidden;
 
 	public Artist() {
 	}
@@ -90,13 +91,6 @@ public class Artist implements Entity {
 	}
 
 	@Override
-	public String toString() {
-		return "Artist [id=" + id + ", artistName=" + artistName
-				+ ", releases=" + releases + ", dateCreated=" + dateCreated
-				+ "]";
-	}
-
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -134,6 +128,14 @@ public class Artist implements Entity {
 		this.androidAudioArtistId = androidAudioArtistId;
 	}
 
+	public Boolean isHidden() {
+		return isHidden;
+	}
+
+	public void setHidden(Boolean isHidden) {
+		this.isHidden = isHidden;
+	}
+
 	public String getMusicBrainzUri() {
 		return MUSIC_BRAINZ_BASE_URI_HTTP + getMusicBrainzId();
 	}
@@ -147,5 +149,14 @@ public class Artist implements Entity {
 		if (dateCreated == null)
 			setDateCreated(new Date());
 
+	}
+
+	@Override
+	public String toString() {
+		return "Artist [id=" + id + ", androidAudioArtistId="
+				+ androidAudioArtistId + ", musicBrainzId=" + musicBrainzId
+				+ ", artistName=" + artistName + ", releases=" + releases
+				+ ", dateCreated=" + dateCreated + ", isHidden=" + isHidden
+				+ "]";
 	}
 }

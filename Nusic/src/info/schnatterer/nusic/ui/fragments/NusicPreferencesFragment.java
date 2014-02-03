@@ -21,6 +21,7 @@
 package info.schnatterer.nusic.ui.fragments;
 
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.ui.activities.NusicPreferencesActivity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
@@ -33,5 +34,11 @@ public class NusicPreferencesFragment extends PreferenceFragment {
 
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.preferences);
+		findPreference(
+				getString(NusicPreferencesActivity.KEY_DISPLAY_ALL_RELEASES))
+				.setOnPreferenceClickListener(
+						NusicPreferencesActivity
+								.createVisibilityButtonListener(getActivity()));
 	}
+
 }

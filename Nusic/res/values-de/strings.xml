@@ -6,6 +6,9 @@
     <string name="action_refresh">Alben aktualisieren</string>
     <string name="action_settings">Einstellungen</string>
     
+    <string name="releaseListMenu_HideRelease">Album ausblenden</string>
+    <string name="releaseListMenu_HideAllByArtist">Alle des Interpreten ausblenden</string>
+    
     <!-- GUI captions -->
     <string name="releaseListRow_RightArrow">Anklicken für mehr Details</string>
     <string name="releaseListRow_Thumbnail">Vorschaubild des Albumcovers</string>
@@ -28,8 +31,12 @@
     </string-array>
     <string name="preferences_title_include_future_releases">Zukünftige Alben anzeigen</string>
     <string name="preferences_summary_include_future_releases">Auch Alben herunterladen und anzeigen, die noch nicht erschienen sind</string>
-    <string name="preferences_title_full_update">Vollständige Updates</string>
-    <string name="preferences_summary_full_update">Updates immer für die Gesamte Zeitspanne ausführen. Wesentlich höherer Datenbedarf, dafür werden auch Alben hinzugefügt, die erst nach ihrer Veröffentlichung in der Datenbank aufgenommen werden (falls das jemals passiert).</string>
+    <string name="preferences_title_display_all_releases">Ausgeblendete Alben wieder anzeigen</string>
+    <string name="preferences_summary_display_all_releases">Mittels langem Tap auf ein Album können diese ausgeblendet werden. Diese Option setzt ausgeblendete Alben und Interpreten zurück.</string>
+    <string name="preferences_message_display_all_releases">Wirklich alle ausgeblendeten Alben und Interpreten wieder anzeigen?</string>
+    
+    <!-- <string name="preferences_title_full_update">Vollständige Updates</string>
+    <string name="preferences_summary_full_update">Updates immer für die Gesamte Zeitspanne ausführen. Wesentlich höherer Datenbedarf, dafür werden auch Alben hinzugefügt, die erst nach ihrer Veröffentlichung in der Datenbank aufgenommen werden (falls das jemals passiert).</string> -->
     
     <string name="preferences_category_bandwitdth">Datennutzung</string>
     <string name="preferences_title_download_only_on_wifi">Nur über WLAN herunterladen</string>

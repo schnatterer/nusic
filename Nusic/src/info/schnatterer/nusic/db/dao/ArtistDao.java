@@ -33,4 +33,11 @@ public interface ArtistDao extends GenericDao<Artist> {
 	 *         Otherwise <code>null</code>.
 	 */
 	Long findByAndroidId(long androidId) throws DatabaseException;
+
+	/**
+	 * Set <code>isHidden</code> to <code>false</code> for all {@link Artist}s.
+	 * 
+	 * @throws DatabaseException
+	 */
+	void showAll() throws DatabaseException;
 }

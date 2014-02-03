@@ -23,7 +23,7 @@ package info.schnatterer.nusic.service.android;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.service.PreferencesService;
 import info.schnatterer.nusic.service.impl.PreferencesServiceSharedPreferences;
-import info.schnatterer.nusic.util.DateUtils;
+import info.schnatterer.nusic.util.DateUtil;
 
 import java.util.Date;
 
@@ -58,7 +58,7 @@ public class LoadNewReleasesServiceBootReceiver extends BroadcastReceiver {
 
 		if (nextReleaseRefresh == null || isHistorical(nextReleaseRefresh)) {
 			// Delay start of service in order not to slow down device boot up
-			Date delayedRefresh = DateUtils
+			Date delayedRefresh = DateUtil
 					.addMinutes(BOOT_DELAY_MINUTES);
 			Log.d(Constants.LOG, "Boot Receiver: Delaying service to start at "
 					+ delayedRefresh);

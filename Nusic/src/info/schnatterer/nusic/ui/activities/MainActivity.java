@@ -23,11 +23,8 @@ package info.schnatterer.nusic.ui.activities;
 import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
-import info.schnatterer.nusic.db.loader.ReleaseLoader;
-import info.schnatterer.nusic.db.model.Release;
 import info.schnatterer.nusic.service.android.LoadNewReleasesService;
 import info.schnatterer.nusic.ui.LoadNewRelasesServiceBinding;
-import info.schnatterer.nusic.ui.LoadNewRelasesServiceBinding.FinishedLoadingListener;
 import info.schnatterer.nusic.ui.fragments.ReleaseListFragment;
 import info.schnatterer.nusic.ui.fragments.ReleaseListFragment.ReleaseQuery;
 
@@ -61,8 +58,6 @@ public class MainActivity extends SherlockFragmentActivity {
 	// Stores the selected tab, even when the configuration changes.
 	private static int currentTabPosition = 0;
 	/** Listens for internet query to end */
-	private ReleaseServiceFinishedLoadingListener releaseTaskFinishedLoadingListener = new ReleaseServiceFinishedLoadingListener();
-	private ReleaseListFragment currentTabFragment = null;
 
 	private Set<ReleaseTabListener> tabListeners = new HashSet<ReleaseTabListener>();
 
@@ -127,8 +122,6 @@ public class MainActivity extends SherlockFragmentActivity {
 	private void registerListeners() {
 		// Set activity as new context of task
 		loadNewRelasesServiceBinding.updateActivity(this);
-		loadNewRelasesServiceBinding
-				.addFinishedLoadingListener(releaseTaskFinishedLoadingListener);
 		// loadReleasesTask.bindService();
 	}
 
@@ -174,6 +167,11 @@ public class MainActivity extends SherlockFragmentActivity {
 					false)) {
 				startLoadingReleasesFromInternet(false);
 			}
+			if (data.getBooleanExtra(
+					NusicPreferencesActivity.RETURN_KEY_IS_CONTENT_CHANGED,
+					false)) {
+				onContentChanged();
+			}
 		}
 	}
 
@@ -195,24 +193,21 @@ public class MainActivity extends SherlockFragmentActivity {
 		super.onStart();
 		registerListeners();
 		if (loadNewRelasesServiceBinding.checkDataChanged()) {
-			triggerContentChanged();
+			onContentChanged();
 		}
 	}
 
-	/**
-	 * Marks all loaders as changed and forces reloading of the current
-	 * fragment.
-	 */
-	private void triggerContentChanged() {
-		// Mark all loaders as changed
+	@Override
+	public void onContentChanged() {
+		super.onContentChanged();
+		/*
+		 * Mark all loaders as changed and forces reloading of the current
+		 * fragment.
+		 */
 		for (ReleaseTabListener listener : tabListeners) {
 			if (listener.fragment != null) {
 				listener.fragment.onContentChanged();
 			}
-		}
-		// Reload data on current tab
-		if (currentTabFragment != null) {
-			currentTabFragment.foreceLoad();
 		}
 	}
 
@@ -244,27 +239,7 @@ public class MainActivity extends SherlockFragmentActivity {
 
 	private void unregisterListeners() {
 		loadNewRelasesServiceBinding.updateActivity(null);
-		loadNewRelasesServiceBinding
-				.removeFinishedLoadingListener(releaseTaskFinishedLoadingListener);
 		loadNewRelasesServiceBinding.unbindService();
-	}
-
-	/**
-	 * Listens for the task that queries releases from the internet to end.
-	 * Notifies {@link ReleaseLoader} to reload the {@link Release} data for GUI
-	 * from local database.
-	 * 
-	 * @author schnatterer
-	 * 
-	 */
-	public class ReleaseServiceFinishedLoadingListener implements
-			FinishedLoadingListener {
-		@Override
-		public void onFinishedLoading(boolean resultChanged) {
-			if (resultChanged) {
-				triggerContentChanged();
-			}
-		}
 	}
 
 	/**
@@ -308,7 +283,6 @@ public class MainActivity extends SherlockFragmentActivity {
 				}
 			}
 			currentTabPosition = tab.getPosition();
-			currentTabFragment = fragment;
 		}
 
 		public void onTabUnselected(Tab tab, FragmentTransaction ft) {

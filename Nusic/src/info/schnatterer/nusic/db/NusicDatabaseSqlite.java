@@ -24,7 +24,8 @@ import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.db.model.Artist;
 import info.schnatterer.nusic.db.model.Release;
-import info.schnatterer.nusic.util.DateUtils;
+import info.schnatterer.nusic.db.util.SqliteUtil;
+import info.schnatterer.nusic.util.DateUtil;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -44,13 +45,13 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "nusic";
 
 	/** Last app version that needed a database update. */
-	private static final int DATABASE_VERSION = Constants.APP_VERSION_0_2_1;
+	private static final int DATABASE_VERSION = SqliteDatabaseVersion.APP_VERSION_0_4;
 
 	private static final String DATABASE_TABLE_CREATE = "CREATE TABLE ";
 	private static final String DATABASE_TABLE_DROP = "DROP TABLE ";
 
-	private static final String DATABASE_FOREIGN_KEY = ", FOREIGN KEY(";
-	private static final String DATABASE_REFERENCES = ") REFERENCES ";
+	private static final String DATABASE_FOREIGN_KEY = "FOREIGN KEY(";
+	private static final String DATABASE_REFERENCES = "REFERENCES ";
 
 	private static final NusicDatabaseSqlite instance = new NusicDatabaseSqlite(
 			Application.getContext());
@@ -77,29 +78,13 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(createTable(TableArtist.NAME, TableArtist.COLUMN_ID,
-				TableArtist.TYPE_COLUMN_ID, TableArtist.COLUMN_ANDROID_ID,
-				TableArtist.TYPE_COLUMN_ANDROID_ID, TableArtist.COLUMN_MB_ID,
-				TableArtist.TYPE_COLUMN_MB_ID, TableArtist.COLUMN_NAME,
-				TableArtist.TYPE_COLUMN_NAME, TableArtist.COLUMN_DATE_CREATED,
-				TableArtist.TYPE_COLUMN_DATE_CREATED));
-		db.execSQL(createTable(TableRelease.NAME, TableRelease.COLUMN_ID,
-				TableRelease.TYPE_COLUMN_ID, TableRelease.COLUMN_MB_ID,
-				TableRelease.TYPE_COLUMN_MB_ID, TableRelease.COLUMN_NAME,
-				TableRelease.TYPE_COLUMN_RELEASENAME,
-				TableRelease.COLUMN_RELEASEDATE_RELEASED,
-				TableRelease.TYPE_COLUMN_RELEASEDATE_RELEASED,
-				TableRelease.COLUMN_RELEASEDATE_CREATED,
-				TableRelease.TYPE_COLUMN_RELEASEDATE_CREATED,
-				TableRelease.COLUMN_RELEASEARTWORK_PATH,
-				TableRelease.TYPE_COLUMN_RELEASEARTWORK_PATH,
-				TableRelease.COLUMN_FK_ID_ARTIST,
-				TableRelease.TYPE_COLUMN_FK_ID_ARTIST_FK));
+		db.execSQL(TableArtist.create());
+		db.execSQL(TableRelease.create());
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		if (oldVersion == Constants.APP_VERSION_0_1) {
+		if (oldVersion == SqliteDatabaseVersion.APP_VERSION_0_1) {
 			/*
 			 * In v.2.1: Column releases.TYPE_COLUMN_RELEASEMB_ID now
 			 * corresponds to MusicBrainz's "release group ID" instead of the
@@ -108,19 +93,37 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 			 * point, we're just going for a clean slate.
 			 */
 			db.execSQL(DATABASE_TABLE_DROP + TableRelease.NAME);
-			db.execSQL(createTable(TableRelease.NAME, TableRelease.COLUMN_ID,
-					TableRelease.TYPE_COLUMN_ID, TableRelease.COLUMN_MB_ID,
-					TableRelease.TYPE_COLUMN_MB_ID, TableRelease.COLUMN_NAME,
-					TableRelease.TYPE_COLUMN_RELEASENAME,
-					TableRelease.COLUMN_RELEASEDATE_RELEASED,
-					TableRelease.TYPE_COLUMN_RELEASEDATE_RELEASED,
-					TableRelease.COLUMN_RELEASEDATE_CREATED,
-					TableRelease.TYPE_COLUMN_RELEASEDATE_CREATED,
-					TableRelease.COLUMN_RELEASEARTWORK_PATH,
-					TableRelease.TYPE_COLUMN_RELEASEARTWORK_PATH,
-					TableRelease.COLUMN_FK_ID_ARTIST,
-					TableRelease.TYPE_COLUMN_FK_ID_ARTIST_FK));
+			db.execSQL(TableRelease.create());
 		}
+		if (oldVersion < SqliteDatabaseVersion.APP_VERSION_0_4) {
+			// Just append new columns, they can be null
+			db.execSQL(addColumn(TableArtist.NAME,
+					TableArtist.COLUMN_IS_HIDDEN,
+					TableArtist.TYPE_COLUMN_IS_HIDDEN));
+			db.execSQL(addColumn(TableRelease.NAME,
+					TableRelease.COLUMN_IS_HIDDEN,
+					TableRelease.TYPE_COLUMN_IS_HIDDEN));
+		}
+		// When changing the database, don't forget to create a new version
+	}
+
+	/**
+	 * Adds a column at the end of a table.
+	 * 
+	 * @param tableName
+	 *            table where to add the new column
+	 * @param columnName
+	 *            new column name
+	 * @param columnType
+	 *            type of new column
+	 * 
+	 * @return the SQL string for appending a column to a table
+	 */
+	private String addColumn(String tableName, String columnName,
+			String columnType) {
+		return new StringBuffer("ALTER TABLE ").append(tableName)
+				.append(" ADD ").append(columnName).append(" ")
+				.append(columnType).toString();
 	}
 
 	/**
@@ -133,8 +136,7 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 	 *            and the type (can contain additional constraints)
 	 * @return an SQL string that creates the table
 	 */
-	protected String createTable(String tableName,
-			String... columnsAndTypeTuples) {
+	static String createTable(String tableName, String... columnsAndTypeTuples) {
 		StringBuffer sql = new StringBuffer(DATABASE_TABLE_CREATE).append(
 				tableName).append("(");
 		int index = 0;
@@ -149,40 +151,20 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 		return sql.toString();
 	}
 
-	protected static void putIfNotNull(ContentValues values, String column,
-			Object value) {
-		if (value == null || values == null) {
-			return;
-		}
-		/*
-		 * Thanks for not providing a put(String,Object) method to the
-		 * Map<String,Object>!! :-(
+	public static interface SqliteDatabaseVersion {
+		/**
+		 * v0.1: Very first release of this app
 		 */
-		if (value instanceof Byte) {
-			values.put(column, (Byte) value);
-		} else if (value instanceof Short) {
-			values.put(column, (Short) value);
-		} else if (value instanceof Integer) {
-			values.put(column, (Integer) value);
-		} else if (value instanceof Long) {
-			values.put(column, (Long) value);
-		} else if (value instanceof Float) {
-			values.put(column, (Float) value);
-		} else if (value instanceof Double) {
-			values.put(column, (Double) value);
-		} else if (value instanceof Boolean) {
-			values.put(column, (Boolean) value);
-		} else if (value instanceof byte[]) {
-			values.put(column, (byte[]) value);
-		} else if (value instanceof String) {
-			values.put(column, (String) value);
-		} else {
-			// Hope for the best and convert it to a string
-			Log.w(Constants.LOG, "Column: " + column
-					+ "Trying to put non primitive value to ContentValues: "
-					+ value + ". Converting to string.");
-			values.put(column, value.toString());
-		}
+		int APP_VERSION_0_1 = 1;
+		/**
+		 * v0.2.1: Update DB schema because release.musicbrainzId is now stores
+		 * the releaseGroupId.
+		 */
+		int APP_VERSION_0_2_1 = 3;
+		/**
+		 * v0.4: Added Artist.isHidden and Release.isHidden
+		 */
+		int APP_VERSION_0_4 = 4;
 	}
 
 	/**
@@ -222,16 +204,20 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 
 		public static final String COLUMN_FK_ID_ARTIST = "fkIdArtist";
 		public static final String TYPE_COLUMN_FK_ID_ARTIST = "INTEGER";
-		public static final String TYPE_COLUMN_FK_ID_ARTIST_FK = TYPE_COLUMN_FK_ID_ARTIST
-				+ DATABASE_FOREIGN_KEY
-				+ COLUMN_FK_ID_ARTIST
-				+ DATABASE_REFERENCES + NAME + "(" + COLUMN_ID + ")";
+		public static final String TYPE_COLUMN_FK_ID_CONSTRAINT_FK = DATABASE_FOREIGN_KEY
+				+ COLUMN_FK_ID_ARTIST + ")";
+		public static final String TYPE_COLUMN_FK_ID_CONSTRAINT_REFERENCES = DATABASE_REFERENCES
+				+ NAME + "(" + COLUMN_ID + ")";
 		public static final int INDEX_COLUMN_FK_ID_ARTIST = 6;
+
+		public static final String COLUMN_IS_HIDDEN = "isHidden";
+		public static final String TYPE_COLUMN_IS_HIDDEN = "INTEGER";
+		public static final int INDEX_COLUMN_IS_HIDDEN = 7;
 
 		public static final String[] COLUMNS = { COLUMN_ID, COLUMN_MB_ID,
 				COLUMN_NAME, COLUMN_RELEASEDATE_RELEASED,
 				COLUMN_RELEASEDATE_CREATED, COLUMN_RELEASEARTWORK_PATH,
-				COLUMN_FK_ID_ARTIST };
+				COLUMN_FK_ID_ARTIST, COLUMN_IS_HIDDEN };
 
 		public static final String COLUMNS_ALL = new StringBuilder(NAME)
 				.append(".").append(COLUMN_ID).append(",").append(NAME)
@@ -241,41 +227,64 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 				.append(NAME).append(".").append(COLUMN_RELEASEDATE_CREATED)
 				.append(",").append(NAME).append(".")
 				.append(COLUMN_RELEASEARTWORK_PATH).append(",").append(NAME)
-				.append(".").append(COLUMN_FK_ID_ARTIST).toString();
+				.append(".").append(COLUMN_FK_ID_ARTIST).append(",")
+				.append(NAME).append(".").append(COLUMN_IS_HIDDEN).toString();
 
 		public static Long toId(Cursor cursor, int startIndex) {
 			return cursor.getLong(startIndex + INDEX_COLUMN_RELEASEID);
 		}
 
 		public static Release toEntity(Cursor cursor, int startIndex) {
-			Release release = new Release(DateUtils.loadDate(cursor, startIndex
-					+ INDEX_COLUMN_RELEASEDATE_CREATED));
+			Release release = new Release(SqliteUtil.loadDate(cursor,
+					startIndex + INDEX_COLUMN_RELEASEDATE_CREATED));
 			release.setId(toId(cursor, startIndex));
 			release.setArtworkPath(cursor.getString(startIndex
 					+ INDEX_COLUMN_RELEASEARTWORK_PATH));
 			release.setMusicBrainzId(cursor.getString(startIndex
 					+ INDEX_COLUMN_MB_ID));
-			release.setReleaseDate(DateUtils.loadDate(cursor, startIndex
+			release.setReleaseDate(SqliteUtil.loadDate(cursor, startIndex
 					+ INDEX_COLUMN_RELEASEDATE_RELEASED));
 			release.setReleaseName(cursor.getString(startIndex
 					+ INDEX_COLUMN_RELEASENAME));
+			release.setHidden(SqliteUtil.loadBoolean(cursor,
+					INDEX_COLUMN_IS_HIDDEN));
 
 			return release;
 		}
 
 		public static ContentValues toContentValues(Release release) {
 			ContentValues values = new ContentValues();
-			putIfNotNull(values, COLUMN_MB_ID, release.getMusicBrainzId());
-			putIfNotNull(values, COLUMN_NAME, release.getReleaseName());
-			putIfNotNull(values, COLUMN_RELEASEDATE_RELEASED,
-					DateUtils.persistDate(release.getReleaseDate()));
-			putIfNotNull(values, COLUMN_RELEASEDATE_CREATED,
-					DateUtils.persistDate(release.getDateCreated()));
-			putIfNotNull(values, COLUMN_RELEASEARTWORK_PATH,
+			SqliteUtil.putIfNotNull(values, COLUMN_MB_ID,
+					release.getMusicBrainzId());
+			SqliteUtil.putIfNotNull(values, COLUMN_NAME,
+					release.getReleaseName());
+			SqliteUtil.putIfNotNull(values, COLUMN_RELEASEDATE_RELEASED,
+					DateUtil.toLong(release.getReleaseDate()));
+			SqliteUtil.putIfNotNull(values, COLUMN_RELEASEDATE_CREATED,
+					DateUtil.toLong(release.getDateCreated()));
+			SqliteUtil.putIfNotNull(values, COLUMN_RELEASEARTWORK_PATH,
 					release.getArtworkPath());
-			putIfNotNull(values, COLUMN_FK_ID_ARTIST, release.getArtist()
-					.getId());
+			SqliteUtil.putIfNotNull(values, COLUMN_FK_ID_ARTIST, release
+					.getArtist().getId());
+			SqliteUtil.putIfNotNull(values, COLUMN_IS_HIDDEN,
+					release.isHidden());
 			return values;
+		}
+
+		public static String create() {
+			return createTable(NAME, COLUMN_ID, TYPE_COLUMN_ID, COLUMN_MB_ID,
+					TYPE_COLUMN_MB_ID, COLUMN_NAME, TYPE_COLUMN_RELEASENAME,
+					COLUMN_RELEASEDATE_RELEASED,
+					TYPE_COLUMN_RELEASEDATE_RELEASED,
+					COLUMN_RELEASEDATE_CREATED,
+					TYPE_COLUMN_RELEASEDATE_CREATED,
+					COLUMN_RELEASEARTWORK_PATH,
+					TYPE_COLUMN_RELEASEARTWORK_PATH, COLUMN_FK_ID_ARTIST,
+					TYPE_COLUMN_FK_ID_ARTIST, COLUMN_IS_HIDDEN,
+					TYPE_COLUMN_IS_HIDDEN,
+					// Constraints
+					TYPE_COLUMN_FK_ID_CONSTRAINT_FK,
+					TYPE_COLUMN_FK_ID_CONSTRAINT_REFERENCES);
 		}
 	}
 
@@ -309,19 +318,24 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 		public static final String TYPE_COLUMN_DATE_CREATED = "INTEGER NOT NULL";
 		public static final int INDEX_COLUMN_DATE_CREATED = 4;
 
+		public static final String COLUMN_IS_HIDDEN = "isHidden";
+		public static final String TYPE_COLUMN_IS_HIDDEN = "INTEGER";
+		public static final int INDEX_COLUMN_IS_HIDDEN = 5;
+
 		public static final String COLUMNS_ALL = new StringBuilder(NAME)
 				.append(".").append(COLUMN_ID).append(",").append(NAME)
 				.append(".").append(COLUMN_ANDROID_ID).append(",").append(NAME)
 				.append(".").append(COLUMN_MB_ID).append(",").append(NAME)
 				.append(".").append(COLUMN_NAME).append(",").append(NAME)
-				.append(".").append(COLUMN_DATE_CREATED).toString();
+				.append(".").append(COLUMN_DATE_CREATED).append(",")
+				.append(NAME).append(".").append(COLUMN_IS_HIDDEN).toString();
 
 		public static Long toId(Cursor cursor, int startIndex) {
 			return cursor.getLong(startIndex + INDEX_COLUMN_ID);
 		}
 
 		public static Artist toEntity(Cursor cursor, int startIndex) {
-			Artist artist = new Artist(DateUtils.loadDate(cursor, startIndex
+			Artist artist = new Artist(SqliteUtil.loadDate(cursor, startIndex
 					+ INDEX_COLUMN_DATE_CREATED));
 
 			artist.setId(toId(cursor, startIndex));
@@ -331,17 +345,31 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 					+ INDEX_COLUMN_MB_ID));
 			artist.setArtistName(cursor.getString(startIndex
 					+ INDEX_COLUMN_NAME));
+			artist.setHidden(SqliteUtil.loadBoolean(cursor,
+					INDEX_COLUMN_IS_HIDDEN));
 			return artist;
+		}
+
+		public static String create() {
+			return createTable(NAME, COLUMN_ID, TYPE_COLUMN_ID,
+					COLUMN_ANDROID_ID, TYPE_COLUMN_ANDROID_ID, COLUMN_MB_ID,
+					TYPE_COLUMN_MB_ID, COLUMN_NAME, TYPE_COLUMN_NAME,
+					COLUMN_DATE_CREATED, TYPE_COLUMN_DATE_CREATED,
+					COLUMN_IS_HIDDEN, TYPE_COLUMN_IS_HIDDEN);
 		}
 
 		public static ContentValues toContentValues(Artist artist) {
 			ContentValues values = new ContentValues();
-			putIfNotNull(values, COLUMN_ANDROID_ID,
+			SqliteUtil.putIfNotNull(values, COLUMN_ANDROID_ID,
 					artist.getAndroidAudioArtistId());
-			putIfNotNull(values, COLUMN_MB_ID, artist.getMusicBrainzId());
-			putIfNotNull(values, COLUMN_NAME, artist.getArtistName());
-			putIfNotNull(values, COLUMN_DATE_CREATED,
-					DateUtils.persistDate(artist.getDateCreated()));
+			SqliteUtil.putIfNotNull(values, COLUMN_MB_ID,
+					artist.getMusicBrainzId());
+			SqliteUtil
+					.putIfNotNull(values, COLUMN_NAME, artist.getArtistName());
+			SqliteUtil.putIfNotNull(values, COLUMN_DATE_CREATED,
+					DateUtil.toLong(artist.getDateCreated()));
+			SqliteUtil
+					.putIfNotNull(values, COLUMN_IS_HIDDEN, artist.isHidden());
 			return values;
 		}
 	}

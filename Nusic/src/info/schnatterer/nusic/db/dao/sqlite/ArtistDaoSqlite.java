@@ -25,6 +25,7 @@ import info.schnatterer.nusic.db.DatabaseException;
 import info.schnatterer.nusic.db.NusicDatabaseSqlite.TableArtist;
 import info.schnatterer.nusic.db.dao.ArtistDao;
 import info.schnatterer.nusic.db.model.Artist;
+import info.schnatterer.nusic.db.util.SqliteUtil;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -79,5 +80,12 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 	@Override
 	protected Long getId(Artist artist) {
 		return artist.getId();
+	}
+
+	@Override
+	public void showAll() throws DatabaseException {
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(TableArtist.COLUMN_IS_HIDDEN, SqliteUtil.FALSE);
+		update(contentValues, null, null);
 	}
 }

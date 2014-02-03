@@ -45,10 +45,11 @@ public interface ReleaseDao extends GenericDao<Release> {
 	 * @return
 	 * @throws DatabaseException
 	 */
-	List<Release> findAll() throws DatabaseException;
+	List<Release> findNotHidden() throws DatabaseException;
 
 	/**
-	 * Finds all releases that were created after a specific date.
+	 * Finds all releases that were created after a specific date and that are
+	 * visible.
 	 * 
 	 * @param gtDateCreated
 	 *            all releases whose creation data is greater than this date are
@@ -58,5 +59,10 @@ public interface ReleaseDao extends GenericDao<Release> {
 	 * @throws DatabaseException
 	 */
 	List<Release> findJustCreated(Date gtDateCreated) throws DatabaseException;
+
+	/**
+	 * Set <code>isHidden</code> to <code>false</code> for all {@link Release}s.
+	 */
+	void showAll() throws DatabaseException;
 
 }

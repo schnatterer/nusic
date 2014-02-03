@@ -22,14 +22,4 @@ package info.schnatterer.nusic;
 
 public interface Constants {
 	String LOG = "info.schnatterer.nusic";
-
-	/**
-	 * v0.1: Very first release of this app
-	 */
-	int APP_VERSION_0_1 = 1;
-	/**
-	 * v0.2.1: Update DB schema because release.musicbrainzId is now stores the
-	 * releaseGroupId.
-	 */
-	int APP_VERSION_0_2_1 = 3;
 }

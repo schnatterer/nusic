@@ -25,6 +25,16 @@ public class ReleaseServiceImpl implements ReleaseService {
 	}
 
 	@Override
+	public int update(Release release) throws ServiceException {
+		try {
+			return releaseDao.update(release);
+		} catch (DatabaseException e) {
+			throw new ServiceException(
+					R.string.ServiceException_errorWritingToDb, e);
+		}
+	}
+
+	@Override
 	public void saveOrUpdate(List<Release> releases) throws ServiceException {
 		saveOrUpdate(releases, true);
 	}
@@ -87,5 +97,17 @@ public class ReleaseServiceImpl implements ReleaseService {
 			throw new ServiceException(
 					R.string.ServiceException_errorReadingFromDb, e);
 		}
+	}
+
+	@Override
+	public void showAll() throws ServiceException {
+		try {
+			releaseDao.showAll();
+			artistDao.showAll();
+		} catch (DatabaseException e) {
+			throw new ServiceException(
+					R.string.ServiceException_errorWritingToDb, e);
+		}
+
 	}
 }

@@ -52,7 +52,7 @@ public class ReleaseLoader extends
 	@Override
 	public List<Release> doLoadInBackground() throws Exception {
 		if (dateCreatedGt == null) {
-			return getDao().findAll();
+			return getDao().findNotHidden();
 		} else {
 			return getDao().findJustCreated(dateCreatedGt);
 		}
