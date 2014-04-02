@@ -38,9 +38,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.preference.PreferenceActivity;
 
-public class NusicPreferencesActivity extends PreferenceActivity {
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
+import com.actionbarsherlock.view.MenuItem;
+
+public class NusicPreferencesActivity extends SherlockPreferenceActivity {
 	public static final String RETURN_KEY_IS_REFRESH_NECESSARY = "isRefreshNecessary";
 	public static final String RETURN_KEY_IS_CONTENT_CHANGED = "isContentChanged";
 
@@ -55,6 +57,8 @@ public class NusicPreferencesActivity extends PreferenceActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		// Display the back arrow in the header (left of the icon)
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
 			onCreatePreferenceActivity();
@@ -164,6 +168,26 @@ public class NusicPreferencesActivity extends PreferenceActivity {
 				return true;
 			}
 		};
+	}
+
+	// @Override
+	// public boolean onMenuItemSelected(int featureId, MenuItem item) {
+	// if (item.getItemId() == android.R.id.home) {
+	// // When the back arrow in the header (left of the icon) is clicked,
+	// // "go back one activity"
+	// finish();
+	// }
+	// return super.onMenuItemSelected(featureId, item);
+	// }
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			// When the back arrow in the header (left of the icon) is clicked,
+			// "go back one activity"
+			finish();
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	/**

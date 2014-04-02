@@ -29,7 +29,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activities.NusicPreferencesActivity" >
+        <activity android:name=".ui.activities.NusicPreferencesActivity"
+            android:label="@string/action_settings" >
             <intent-filter>
                 <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
 
