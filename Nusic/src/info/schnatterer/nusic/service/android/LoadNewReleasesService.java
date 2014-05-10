@@ -71,7 +71,7 @@ public class LoadNewReleasesService extends WakefulService {
 	private ReleaseService releaseService = new ReleaseServiceImpl(this);
 
 	private List<Artist> errorArtists;
-	private int totalArtists = 0;
+	// private int totalArtists = 0;
 	private ProgressListenerNotifications progressListenerNotifications = new ProgressListenerNotifications();
 	private LoadNewReleasesServiceBinder binder = new LoadNewReleasesServiceBinder();
 	/**
@@ -165,7 +165,7 @@ public class LoadNewReleasesService extends WakefulService {
 		if (workerThread == null) {
 			Log.d(Constants.LOG, "Service thread not working yet, starting.");
 			errorArtists = new LinkedList<Artist>();
-			totalArtists = 0;
+			// totalArtists = 0;
 			workerThread = new Thread(new WorkerThread(updateOnlyIfNeccesary,
 					artistProcessedListener));
 			workerThread.start();
@@ -384,7 +384,7 @@ public class LoadNewReleasesService extends WakefulService {
 		@Override
 		public void onProgressStarted(int nEntities) {
 			errorArtists = new LinkedList<Artist>();
-			totalArtists = nEntities;
+			// totalArtists = nEntities;
 		}
 
 		@Override
@@ -399,11 +399,13 @@ public class LoadNewReleasesService extends WakefulService {
 
 		@Override
 		public void onProgressFinished(Boolean result) {
-			if (errorArtists != null && errorArtists.size() > 0) {
-				Application.notifyWarning(
-						R.string.LoadNewReleasesBinding_finishedWithErrors,
-						errorArtists.size(), totalArtists);
-			}
+			// Don't bother the user about the failure. Better luck next
+			// time!
+			// if (errorArtists != null && errorArtists.size() > 0) {
+			// Application.notifyWarning(
+			// R.string.LoadNewReleasesBinding_finishedWithErrors,
+			// errorArtists.size(), totalArtists);
+			// }
 			// On success, keep quiet
 			// } else if (totalArtists > 0) {
 			// Application.notifyInfo("!!SUCESSFULLY FINISHED REFRESHING "
