@@ -27,19 +27,18 @@ import info.schnatterer.nusic.service.android.LoadNewReleasesService;
 import info.schnatterer.nusic.ui.LoadNewRelasesServiceBinding;
 import info.schnatterer.nusic.ui.fragments.ReleaseListFragment;
 import info.schnatterer.nusic.ui.fragments.ReleaseListFragment.ReleaseQuery;
-
-import java.util.HashSet;
-import java.util.Set;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
-import com.actionbarsherlock.app.ActionBar.TabListener;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -51,31 +50,44 @@ public class MainActivity extends SherlockFragmentActivity {
 	private static final int RELEASE_DB_LOADER_ALL = 0;
 	private static final int RELEASE_DB_LOADER_JUST_ADDED = 1;
 
-	/**
-	 * Start and bind the {@link LoadNewReleasesService}.
-	 */
+	/** Start and bind the {@link LoadNewReleasesService}. */
 	private static LoadNewRelasesServiceBinding loadNewRelasesServiceBinding = null;
-	// Stores the selected tab, even when the configuration changes.
+	/** Stores the selected tab, even when the configuration changes. */
 	private static int currentTabPosition = 0;
-	/** Listens for internet query to end */
-
-	private Set<ReleaseTabListener> tabListeners = new HashSet<ReleaseTabListener>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		// Set underlying layout (view pager that captures swipes)
+		setContentView(R.layout.activity_main);
 
 		/* Init tab fragments */
-		ActionBar actionBar = getSupportActionBar();
+		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		// Create first Tab
-		createTab(actionBar, R.string.MainActivity_TabJustAdded,
-				RELEASE_DB_LOADER_JUST_ADDED, ReleaseQuery.JUST_ADDED, 0);
+		// Capture page swipes
+		ViewPager pager = (ViewPager) findViewById(R.id.mainPager);
+		ViewPager.SimpleOnPageChangeListener ViewPagerListener = new ViewPager.SimpleOnPageChangeListener() {
+			@Override
+			public void onPageSelected(int position) {
+				super.onPageSelected(position);
+				// Find the ViewPager Position
+				actionBar.setSelectedNavigationItem(position);
+			}
+		};
+		pager.setOnPageChangeListener(ViewPagerListener);
+		// Set adapter that handles fragment (i.e. tab creation)
+		ViewPagerAdapter tabAdapter = new ViewPagerAdapter(
+				getSupportFragmentManager());
+		pager.setAdapter(tabAdapter);
 
-		// Create Second Tab
-		createTab(actionBar, R.string.MainActivity_TabAll,
-				RELEASE_DB_LOADER_ALL, ReleaseQuery.ALL, 1);
+		// Create all tabs as defined in adapter
+		TabListener tabListener = new TabListener(pager);
+		for (int i = 0; i < tabAdapter.tabs.length; i++) {
+			TabHolder tab = tabAdapter.tabs[i];
+			actionBar.addTab(actionBar.newTab().setText(tab.titleId)
+					.setTabListener(tabListener), i, isTabSelected(i));
+		}
 
 		if (loadNewRelasesServiceBinding == null) {
 			loadNewRelasesServiceBinding = new LoadNewRelasesServiceBinding();
@@ -84,27 +96,6 @@ public class MainActivity extends SherlockFragmentActivity {
 		} else {
 			registerListeners();
 		}
-	}
-
-	/**
-	 * Creates a tab and sets it active depending on {@link #currentTabPosition}
-	 * .
-	 * 
-	 * @param actionBar
-	 * @param titleId
-	 * @param loaderId
-	 * @param releaseQuery
-	 * @param position
-	 */
-	private void createTab(ActionBar actionBar, int titleId, int loaderId,
-			ReleaseQuery releaseQuery, int position) {
-		// Pragmatic approach: Use releaseQuery also as Tag to identify fragment
-		ReleaseTabListener listener = new ReleaseTabListener(releaseQuery,
-				loaderId, releaseQuery.name());
-		tabListeners.add(listener);
-		actionBar.addTab(
-				actionBar.newTab().setText(titleId).setTabListener(listener),
-				position, isTabSelected(position));
 	}
 
 	/**
@@ -200,22 +191,17 @@ public class MainActivity extends SherlockFragmentActivity {
 	@Override
 	public void onContentChanged() {
 		super.onContentChanged();
-		/*
-		 * Mark all loaders as changed and forces reloading of the current
-		 * fragment.
-		 */
-		for (ReleaseTabListener listener : tabListeners) {
-			if (listener.fragment != null) {
-				listener.fragment.onContentChanged();
-			}
+		final ViewPager pager = (ViewPager) findViewById(R.id.mainPager);
+		final PagerAdapter adapter = pager.getAdapter();
+		if (adapter != null) {
+			runOnUiThread(new Runnable() {
+				public void run() {
+					adapter.notifyDataSetChanged();
+					// pager.invalidate();
+				}
+			});
 		}
 	}
-
-	// @Override
-	// protected void onResume() {
-	// super.onResume();
-	// registerListeners();
-	// }
 
 	@Override
 	protected void onStop() {
@@ -223,18 +209,10 @@ public class MainActivity extends SherlockFragmentActivity {
 		unregisterListeners();
 	}
 
-	// @Override
-	// protected void onPause() {
-	// super.onPause();
-	// unregisterListeners();
-	// }
-
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		unregisterListeners();
-		// No good idea if service is running...
-		// NusicDatabase.getInstance().close();
 	}
 
 	private void unregisterListeners() {
@@ -243,56 +221,111 @@ public class MainActivity extends SherlockFragmentActivity {
 	}
 
 	/**
-	 * Creates a new {@link ReleaseListFragment} for ever tab which is
-	 * attached/detached on select/unselect.
+	 * Create view pager adapter that defines the content of the tabs (i.e. the
+	 * fragments).
 	 * 
 	 * @author schnatterer
 	 * 
 	 */
-	public class ReleaseTabListener implements TabListener {
-		private ReleaseQuery releaseQuery;
-		private int loaderId;
-		private ReleaseListFragment fragment;
-		private final String tag;
+	public class ViewPagerAdapter extends FragmentPagerAdapter {
+		/** This basically defines the content of the tabs. */
+		final TabHolder[] tabs = {
+				new TabHolder(R.string.MainActivity_TabJustAdded,
+						RELEASE_DB_LOADER_JUST_ADDED, ReleaseQuery.JUST_ADDED),
+				new TabHolder(R.string.MainActivity_TabAll,
+						RELEASE_DB_LOADER_ALL, ReleaseQuery.ALL) };
 
-		public ReleaseTabListener(ReleaseQuery releaseQuery, int loaderId,
-				String tag) {
-			this.releaseQuery = releaseQuery;
+		public ViewPagerAdapter(FragmentManager fm) {
+			super(fm);
+		}
+
+		@Override
+		public Fragment getItem(int position) {
+			int actualPos = position;
+			if (tabs.length <= position) {
+				// Default tab
+				actualPos = 0;
+			}
+			return createTabFragment(tabs[actualPos]);
+		}
+
+		private Fragment createTabFragment(TabHolder tab) {
+			// Create fragment
+			Bundle bundle = new Bundle();
+			bundle.putString(ReleaseListFragment.ARG_RELEASE_QUERY,
+					tab.releaseQuery.name());
+			bundle.putInt(ReleaseListFragment.ARG_LOADER_ID, tab.loaderId);
+			return (ReleaseListFragment) Fragment.instantiate(
+					MainActivity.this, ReleaseListFragment.class.getName(),
+					bundle);
+		}
+
+		@Override
+		public int getItemPosition(Object object) {
+			/*
+			 * Workaround to updating the fragments work! This method is only
+			 * called when PagerAdapter.notifyDataSetChanged() is called. The
+			 * normal workaround would be to just return POSITION_NONE and have
+			 * the fragments be re-created. See
+			 * http://stackoverflow.com/questions
+			 * /10849552/android-viewpager-cant -update-dynamically/ However,
+			 * the release list fragments are capable of updating themselves,
+			 * which save us from creating new instances!
+			 */
+			if (object instanceof ReleaseListFragment) {
+				((ReleaseListFragment) object).onContentChanged();
+				return POSITION_UNCHANGED;
+			}
+			return POSITION_NONE;
+		}
+
+		@Override
+		public int getCount() {
+			return tabs.length;
+		}
+	}
+
+	/**
+	 * Holds the basic information for each tab.
+	 * 
+	 * @author schnatterer
+	 */
+	public static class TabHolder {
+		final int titleId;
+		final int loaderId;
+		final ReleaseQuery releaseQuery;
+
+		public TabHolder(int titleId, int loaderId, ReleaseQuery releaseQuery) {
+			this.titleId = titleId;
 			this.loaderId = loaderId;
-			this.tag = tag;
-			fragment = (ReleaseListFragment) getSupportFragmentManager()
-					.findFragmentByTag(tag);
+			this.releaseQuery = releaseQuery;
+		}
+	}
+
+	/**
+	 * Tab listener that reports the current position to a view pager.
+	 * 
+	 * @author schnatterer
+	 */
+	public class TabListener implements ActionBar.TabListener {
+		private ViewPager pager;
+
+		public TabListener(ViewPager pager) {
+			this.pager = pager;
 		}
 
 		@Override
 		public void onTabSelected(Tab tab, FragmentTransaction ft) {
-			// Avoid calling Fragment.onCreate() more than once
-			if (fragment == null) {
-				// Create fragment
-				Bundle bundle = new Bundle();
-				bundle.putString(ReleaseListFragment.ARG_RELEASE_QUERY,
-						releaseQuery.name());
-				bundle.putInt(ReleaseListFragment.ARG_LOADER_ID, loaderId);
-				fragment = (ReleaseListFragment) Fragment.instantiate(
-						MainActivity.this, ReleaseListFragment.class.getName(),
-						bundle);
-				ft.replace(android.R.id.content, fragment, tag);
-			} else {
-				if (fragment.isDetached()) {
-					ft.attach(fragment);
-				}
-			}
-			currentTabPosition = tab.getPosition();
+			// Pass the position on tab click to ViewPager
+			pager.setCurrentItem(tab.getPosition());
 		}
 
+		@Override
 		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-			if (fragment != null) {
-				ft.detach(fragment);
-			}
 		}
 
 		@Override
 		public void onTabReselected(Tab tab, FragmentTransaction ft) {
 		}
-	}
+	};
 }
