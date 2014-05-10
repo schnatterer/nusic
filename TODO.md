@@ -1,16 +1,23 @@
 TODOs - Features, enhancements, refactoring, ...
 
+- Remove error message
 - Feature: Swipe between Tabs
+=== RELEASE v.0.5
+
 - Feature: Info dialog
 - Feature: Tabs: Available, Announced
 - Feature: Use WeakReferences to improve performance while scrolling list: http://stackoverflow.com/questions/3243215/how-to-use-weakreference-in-java-and-android-development
-=== RELEASE v.0.5
+=== RELEASE v.0.6
+
 
 - Feature: Query and display album covers: Last fm? (See Apollo Music player) or Discogs? Store covers in sqlite oder in file system? Get Last.FM ID/Discogs ID from MusicBrainz?
 === Release v1.0
 
 
 ................... More TODOs
+- Display additional album info like "remastered special edition", "anniversary edition", etc. or use only the "oldest" release in a release group
+- Display MusicBrainz side in internal Webview -> Better usability
+- In app search
 - Refactor testing: Maven? JUnit4, separtion of "normal" and android tests?
 - Feature: Tablet optimization: Layout + Screens for 7" + 10"
 
