@@ -59,11 +59,34 @@ public class HttpClientWebServiceWs2 extends DefaultWebServiceWs2 {
 	 * A {@link HttpClient} instance
 	 */
 	private DefaultHttpClient httpClient;
+	/**
+	 * User agent string sent to music brainz.
+	 */
+	private String userAgent;
 
 	/**
 	 * Default constructor creates a httpClient with default properties.
 	 */
 	public HttpClientWebServiceWs2() {
+		userAgent = createUserAgent();
+		this.httpClient = new DefaultHttpClient();
+	}
+
+	/**
+	 * Creates a httpClient with default properties and a custom user agent
+	 * string.
+	 * 
+	 * @param applicationName
+	 *            custom application name used in user agent string
+	 * @param applicationVersion
+	 *            custom application version used in user agent string
+	 * @param applicationContact
+	 *            contact URL or author email used in user agent string
+	 */
+	public HttpClientWebServiceWs2(String applicationName,
+			String applicationVersion, String applicationContact) {
+		userAgent = createUserAgent(applicationName, applicationVersion,
+				applicationContact);
 		this.httpClient = new DefaultHttpClient();
 	}
 
@@ -83,7 +106,7 @@ public class HttpClientWebServiceWs2 extends DefaultWebServiceWs2 {
 
 		HttpConnectionParams.setConnectionTimeout(connectionParams, 60000);
 		HttpConnectionParams.setSoTimeout(connectionParams, 60000);
-		connectionParams.setParameter("http.useragent", USERAGENT);
+		connectionParams.setParameter("http.useragent", userAgent);
 		connectionParams.setParameter("http.protocol.content-charset", "UTF-8");
 
 		if (getUsername() != null && !getUsername().isEmpty()) {
@@ -222,12 +245,12 @@ public class HttpClientWebServiceWs2 extends DefaultWebServiceWs2 {
 
 		HttpParams params = new BasicHttpParams();
 		HttpProtocolParamBean paramsBean = new HttpProtocolParamBean(params);
-		paramsBean.setUserAgent(USERAGENT);
+		paramsBean.setUserAgent(userAgent);
 		method.setParams(params);
 
 		// Try using compression
 		method.setHeader("Accept-Encoding", "gzip");
-		
+
 		try {
 			// Execute the method.
 			log.debug("Hitting url: " + method.getURI().toString());

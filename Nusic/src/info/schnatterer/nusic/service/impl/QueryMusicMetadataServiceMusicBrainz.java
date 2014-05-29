@@ -51,6 +51,14 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 	 */
 	private static final double PERMITS_PER_SECOND = 1.0;
 	final RateLimiter rateLimiter = RateLimiter.create(PERMITS_PER_SECOND);
+	/** Application name used in user agent string of request. */
+	private String appName;
+	/** Application version used in user agent string of request. */
+	private String appVersion;
+	/**
+	 * Contact URL or author email used in user agent string of request.
+	 */
+	private String appContact;
 	/**
 	 * See http://musicbrainz.org/doc/Development/XML_Web_Service/Version_2#
 	 * Release_Type_and_Status
@@ -62,6 +70,26 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 	private static final String SEARCH_DATE_FINAL = "]";
 	private static final String SEARCH_ARTIST_1 = " AND artist:\"";
 	private static final String SEARCH_ARTIST_2 = "\"";
+
+	/**
+	 * Creates a service instance for finding releases.
+	 * 
+	 * @param appName
+	 *            application name used in user agent string of request
+	 * 
+	 * @param appVersion
+	 *            application version used in user agent string of request
+	 * 
+	 * @param appContact
+	 *            contact URL or author email used in user agent string of
+	 *            request
+	 */
+	public QueryMusicMetadataServiceMusicBrainz(String appName,
+			String appVersion, String appContact) {
+		this.appName = appName;
+		this.appVersion = appVersion;
+		this.appContact = appContact;
+	}
 
 	@SuppressLint("SimpleDateFormat")
 	private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -76,7 +104,8 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 		Map<String, Release> releases = new HashMap<String, Release>();
 		try {
 			// List<ReleaseResultWs2> releaseResults = findReleases();
-			org.musicbrainz.controller.Release releaseSearch = createReleaseSearch();
+			org.musicbrainz.controller.Release releaseSearch = createReleaseSearch(
+					appName, appVersion, appContact);
 			releaseSearch.search(appendDate(fromDate, endDate,
 					new StringBuffer(SEARCH_BASE)).append(SEARCH_ARTIST_1)
 					.append(artistName).append(SEARCH_ARTIST_2).toString());
@@ -102,8 +131,8 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 			throw securityException;
 		} catch (Throwable t) {
 			throw new ServiceException(
-					R.string.ServiceException_errorFindingReleasesArtist,
-					t, artistName);
+					R.string.ServiceException_errorFindingReleasesArtist, t,
+					artistName);
 		}
 		return artist;
 	}
@@ -131,8 +160,24 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 		return stringBuffer;
 	}
 
-	protected org.musicbrainz.controller.Release createReleaseSearch() {
-		return new org.musicbrainz.controller.Release();
+	/**
+	 * Creates an instance of the release search object.
+	 * 
+	 * @param userAgentName
+	 *            custom application name used in user agent string. If
+	 *            <code>null</code>, the default user agent string is used.
+	 * @param userAgentVersion
+	 *            custom application version used in user agent string
+	 * @param userAgentContact
+	 *            contact URL or author email used in user agent string
+	 * 
+	 * @return a new instance of the web service implementation.
+	 */
+	protected org.musicbrainz.controller.Release createReleaseSearch(
+			String userAgentName, String userAgentVersion,
+			String userAgentContact) {
+		return new org.musicbrainz.controller.Release(userAgentName,
+				userAgentVersion, userAgentContact);
 	}
 
 	protected void processReleaseResults(String artistName, Artist artist,

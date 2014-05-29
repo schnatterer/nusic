@@ -22,4 +22,5 @@ package info.schnatterer.nusic;
 
 public interface Constants {
 	String LOG = "info.schnatterer.nusic";
+	String APPLICATION_URL = "https://github.com/schnatterer/nusic";
 }

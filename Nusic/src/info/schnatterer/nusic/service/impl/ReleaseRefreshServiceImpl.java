@@ -20,6 +20,7 @@
  */
 package info.schnatterer.nusic.service.impl;
 
+import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.db.DatabaseException;
@@ -46,7 +47,7 @@ import android.util.Log;
 
 public class ReleaseRefreshServiceImpl implements ReleaseRefreshService {
 	private Context context;
-	private QueryMusicMetadataService queryMusicMetadataService = new QueryMusicMetadataServiceMusicBrainz();
+	private final QueryMusicMetadataService queryMusicMetadataService;
 	private ArtistQueryService artistQueryService = new ArtistQueryServiceImpl();
 	private PreferencesService preferencesService = PreferencesServiceSharedPreferences
 			.getInstance();
@@ -63,6 +64,9 @@ public class ReleaseRefreshServiceImpl implements ReleaseRefreshService {
 		if (context != null) {
 			this.artistService = new ArtistServiceImpl(context);
 		}
+		queryMusicMetadataService = new QueryMusicMetadataServiceMusicBrainz(
+				context.getString(R.string.app_name),
+				Application.getVersionName(), Constants.APPLICATION_URL);
 	}
 
 	@Override

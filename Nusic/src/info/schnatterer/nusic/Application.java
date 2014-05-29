@@ -25,6 +25,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -33,6 +34,7 @@ import android.widget.Toast;
 public class Application extends android.app.Application {
 	private static final int NOTIFICATION_ID_WARNING = 0;
 	private static final int NOTIFICATION_ID_INFO = 1;
+	private static String versionName;
 
 	private static Context context;
 
@@ -40,6 +42,7 @@ public class Application extends android.app.Application {
 	public void onCreate() {
 		super.onCreate();
 		Application.context = getApplicationContext();
+		versionName = createVersionName();
 	}
 
 	/**
@@ -49,6 +52,13 @@ public class Application extends android.app.Application {
 	 */
 	public static Context getContext() {
 		return Application.context;
+	}
+
+	/**
+	 * @return the human readable version name.
+	 */
+	public static String getVersionName() {
+		return versionName;
 	}
 
 	/**
@@ -152,5 +162,23 @@ public class Application extends android.app.Application {
 		// mId allows you to update the notification later on.
 		mNotificationManager.notify(id, notificationBuilder.build());
 		Log.i(Constants.LOG, "Notifcation: " + text);
+	}
+
+	/**
+	 * Reads the human readable version name from the package manager.
+	 * 
+	 * @return the version or <code>ErrorReadingVersion</code> if an error
+	 *         Occurs.
+	 */
+	private String createVersionName() {
+		String versionName;
+		try {
+			versionName = context.getPackageManager().getPackageInfo(
+					context.getPackageName(), 0).versionName;
+		} catch (PackageManager.NameNotFoundException e) {
+			Log.w(Constants.LOG, "Unable to read version name", e);
+			versionName = "ErrorReadingVersion";
+		}
+		return versionName;
 	}
 }
