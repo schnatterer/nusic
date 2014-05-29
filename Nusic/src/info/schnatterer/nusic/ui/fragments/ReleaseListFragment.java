@@ -140,7 +140,7 @@ public class ReleaseListFragment extends SherlockFragment {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		// if (v.getId() == R.id.releasesListView) {
 		MenuInflater inflater = getSherlockActivity().getMenuInflater();
-		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+		AdapterView.AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
 		Release release = (Release) releasesListView
 				.getItemAtPosition(info.position);
 		menu.setHeaderTitle(release.getArtistName() + " - "
@@ -151,31 +151,36 @@ public class ReleaseListFragment extends SherlockFragment {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
-				.getMenuInfo();
-		Release release = (Release) releasesListView
-				.getItemAtPosition(info.position);
-		try {
-			switch (item.getItemId()) {
-			case R.id.releaseListMenuHideRelease:
-				release.setHidden(true);
-				getReleaseService().update(release);
-				getActivity().onContentChanged();
-				break;
-			case R.id.releaseListMenuHideAllByArtist:
-				Artist artist = release.getArtist();
-				artist.setHidden(true);
-				getArtistService().update(artist);
-				getActivity().onContentChanged();
-				break;
-			default:
-				return super.onContextItemSelected(item);
+		// If this callback was invoked on the visible fragment instance
+		if (getUserVisibleHint()) {
+			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+					.getMenuInfo();
+			Release release = (Release) releasesListView
+					.getItemAtPosition(info.position);
+			try {
+				switch (item.getItemId()) {
+				case R.id.releaseListMenuHideRelease:
+					release.setHidden(true);
+					getReleaseService().update(release);
+					getActivity().onContentChanged();
+					break;
+				case R.id.releaseListMenuHideAllByArtist:
+					Artist artist = release.getArtist();
+					artist.setHidden(true);
+					getArtistService().update(artist);
+					getActivity().onContentChanged();
+					break;
+				default:
+					return super.onContextItemSelected(item);
+				}
+			} catch (ServiceException e) {
+				Log.w(Constants.LOG, "Error hiding release/artist", e);
+				Application.toast(e.getLocalizedMessageId());
 			}
-		} catch (ServiceException e) {
-			Log.w(Constants.LOG, "Error hiding release/artist", e);
-			Application.toast(e.getLocalizedMessageId());
+			return true; // Finish processing fragment instances
+		} else {
+			return false; // Pass the event to the next fragment
 		}
-		return false;
 	}
 
 	protected void setReleases(List<Release> result) {
