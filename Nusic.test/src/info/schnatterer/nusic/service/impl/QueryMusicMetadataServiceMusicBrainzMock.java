@@ -20,8 +20,6 @@
  */
 package info.schnatterer.nusic.service.impl;
 
-import info.schnatterer.nusic.service.impl.QueryMusicMetadataServiceMusicBrainz;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,6 +29,10 @@ import org.musicbrainz.model.searchresult.ReleaseResultWs2;
 
 public class QueryMusicMetadataServiceMusicBrainzMock extends
 		QueryMusicMetadataServiceMusicBrainz {
+	public QueryMusicMetadataServiceMusicBrainzMock() {
+		super(null, null, null);
+	}
+
 	private String lastSearchText;
 	private List<ReleaseWs2> mockedReleases;
 
@@ -47,7 +49,9 @@ public class QueryMusicMetadataServiceMusicBrainzMock extends
 	}
 
 	@Override
-	protected org.musicbrainz.controller.Release createReleaseSearch() {
+	protected org.musicbrainz.controller.Release createReleaseSearch(
+			String userAgentName, String userAgentVersion,
+			String userAgentContact) {
 		return new org.musicbrainz.controller.Release() {
 			@Override
 			public boolean hasMore() {
@@ -76,16 +80,16 @@ public class QueryMusicMetadataServiceMusicBrainzMock extends
 		};
 	}
 
-//	@Override
-//	protected List<ReleaseResultWs2> findReleases(String searchText) {
-//		lastSearchText = searchText;
-//		List<ReleaseResultWs2> ret = new LinkedList<ReleaseResultWs2>();
-//		for (ReleaseWs2 releaseWs2 : mockedReleases) {
-//			ReleaseResultWs2 result = new ReleaseResultWs2();
-//			result.setRelease(releaseWs2);
-//			ret.add(result);
-//		}
-//
-//		return ret;
-//	}
+	// @Override
+	// protected List<ReleaseResultWs2> findReleases(String searchText) {
+	// lastSearchText = searchText;
+	// List<ReleaseResultWs2> ret = new LinkedList<ReleaseResultWs2>();
+	// for (ReleaseWs2 releaseWs2 : mockedReleases) {
+	// ReleaseResultWs2 result = new ReleaseResultWs2();
+	// result.setRelease(releaseWs2);
+	// ret.add(result);
+	// }
+	//
+	// return ret;
+	// }
 }
