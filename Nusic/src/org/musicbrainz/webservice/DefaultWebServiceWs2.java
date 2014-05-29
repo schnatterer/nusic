@@ -97,7 +97,7 @@ public abstract class DefaultWebServiceWs2 extends DomainsWs2 implements
 	private String realm = AUTHREALM;
 
 	/**
-	 * The protocol, defaults to http
+	 * The protocol, defaults to https
 	 */
 	private String protocol = "https";
 
