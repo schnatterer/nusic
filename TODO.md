@@ -1,9 +1,5 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Remove error message
-- Feature: Swipe between Tabs
-=== RELEASE v.0.5
-
 - Feature: Info dialog
 - Feature: Tabs: Available, Announced
 - Feature: Use WeakReferences to improve performance while scrolling list: http://stackoverflow.com/questions/3243215/how-to-use-weakreference-in-java-and-android-development
@@ -35,7 +31,7 @@ TODOs - Features, enhancements, refactoring, ...
 
 .... Even more ideas
 - Feature: Kind of releases: Album, Release, Live ...
-- Feature: Error reporter
+- Feature: Error reporter; Or a simpler workaround: Log errors to SD (microlog4android? http://stackoverflow.com/a/13479675/1845976)
 - Feature: Check connectivity while refreshing and cancel with error when lost: http://developer.android.com/training/monitoring-device-state/connectivity-monitoring.html
 - Feature: Show number of artists and releases, show date of last refresh (in status/statistik dialog?)
 - Refactoring: Delete LoadNewServiceBinding and split its functionality to MainActivity and  ServiceConnection?
@@ -46,7 +42,6 @@ TODOs - Features, enhancements, refactoring, ...
 - Feature: Preference Time period: infinitely. TODO Refactor refreshing release to decrease memory consumption.
 
 .... Lower priority ideas
-- Feature: Use HTTPS?
 - Feature: Update only when sync is enabled: http://stackoverflow.com/questions/11252876/check-if-sync-is-enabled-within-android-app
 (- Fix: Connect to Service and Start Dialog when Service started itself (e.g. after boot: wait for service to start, then tap refresh)) 
 - Fix: After service was killed: Continue from last artists instead of starting new
