@@ -32,6 +32,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.musicbrainz.MBWS2Exception;
 import org.musicbrainz.model.ArtistCreditWs2;
@@ -70,6 +71,14 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 	private static final String SEARCH_DATE_FINAL = "]";
 	private static final String SEARCH_ARTIST_1 = " AND artist:\"";
 	private static final String SEARCH_ARTIST_2 = "\"";
+
+	static {
+		/*
+		 * Some class are flooding our logs with warnings. Give us some space!
+		 */
+		Logger.getLogger("org.musicbrainz.wsxml.impl.JDOMParserWs2").setLevel(
+				java.util.logging.Level.SEVERE);
+	}
 
 	/**
 	 * Creates a service instance for finding releases.
