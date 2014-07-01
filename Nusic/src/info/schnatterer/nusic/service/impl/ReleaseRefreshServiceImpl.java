@@ -152,6 +152,11 @@ public class ReleaseRefreshServiceImpl implements ReleaseRefreshService {
 		Artist[] artists;
 		try {
 			artists = getArtists();
+			if (artists == null) {
+				Log.w(Constants.LOG,
+						"No artists were returned. No music files on device?");
+				return;
+			}
 
 			progressUpdater.progressStarted(artists.length);
 			ServiceException potentialException = null;
@@ -163,8 +168,13 @@ public class ReleaseRefreshServiceImpl implements ReleaseRefreshService {
 				 * limit of 2048 chars in mind)
 				 */
 				try {
-					queryMusicMetadataService.findReleases(artist, startDate,
-							endDate).getReleases();
+					artist = queryMusicMetadataService.findReleases(artist,
+							startDate, endDate);
+					if (artist == null) {
+						Log.w(Constants.LOG, "Artist " + i + " of "
+								+ artists.length + " is null.");
+						continue;
+					}
 
 					// TODO query images from lastfm
 					// de.umass.lastfm.Artist artistInfo =
