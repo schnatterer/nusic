@@ -150,7 +150,7 @@ public class Release implements Entity {
 		return dateCreated;
 	}
 
-	protected void setDateCreated(Date dateCreated) {
+	public void setDateCreated(Date dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 

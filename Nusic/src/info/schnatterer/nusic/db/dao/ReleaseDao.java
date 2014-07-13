@@ -33,11 +33,12 @@ public interface ReleaseDao extends GenericDao<Release> {
 	 * {@link Release#getMusicBrainzId()} exists.
 	 * 
 	 * @param musicBrainzId
-	 * @return the {@link Release#getId()} of the release if the release exists.
+	 * @return the {@link Release} containing ID and dateCreated, if existing
 	 *         Otherwise <code>null</code>.
 	 * @throws DatabaseException
 	 */
-	Long findByMusicBrainzId(String musicBrainzId) throws DatabaseException;
+	Release findIdDateCreatedByMusicBrainzId(String musicBrainzId)
+			throws DatabaseException;
 
 	/**
 	 * Finds all releases.

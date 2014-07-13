@@ -29,10 +29,22 @@ public interface ArtistDao extends GenericDao<Artist> {
 	 * {@link Artist#getAndroidAudioArtistId()} exists.
 	 * 
 	 * @param androidId
-	 * @return the {@link Artist#getId()} of the artist if the artist exists.
+	 * @return the {@link Artist} containing ID and dateCreated, if existing.
 	 *         Otherwise <code>null</code>.
 	 */
-	Long findByAndroidId(long androidId) throws DatabaseException;
+	Artist findIdDateCreatedByMusicBrainzId(long androidId)
+			throws DatabaseException;
+
+	/**
+	 * Finds out of if artist with a specific
+	 * {@link Artist#getAndroidAudioArtistId()} exists.
+	 * 
+	 * @param androidId
+	 * @return the {@link Artist#getId()} of the artist if the artist exists.
+	 *         Otherwise <code>null</code>.
+	 * @throws DatabaseException
+	 */
+	Long findIdByAndroidId(Long androidAudioArtistId) throws DatabaseException;
 
 	/**
 	 * Set <code>isHidden</code> to <code>false</code> for all {@link Artist}s.

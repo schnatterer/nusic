@@ -60,7 +60,10 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 			.append(TableRelease.COLUMN_IS_HIDDEN).append(" IS NULL OR ")
 			.append(TableRelease.NAME).append(".")
 			.append(TableRelease.COLUMN_IS_HIDDEN).append("!=")
-			.append(SqliteUtil.TRUE).append(") AND (").append(TableArtist.NAME)
+			.append(SqliteUtil.TRUE).append(") AND (")
+			.append(TableRelease.NAME).append(".")
+			.append(TableRelease.COLUMN_RELEASEDATE_RELEASED)
+			.append(" IS NOT NULL").append(") AND (").append(TableArtist.NAME)
 			.append(".").append(TableArtist.COLUMN_IS_HIDDEN)
 			.append(" IS NULL OR ").append(TableArtist.NAME).append(".")
 			.append(TableArtist.COLUMN_IS_HIDDEN).append("!=")
@@ -80,17 +83,20 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 	}
 
 	@Override
-	public Long findByMusicBrainzId(String musicBrainzId)
+	public Release findIdDateCreatedByMusicBrainzId(String musicBrainzId)
 			throws DatabaseException {
 		try {
-			Cursor cursor = query(TableRelease.NAME,
-					new String[] { TableRelease.COLUMN_ID },
+			Cursor cursor = query(TableRelease.NAME, new String[] {
+					TableRelease.COLUMN_ID,
+					TableRelease.COLUMN_RELEASEDATE_CREATED },
 					TableRelease.COLUMN_MB_ID + " = '" + musicBrainzId + "'",
 					null, null, null, null);
 			if (!cursor.moveToFirst()) {
 				return null;
 			}
-			return cursor.getLong(0);
+			Release release = new Release(SqliteUtil.loadDate(cursor, 1));
+			release.setId(cursor.getLong(0));
+			return release;
 		} catch (Throwable t) {
 			throw new DatabaseException(
 					"Unable to find release by MusicBrainz id:" + musicBrainzId,
