@@ -41,11 +41,10 @@ import android.util.Log;
  * 
  */
 public class NusicDatabaseSqlite extends SQLiteOpenHelper {
-
 	private static final String DATABASE_NAME = "nusic";
 
 	/** Last app version that needed a database update. */
-	private static final int DATABASE_VERSION = SqliteDatabaseVersion.APP_VERSION_0_4;
+	private static final int DATABASE_VERSION = SqliteDatabaseVersion.APP_VERSION_0_5;
 
 	private static final String DATABASE_TABLE_CREATE = "CREATE TABLE ";
 	private static final String DATABASE_TABLE_DROP = "DROP TABLE ";
@@ -103,6 +102,16 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 			db.execSQL(addColumn(TableRelease.NAME,
 					TableRelease.COLUMN_IS_HIDDEN,
 					TableRelease.TYPE_COLUMN_IS_HIDDEN));
+		}
+		if (oldVersion < SqliteDatabaseVersion.APP_VERSION_0_5) {
+			/*
+			 * Set all release dates to null. They are filled again on app
+			 * start.
+			 */
+			ContentValues contentValues = new ContentValues();
+			contentValues.put(TableRelease.COLUMN_RELEASEDATE_RELEASED,
+					(Integer) null);
+			db.update(TableRelease.NAME, contentValues, null, null);
 		}
 		// When changing the database, don't forget to create a new version
 	}
@@ -165,6 +174,11 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 		 * v0.4: Added Artist.isHidden and Release.isHidden
 		 */
 		int APP_VERSION_0_4 = 4;
+		/**
+		 * v0.5: Reset {@link TableRelease#COLUMN_RELEASEDATE_RELEASED} due to
+		 * invalid values (no UTC values)
+		 */
+		int APP_VERSION_0_5 = 5;
 	}
 
 	/**
