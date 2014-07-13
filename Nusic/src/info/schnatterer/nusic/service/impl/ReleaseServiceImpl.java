@@ -95,10 +95,13 @@ public class ReleaseServiceImpl implements ReleaseService {
 		try {
 			if (release.getId() == null) {
 				Release existingRelease = releaseDao
-						.findIdDateCreatedByMusicBrainzId(release.getMusicBrainzId());
-				release.setId(existingRelease.getId());
-				// Never overwrite date created!
-				release.setDateCreated(existingRelease.getDateCreated());
+						.findIdDateCreatedByMusicBrainzId(release
+								.getMusicBrainzId());
+				if (existingRelease != null) {
+					release.setId(existingRelease.getId());
+					// Never overwrite date created!
+					release.setDateCreated(existingRelease.getDateCreated());
+				}
 			}
 			if (release.getId() == null) {
 				releaseDao.save(release);

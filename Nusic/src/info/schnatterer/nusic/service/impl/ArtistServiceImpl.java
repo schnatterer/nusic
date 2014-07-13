@@ -70,10 +70,13 @@ public class ArtistServiceImpl implements ArtistService {
 		try {
 			// Does artist exist?
 			if (artist.getId() == null) {
-				Artist existingArtist = artistDao.findIdDateCreatedByMusicBrainzId(artist
-						.getAndroidAudioArtistId());
-				artist.setId(existingArtist.getId());
-				artist.setDateCreated(existingArtist.getDateCreated());
+				Artist existingArtist = artistDao
+						.findIdDateCreatedByMusicBrainzId(artist
+								.getAndroidAudioArtistId());
+				if (existingArtist != null) {
+					artist.setId(existingArtist.getId());
+					artist.setDateCreated(existingArtist.getDateCreated());
+				}
 			}
 			if (artist.getId() == null) {
 				save(artist);
