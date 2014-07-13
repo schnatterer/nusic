@@ -43,6 +43,9 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 		try {
 			Cursor cursor = findCursorByAndroidId(androidId, new String[] {
 					TableArtist.COLUMN_ID, TableArtist.COLUMN_DATE_CREATED });
+			if (!cursor.moveToFirst()) {
+				return null;
+			}
 			Artist artist = new Artist(SqliteUtil.loadDate(cursor, 1));
 			artist.setId(cursor.getLong(0));
 			return artist;
@@ -54,8 +57,12 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 	@Override
 	public Long findIdByAndroidId(Long androidId) throws DatabaseException {
 		try {
-			return findCursorByAndroidId(androidId,
-					new String[] { TableArtist.COLUMN_ID }).getLong(0);
+			Cursor cursor = findCursorByAndroidId(androidId,
+					new String[] { TableArtist.COLUMN_ID });
+			if (!cursor.moveToFirst()) {
+				return null;
+			}
+			return cursor.getLong(0);
 		} finally {
 			closeCursor();
 		}
@@ -99,7 +106,7 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 	 * 
 	 * @param androidId
 	 * @param columns
-	 * @return
+	 * @return the cursor or <code>null</code>, if none found
 	 * @throws DatabaseException
 	 */
 	private Cursor findCursorByAndroidId(long androidId, String[] columns)
@@ -109,9 +116,6 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 			cursor = query(TableArtist.NAME, columns,
 					TableArtist.COLUMN_ANDROID_ID + " = " + androidId, null,
 					null, null, null);
-			if (!cursor.moveToFirst()) {
-				return null;
-			}
 			return cursor;
 		} catch (Throwable t) {
 			throw new DatabaseException("Unable to find artist by android id:"
