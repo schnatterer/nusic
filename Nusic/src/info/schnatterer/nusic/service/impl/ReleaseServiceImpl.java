@@ -30,7 +30,6 @@ import info.schnatterer.nusic.db.model.Release;
 import info.schnatterer.nusic.service.ReleaseService;
 import info.schnatterer.nusic.service.ServiceException;
 
-import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -116,10 +115,10 @@ public class ReleaseServiceImpl implements ReleaseService {
 	}
 
 	@Override
-	public List<Release> findJustCreated(Date gtDateCreated)
+	public List<Release> findJustCreated(long gtDateCreated)
 			throws ServiceException {
 		try {
-			return releaseDao.findJustCreated(gtDateCreated);
+			return releaseDao.findByDateCreatedGreaterThan(gtDateCreated);
 		} catch (DatabaseException e) {
 			throw new ServiceException(
 					R.string.ServiceException_errorReadingFromDb, e);

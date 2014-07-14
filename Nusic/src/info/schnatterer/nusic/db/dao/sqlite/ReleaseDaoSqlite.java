@@ -28,7 +28,6 @@ import info.schnatterer.nusic.db.model.Artist;
 import info.schnatterer.nusic.db.model.Release;
 import info.schnatterer.nusic.db.util.SqliteUtil;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,10 +40,15 @@ import android.database.Cursor;
 public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 		ReleaseDao {
 
-	public static final String ORDER_BY_RELEASE_DATE_ASC = new StringBuilder(
+	public static final String ORDER_BY_RELEASE_DATE = new StringBuilder(
 			" ORDER BY ").append(TableRelease.NAME).append(".")
-			.append(TableRelease.COLUMN_RELEASEDATE_RELEASED).append(" DESC")
-			.toString();
+			.append(TableRelease.COLUMN_DATE_RELEASED).toString();
+
+	public static final String ORDER_BY_RELEASE_DATE_DESC = new StringBuilder(
+			ORDER_BY_RELEASE_DATE).append(" DESC").toString();
+
+	public static final String ORDER_BY_RELEASE_DATE_ASC = new StringBuilder(
+			ORDER_BY_RELEASE_DATE).append(" ASC").toString();
 
 	public static final String QUERY_ALL = new StringBuilder("SELECT ")
 			.append(TableRelease.COLUMNS_ALL).append(",")
@@ -62,21 +66,32 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 			.append(TableRelease.COLUMN_IS_HIDDEN).append("!=")
 			.append(SqliteUtil.TRUE).append(") AND (")
 			.append(TableRelease.NAME).append(".")
-			.append(TableRelease.COLUMN_RELEASEDATE_RELEASED)
-			.append(" IS NOT NULL").append(") AND (").append(TableArtist.NAME)
-			.append(".").append(TableArtist.COLUMN_IS_HIDDEN)
-			.append(" IS NULL OR ").append(TableArtist.NAME).append(".")
+			.append(TableRelease.COLUMN_DATE_RELEASED).append(" IS NOT NULL")
+			.append(") AND (").append(TableArtist.NAME).append(".")
+			.append(TableArtist.COLUMN_IS_HIDDEN).append(" IS NULL OR ")
+			.append(TableArtist.NAME).append(".")
 			.append(TableArtist.COLUMN_IS_HIDDEN).append("!=")
 			.append(SqliteUtil.TRUE).append(")").toString();
 
 	public static final String QUERY_NOT_HIDDEN_ORDER_RELEASE_DATE_ASC = new StringBuilder(
-			QUERY_NOT_HIDDEN).append(ORDER_BY_RELEASE_DATE_ASC).toString();
+			QUERY_NOT_HIDDEN).append(ORDER_BY_RELEASE_DATE_DESC).toString();
 
-	public static final String QUERY_BY_RELEASE_DATE_ORDER_BY_DATE_ASC = new StringBuilder(
+	public static final String QUERY_BY_DATE_CREATED_ORDER_BY_DATE_ASC = new StringBuilder(
 			QUERY_NOT_HIDDEN).append(" AND ").append(TableRelease.NAME)
-			.append(".").append(TableRelease.COLUMN_RELEASEDATE_CREATED)
-			.append(">").append(" ?").append(ORDER_BY_RELEASE_DATE_ASC)
-			.toString();
+			.append(".").append(TableRelease.COLUMN_DATE_CREATED).append(">")
+			.append(" ?").append(ORDER_BY_RELEASE_DATE_DESC).toString();
+
+	private static final String QUERY_BY_RELEASE_DATE_BASE = new StringBuilder(
+			QUERY_NOT_HIDDEN).append(" AND ").append(TableRelease.NAME)
+			.append(".").append(TableRelease.COLUMN_DATE_RELEASED).toString();
+
+	private static final String QUERY_BY_RELEASE_DATE_LT = new StringBuilder(
+			QUERY_BY_RELEASE_DATE_BASE).append(" <").append(" ?")
+			.append(ORDER_BY_RELEASE_DATE_DESC).toString();
+
+	private static final String QUERY_BY_RELEASE_DATE_GTE = new StringBuilder(
+			QUERY_BY_RELEASE_DATE_BASE).append(" >=").append(" ?")
+			.append(ORDER_BY_RELEASE_DATE_ASC).toString();
 
 	public ReleaseDaoSqlite(Context context) {
 		super(context);
@@ -87,8 +102,7 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 			throws DatabaseException {
 		try {
 			Cursor cursor = query(TableRelease.NAME, new String[] {
-					TableRelease.COLUMN_ID,
-					TableRelease.COLUMN_RELEASEDATE_CREATED },
+					TableRelease.COLUMN_ID, TableRelease.COLUMN_DATE_CREATED },
 					TableRelease.COLUMN_MB_ID + " = '" + musicBrainzId + "'",
 					null, null, null, null);
 			if (!cursor.moveToFirst()) {
@@ -107,15 +121,29 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 	}
 
 	@Override
-	public List<Release> findNotHidden() throws DatabaseException {
+	public List<Release> findByHiddenFalse() throws DatabaseException {
 		return executeQuery(QUERY_NOT_HIDDEN_ORDER_RELEASE_DATE_ASC, null);
 	}
 
 	@Override
-	public List<Release> findJustCreated(Date gtDateCreated)
+	public List<Release> findByDateCreatedGreaterThan(long gtDateCreated)
 			throws DatabaseException {
-		return executeQuery(QUERY_BY_RELEASE_DATE_ORDER_BY_DATE_ASC,
-				new String[] { String.valueOf(gtDateCreated.getTime()) });
+		return executeQuery(QUERY_BY_DATE_CREATED_ORDER_BY_DATE_ASC,
+				new String[] { String.valueOf(gtDateCreated) });
+	}
+
+	@Override
+	public List<Release> findByReleaseDateLessThan(long ltReleaseDate)
+			throws DatabaseException {
+		return executeQuery(QUERY_BY_RELEASE_DATE_LT,
+				new String[] { String.valueOf(ltReleaseDate) });
+	}
+
+	@Override
+	public List<Release> findByReleaseDateGreaterThanEqual(long gtEqReleaseDate)
+			throws DatabaseException {
+		return executeQuery(QUERY_BY_RELEASE_DATE_GTE,
+				new String[] { String.valueOf(gtEqReleaseDate) });
 	}
 
 	private List<Release> executeQuery(String sql, String[] selectionArgs)

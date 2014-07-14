@@ -217,7 +217,7 @@ public class LoadNewReleasesService extends WakefulService {
 				getReleasesService().addArtistProcessedListener(
 						progressListenerNotifications);
 
-				Date beforeRefresh = new Date();
+				long beforeRefresh = System.currentTimeMillis();
 				Log.d(Constants.LOG,
 						"Service thread: Calling refreshReleases()");
 				if (getReleasesService().refreshReleases(updateOnlyIfNeccesary)) {
@@ -250,7 +250,7 @@ public class LoadNewReleasesService extends WakefulService {
 	 * @param beforeRefresh
 	 * @throws DatabaseException
 	 */
-	private void notifyNewReleases(Date beforeRefresh) throws ServiceException {
+	private void notifyNewReleases(long beforeRefresh) throws ServiceException {
 		List<Release> newReleases = releaseService
 				.findJustCreated(beforeRefresh);
 		if (newReleases.size() > 0) {
