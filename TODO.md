@@ -1,9 +1,11 @@
 TODOs - Features, enhancements, refactoring, ...
 
+- Feature: Notification: Release "is published today", can be disabled in prefs. Notification for new ablums can be disabled in prefs.
 - Feature: Info dialog
-- Feature: Tabs: Available, Announced
+=== RELEASE v.0.7
+
 - Feature: Use WeakReferences to improve performance while scrolling list: http://stackoverflow.com/questions/3243215/how-to-use-weakreference-in-java-and-android-development
-=== RELEASE v.0.6
+=== RELEASE v.0.8
 
 
 - Feature: Query and display album covers: Last fm? (See Apollo Music player) or Discogs? Store covers in sqlite oder in file system? Get Last.FM ID/Discogs ID from MusicBrainz?
@@ -30,6 +32,7 @@ TODOs - Features, enhancements, refactoring, ...
 
 
 .... Even more ideas
+- Feature: Clean up DB, remove older entries or remove dateRelease in order to not display them anymore in app.
 - Feature: Kind of releases: Album, Release, Live ...
 - Feature: Error reporter; Or a simpler workaround: Log errors to SD (microlog4android? http://stackoverflow.com/a/13479675/1845976)
 - Feature: Check connectivity while refreshing and cancel with error when lost: http://developer.android.com/training/monitoring-device-state/connectivity-monitoring.html
