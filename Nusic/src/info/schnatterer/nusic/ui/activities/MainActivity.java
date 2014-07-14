@@ -49,6 +49,8 @@ public class MainActivity extends SherlockFragmentActivity {
 
 	private static final int RELEASE_DB_LOADER_ALL = 0;
 	private static final int RELEASE_DB_LOADER_JUST_ADDED = 1;
+	private static final int RELEASE_DB_LOADER_AVAILABLE = 2;
+	private static final int RELEASE_DB_LOADER_ANNOUNCED = 3;
 
 	/** Start and bind the {@link LoadNewReleasesService}. */
 	private static LoadNewRelasesServiceBinding loadNewRelasesServiceBinding = null;
@@ -232,6 +234,10 @@ public class MainActivity extends SherlockFragmentActivity {
 		final TabHolder[] tabs = {
 				new TabHolder(R.string.MainActivity_TabJustAdded,
 						RELEASE_DB_LOADER_JUST_ADDED, ReleaseQuery.JUST_ADDED),
+				new TabHolder(R.string.MainActivity_TabAvailable,
+						RELEASE_DB_LOADER_AVAILABLE, ReleaseQuery.AVAILABLE),
+				new TabHolder(R.string.MainActivity_TabAnnounced,
+						RELEASE_DB_LOADER_ANNOUNCED, ReleaseQuery.ANNOUNCED),
 				new TabHolder(R.string.MainActivity_TabAll,
 						RELEASE_DB_LOADER_ALL, ReleaseQuery.ALL) };
 

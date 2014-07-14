@@ -38,20 +38,31 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 	}
 
 	@Override
-	public Long findByAndroidId(long androidId) throws DatabaseException {
-		Cursor cursor = null;
+	public Artist findIdDateCreatedByMusicBrainzId(long androidId)
+			throws DatabaseException {
 		try {
-			cursor = query(TableArtist.NAME,
-					new String[] { TableArtist.COLUMN_ID },
-					TableArtist.COLUMN_ANDROID_ID + " = " + androidId, null,
-					null, null, null);
+			Cursor cursor = findCursorByAndroidId(androidId, new String[] {
+					TableArtist.COLUMN_ID, TableArtist.COLUMN_DATE_CREATED });
+			if (!cursor.moveToFirst()) {
+				return null;
+			}
+			Artist artist = new Artist(SqliteUtil.loadDate(cursor, 1));
+			artist.setId(cursor.getLong(0));
+			return artist;
+		} finally {
+			closeCursor();
+		}
+	}
+
+	@Override
+	public Long findIdByAndroidId(Long androidId) throws DatabaseException {
+		try {
+			Cursor cursor = findCursorByAndroidId(androidId,
+					new String[] { TableArtist.COLUMN_ID });
 			if (!cursor.moveToFirst()) {
 				return null;
 			}
 			return cursor.getLong(0);
-		} catch (Throwable t) {
-			throw new DatabaseException("Unable to find artist by android id:"
-					+ androidId, t);
 		} finally {
 			closeCursor();
 		}
@@ -87,5 +98,28 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(TableArtist.COLUMN_IS_HIDDEN, SqliteUtil.FALSE);
 		update(contentValues, null, null);
+	}
+
+	/**
+	 * Queries a specific artists ID and returns the cursor or <code>null</code>
+	 * if none present. <b>Make sure to close the cursor when finished!</b>
+	 * 
+	 * @param androidId
+	 * @param columns
+	 * @return the cursor or <code>null</code>, if none found
+	 * @throws DatabaseException
+	 */
+	private Cursor findCursorByAndroidId(long androidId, String[] columns)
+			throws DatabaseException {
+		Cursor cursor = null;
+		try {
+			cursor = query(TableArtist.NAME, columns,
+					TableArtist.COLUMN_ANDROID_ID + " = " + androidId, null,
+					null, null, null);
+			return cursor;
+		} catch (Throwable t) {
+			throw new DatabaseException("Unable to find artist by android id:"
+					+ androidId, t);
+		}
 	}
 }

@@ -17,6 +17,8 @@
     <string name="MainActivity_noNewReleasesFound">Recently, no new releases were found for the artists on your device in the specified time period.</string>
     <string name="MainActivity_TabAll">All</string>
     <string name="MainActivity_TabJustAdded">Just added</string>
+    <string name="MainActivity_TabAvailable">Available</string>
+    <string name="MainActivity_TabAnnounced">Announced</string>
     <!-- <string name="MainActivity_JustAddedInformation">All releases that were added within the last %1$d days</string> -->
     
      <!-- Prefrences -->

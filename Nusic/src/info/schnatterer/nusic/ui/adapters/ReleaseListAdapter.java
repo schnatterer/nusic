@@ -23,11 +23,12 @@ package info.schnatterer.nusic.ui.adapters;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.db.model.Release;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import android.content.Context;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,13 +37,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ReleaseListAdapter extends BaseAdapter {
-	private Context context;
 	private List<Release> listData;
 	private static LayoutInflater layoutInflater = null;
 
 	public ReleaseListAdapter(Context context) {
-		// this.listData = listData;
-		this.context = context;
 		layoutInflater = LayoutInflater.from(context);
 	}
 
@@ -90,8 +88,9 @@ public class ReleaseListAdapter extends BaseAdapter {
 		artistView.setText(release.getArtistName());
 		Date releaseDate = release.getReleaseDate();
 		if (releaseDate != null) {
-			releaseDateView.setText(DateFormat.getDateFormat(context).format(
-					releaseDate));
+			DateFormat dateFormat = DateFormat.getDateInstance();
+			dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+			releaseDateView.setText(dateFormat.format(releaseDate));
 		} else {
 			releaseDateView.setText("");
 		}

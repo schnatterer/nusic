@@ -4,10 +4,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.musicbrainz.model.ArtistCreditWs2;
 import org.musicbrainz.model.entity.listelement.ReleaseListWs2;
 
@@ -178,6 +179,9 @@ public class ReleaseGroupWs2 extends EntityWs2 {
         if (firstReleaseDateStr.length() == 7) 
                 f = new SimpleDateFormat("yyyy-MM");
 
+        // Values retunred by musicbrainz are always in UTC!
+        f.setTimeZone(TimeZone.getTimeZone("UTC"));
+        
         try {
                 return f.parse(firstReleaseDateStr);
         } catch (ParseException e) {

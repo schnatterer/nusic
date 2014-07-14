@@ -23,7 +23,6 @@ package info.schnatterer.nusic.db.dao;
 import info.schnatterer.nusic.db.DatabaseException;
 import info.schnatterer.nusic.db.model.Release;
 
-import java.util.Date;
 import java.util.List;
 
 public interface ReleaseDao extends GenericDao<Release> {
@@ -33,11 +32,12 @@ public interface ReleaseDao extends GenericDao<Release> {
 	 * {@link Release#getMusicBrainzId()} exists.
 	 * 
 	 * @param musicBrainzId
-	 * @return the {@link Release#getId()} of the release if the release exists.
+	 * @return the {@link Release} containing ID and dateCreated, if existing
 	 *         Otherwise <code>null</code>.
 	 * @throws DatabaseException
 	 */
-	Long findByMusicBrainzId(String musicBrainzId) throws DatabaseException;
+	Release findIdDateCreatedByMusicBrainzId(String musicBrainzId)
+			throws DatabaseException;
 
 	/**
 	 * Finds all releases.
@@ -45,7 +45,7 @@ public interface ReleaseDao extends GenericDao<Release> {
 	 * @return
 	 * @throws DatabaseException
 	 */
-	List<Release> findNotHidden() throws DatabaseException;
+	List<Release> findByHiddenFalse() throws DatabaseException;
 
 	/**
 	 * Finds all releases that were created after a specific date and that are
@@ -58,7 +58,36 @@ public interface ReleaseDao extends GenericDao<Release> {
 	 * @return all releases that were created after <code>gtDateCreated</code>
 	 * @throws DatabaseException
 	 */
-	List<Release> findJustCreated(Date gtDateCreated) throws DatabaseException;
+	List<Release> findByDateCreatedGreaterThan(long gtDateCreated)
+			throws DatabaseException;
+
+	/**
+	 * Finds all releases whose release date is less than a specific date and
+	 * that are visible.
+	 * 
+	 * @param ltReleaseDate
+	 *            all releases whose release date is less than this date are
+	 *            returned
+	 * @return all releases whose release date is before
+	 *         <code>ltReleaseDate</code>
+	 * @throws DatabaseException
+	 */
+	List<Release> findByReleaseDateLessThan(long ltReleaseDate)
+			throws DatabaseException;
+
+	/**
+	 * Finds all releases whose release date is greater than or equal to a
+	 * specific date and that are visible.
+	 * 
+	 * @param gtEqReleaseDate
+	 *            all releases whose release date greater than or equal to this
+	 *            date are returned
+	 * @return all releases whose release date is at or after
+	 *         <code>gtEqReleaseDate</code>
+	 * @throws DatabaseException
+	 */
+	List<Release> findByReleaseDateGreaterThanEqual(long gtEqReleaseDate)
+			throws DatabaseException;
 
 	/**
 	 * Set <code>isHidden</code> to <code>false</code> for all {@link Release}s.

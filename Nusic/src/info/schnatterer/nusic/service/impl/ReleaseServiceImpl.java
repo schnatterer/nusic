@@ -30,7 +30,6 @@ import info.schnatterer.nusic.db.model.Release;
 import info.schnatterer.nusic.service.ReleaseService;
 import info.schnatterer.nusic.service.ServiceException;
 
-import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -72,8 +71,9 @@ public class ReleaseServiceImpl implements ReleaseService {
 				/* Get existing artist */
 				if (release.getArtist() == null && saveArtist) {
 					if (release.getArtist().getId() == null) {
-						Long existingArtist = artistDao.findByAndroidId(release
-								.getArtist().getAndroidAudioArtistId());
+						Long existingArtist = artistDao
+								.findIdByAndroidId(release.getArtist()
+										.getAndroidAudioArtistId());
 						if (existingArtist == null) {
 							artistDao.save(release.getArtist());
 						}
@@ -93,8 +93,14 @@ public class ReleaseServiceImpl implements ReleaseService {
 		// Does release exist?
 		try {
 			if (release.getId() == null) {
-				release.setId(releaseDao.findByMusicBrainzId(release
-						.getMusicBrainzId()));
+				Release existingRelease = releaseDao
+						.findIdDateCreatedByMusicBrainzId(release
+								.getMusicBrainzId());
+				if (existingRelease != null) {
+					release.setId(existingRelease.getId());
+					// Never overwrite date created!
+					release.setDateCreated(existingRelease.getDateCreated());
+				}
 			}
 			if (release.getId() == null) {
 				releaseDao.save(release);
@@ -109,10 +115,10 @@ public class ReleaseServiceImpl implements ReleaseService {
 	}
 
 	@Override
-	public List<Release> findJustCreated(Date gtDateCreated)
+	public List<Release> findJustCreated(long gtDateCreated)
 			throws ServiceException {
 		try {
-			return releaseDao.findJustCreated(gtDateCreated);
+			return releaseDao.findByDateCreatedGreaterThan(gtDateCreated);
 		} catch (DatabaseException e) {
 			throw new ServiceException(
 					R.string.ServiceException_errorReadingFromDb, e);
