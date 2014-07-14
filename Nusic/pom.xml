@@ -139,16 +139,18 @@
 				</executions>
 			</plugin>
 
+			<!-- Starting with Android SDK Tools 23? you might have to copy zipaling 
+				from sdk/build-tools/<version> to sdk/tools -->
 			<plugin>
 				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 				<artifactId>android-maven-plugin</artifactId>
-				<version>3.6.0</version>
+				<version>3.8.2</version>
 				<inherited>true</inherited>
 				<extensions>true</extensions>
 				<executions>
 					<execution>
 						<id>alignApk</id>
-						<phase>install</phase>
+						<phase>package</phase>
 						<goals>
 							<goal>zipalign</goal>
 						</goals>
