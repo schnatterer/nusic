@@ -17,6 +17,8 @@
     <string name="MainActivity_noNewReleasesFound">In der letzten Zeit wurden keine neuen Alben gefunden für die auf dem Gerät vorhandenen Interpreten und den angegebenen Zeitraum.</string>
     <string name="MainActivity_TabAll">Alle</string>
     <string name="MainActivity_TabJustAdded">Neu hinzugefügt</string>
+    <string name="MainActivity_TabAvailable">Verfügbar</string>
+    <string name="MainActivity_TabAnnounced">Angekündigt</string>
     <!-- <string name="MainActivity_JustAddedInformation">Alle Alben, die in den letzten %1$d Tagen hinzugefügt wurden</string> -->
     
     <!-- Prefrences -->

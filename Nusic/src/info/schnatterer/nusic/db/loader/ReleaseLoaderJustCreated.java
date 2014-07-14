@@ -23,23 +23,22 @@ package info.schnatterer.nusic.db.loader;
 import info.schnatterer.nusic.db.dao.sqlite.ReleaseDaoSqlite;
 import info.schnatterer.nusic.db.model.Release;
 
-import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
 
-public class ReleaseLoader extends
+public class ReleaseLoaderJustCreated extends
 		AbstractAsyncSqliteLoader<List<Release>, Release, ReleaseDaoSqlite> {
 
-	private Date dateCreatedGt;
+	private Long dateCreatedGt;
 
 	/**
 	 * @param context
 	 * @param dateCreatedGt
 	 *            the releases should all have a date created that is greater
-	 *            than this
+	 *            than this. If <code>null</code>, all releases are returned.
 	 */
-	public ReleaseLoader(Context context, Date dateCreatedGt) {
+	public ReleaseLoaderJustCreated(Context context, Long dateCreatedGt) {
 		super(context);
 		this.dateCreatedGt = dateCreatedGt;
 	}
@@ -52,9 +51,9 @@ public class ReleaseLoader extends
 	@Override
 	public List<Release> doLoadInBackground() throws Exception {
 		if (dateCreatedGt == null) {
-			return getDao().findNotHidden();
+			return getDao().findByHiddenFalse();
 		} else {
-			return getDao().findJustCreated(dateCreatedGt);
+			return getDao().findByDateCreatedGreaterThan(dateCreatedGt);
 		}
 	}
 }

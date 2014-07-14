@@ -109,7 +109,7 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 			 * start.
 			 */
 			ContentValues contentValues = new ContentValues();
-			contentValues.put(TableRelease.COLUMN_RELEASEDATE_RELEASED,
+			contentValues.put(TableRelease.COLUMN_DATE_RELEASED,
 					(Integer) null);
 			db.update(TableRelease.NAME, contentValues, null, null);
 		}
@@ -175,7 +175,7 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 		 */
 		int APP_VERSION_0_4 = 4;
 		/**
-		 * v0.5: Reset {@link TableRelease#COLUMN_RELEASEDATE_RELEASED} due to
+		 * v0.5: Reset {@link TableRelease#COLUMN_DATE_RELEASED} due to
 		 * invalid values (no UTC values)
 		 */
 		int APP_VERSION_0_5 = 5;
@@ -204,11 +204,11 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 		public static final String TYPE_COLUMN_RELEASENAME = "TEXT NOT NULL";
 		public static final int INDEX_COLUMN_RELEASENAME = 2;
 
-		public static final String COLUMN_RELEASEDATE_RELEASED = "dateReleased";
+		public static final String COLUMN_DATE_RELEASED = "dateReleased";
 		public static final String TYPE_COLUMN_RELEASEDATE_RELEASED = "INTEGER";
 		public static final int INDEX_COLUMN_RELEASEDATE_RELEASED = 3;
 
-		public static final String COLUMN_RELEASEDATE_CREATED = "dateCreated";
+		public static final String COLUMN_DATE_CREATED = "dateCreated";
 		public static final String TYPE_COLUMN_RELEASEDATE_CREATED = "INTEGER NOT NULL";
 		public static final int INDEX_COLUMN_RELEASEDATE_CREATED = 4;
 
@@ -229,16 +229,16 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 		public static final int INDEX_COLUMN_IS_HIDDEN = 7;
 
 		public static final String[] COLUMNS = { COLUMN_ID, COLUMN_MB_ID,
-				COLUMN_NAME, COLUMN_RELEASEDATE_RELEASED,
-				COLUMN_RELEASEDATE_CREATED, COLUMN_RELEASEARTWORK_PATH,
+				COLUMN_NAME, COLUMN_DATE_RELEASED,
+				COLUMN_DATE_CREATED, COLUMN_RELEASEARTWORK_PATH,
 				COLUMN_FK_ID_ARTIST, COLUMN_IS_HIDDEN };
 
 		public static final String COLUMNS_ALL = new StringBuilder(NAME)
 				.append(".").append(COLUMN_ID).append(",").append(NAME)
 				.append(".").append(COLUMN_MB_ID).append(",").append(NAME)
 				.append(".").append(COLUMN_NAME).append(",").append(NAME)
-				.append(".").append(COLUMN_RELEASEDATE_RELEASED).append(",")
-				.append(NAME).append(".").append(COLUMN_RELEASEDATE_CREATED)
+				.append(".").append(COLUMN_DATE_RELEASED).append(",")
+				.append(NAME).append(".").append(COLUMN_DATE_CREATED)
 				.append(",").append(NAME).append(".")
 				.append(COLUMN_RELEASEARTWORK_PATH).append(",").append(NAME)
 				.append(".").append(COLUMN_FK_ID_ARTIST).append(",")
@@ -272,9 +272,9 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 					release.getMusicBrainzId());
 			SqliteUtil.putIfNotNull(values, COLUMN_NAME,
 					release.getReleaseName());
-			SqliteUtil.putIfNotNull(values, COLUMN_RELEASEDATE_RELEASED,
+			SqliteUtil.putIfNotNull(values, COLUMN_DATE_RELEASED,
 					DateUtil.toLong(release.getReleaseDate()));
-			SqliteUtil.putIfNotNull(values, COLUMN_RELEASEDATE_CREATED,
+			SqliteUtil.putIfNotNull(values, COLUMN_DATE_CREATED,
 					DateUtil.toLong(release.getDateCreated()));
 			SqliteUtil.putIfNotNull(values, COLUMN_RELEASEARTWORK_PATH,
 					release.getArtworkPath());
@@ -288,9 +288,9 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 		public static String create() {
 			return createTable(NAME, COLUMN_ID, TYPE_COLUMN_ID, COLUMN_MB_ID,
 					TYPE_COLUMN_MB_ID, COLUMN_NAME, TYPE_COLUMN_RELEASENAME,
-					COLUMN_RELEASEDATE_RELEASED,
+					COLUMN_DATE_RELEASED,
 					TYPE_COLUMN_RELEASEDATE_RELEASED,
-					COLUMN_RELEASEDATE_CREATED,
+					COLUMN_DATE_CREATED,
 					TYPE_COLUMN_RELEASEDATE_CREATED,
 					COLUMN_RELEASEARTWORK_PATH,
 					TYPE_COLUMN_RELEASEARTWORK_PATH, COLUMN_FK_ID_ARTIST,

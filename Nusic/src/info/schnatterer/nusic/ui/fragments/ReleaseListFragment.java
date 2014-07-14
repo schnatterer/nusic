@@ -24,7 +24,8 @@ import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.db.loader.AsyncResult;
-import info.schnatterer.nusic.db.loader.ReleaseLoader;
+import info.schnatterer.nusic.db.loader.ReleaseLoaderAvailable;
+import info.schnatterer.nusic.db.loader.ReleaseLoaderJustCreated;
 import info.schnatterer.nusic.db.model.Artist;
 import info.schnatterer.nusic.db.model.Release;
 import info.schnatterer.nusic.service.ArtistService;
@@ -65,7 +66,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 
 public class ReleaseListFragment extends SherlockFragment {
 	public enum ReleaseQuery {
-		ALL, JUST_ADDED;
+		ALL, JUST_ADDED, ANNOUNCED, AVAILABLE;
 	}
 
 	public static final String ARG_RELEASE_QUERY = "releaseQuery";
@@ -251,7 +252,7 @@ public class ReleaseListFragment extends SherlockFragment {
 	}
 
 	/**
-	 * Handles callbacks from {@link ReleaseLoader} that loads the
+	 * Handles callbacks from {@link ReleaseLoaderJustCreated} that loads the
 	 * {@link Release}s from the local database.
 	 * 
 	 * @author schnatterer
@@ -259,23 +260,30 @@ public class ReleaseListFragment extends SherlockFragment {
 	 */
 	public class ReleaseLoaderCallbacks implements
 			LoaderManager.LoaderCallbacks<AsyncResult<List<Release>>> {
+
 		@Override
-		public ReleaseLoader onCreateLoader(int id, Bundle bundle) {
+		public Loader<AsyncResult<List<Release>>> onCreateLoader(int id,
+				Bundle args) {
 			// if (id == RELEASE_DB_LOADER)
 			switch (releaseQuery) {
 			case ALL:
-				return new ReleaseLoader(getActivity(), null);
+				return new ReleaseLoaderJustCreated(getActivity(), null);
 			case JUST_ADDED:
 				Calendar cal = Calendar.getInstance();
 				cal.add(Calendar.DAY_OF_MONTH,
 						-preferencesService.getJustAddedTimePeriod());
-				return new ReleaseLoader(getActivity(), cal.getTime());
+				return new ReleaseLoaderJustCreated(getActivity(),
+						cal.getTimeInMillis());
+			case ANNOUNCED:
+				return new ReleaseLoaderAvailable(getActivity(), false);
+			case AVAILABLE:
+				return new ReleaseLoaderAvailable(getActivity(), true);
 			default:
 				Log.w(Constants.LOG,
 						"Unimplemented " + ReleaseQuery.class.getName()
 								+ " enumeration: \"" + releaseQuery.name()
 								+ "\"");
-				return new ReleaseLoader(getActivity(), null);
+				return new ReleaseLoaderJustCreated(getActivity(), null);
 			}
 		}
 

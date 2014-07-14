@@ -23,7 +23,6 @@ package info.schnatterer.nusic.service;
 import info.schnatterer.nusic.db.model.Artist;
 import info.schnatterer.nusic.db.model.Release;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -84,7 +83,7 @@ public interface ReleaseService {
 	 * @return all releases that were created after <code>gtDateCreated</code>
 	 * @throws ServiceException
 	 */
-	List<Release> findJustCreated(Date beforeRefresh) throws ServiceException;
+	List<Release> findJustCreated(long beforeRefresh) throws ServiceException;
 
 	/**
 	 * Set <code>isHidden</code> to <code>false</code> for all {@link Release}s
