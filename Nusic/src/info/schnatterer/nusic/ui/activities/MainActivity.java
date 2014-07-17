@@ -33,9 +33,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.ViewGroup;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
@@ -79,7 +79,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		};
 		pager.setOnPageChangeListener(ViewPagerListener);
 		// Set adapter that handles fragment (i.e. tab creation)
-		ViewPagerAdapter tabAdapter = new ViewPagerAdapter(
+		TabFragmentPagerAdapter tabAdapter = new TabFragmentPagerAdapter(
 				getSupportFragmentManager());
 		pager.setAdapter(tabAdapter);
 
@@ -194,12 +194,12 @@ public class MainActivity extends SherlockFragmentActivity {
 	public void onContentChanged() {
 		super.onContentChanged();
 		final ViewPager pager = (ViewPager) findViewById(R.id.mainPager);
-		final PagerAdapter adapter = pager.getAdapter();
+		final TabFragmentPagerAdapter adapter = (TabFragmentPagerAdapter) pager
+				.getAdapter();
 		if (adapter != null) {
 			runOnUiThread(new Runnable() {
 				public void run() {
-					adapter.notifyDataSetChanged();
-					// pager.invalidate();
+					adapter.onContentChanged();
 				}
 			});
 		}
@@ -223,13 +223,13 @@ public class MainActivity extends SherlockFragmentActivity {
 	}
 
 	/**
-	 * Create view pager adapter that defines the content of the tabs (i.e. the
-	 * fragments).
+	 * A fragment pager adapter that defines the content of the tabs and manages
+	 * the fragments that basically show the content of the tabs.
 	 * 
 	 * @author schnatterer
 	 * 
 	 */
-	public class ViewPagerAdapter extends FragmentPagerAdapter {
+	public class TabFragmentPagerAdapter extends FragmentPagerAdapter {
 		/** This basically defines the content of the tabs. */
 		final TabHolder[] tabs = {
 				new TabHolder(R.string.MainActivity_TabJustAdded,
@@ -241,8 +241,19 @@ public class MainActivity extends SherlockFragmentActivity {
 				new TabHolder(R.string.MainActivity_TabAll,
 						RELEASE_DB_LOADER_ALL, ReleaseQuery.ALL) };
 
-		public ViewPagerAdapter(FragmentManager fm) {
+		public TabFragmentPagerAdapter(FragmentManager fm) {
 			super(fm);
+		}
+
+		/**
+		 * Marks the content of all tabs as changed.
+		 */
+		public void onContentChanged() {
+			for (TabHolder tab : tabs) {
+				if (tab.fragment != null) {
+					tab.fragment.onContentChanged();
+				}
+			}
 		}
 
 		@Override
@@ -252,10 +263,22 @@ public class MainActivity extends SherlockFragmentActivity {
 				// Default tab
 				actualPos = 0;
 			}
-			return createTabFragment(tabs[actualPos]);
+			ReleaseListFragment fragment = createTabFragment(tabs[actualPos]);
+			if (position < tabs.length) {
+				tabs[position].fragment = fragment;
+			}
+			return fragment;
 		}
 
-		private Fragment createTabFragment(TabHolder tab) {
+		@Override
+		public void destroyItem(ViewGroup container, int position, Object object) {
+			super.destroyItem(container, position, object);
+			if (position < tabs.length) {
+				tabs[position].fragment = null;
+			}
+		}
+
+		private ReleaseListFragment createTabFragment(TabHolder tab) {
 			// Create fragment
 			Bundle bundle = new Bundle();
 			bundle.putString(ReleaseListFragment.ARG_RELEASE_QUERY,
@@ -264,25 +287,6 @@ public class MainActivity extends SherlockFragmentActivity {
 			return (ReleaseListFragment) Fragment.instantiate(
 					MainActivity.this, ReleaseListFragment.class.getName(),
 					bundle);
-		}
-
-		@Override
-		public int getItemPosition(Object object) {
-			/*
-			 * Workaround to updating the fragments work! This method is only
-			 * called when PagerAdapter.notifyDataSetChanged() is called. The
-			 * normal workaround would be to just return POSITION_NONE and have
-			 * the fragments be re-created. See
-			 * http://stackoverflow.com/questions
-			 * /10849552/android-viewpager-cant -update-dynamically/ However,
-			 * the release list fragments are capable of updating themselves,
-			 * which save us from creating new instances!
-			 */
-			if (object instanceof ReleaseListFragment) {
-				((ReleaseListFragment) object).onContentChanged();
-				return POSITION_UNCHANGED;
-			}
-			return POSITION_NONE;
 		}
 
 		@Override
@@ -300,6 +304,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		final int titleId;
 		final int loaderId;
 		final ReleaseQuery releaseQuery;
+		ReleaseListFragment fragment = null;
 
 		public TabHolder(int titleId, int loaderId, ReleaseQuery releaseQuery) {
 			this.titleId = titleId;
