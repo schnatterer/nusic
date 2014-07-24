@@ -302,10 +302,10 @@ public class LoadNewReleasesService extends WakefulService {
 		 * Set a repeating schedule, so there always is a next alarm even when
 		 * one alarm should fail for some reason
 		 */
-		alarm.setRepeating(AlarmManager.RTC, triggerAtDate.getTime(),
+		alarm.setInexactRepeating(AlarmManager.RTC, triggerAtDate.getTime(),
 				AlarmManager.INTERVAL_DAY * intervalDays, pintent);
 		preferencesService.setNextReleaseRefresh(triggerAtDate);
-		Log.i(Constants.LOG, "Scheduled task to run again every "
+		Log.d(Constants.LOG, "Scheduled task to run again every "
 				+ intervalDays + " days, starting at " + triggerAtDate);
 	}
 

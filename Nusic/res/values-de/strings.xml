@@ -20,6 +20,11 @@
     <string name="MainActivity_TabAvailable">Verfügbar</string>
     <string name="MainActivity_TabAnnounced">Angekündigt</string>
     <!-- <string name="MainActivity_JustAddedInformation">Alle Alben, die in den letzten %1$d Tagen hinzugefügt wurden</string> -->
+    <plurals name="LoadNewReleasesService_foundNewReleases">
+        <item quantity="one">%1$d neues Album gefunden.</item>
+        <item quantity="other">%1$d neue Alben gefunden</item>
+    </plurals>
+    <string name="ReleasedTodayService_ReleasedToday">%1$s - %2$s erscheint heute</string>
     
     <!-- Prefrences -->
     <string name="preferences_category_releases">Alben</string>
@@ -55,10 +60,6 @@
     <string name="LoadNewReleasesBinding_errorFindingReleases">Aktualisieren der Alben fehlgeschlagen: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">Unfassbarer Fehler beim Aktualiseren der Alben: </string>
     <string name="LoadNewReleasesBinding_finishedWithErrors">Update der Alben für %1$d Interpreten von %2$d fehlgeschlagen</string>
-    <plurals name="LoadNewReleasesService_foundNewReleases">
-        <item quantity="one">%1$d neues Album gefunden.</item>
-        <item quantity="other">%1$d neue Alben gefunden</item>
-    </plurals>
     
     <string name="ServiceException_errorLoadingArtists">Fehler beim Laden der Interpreten vom Gerät</string>
     <string name="ServiceException_errorFindingReleasesArtist">Fehler beim Finden von Alben für Interpret %1$s</string>

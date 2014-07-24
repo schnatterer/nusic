@@ -29,7 +29,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activities.NusicPreferencesActivity"
+        <activity
+            android:name=".ui.activities.NusicPreferencesActivity"
             android:label="@string/action_settings" >
             <intent-filter>
                 <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
@@ -47,12 +48,30 @@
         <receiver android:name=".service.android.LoadNewReleasesServiceBootReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                 <category android:name="android.intent.category.HOME" />
+
+                <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
+        <!-- Register receiver that starts service after alarm -->
         <receiver android:name=".service.android.LoadNewReleasesService$LoadNewReleasesServiceAlarmReceiver" />
 
         <service android:name=".service.android.LoadNewReleasesService" />
+
+        <!-- Schedule execution of released today check after boot and timezone changed -->
+        <receiver android:name=".service.android.ReleasedTodayService$ReleasedTodaySchedulerReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <!--
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                -->
+            </intent-filter>
+        </receiver>
+        <!-- Register receiver that starts service after alarm -->
+        <receiver android:name=".service.android.ReleasedTodayService$ReleasedTodayServiceStarterReceiver" />
+        <service android:name=".service.android.ReleasedTodayService" />
+        
     </application>
 
 </manifest>

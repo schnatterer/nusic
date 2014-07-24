@@ -20,12 +20,11 @@
  */
 package info.schnatterer.nusic.db.loader;
 
+import static info.schnatterer.nusic.util.DateUtil.tomorrowMidnightUtc;
 import info.schnatterer.nusic.db.dao.sqlite.ReleaseDaoSqlite;
 import info.schnatterer.nusic.db.model.Release;
 
-import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
 import android.content.Context;
 
@@ -62,25 +61,5 @@ public class ReleaseLoaderAvailable extends
 			return getDao().findByReleaseDateGreaterThanEqual(
 					tomorrowMidnightUtc());
 		}
-	}
-
-	/**
-	 * @return the timestamp for tomorrow midnight in UTC.
-	 */
-	private long tomorrowMidnightUtc() {
-		// Get timestamp for tomorrow midnight.
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DAY_OF_YEAR, 1);
-		// The "local tomorrow"
-		int year = cal.get(Calendar.YEAR);
-		int month = cal.get(Calendar.MONTH);
-		int day = cal.get(Calendar.DAY_OF_MONTH);
-
-		// Switch to UTC
-		cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-		// Make sure to get EXACTLY midnight
-		cal.setTimeInMillis(0);
-		cal.set(year, month, day, 0, 0, 0);
-		return cal.getTimeInMillis();
 	}
 }

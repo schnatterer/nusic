@@ -20,6 +20,11 @@
     <string name="MainActivity_TabAvailable">Available</string>
     <string name="MainActivity_TabAnnounced">Announced</string>
     <!-- <string name="MainActivity_JustAddedInformation">All releases that were added within the last %1$d days</string> -->
+    <plurals name="LoadNewReleasesService_foundNewReleases">
+        <item quantity="one">Found %1$d new release</item>
+        <item quantity="other">Found %1$d new releases</item>
+    </plurals>
+    <string name="ReleasedTodayService_ReleasedToday">%1$s - %2$s is released today</string>
     
      <!-- Prefrences -->
      <string name="preferences_category_releases">Releases</string>
@@ -54,10 +59,6 @@
     <string name="LoadNewReleasesBinding_errorFindingReleases">Refreshing releases failed: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">Unbelievable error while trying to refresh releases: </string>
     <string name="LoadNewReleasesBinding_finishedWithErrors">Updating releases failed for %1$d of %2$d artists</string>
-    <plurals name="LoadNewReleasesService_foundNewReleases">
-        <item quantity="one">Found %1$d new release</item>
-        <item quantity="other">Found %1$d new releases</item>
-    </plurals>
     
     <string name="ServiceException_errorLoadingArtists">Error loading artists from the device</string>
     <string name="ServiceException_errorFindingReleasesArtist">Error finding releases for artist %1$s</string>

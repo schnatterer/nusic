@@ -20,8 +20,11 @@
  */
 package info.schnatterer.nusic.util;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public final class DateUtilTest extends TestCase {
@@ -35,5 +38,35 @@ public final class DateUtilTest extends TestCase {
 
 		assertTrue("Added time amount is not great enough",
 				actualTime >= expectedTime);
+	}
+
+	/**
+	 * Test for {@link DateUtil#midnightUtc(Calendar)} where in UTC it is the
+	 * 21st of July, but our local date is already 22nd of July (GMT+x).
+	 */
+	public void testMidnightUtcPlus() {
+		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC+2"));
+		// 2014-07-22T01:44:55+02:00 (UTC+2) equals 2014-07-21T23:44:55Z (UTC).
+		cal.set(2014, Calendar.JULY, 22, 1, 44, 55);
+		// 2014-07-22T00:00:00Z,
+		long expected = 1405987200000l;
+		long actual = DateUtil.midnightUtc(cal);
+		Assert.assertEquals("Unexpected date returned", expected, actual);
+		// Don't return 2014-07-21T00:00:00Z
+	}
+
+	/**
+	 * Test for {@link DateUtil#midnightUtc(Calendar)} where in UTC it is the
+	 * 23rd of July, but our local date still is 22nd of July (GMT-x).
+	 */
+	public void testMidnightUtcMinus() {
+		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC-2"));
+		// 2014-07-22T23:44:55-02:00 (UTC+2) equals 2014-07-23T01:44:55Z (UTC).
+		cal.set(2014, Calendar.JULY, 22, 23, 44, 55);
+		// 2014-07-22T00:00:00Z,
+		long expected = 1405987200000l;
+		long actual = DateUtil.midnightUtc(cal);
+		Assert.assertEquals("Unexpected date returned", expected, actual);
+		// Don't return 2014-07-23T00:00:00Z
 	}
 }

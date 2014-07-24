@@ -2,7 +2,7 @@
 <!-- Preference details. Don't translate! -->
 <resources>
     
-     <string name="preferences_key_download_releases_time_period">downloadReleasesNumberOfMonths</string>
+    <string name="preferences_key_download_releases_time_period">downloadReleasesNumberOfMonths</string>
     <string name="preferences_default_download_releases_time_period">6</string>
     <string-array name="preferences_entry_values_download_releases_time_period">
         <item>1</item>
@@ -29,4 +29,14 @@
         <item>3</item>
         <item>7</item>
     </string-array>
+    
+    <string name="preferences_key_is_enabled_released_today">isEnabledReleasedToday</string>
+    <bool name="preferences_default_is_enabled_released_today">true</bool>
+    
+    <string name="preferences_key_released_today_hour_of_day">releaseTodayHourOfDay</string>
+    <string name="preferences_default_released_today_hour_of_day">12</string>
+    
+    <string name="preferences_key_released_today_minute">releaseTodayMinute</string>
+    <string name="preferences_default_released_today_minute">00</string>
+    
 </resources>

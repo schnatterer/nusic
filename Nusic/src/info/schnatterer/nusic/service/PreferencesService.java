@@ -33,6 +33,10 @@ import java.util.Date;
  * @author schnatterer
  * 
  */
+/**
+ * @author schnatterer
+ *
+ */
 public interface PreferencesService {
 	/**
 	 * Distinguishes different kinds of app starts: <li>
@@ -176,4 +180,24 @@ public interface PreferencesService {
 	 * @return
 	 */
 	boolean setEnabledConnectivityReceiver(boolean enabled);
+
+	/**
+	 * @return <code>true</code> if the check for albums getting release today
+	 *         is enabled.
+	 */
+	boolean isEnabledReleasedToday();
+
+	/**
+	 * @return the hour of day where the check for albums getting release today
+	 *         is performed if {@link #isEnabledReleasedToday()} is
+	 *         <code>true</code>.
+	 */
+	int getReleasedTodayScheduleHourOfDay();
+
+	/**
+	 * @return the minute where the check for albums getting release today is
+	 *         performed if {@link #isEnabledReleasedToday()} is
+	 *         <code>true</code>.
+	 */
+	int getReleasedTodayScheduleMinute();
 }

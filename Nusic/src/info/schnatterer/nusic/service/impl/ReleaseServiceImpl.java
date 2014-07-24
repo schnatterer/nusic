@@ -20,6 +20,8 @@
  */
 package info.schnatterer.nusic.service.impl;
 
+import static info.schnatterer.nusic.util.DateUtil.todayMidnightUtc;
+import static info.schnatterer.nusic.util.DateUtil.tomorrowMidnightUtc;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.db.DatabaseException;
 import info.schnatterer.nusic.db.dao.ArtistDao;
@@ -119,6 +121,22 @@ public class ReleaseServiceImpl implements ReleaseService {
 			throws ServiceException {
 		try {
 			return releaseDao.findByDateCreatedGreaterThan(gtDateCreated);
+		} catch (DatabaseException e) {
+			throw new ServiceException(
+					R.string.ServiceException_errorReadingFromDb, e);
+		}
+	}
+
+	@Override
+	public List<Release> findReleasedToday() throws ServiceException {
+		try {
+			/*
+			 * Find all releases that are released between today 00:00:00h and
+			 * before tomorrow 00:00:00h. As the dates are strored as UTC
+			 * values, find out the dates in UTC first.
+			 */
+			return releaseDao.findByReleaseDateGreaterThanEqualAndReleaseDateLessThan(todayMidnightUtc(),
+					tomorrowMidnightUtc());
 		} catch (DatabaseException e) {
 			throw new ServiceException(
 					R.string.ServiceException_errorReadingFromDb, e);

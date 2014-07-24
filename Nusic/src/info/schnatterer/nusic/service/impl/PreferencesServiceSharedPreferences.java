@@ -91,6 +91,15 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	public final String KEY_REFRESH_PERIOD;
 	public final String DEFAULT_REFRESH_PERIOD;
 
+	public final String KEY_ENABLED_RELEASED_TODAY;
+	public final Boolean DEFAULT_KEY_ENABLED_RELEASED_TODAY;
+
+	public final String KEY_RELEASED_TODAY_HOUR_OF_DAY;
+	public final Integer DEFAULT_KEY_RELEASED_TODAY_HOUR_OF_DAY;
+
+	public final String KEY_RELEASED_TODAY_MINUTE;
+	public final Integer DEFAULT_KEY_RELEASED_TODAY_MINUTE;
+
 	private final SharedPreferences sharedPreferences;
 	// private static Context context = null;
 	private static PreferencesServiceSharedPreferences instance = new PreferencesServiceSharedPreferences();
@@ -159,6 +168,29 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 
 			DEFAULT_JUST_ADDED_TIME_PERIOD = parseIntOrThrow(
 					KEY_REFRESH_PERIOD, DEFAULT_REFRESH_PERIOD);
+
+			KEY_ENABLED_RELEASED_TODAY = getContext().getString(
+					R.string.preferences_key_is_enabled_released_today);
+			DEFAULT_KEY_ENABLED_RELEASED_TODAY = getContext()
+					.getResources()
+					.getBoolean(
+							R.bool.preferences_default_is_enabled_released_today);
+
+			KEY_RELEASED_TODAY_HOUR_OF_DAY = getContext().getString(
+					R.string.preferences_key_released_today_hour_of_day);
+			DEFAULT_KEY_RELEASED_TODAY_HOUR_OF_DAY = parseIntOrThrow(
+					KEY_RELEASED_TODAY_HOUR_OF_DAY,
+					getContext()
+							.getString(
+									R.string.preferences_default_released_today_hour_of_day));
+
+			KEY_RELEASED_TODAY_MINUTE = getContext().getString(
+					R.string.preferences_key_released_today_minute);
+			DEFAULT_KEY_RELEASED_TODAY_MINUTE = parseIntOrThrow(
+					KEY_RELEASED_TODAY_MINUTE,
+					getContext().getString(
+							R.string.preferences_default_released_today_minute));
+
 		} else {
 			// e.g. for Testing
 			KEY_DOWLOAD_ONLY_ON_WIFI = null;
@@ -177,6 +209,15 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 			DEFAULT_REFRESH_PERIOD = null;
 
 			DEFAULT_JUST_ADDED_TIME_PERIOD = null;
+
+			KEY_ENABLED_RELEASED_TODAY = null;
+			DEFAULT_KEY_ENABLED_RELEASED_TODAY = null;
+
+			KEY_RELEASED_TODAY_HOUR_OF_DAY = null;
+			DEFAULT_KEY_RELEASED_TODAY_HOUR_OF_DAY = null;
+
+			KEY_RELEASED_TODAY_MINUTE = null;
+			DEFAULT_KEY_RELEASED_TODAY_MINUTE = null;
 		}
 	}
 
@@ -362,5 +403,23 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 
 	protected static Context getContext() {
 		return Application.getContext();
+	}
+
+	@Override
+	public boolean isEnabledReleasedToday() {
+		return sharedPreferences.getBoolean(KEY_ENABLED_RELEASED_TODAY,
+				DEFAULT_KEY_ENABLED_RELEASED_TODAY);
+	}
+
+	@Override
+	public int getReleasedTodayScheduleHourOfDay() {
+		return sharedPreferences.getInt(KEY_RELEASED_TODAY_HOUR_OF_DAY,
+				DEFAULT_KEY_RELEASED_TODAY_HOUR_OF_DAY);
+	}
+
+	@Override
+	public int getReleasedTodayScheduleMinute() {
+		return sharedPreferences.getInt(KEY_RELEASED_TODAY_MINUTE,
+				DEFAULT_KEY_RELEASED_TODAY_MINUTE);
 	}
 }

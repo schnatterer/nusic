@@ -24,6 +24,7 @@ import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.service.android.LoadNewReleasesService;
+import info.schnatterer.nusic.service.android.ReleasedTodayService;
 import info.schnatterer.nusic.ui.LoadNewRelasesServiceBinding;
 import info.schnatterer.nusic.ui.fragments.ReleaseListFragment;
 import info.schnatterer.nusic.ui.fragments.ReleaseListFragment.ReleaseQuery;
@@ -56,6 +57,8 @@ public class MainActivity extends SherlockFragmentActivity {
 	private static LoadNewRelasesServiceBinding loadNewRelasesServiceBinding = null;
 	/** Stores the selected tab, even when the configuration changes. */
 	private static int currentTabPosition = 0;
+
+	private static boolean isReleasedTodayServiceScheduled = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -97,6 +100,15 @@ public class MainActivity extends SherlockFragmentActivity {
 			startLoadingReleasesFromInternet(true);
 		} else {
 			registerListeners();
+		}
+
+		/*
+		 * Make sure the Release Today service is scheduled (if not swichted off
+		 * in preferences). Try to schedule it not too often.
+		 */
+		if (!isReleasedTodayServiceScheduled) {
+			ReleasedTodayService.schedule(this);
+			isReleasedTodayServiceScheduled = true;
 		}
 	}
 

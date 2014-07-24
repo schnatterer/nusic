@@ -43,6 +43,11 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 	public static final String ORDER_BY_RELEASE_DATE = new StringBuilder(
 			" ORDER BY ").append(TableRelease.NAME).append(".")
 			.append(TableRelease.COLUMN_DATE_RELEASED).toString();
+	public static final String ORDER_BY_RELASE_NAME = new StringBuilder(
+			" ORDER BY ").append(TableArtist.NAME).append(".")
+			.append(TableArtist.COLUMN_NAME).append(",")
+			.append(TableRelease.NAME).append(".")
+			.append(TableRelease.COLUMN_NAME).toString();
 
 	public static final String ORDER_BY_RELEASE_DATE_DESC = new StringBuilder(
 			ORDER_BY_RELEASE_DATE).append(" DESC").toString();
@@ -89,9 +94,18 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 			QUERY_BY_RELEASE_DATE_BASE).append(" <").append(" ?")
 			.append(ORDER_BY_RELEASE_DATE_DESC).toString();
 
+	private static final String QUERY_BY_RELEASE_DATE_GTE_BASE = new StringBuilder(
+			QUERY_BY_RELEASE_DATE_BASE).append(" >=").append(" ?").toString();
+
 	private static final String QUERY_BY_RELEASE_DATE_GTE = new StringBuilder(
-			QUERY_BY_RELEASE_DATE_BASE).append(" >=").append(" ?")
-			.append(ORDER_BY_RELEASE_DATE_ASC).toString();
+			QUERY_BY_RELEASE_DATE_GTE_BASE).append(ORDER_BY_RELEASE_DATE_ASC)
+			.toString();
+
+	private static final String QUERY_BY_RELEASE_DATE_RANGE = new StringBuilder(
+			QUERY_BY_RELEASE_DATE_GTE_BASE).append(" AND ")
+			.append(TableRelease.NAME).append(".")
+			.append(TableRelease.COLUMN_DATE_RELEASED).append(" <")
+			.append(" ?").append(ORDER_BY_RELASE_NAME).toString();
 
 	public ReleaseDaoSqlite(Context context) {
 		super(context);
@@ -144,6 +158,15 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 			throws DatabaseException {
 		return executeQuery(QUERY_BY_RELEASE_DATE_GTE,
 				new String[] { String.valueOf(gtEqReleaseDate) });
+	}
+
+	@Override
+	public List<Release> findByReleaseDateGreaterThanEqualAndReleaseDateLessThan(
+			long gtEqReleaseDate, long ltRealaseDate) throws DatabaseException {
+		return executeQuery(
+				QUERY_BY_RELEASE_DATE_RANGE,
+				new String[] { String.valueOf(gtEqReleaseDate),
+						String.valueOf(ltRealaseDate) });
 	}
 
 	private List<Release> executeQuery(String sql, String[] selectionArgs)
