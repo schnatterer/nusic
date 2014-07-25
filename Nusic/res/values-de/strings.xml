@@ -24,7 +24,8 @@
         <item quantity="one">%1$d neues Album gefunden.</item>
         <item quantity="other">%1$d neue Alben gefunden</item>
     </plurals>
-    <string name="ReleasedTodayService_ReleasedToday">%1$s - %2$s erscheint heute</string>
+    <string name="ReleasedTodayService_ReleasedToday">Heute erscheint:</string>
+    <string name="ReleasedTodayService_MultipleReleasedToday">%1$d Alben werden heute veröffentlicht</string>
     
     <!-- Prefrences -->
     <string name="preferences_category_releases">Alben</string>
@@ -67,4 +68,5 @@
     <string name="ServiceException_errorReadingFromDb">Fehler beim Lesen von der Anwendungsdatenbank</string>
     <string name="ServiceException_errorWritingToDb">Fehler beim Schreiben in die Anwendungsdatenbank</string>
     
+    <string name="ReleasedTodayService_ReleasedTodayError">Fehler beim Finden heutiger Veröffentlichungen</string>
 </resources>

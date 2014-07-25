@@ -24,7 +24,8 @@
         <item quantity="one">Found %1$d new release</item>
         <item quantity="other">Found %1$d new releases</item>
     </plurals>
-    <string name="ReleasedTodayService_ReleasedToday">%1$s - %2$s is released today</string>
+    <string name="ReleasedTodayService_ReleasedToday">Published today:</string>
+    <string name="ReleasedTodayService_MultipleReleasedToday">%1$d releases are published today</string>
     
      <!-- Prefrences -->
      <string name="preferences_category_releases">Releases</string>
@@ -65,4 +66,6 @@
     <string name="ServiceException_errorQueryingMusicBrainz">Error querying releases for artist %1$s from the internet. No connection to the internet?</string>
     <string name="ServiceException_errorReadingFromDb">Error reading from application database</string>
     <string name="ServiceException_errorWritingToDb">Error writing to application datbase</string>
+    
+     <string name="ReleasedTodayService_ReleasedTodayError">Error finding today\'s releases</string>
 </resources>

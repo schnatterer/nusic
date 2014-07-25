@@ -21,6 +21,7 @@
 package info.schnatterer.nusic.service.android;
 
 import info.schnatterer.nusic.Application;
+import info.schnatterer.nusic.Application.Notification;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.db.DatabaseException;
@@ -36,6 +37,7 @@ import info.schnatterer.nusic.service.impl.ConnectivityServiceAndroid;
 import info.schnatterer.nusic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.nusic.service.impl.ReleaseRefreshServiceImpl;
 import info.schnatterer.nusic.service.impl.ReleaseServiceImpl;
+import info.schnatterer.nusic.ui.activities.MainActivity;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -254,10 +256,25 @@ public class LoadNewReleasesService extends WakefulService {
 		List<Release> newReleases = releaseService
 				.findJustCreated(beforeRefresh);
 		if (newReleases.size() > 0) {
-			Application.notifyInfo(getResources().getQuantityString(
+			notifyNewReleases(getResources().getQuantityString(
 					R.plurals.LoadNewReleasesService_foundNewReleases,
 					newReleases.size(), newReleases.size()));
 		}
+	}
+
+	/**
+	 * Puts out a notification containing an info symbol. Overwrites any
+	 * previous instances of this notification..<br/>
+	 * <br/>
+	 * Future calls overwrite any previous instances of this notification still
+	 * on display.
+	 * 
+	 * @param text
+	 */
+	private void notifyNewReleases(String text, Object... args) {
+		Application.notify(Notification.NEW_RELEASE, String.format(text, args),
+				null, android.R.drawable.ic_dialog_info, null,
+				MainActivity.class);
 	}
 
 	/**
@@ -408,7 +425,7 @@ public class LoadNewReleasesService extends WakefulService {
 			// }
 			// On success, keep quiet
 			// } else if (totalArtists > 0) {
-			// Application.notifyInfo("!!SUCESSFULLY FINISHED REFRESHING "
+			// Application.notifyNewReleases("!!SUCESSFULLY FINISHED REFRESHING "
 			// + totalArtists + " ARTISTS!!");
 			// }
 		}

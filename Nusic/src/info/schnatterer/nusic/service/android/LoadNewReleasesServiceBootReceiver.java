@@ -49,22 +49,13 @@ public class LoadNewReleasesServiceBootReceiver extends BroadcastReceiver {
 		Date nextReleaseRefresh = preferencesService.getNextReleaseRefresh();
 		Log.d(Constants.LOG, "Boot Receiver: Boot completed!");
 
-		// if (nextReleaseRefresh == null) {
-		// Application.notifyInfo("Starting release refresh");
-		// } else {
-		// Application.notifyInfo("Scheduling release refresh to "
-		// + nextReleaseRefresh);
-		// }
-
 		if (nextReleaseRefresh == null || isHistorical(nextReleaseRefresh)) {
 			// Delay start of service in order not to slow down device boot up
-			Date delayedRefresh = DateUtil
-					.addMinutes(BOOT_DELAY_MINUTES);
+			Date delayedRefresh = DateUtil.addMinutes(BOOT_DELAY_MINUTES);
 			Log.d(Constants.LOG, "Boot Receiver: Delaying service to start at "
 					+ delayedRefresh);
-			LoadNewReleasesService
-					.schedule(context, preferencesService.getRefreshPeriod(),
-							delayedRefresh);
+			LoadNewReleasesService.schedule(context,
+					preferencesService.getRefreshPeriod(), delayedRefresh);
 		} else {
 			// Schedule service
 			Log.d(Constants.LOG, "Boot Receiver: Scheduling service to "

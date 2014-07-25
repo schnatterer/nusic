@@ -21,6 +21,7 @@
 package info.schnatterer.nusic.service.android;
 
 import info.schnatterer.nusic.Application;
+import info.schnatterer.nusic.Application.Notification;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.db.model.Release;
@@ -29,6 +30,7 @@ import info.schnatterer.nusic.service.ReleaseService;
 import info.schnatterer.nusic.service.ServiceException;
 import info.schnatterer.nusic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.nusic.service.impl.ReleaseServiceImpl;
+import info.schnatterer.nusic.ui.activities.MainActivity;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -40,6 +42,7 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
@@ -61,29 +64,62 @@ public class ReleasedTodayService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		try {
-			List<Release> realsedToday = releaseService.findReleasedToday();
-			// if (realsedToday.isEmpty()) {
-			// // remove this message
-			// Application.notifyInfo("No releases are released today",
-			// realsedToday.size());
-			// } else {
-			// TODO remove this message
-			// Application.notifyInfo(realsedToday.size() + " releases today");
-			for (Release release : realsedToday) {
-				// TODO set artwork
-				// release.getArtworkPath();
+			List<Release> releasedToday = releaseService.findReleasedToday();
+			if (releasedToday.size() == 1) {
 				// TODO make notification open nusic on the proper tab
-				Application.notifyInfo(
-						R.string.ReleasedTodayService_ReleasedToday, release
-								.getArtist().getArtistName(), release
-								.getReleaseName());
+				notifyReleaseToday(releasedToday.get(0));
+			} else if (releasedToday.size() > 1) {
+				// If more than one release, put less detail in notification
+				notifyReleaseToday(releasedToday.size());
 			}
-			// }
 		} catch (ServiceException e) {
-			// TODO write message that tells about the error
-			Application.notifyInfo(e.getLocalizedMessage());
+			Application
+					.notifyWarning(
+							getString(R.string.ReleasedTodayService_ReleasedTodayError),
+							e.getLocalizedMessage());
 		}
+		// TODO reschedule service to make sure we're not getting to far from
+		// our original date?
 		return Service.START_STICKY;
+	}
+
+	/**
+	 * Puts out a notification informing about one release published today.<br/>
+	 * <br/>
+	 * <br/>
+	 * Future calls overwrite any previous instances of this notification still
+	 * on display.
+	 * 
+	 * @param release
+	 * 
+	 */
+	private void notifyReleaseToday(Release release) {
+		Application.notify(
+				Notification.RELEASED_TODAY,
+				getString(R.string.ReleasedTodayService_ReleasedToday),
+				release.getArtist().getArtistName() + " - "
+						+ release.getReleaseName(), R.drawable.ic_launcher,
+				release.getArtwork(), MainActivity.class);
+	}
+
+	/**
+	 * Puts out a notification informing about multiple releases published
+	 * today.<br/>
+	 * <br/>
+	 * Future calls overwrite any previous instances of this notification still
+	 * on display.
+	 * 
+	 * @param nReleases
+	 *            the number of releases published today
+	 * 
+	 * @param text
+	 */
+	private void notifyReleaseToday(int nReleases) {
+		Application.notify(Notification.RELEASED_TODAY, String.format(
+				getString(R.string.ReleasedTodayService_MultipleReleasedToday),
+				nReleases), null, R.drawable.ic_launcher, BitmapFactory
+				.decodeResource(getResources(), R.drawable.ic_launcher),
+				MainActivity.class);
 	}
 
 	/**
@@ -108,6 +144,11 @@ public class ReleasedTodayService extends Service {
 					.getReleasedTodayScheduleHourOfDay();
 			int minute = preferencesService.getReleasedTodayScheduleMinute();
 
+			/*
+			 * TODO trigger only for today if time is in the future. If not,
+			 * trigger same time tomorrow in order to avoid too much
+			 * notifications.
+			 */
 			Calendar triggerAtCal = Calendar.getInstance();
 			triggerAtCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			triggerAtCal.set(Calendar.MINUTE, minute);

@@ -106,6 +106,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		 * Make sure the Release Today service is scheduled (if not swichted off
 		 * in preferences). Try to schedule it not too often.
 		 */
+		// TODO trigger only once with new version
 		if (!isReleasedTodayServiceScheduled) {
 			ReleasedTodayService.schedule(this);
 			isReleasedTodayServiceScheduled = true;
