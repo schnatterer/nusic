@@ -78,8 +78,6 @@ public class ReleasedTodayService extends Service {
 							getString(R.string.ReleasedTodayService_ReleasedTodayError),
 							e.getLocalizedMessage());
 		}
-		// TODO reschedule service to make sure we're not getting to far from
-		// our original date?
 		return Service.START_STICKY;
 	}
 
@@ -158,14 +156,22 @@ public class ReleasedTodayService extends Service {
 					.getReleasedTodayScheduleHourOfDay();
 			int minute = preferencesService.getReleasedTodayScheduleMinute();
 
-			/*
-			 * TODO trigger only for today if time is in the future. If not,
-			 * trigger same time tomorrow in order to avoid too much
-			 * notifications.
-			 */
 			Calendar triggerAtCal = Calendar.getInstance();
 			triggerAtCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			triggerAtCal.set(Calendar.MINUTE, minute);
+			triggerAtCal.set(Calendar.SECOND, 0);
+			if (triggerAtCal.getTimeInMillis() < System.currentTimeMillis()) {
+				/*
+				 * Trigger only for today if time is in the future. If not,
+				 * trigger same time tomorrow.
+				 * 
+				 * If the triggering time is in the past, android will trigger
+				 * it directly.
+				 */
+				Log.d(Constants.LOG,
+						"Triggering notification service for tommorrow");
+				triggerAtCal.add(Calendar.DAY_OF_MONTH, 1);
+			}
 
 			PendingIntent pintent = PendingIntent.getBroadcast(context, 0,
 					new Intent(context,
