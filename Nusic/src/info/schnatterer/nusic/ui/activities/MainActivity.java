@@ -25,6 +25,7 @@ import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.service.android.LoadNewReleasesService;
 import info.schnatterer.nusic.service.android.ReleasedTodayService;
+import info.schnatterer.nusic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.nusic.ui.LoadNewRelasesServiceBinding;
 import info.schnatterer.nusic.ui.fragments.ReleaseListFragment;
 import info.schnatterer.nusic.ui.fragments.ReleaseListFragment.ReleaseQuery;
@@ -108,8 +109,6 @@ public class MainActivity extends SherlockFragmentActivity {
 	 */
 	private static TabDefinition currentTab = TabDefinition.JUST_ADDED;
 
-	private static boolean isReleasedTodayServiceScheduled = false;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -157,13 +156,18 @@ public class MainActivity extends SherlockFragmentActivity {
 		}
 
 		/*
-		 * Make sure the Release Today service is scheduled (if not swichted off
-		 * in preferences). Try to schedule it not too often.
+		 * Make sure the Release Today service is scheduled (if not switched off
+		 * in preferences). Schedule it only after updates and new installations
+		 * to avoid overhead.
 		 */
-		// TODO trigger only once with new version?
-		if (!isReleasedTodayServiceScheduled) {
+		switch (PreferencesServiceSharedPreferences.getInstance()
+				.checkAppStart()) {
+		case FIRST_TIME_VERSION:
+		case FIRST_TIME:
 			ReleasedTodayService.schedule(this);
-			isReleasedTodayServiceScheduled = true;
+			break;
+		default:
+			break;
 		}
 	}
 
