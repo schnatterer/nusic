@@ -34,8 +34,7 @@ public class NusicPreferencesFragment extends PreferenceFragment {
 
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.preferences);
-		findPreference(
-				getString(NusicPreferencesActivity.KEY_DISPLAY_ALL_RELEASES))
+		findPreference(getString(R.string.preferences_key_display_all_releases))
 				.setOnPreferenceClickListener(
 						NusicPreferencesActivity
 								.createVisibilityButtonListener(getActivity()));

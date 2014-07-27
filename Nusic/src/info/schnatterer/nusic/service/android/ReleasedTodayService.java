@@ -21,8 +21,8 @@
 package info.schnatterer.nusic.service.android;
 
 import info.schnatterer.nusic.Application;
-import info.schnatterer.nusic.Application.Notification;
 import info.schnatterer.nusic.Constants;
+import info.schnatterer.nusic.Constants.Notification;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.db.model.Release;
 import info.schnatterer.nusic.service.PreferencesService;
@@ -44,6 +44,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -66,7 +67,6 @@ public class ReleasedTodayService extends Service {
 		try {
 			List<Release> releasedToday = releaseService.findReleasedToday();
 			if (releasedToday.size() == 1) {
-				// TODO make notification open nusic on the proper tab
 				notifyReleaseToday(releasedToday.get(0));
 			} else if (releasedToday.size() > 1) {
 				// If more than one release, put less detail in notification
@@ -99,7 +99,21 @@ public class ReleasedTodayService extends Service {
 				getString(R.string.ReleasedTodayService_ReleasedToday),
 				release.getArtist().getArtistName() + " - "
 						+ release.getReleaseName(), R.drawable.ic_launcher,
-				release.getArtwork(), MainActivity.class);
+				release.getArtwork(), MainActivity.class,
+				createExtraActiveTab());
+	}
+
+	/**
+	 * Creates an extra bundle that contains the tab to be shown when
+	 * {@link MainActivity} is launched.
+	 * 
+	 * @return
+	 */
+	private Bundle createExtraActiveTab() {
+		Bundle extras = new Bundle();
+		extras.putSerializable(MainActivity.EXTRA_ACTIVE_TAB,
+				MainActivity.TabDefinition.AVAILABLE);
+		return extras;
 	}
 
 	/**
@@ -119,7 +133,7 @@ public class ReleasedTodayService extends Service {
 				getString(R.string.ReleasedTodayService_MultipleReleasedToday),
 				nReleases), null, R.drawable.ic_launcher, BitmapFactory
 				.decodeResource(getResources(), R.drawable.ic_launcher),
-				MainActivity.class);
+				MainActivity.class, createExtraActiveTab());
 	}
 
 	/**

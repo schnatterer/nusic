@@ -21,6 +21,22 @@
 package info.schnatterer.nusic;
 
 public interface Constants {
+
+	/**
+	 * Enums that keeps track of the notification types used in this
+	 * application. Just uses {@link #ordinal()} as numeric ID.
+	 * 
+	 * @author schnatterer
+	 */
+	public enum Notification {
+		/** Generic warning. */
+		WARNING,
+		/** Found new releases (recently added tab). */
+		NEW_RELEASE,
+		/** A release is published today. */
+		RELEASED_TODAY
+	}
+
 	String LOG = "info.schnatterer.nusic";
 	String APPLICATION_URL = "https://github.com/schnatterer/nusic";
 }

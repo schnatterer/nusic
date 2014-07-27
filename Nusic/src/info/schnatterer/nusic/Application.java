@@ -20,6 +20,7 @@
  */
 package info.schnatterer.nusic;
 
+import info.schnatterer.nusic.Constants.Notification;
 import info.schnatterer.nusic.ui.activities.MainActivity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -27,28 +28,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
 public class Application extends android.app.Application {
-
-	/**
-	 * Enums that keeps track of the notification types used in this
-	 * application.
-	 * 
-	 * @author schnatterer
-	 */
-	public enum Notification {
-		/** Generic warning. */
-		WARNING,
-		/** Found new releases (recently added tab). */
-		NEW_RELEASE,
-		/** A release is published today. */
-		RELEASED_TODAY
-	}
-
 	private static String versionName;
 
 	private static Context context;
@@ -118,8 +104,12 @@ public class Application extends android.app.Application {
 	 *            second line of text to put out
 	 */
 	public static void notifyWarning(String text, String subtext) {
+		/*
+		 * Don't pass any extras, make Activity open in the default tab.
+		 */
 		notify(Notification.WARNING, text, subtext,
-				android.R.drawable.ic_dialog_alert, null, MainActivity.class);
+				android.R.drawable.ic_dialog_alert, null, MainActivity.class,
+				null);
 	}
 
 	/**
@@ -130,8 +120,12 @@ public class Application extends android.app.Application {
 	 *            text to put out verbatim
 	 */
 	public static void notifyWarning(String text, Object... args) {
+		/*
+		 * Don't pass any extras, make Activity open in the default tab.
+		 */
 		notify(Notification.WARNING, String.format(text, args), null,
-				android.R.drawable.ic_dialog_alert, null, MainActivity.class);
+				android.R.drawable.ic_dialog_alert, null, MainActivity.class,
+				null);
 	}
 
 	/**
@@ -145,7 +139,6 @@ public class Application extends android.app.Application {
 		notifyWarning(getContext().getString(stringId), args);
 	}
 
-	// TODO pass tab number to mainActivity when launching from notification
 	/**
 	 * Writes an android notification that has the localized title of the app.
 	 * Overwrites any previous with the same <code>id</code>.
@@ -162,15 +155,28 @@ public class Application extends android.app.Application {
 	 *            use.
 	 * @param largeIcon
 	 *            large icon that is shown in the ticker and notification.
-	 * 
 	 * @param cls
 	 *            activity to be launched on click
+	 * @param extras
+	 *            extended data to be passed to the activity
 	 */
 	public static void notify(Notification id, String text, String subtext,
-			int smallIconId, Bitmap largeIcon, Class<? extends Context> cls) {
+			int smallIconId, Bitmap largeIcon, Class<? extends Context> cls,
+			Bundle extras) {
 		// Creates an explicit intent for an Activity in your app
 		Intent resultIntent = new Intent(getContext(), cls);
-
+		/*
+		 * Make sure the intent is also delivered when the application is
+		 * already running in a task.
+		 * 
+		 * Note: On Android 2.x the intent is not delivered when another
+		 * activity of the same application is running. Instead the application
+		 * is only brought to foreground.
+		 */
+		resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		if (extras != null) {
+			resultIntent.putExtras(extras);
+		}
 		/*
 		 * The stack builder object will contain an artificial back stack for
 		 * the started Activity. This ensures that navigating backward from the
@@ -181,8 +187,12 @@ public class Application extends android.app.Application {
 		stackBuilder.addParentStack(cls);
 		// Adds the Intent that starts the Activity to the top of the stack
 		stackBuilder.addNextIntent(resultIntent);
-		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,
-				PendingIntent.FLAG_UPDATE_CURRENT);
+		/*
+		 * Make sure to deliver the intent just created even though there
+		 * already is an intent with the same request ID.
+		 */
+		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
+				id.ordinal(), PendingIntent.FLAG_UPDATE_CURRENT);
 		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(
 				getContext()).setSmallIcon(smallIconId)
 				.setContentTitle(getContext().getString(R.string.app_name))

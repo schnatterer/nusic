@@ -64,15 +64,50 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
+/**
+ * Fragment that loads a list of releases from the local database and displays
+ * it.
+ * 
+ * Which releases are queried and which loader is used can be decided in the
+ * intent that create the fragment using the following extras.
+ * 
+ * <ul>
+ * <li>{@link #EXTRA_RELEASE_QUERY}, the {@link ReleaseQuery} to use</li>
+ * <li>{@value #EXTRA_LOADER_ID} the ID of the underlying loader</li>
+ * </ul>
+ * 
+ * @author schnatterer
+ *
+ */
 public class ReleaseListFragment extends SherlockFragment {
+	/**
+	 * Lists all types of queries whose result are displayed within this
+	 * fragment.
+	 * 
+	 * @author schnatterer
+	 *
+	 */
 	public enum ReleaseQuery {
 		ALL, JUST_ADDED, ANNOUNCED, AVAILABLE;
 	}
 
-	public static final String ARG_RELEASE_QUERY = "releaseQuery";
-	public static final String ARG_LOADER_ID = "loaderId";
+	/**
+	 * Key to the creating intent's extras that contains the
+	 * {@link ReleaseQuery}<br/>
+	 * See {@link #releaseQuery}.
+	 */
+	public static final String EXTRA_RELEASE_QUERY = "nusic.intent.releaseList.releaseQuery";
+	/**
+	 * Key to the creating intent's extras that contains the
+	 * {@link ReleaseQuery}<br/>
+	 * See {@link #loaderId}.
+	 */
+	public static final String EXTRA_LOADER_ID = "nusic.intent.releaseList.loaderId";
 
+	/** The query that returns the data to be displayed in the fragment. */
 	private ReleaseQuery releaseQuery;
+	/** The loader that is connected to the data displayed in the fragment. */
+	private int loaderId;
 	private PreferencesService preferencesService = PreferencesServiceSharedPreferences
 			.getInstance();
 
@@ -81,7 +116,6 @@ public class ReleaseListFragment extends SherlockFragment {
 	private TextView releasesTextViewNoneFound;
 	/** Progress animation when loading releases from db */
 	private ProgressBar progressBar;
-	private int loaderId;
 	private ReleaseRefreshService releaseRefreshService;
 	private ReleaseService releaseService;
 	private ArtistService artistService;
@@ -92,8 +126,8 @@ public class ReleaseListFragment extends SherlockFragment {
 		try {
 
 			releaseQuery = ReleaseQuery.valueOf(getArguments().getString(
-					ARG_RELEASE_QUERY));
-			loaderId = getArguments().getInt(ARG_LOADER_ID);
+					EXTRA_RELEASE_QUERY));
+			loaderId = getArguments().getInt(EXTRA_LOADER_ID);
 
 		} catch (Exception e) {
 			Log.w(Constants.LOG,
