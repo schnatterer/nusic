@@ -77,6 +77,9 @@ public class ReleasedTodayService extends Service {
 					.notifyWarning(
 							getString(R.string.ReleasedTodayService_ReleasedTodayError),
 							e.getLocalizedMessage());
+		} finally {
+			// Make sure the service runs again tomorrow
+			schedule(this);
 		}
 		return Service.START_STICKY;
 	}
@@ -187,7 +190,8 @@ public class ReleasedTodayService extends Service {
 					triggerAtCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY,
 					pintent);
 			Log.d(Constants.LOG,
-					"Scheduled task to run again every day, starting at "
+					"Scheduled " + ReleasedTodayService.class.getSimpleName()
+							+ " to run again every day, starting at "
 							+ new Date(+triggerAtCal.getTimeInMillis()));
 		}
 	}
