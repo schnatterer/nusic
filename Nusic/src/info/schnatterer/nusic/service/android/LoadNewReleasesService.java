@@ -326,9 +326,10 @@ public class LoadNewReleasesService extends WakefulService {
 		 * order to avoid the device falling back to sleep before service is
 		 * started
 		 */
-		PendingIntent pintent = PendingIntent.getBroadcast(context, 0,
-				new Intent(context, LoadNewReleasesServiceAlarmReceiver.class),
-				0);
+		PendingIntent pintent = PendingIntent.getBroadcast(context,
+				Constants.Alarms.NEW_RELEASES.ordinal(), new Intent(context,
+						LoadNewReleasesServiceAlarmReceiver.class),
+				PendingIntent.FLAG_UPDATE_CURRENT);
 
 		AlarmManager alarm = (AlarmManager) context
 				.getSystemService(Context.ALARM_SERVICE);

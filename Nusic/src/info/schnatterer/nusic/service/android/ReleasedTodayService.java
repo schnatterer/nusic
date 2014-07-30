@@ -176,9 +176,11 @@ public class ReleasedTodayService extends Service {
 				triggerAtCal.add(Calendar.DAY_OF_MONTH, 1);
 			}
 
-			PendingIntent pintent = PendingIntent.getBroadcast(context, 0,
+			PendingIntent pintent = PendingIntent.getBroadcast(context,
+					Constants.Alarms.RELEASED_TODAY.ordinal(),
 					new Intent(context,
-							ReleasedTodayServiceStarterReceiver.class), 0);
+							ReleasedTodayServiceStarterReceiver.class),
+					PendingIntent.FLAG_UPDATE_CURRENT);
 
 			AlarmManager alarm = (AlarmManager) context
 					.getSystemService(Context.ALARM_SERVICE);
