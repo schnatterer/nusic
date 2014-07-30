@@ -38,6 +38,11 @@ public class NusicPreferencesFragment extends PreferenceFragment {
 				.setOnPreferenceClickListener(
 						NusicPreferencesActivity
 								.createVisibilityButtonListener(getActivity()));
+		findPreference(
+				getString(R.string.preferences_key_released_today_hour_of_day))
+				.setOnPreferenceClickListener(
+						NusicPreferencesActivity
+								.createReleasedTodayTimePickerListener(getActivity()));
 	}
 
 }

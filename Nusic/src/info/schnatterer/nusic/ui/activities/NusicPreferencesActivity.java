@@ -25,6 +25,7 @@ import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.db.model.Artist;
 import info.schnatterer.nusic.service.ReleaseService;
 import info.schnatterer.nusic.service.ServiceException;
+import info.schnatterer.nusic.service.android.ReleasedTodayService;
 import info.schnatterer.nusic.service.event.PreferenceChangedListener;
 import info.schnatterer.nusic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.nusic.service.impl.ReleaseServiceImpl;
@@ -32,12 +33,14 @@ import info.schnatterer.nusic.ui.fragments.NusicPreferencesFragment;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.widget.TimePicker;
 
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.MenuItem;
@@ -70,7 +73,7 @@ public class NusicPreferencesActivity extends SherlockPreferenceActivity {
 	public static final String EXTRA_RESULT_IS_CONTENT_CHANGED = "nusic.intent.extra.preferences.result.isContentChanged";
 
 	private TimePeriodPreferenceChangedListener timePeriodPreferenceChangedListener = new TimePeriodPreferenceChangedListener();
-	private PreferencesServiceSharedPreferences preferencesService = PreferencesServiceSharedPreferences
+	private static PreferencesServiceSharedPreferences preferencesService = PreferencesServiceSharedPreferences
 			.getInstance();
 	/**
 	 * <code>true</code> if a check for new releases must be performed. <br/>
@@ -96,6 +99,9 @@ public class NusicPreferencesActivity extends SherlockPreferenceActivity {
 			Preference resetVisibilityButton = findPreferenceActivity(getString(R.string.preferences_key_display_all_releases));
 			resetVisibilityButton
 					.setOnPreferenceClickListener(createVisibilityButtonListener(this));
+			Preference releasedTodayTimePicker = findPreferenceActivity(getString(R.string.preferences_key_released_today_hour_of_day));
+			releasedTodayTimePicker
+					.setOnPreferenceClickListener(createReleasedTodayTimePickerListener(this));
 		} else {
 			onCreatePreferenceFragment();
 		}
@@ -161,7 +167,7 @@ public class NusicPreferencesActivity extends SherlockPreferenceActivity {
 	}
 
 	/**
-	 * Creates a preference listener that opens an alert dialog. If it is
+	 * Creates a preference listener that opens an {@link AlertDialog}. If it is
 	 * answered with yes, all releases and artists are set to visible (
 	 * {@link Artist#setHidden(Boolean)}=<code>true</code>).
 	 * 
@@ -172,7 +178,7 @@ public class NusicPreferencesActivity extends SherlockPreferenceActivity {
 			final Activity activity) {
 		return new Preference.OnPreferenceClickListener() {
 			@Override
-			public boolean onPreferenceClick(Preference arg0) {
+			public boolean onPreferenceClick(Preference preference) {
 				new AlertDialog.Builder(activity)
 						// .setTitle(
 						// R.string.preferences_title_display_all_releases)
@@ -196,6 +202,47 @@ public class NusicPreferencesActivity extends SherlockPreferenceActivity {
 										}
 									}
 								}).show();
+				return true;
+			}
+		};
+	}
+
+	/**
+	 * Creates a preference listener that opens a {@link TimePicker}. If a new
+	 * time is persisted
+	 * {@link ReleasedTodayService#schedule(android.content.Context)} is called.
+	 * 
+	 * @param activity
+	 * @return
+	 */
+	public static OnPreferenceClickListener createReleasedTodayTimePickerListener(
+			final Activity activity) {
+		return new Preference.OnPreferenceClickListener() {
+
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				new TimePickerDialog(
+						activity,
+						new TimePickerDialog.OnTimeSetListener() {
+							// Workaround for onTimeSet() being called twice
+							boolean isTimeSet = false;
+
+							@Override
+							public void onTimeSet(TimePicker view,
+									int hourOfDay, int minute) {
+								if (!isTimeSet) {
+									isTimeSet = true;
+									if (preferencesService
+											.setReleasedTodaySchedule(
+													hourOfDay, minute)) {
+										ReleasedTodayService.schedule(activity);
+									}
+								}
+							}
+						}, preferencesService
+								.getReleasedTodayScheduleHourOfDay(),
+						preferencesService.getReleasedTodayScheduleMinute(),
+						true).show();
 				return true;
 			}
 		};

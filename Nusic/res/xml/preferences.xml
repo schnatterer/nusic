@@ -16,6 +16,7 @@
             android:summary="@string/preferences_summary_include_future_releases"
             android:title="@string/preferences_title_include_future_releases" />
 
+        <!-- Implemented in activity: Alert Dialog and resetting all hidden releases and artists -->
         <Preference
             android:key="@string/preferences_key_display_all_releases"
             android:summary="@string/preferences_summary_display_all_releases"
@@ -32,6 +33,19 @@
             android:summary="@string/preferences_summary_full_update"
             android:title="@string/preferences_title_full_update" />
         -->
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/preferences_category_notifications" >
+        <CheckBoxPreference
+            android:defaultValue="@bool/preferences_default_is_enabled_released_today"
+            android:key="@string/preferences_key_is_enabled_released_today"
+            android:summary="@string/preferences_summary_is_enabled_released_today"
+            android:title="@string/preferences_title_is_enabled_released_today" />
+        <!-- Implemented in activity: Time Picker dialog and scheduling of the service -->
+        <Preference
+            android:key="@string/preferences_key_released_today_hour_of_day"
+            android:summary="@string/preferences_summary_released_hour_of_day"
+            android:title="@string/preferences_title_released_today_hour_of_day" 
+            android:dependency="@string/preferences_key_is_enabled_released_today"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/preferences_category_bandwitdth" >
         <CheckBoxPreference

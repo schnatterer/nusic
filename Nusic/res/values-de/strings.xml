@@ -50,6 +50,12 @@
     <string name="preferences_title_download_only_on_wifi">Nur über WLAN herunterladen</string>
     <string name="preferences_summary_download_only_on_wifi">Keine Internetverbindung über Mobilfunknetzwerke verwenden</string>
     
+    <string name="preferences_category_notifications">Benachrichtigungen</string>
+    <string name="preferences_title_is_enabled_released_today">Erscheinungstermine</string>
+    <string name="preferences_summary_is_enabled_released_today">Am Tag der Veröffentlichung von Alben benachrichtigen</string>
+    <string name="preferences_title_released_today_hour_of_day">Zeit der Benachrichtigung</string>
+    <string name="preferences_summary_released_hour_of_day">Zeit zu der die Benachrichtigung über Veröffentlichung ungefähr erscheint. Android kann die Ausführung verzögern um Strom zu sparen.</string>
+    
     <!-- (Error) messages -->
     <string name="GenericError">Etwas beinahe unmögliches ist geschehen: %1s!</string>
     <string name="NotOnline">Keine Verbindung zum Internet (Einstellungen prüfen, um die Verwendung des mobilen Internet zu ermöglichen)</string>

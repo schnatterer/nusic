@@ -79,7 +79,7 @@ public class ReleasedTodayService extends Service {
 							e.getLocalizedMessage());
 		} finally {
 			// Make sure the service runs again tomorrow
-			schedule(this);
+			// schedule(this);
 		}
 		return Service.START_STICKY;
 	}

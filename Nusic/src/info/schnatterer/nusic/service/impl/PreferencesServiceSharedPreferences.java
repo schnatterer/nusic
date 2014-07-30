@@ -418,8 +418,16 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	}
 
 	@Override
+	public boolean setReleasedTodaySchedule(int hourOfDay, int minute) {
+		return sharedPreferences.edit()
+				.putInt(KEY_RELEASED_TODAY_HOUR_OF_DAY, hourOfDay)
+				.putInt(KEY_RELEASED_TODAY_MINUTE, minute).commit();
+	}
+
+	@Override
 	public int getReleasedTodayScheduleMinute() {
 		return sharedPreferences.getInt(KEY_RELEASED_TODAY_MINUTE,
 				DEFAULT_KEY_RELEASED_TODAY_MINUTE);
 	}
+
 }

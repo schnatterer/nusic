@@ -194,6 +194,8 @@ public interface PreferencesService {
 	 */
 	int getReleasedTodayScheduleHourOfDay();
 
+	boolean setReleasedTodaySchedule(int hourOfDay, int minute);
+
 	/**
 	 * @return the minute where the check for albums getting release today is
 	 *         performed if {@link #isEnabledReleasedToday()} is
