@@ -63,23 +63,29 @@ public class ReleasedTodayService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		try {
-			List<Release> releasedToday = releaseService.findReleasedToday();
-			if (releasedToday.size() == 1) {
-				notifyReleaseToday(releasedToday.get(0));
-			} else if (releasedToday.size() > 1) {
-				// If more than one release, put less detail in notification
-				notifyReleaseToday(releasedToday.size());
-			}
-		} catch (ServiceException e) {
-			Application
-					.notifyWarning(
-							getString(R.string.ReleasedTodayService_ReleasedTodayError),
-							e.getLocalizedMessage());
-		}// finally {
-			// Make sure the service runs again tomorrow
-			// schedule(this);
-		// }
+		if (preferencesService.isEnabledNotifyReleasedToday()) {
+			try {
+				List<Release> releasedToday = releaseService
+						.findReleasedToday();
+				if (releasedToday.size() == 1) {
+					notifyReleaseToday(releasedToday.get(0));
+				} else if (releasedToday.size() > 1) {
+					// If more than one release, put less detail in notification
+					notifyReleaseToday(releasedToday.size());
+				}
+			} catch (ServiceException e) {
+				Application
+						.notifyWarning(
+								getString(R.string.ReleasedTodayService_ReleasedTodayError),
+								e.getLocalizedMessage());
+			}// finally {
+				// Make sure the service runs again tomorrow
+				// schedule(this);
+			// }
+		} else {
+			// Stop schedule
+			stopSchedule(this);
+		}
 		return Service.START_STICKY;
 	}
 
@@ -174,26 +180,45 @@ public class ReleasedTodayService extends Service {
 				triggerAtCal.add(Calendar.DAY_OF_MONTH, 1);
 			}
 
-			PendingIntent pintent = PendingIntent.getBroadcast(context,
-					Constants.Alarms.RELEASED_TODAY.ordinal(),
-					new Intent(context,
-							ReleasedTodayServiceStarterReceiver.class),
-					PendingIntent.FLAG_UPDATE_CURRENT);
-
-			AlarmManager alarm = (AlarmManager) context
-					.getSystemService(Context.ALARM_SERVICE);
 			/*
 			 * Set a repeating schedule, so there always is a next alarm even
 			 * when one alarm should fail for some reason
 			 */
-			alarm.setInexactRepeating(AlarmManager.RTC,
-					triggerAtCal.getTimeInMillis(), AlarmManager.INTERVAL_DAY,
-					pintent);
+			((AlarmManager) context.getSystemService(Context.ALARM_SERVICE))
+					.setInexactRepeating(AlarmManager.RTC,
+							triggerAtCal.getTimeInMillis(),
+							AlarmManager.INTERVAL_DAY,
+							createPendingIntent(context));
 			Log.d(Constants.LOG,
 					"Scheduled " + ReleasedTodayService.class.getSimpleName()
 							+ " to run again every day, starting at "
 							+ new Date(+triggerAtCal.getTimeInMillis()));
 		}
+	}
+
+	/**
+	 * Creates the pending intent that is passed to the alarm manager for
+	 * scheduling the service.
+	 * 
+	 * @param context
+	 * @return
+	 */
+	private static PendingIntent createPendingIntent(Context context) {
+		PendingIntent pintent = PendingIntent.getBroadcast(context,
+				Constants.Alarms.RELEASED_TODAY.ordinal(), new Intent(context,
+						ReleasedTodayServiceStarterReceiver.class),
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		return pintent;
+	}
+
+	/**
+	 * Cancel this task so it is not scheduled anymore.
+	 * 
+	 * @param context
+	 */
+	public void stopSchedule(Context context) {
+		((AlarmManager) getSystemService(ALARM_SERVICE))
+				.cancel(createPendingIntent(context));
 	}
 
 	@Override
