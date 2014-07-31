@@ -42,7 +42,6 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -77,10 +76,10 @@ public class ReleasedTodayService extends Service {
 					.notifyWarning(
 							getString(R.string.ReleasedTodayService_ReleasedTodayError),
 							e.getLocalizedMessage());
-		} finally {
+		}// finally {
 			// Make sure the service runs again tomorrow
 			// schedule(this);
-		}
+		// }
 		return Service.START_STICKY;
 	}
 
@@ -100,8 +99,8 @@ public class ReleasedTodayService extends Service {
 				getString(R.string.ReleasedTodayService_ReleasedToday),
 				release.getArtist().getArtistName() + " - "
 						+ release.getReleaseName(), R.drawable.ic_launcher,
-				release.getArtwork(), MainActivity.class,
-				createExtraActiveTab());
+				/* TODO insert the releases icon here */null,
+				MainActivity.class, createExtraActiveTab());
 	}
 
 	/**
@@ -132,8 +131,7 @@ public class ReleasedTodayService extends Service {
 	private void notifyReleaseToday(int nReleases) {
 		Application.notify(Notification.RELEASED_TODAY, String.format(
 				getString(R.string.ReleasedTodayService_MultipleReleasedToday),
-				nReleases), null, R.drawable.ic_launcher, BitmapFactory
-				.decodeResource(getResources(), R.drawable.ic_launcher),
+				nReleases), null, R.drawable.ic_launcher, null,
 				MainActivity.class, createExtraActiveTab());
 	}
 
