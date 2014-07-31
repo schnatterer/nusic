@@ -225,7 +225,8 @@ public class ReleasedTodayService extends Service {
 	 * @author schnatterer
 	 * 
 	 */
-	public class ReleasedTodaySchedulerReceiver extends BroadcastReceiver {
+	public static class ReleasedTodaySchedulerReceiver extends
+			BroadcastReceiver {
 		@Override
 		public void onReceive(final Context context, final Intent intent) {
 			ReleasedTodayService.schedule(context);
