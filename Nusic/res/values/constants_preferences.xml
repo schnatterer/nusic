@@ -30,8 +30,11 @@
         <item>7</item>
     </string-array>
     
-    <string name="preferences_key_is_enabled_released_today">isEnabledReleasedToday</string>
-    <bool name="preferences_default_is_enabled_released_today">true</bool>
+    <string name="preferences_key_is_enabled_notify_new_releases">isEnabledNotifyNewReleases</string>
+    <bool name="preferences_default_is_enabled_notify_new_releases">true</bool>
+    
+    <string name="preferences_key_is_enabled_notify_released_today">isEnabledNotifyReleasedToday</string>
+    <bool name="preferences_default_is_enabled_notify_released_today">true</bool>
     
     <string name="preferences_key_released_today_hour_of_day">releaseTodayHourOfDay</string>
     <string name="preferences_default_released_today_hour_of_day">12</string>

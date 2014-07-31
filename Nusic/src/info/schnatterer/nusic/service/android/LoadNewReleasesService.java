@@ -251,18 +251,21 @@ public class LoadNewReleasesService extends WakefulService {
 	}
 
 	/**
-	 * Finds which releases are new to the device and notifies user.
+	 * Finds which releases are new to the device and notifies user if enabled
+	 * in preferences.
 	 * 
 	 * @param beforeRefresh
 	 * @throws DatabaseException
 	 */
 	private void notifyNewReleases(long beforeRefresh) throws ServiceException {
-		List<Release> newReleases = releaseService
-				.findJustCreated(beforeRefresh);
-		if (newReleases.size() > 0) {
-			notifyNewReleases(getResources().getQuantityString(
-					R.plurals.LoadNewReleasesService_foundNewReleases,
-					newReleases.size(), newReleases.size()));
+		if (preferencesService.isEnabledNotifyNewReleases()) {
+			List<Release> newReleases = releaseService
+					.findJustCreated(beforeRefresh);
+			if (newReleases.size() > 0) {
+				notifyNewReleases(getResources().getQuantityString(
+						R.plurals.LoadNewReleasesService_foundNewReleases,
+						newReleases.size(), newReleases.size()));
+			}
 		}
 	}
 

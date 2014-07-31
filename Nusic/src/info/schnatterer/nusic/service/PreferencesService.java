@@ -185,11 +185,17 @@ public interface PreferencesService {
 	 * @return <code>true</code> if the check for albums getting release today
 	 *         is enabled.
 	 */
-	boolean isEnabledReleasedToday();
+	boolean isEnabledNotifyReleasedToday();
+
+	/**
+	 * @return <code>true</code> if a notification is shown when
+	 *         {@link LoadNewReleasesService} finds new releases.
+	 */
+	boolean isEnabledNotifyNewReleases();
 
 	/**
 	 * @return the hour of day where the check for albums getting release today
-	 *         is performed if {@link #isEnabledReleasedToday()} is
+	 *         is performed if {@link #isEnabledNotifyReleasedToday()} is
 	 *         <code>true</code>.
 	 */
 	int getReleasedTodayScheduleHourOfDay();
@@ -198,7 +204,7 @@ public interface PreferencesService {
 
 	/**
 	 * @return the minute where the check for albums getting release today is
-	 *         performed if {@link #isEnabledReleasedToday()} is
+	 *         performed if {@link #isEnabledNotifyReleasedToday()} is
 	 *         <code>true</code>.
 	 */
 	int getReleasedTodayScheduleMinute();

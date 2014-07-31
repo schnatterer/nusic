@@ -50,10 +50,12 @@
     <string name="preferences_summary_download_only_on_wifi">Don\'t use mobile networks</string>
     
     <string name="preferences_category_notifications">Notifications</string>
-    <string name="preferences_title_is_enabled_released_today">Release dates</string>
-    <string name="preferences_summary_is_enabled_released_today">Notify on the day releases are published</string>
+        <string name="preferences_title_is_enabled_notify_new_releases">New releases</string>
+    <string name="preferences_summary_is_enabled_notify_new_releases">Notify when new releases are found.</string>
+    <string name="preferences_title_is_enabled_notify_released_today">Release dates</string>
+    <string name="preferences_summary_is_enabled_notify_released_today">Notify on the day releases are published</string>
     <string name="preferences_title_released_today_hour_of_day">Time of notification</string>
-    <string name="preferences_summary_released_hour_of_day">Approximate time of notification when new releases are published. Android might delay execution in order to save energy.</string>
+    <string name="preferences_summary_released_hour_of_day">Approximate time of notification that informas of releases dates. Android might delay execution in order to save energy.</string>
     
     <!-- (Error) messages -->
     <string name="GenericError">Something almost impossible has happened: %1s!</string>

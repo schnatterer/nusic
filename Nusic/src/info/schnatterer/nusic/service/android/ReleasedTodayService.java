@@ -151,7 +151,7 @@ public class ReleasedTodayService extends Service {
 	 * @param context
 	 */
 	public static void schedule(Context context) {
-		boolean isEnabled = preferencesService.isEnabledReleasedToday();
+		boolean isEnabled = preferencesService.isEnabledNotifyReleasedToday();
 		if (isEnabled) {
 			int hourOfDay = preferencesService
 					.getReleasedTodayScheduleHourOfDay();

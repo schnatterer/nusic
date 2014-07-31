@@ -36,16 +36,21 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/preferences_category_notifications" >
         <CheckBoxPreference
-            android:defaultValue="@bool/preferences_default_is_enabled_released_today"
-            android:key="@string/preferences_key_is_enabled_released_today"
-            android:summary="@string/preferences_summary_is_enabled_released_today"
-            android:title="@string/preferences_title_is_enabled_released_today" />
+            android:defaultValue="@bool/preferences_default_is_enabled_notify_new_releases"
+            android:key="@string/preferences_key_is_enabled_notify_new_releases"
+            android:summary="@string/preferences_summary_is_enabled_notify_new_releases"
+            android:title="@string/preferences_title_is_enabled_notify_new_releases" />
+        <CheckBoxPreference
+            android:defaultValue="@bool/preferences_default_is_enabled_notify_released_today"
+            android:key="@string/preferences_key_is_enabled_notify_released_today"
+            android:summary="@string/preferences_summary_is_enabled_notify_released_today"
+            android:title="@string/preferences_title_is_enabled_notify_released_today" />
         <!-- Implemented in activity: Time Picker dialog and scheduling of the service -->
         <Preference
             android:key="@string/preferences_key_released_today_hour_of_day"
             android:summary="@string/preferences_summary_released_hour_of_day"
             android:title="@string/preferences_title_released_today_hour_of_day" 
-            android:dependency="@string/preferences_key_is_enabled_released_today"/>
+            android:dependency="@string/preferences_key_is_enabled_notify_released_today"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/preferences_category_bandwitdth" >
         <CheckBoxPreference
