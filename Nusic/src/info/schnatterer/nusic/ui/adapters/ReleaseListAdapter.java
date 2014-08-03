@@ -23,6 +23,7 @@ package info.schnatterer.nusic.ui.adapters;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.db.model.Release;
 
+import java.lang.ref.WeakReference;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
@@ -66,41 +67,62 @@ public class ReleaseListAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
+		ReleaseListHolder holder;
 		if (convertView == null) {
 			convertView = layoutInflater.inflate(R.layout.release_list_row,
-					null);
+					parent, false);
+			holder = new ReleaseListHolder(convertView);
+			// Store holder in view
+			convertView.setTag(holder);
+		} else {
+			// Extract holder from existing view
+			holder = (ReleaseListHolder) convertView.getTag();
 		}
-		TextView releaseNameView = (TextView) convertView
-				.findViewById(R.id.releaseListRowReleaseName);
-		TextView artistView = (TextView) convertView
-				.findViewById(R.id.releaseListRowArtistName);
-		TextView releaseDateView = (TextView) convertView
-				.findViewById(R.id.releaseListRowReleaseDate);
-		ImageView thumbnailView = (ImageView) convertView
-				.findViewById(R.id.releaseListRowThumbnail);
-
 		Release release = listData.get(position);
 		if (release == null) {
-			artistView.setText(listData.get(position).getArtistName());
+			holder.artistView.get().setText(
+					listData.get(position).getArtistName());
 			return convertView;
 		}
-		releaseNameView.setText(release.getReleaseName());
-		artistView.setText(release.getArtistName());
+		holder.releaseNameView.get().setText(release.getReleaseName());
+		holder.artistView.get().setText(release.getArtistName());
 		Date releaseDate = release.getReleaseDate();
 		if (releaseDate != null) {
 			DateFormat dateFormat = DateFormat.getDateInstance();
 			dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-			releaseDateView.setText(dateFormat.format(releaseDate));
+			holder.releaseDateView.get()
+					.setText(dateFormat.format(releaseDate));
 		} else {
-			releaseDateView.setText("");
+			holder.releaseDateView.get().setText("");
 		}
-		thumbnailView.setImageBitmap(release.getArtwork());
+		holder.thumbnailView.get().setImageBitmap(release.getArtwork());
 		return convertView;
 	}
 
 	public void show(List<Release> listData) {
 		this.listData = listData;
 		notifyDataSetChanged();
+	}
+
+	public class ReleaseListHolder {
+		WeakReference<TextView> releaseNameView;
+		WeakReference<TextView> artistView;
+		WeakReference<TextView> releaseDateView;
+		WeakReference<ImageView> thumbnailView;
+
+		public ReleaseListHolder(View view) {
+			releaseNameView = new WeakReference<TextView>(
+					(TextView) (TextView) view
+							.findViewById(R.id.releaseListRowReleaseName));
+			artistView = new WeakReference<TextView>(
+					(TextView) (TextView) view
+							.findViewById(R.id.releaseListRowArtistName));
+			releaseDateView = new WeakReference<TextView>(
+					(TextView) view
+							.findViewById(R.id.releaseListRowReleaseDate));
+			thumbnailView = new WeakReference<ImageView>(
+					(ImageView) view.findViewById(R.id.releaseListRowThumbnail));
+		}
 	}
 
 }

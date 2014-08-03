@@ -20,7 +20,38 @@
  */
 package info.schnatterer.nusic;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+
 public interface Constants {
+
+	/**
+	 * Enums that keeps track of the notification types used in this
+	 * application. Uses {@link #ordinal()} as numeric ID.
+	 * 
+	 * @author schnatterer
+	 */
+	public enum Notification {
+		/** Generic warning. */
+		WARNING,
+		/** Found new releases (recently added tab). */
+		NEW_RELEASE,
+		/** A release is published today. */
+		RELEASED_TODAY
+	}
+
+	/**
+	 * Enum that keeps track of application-wide request codes that are used for
+	 * setting repeating alarms {@link PendingIntent}s with {@link AlarmManager}
+	 * . Uses {@link #ordinal()} as numeric ID.
+	 * 
+	 * @author schnatterer
+	 *
+	 */
+	public enum Alarms {
+		NEW_RELEASES, RELEASED_TODAY;
+	}
+
 	String LOG = "info.schnatterer.nusic";
 	String APPLICATION_URL = "https://github.com/schnatterer/nusic";
 }

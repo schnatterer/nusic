@@ -22,6 +22,7 @@ package info.schnatterer.nusic.service.android;
 
 import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
+import info.schnatterer.nusic.Constants.Notification;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.db.DatabaseException;
 import info.schnatterer.nusic.db.model.Artist;
@@ -36,6 +37,7 @@ import info.schnatterer.nusic.service.impl.ConnectivityServiceAndroid;
 import info.schnatterer.nusic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.nusic.service.impl.ReleaseRefreshServiceImpl;
 import info.schnatterer.nusic.service.impl.ReleaseServiceImpl;
+import info.schnatterer.nusic.ui.activities.MainActivity;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -49,19 +51,28 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
 /**
  * Wraps the android implementation of the business logic service
  * {@link ReleaseRefreshService} in an android {@link Service} in order to allow
- * running outside of the application. In addition takes care of the scheduling.
+ * running outside of the application. In addition, it takes care of the
+ * scheduling.
+ * 
+ * The service requires the {@link #EXTRA_REFRESH_ON_START} to contain
+ * <code>true</code> in order to actually start refreshing releases.
  * 
  * @author schnatterer
  * 
  */
 public class LoadNewReleasesService extends WakefulService {
-	public static final String ARG_REFRESH_ON_START = "refreshOnStart";
+	/**
+	 * Key to the creating intent's extras that contains a boolean that triggers
+	 * loading the release if <code>true</code>.
+	 */
+	public static final String EXTRA_REFRESH_ON_START = "nusic.intent.extra.refreshOnStart";
 
 	private static PreferencesService preferencesService = PreferencesServiceSharedPreferences
 			.getInstance();
@@ -88,9 +99,10 @@ public class LoadNewReleasesService extends WakefulService {
 						+ startId
 						+ ". Intent = "
 						+ intent
-						+ (intent != null ? (", extra " + ARG_REFRESH_ON_START
-								+ " = " + intent.getBooleanExtra(
-								ARG_REFRESH_ON_START, false)) : ""));
+						+ (intent != null ? (", extra "
+								+ EXTRA_REFRESH_ON_START + " = " + intent
+								.getBooleanExtra(EXTRA_REFRESH_ON_START, false))
+								: ""));
 		boolean refreshing = true;
 
 		if (intent == null) {
@@ -100,7 +112,7 @@ public class LoadNewReleasesService extends WakefulService {
 			Log.d(Constants.LOG,
 					"Services restarted after being destroyed while workerThread was running.");
 			refreshReleases(false, null);
-		} else if (intent.getBooleanExtra(ARG_REFRESH_ON_START, false)) {
+		} else if (intent.getBooleanExtra(EXTRA_REFRESH_ON_START, false)) {
 			refreshReleases(false, null);
 		} else {
 			refreshing = false;
@@ -117,12 +129,6 @@ public class LoadNewReleasesService extends WakefulService {
 		}
 
 		return Service.START_STICKY;
-
-		// if (flags == START_FLAG_REDELIVERY) {
-		// // When START_REDELIVER_INTENT this flag will be set and intent will
-		// // be the same as the original one
-		// }
-		// return Service.START_REDELIVER_INTENT;
 	}
 
 	/**
@@ -245,23 +251,54 @@ public class LoadNewReleasesService extends WakefulService {
 	}
 
 	/**
-	 * Finds which releases are new to the device and notifies user.
+	 * Finds which releases are new to the device and notifies user if enabled
+	 * in preferences.
 	 * 
 	 * @param beforeRefresh
 	 * @throws DatabaseException
 	 */
 	private void notifyNewReleases(long beforeRefresh) throws ServiceException {
-		List<Release> newReleases = releaseService
-				.findJustCreated(beforeRefresh);
-		if (newReleases.size() > 0) {
-			Application.notifyInfo(getResources().getQuantityString(
-					R.plurals.LoadNewReleasesService_foundNewReleases,
-					newReleases.size(), newReleases.size()));
+		if (preferencesService.isEnabledNotifyNewReleases()) {
+			List<Release> newReleases = releaseService
+					.findJustCreated(beforeRefresh);
+			if (newReleases.size() > 0) {
+				notifyNewReleases(getResources().getQuantityString(
+						R.plurals.LoadNewReleasesService_foundNewReleases,
+						newReleases.size(), newReleases.size()));
+			}
 		}
 	}
 
 	/**
-	 * Schedule this task to run regularly.
+	 * Puts out a notification containing an info symbol. Overwrites any
+	 * previous instances of this notification..<br/>
+	 * <br/>
+	 * Future calls overwrite any previous instances of this notification still
+	 * on display.
+	 * 
+	 * @param text
+	 */
+	private void notifyNewReleases(String text, Object... args) {
+		Application.notify(Notification.NEW_RELEASE, String.format(text, args),
+				null, android.R.drawable.ic_dialog_info, null,
+				MainActivity.class, createExtraActiveTab());
+	}
+
+	/**
+	 * Creates an extra bundle that contains the tab to be shown when
+	 * {@link MainActivity} is launched.
+	 * 
+	 * @return
+	 */
+	private Bundle createExtraActiveTab() {
+		Bundle extras = new Bundle();
+		extras.putSerializable(MainActivity.EXTRA_ACTIVE_TAB,
+				MainActivity.TabDefinition.JUST_ADDED);
+		return extras;
+	}
+
+	/**
+	 * /** Schedule this task to run regularly.
 	 * 
 	 * @param context
 	 * @param intervalDays
@@ -292,9 +329,10 @@ public class LoadNewReleasesService extends WakefulService {
 		 * order to avoid the device falling back to sleep before service is
 		 * started
 		 */
-		PendingIntent pintent = PendingIntent.getBroadcast(context, 0,
-				new Intent(context, LoadNewReleasesServiceAlarmReceiver.class),
-				0);
+		PendingIntent pintent = PendingIntent.getBroadcast(context,
+				Constants.Alarms.NEW_RELEASES.ordinal(), new Intent(context,
+						LoadNewReleasesServiceAlarmReceiver.class),
+				PendingIntent.FLAG_UPDATE_CURRENT);
 
 		AlarmManager alarm = (AlarmManager) context
 				.getSystemService(Context.ALARM_SERVICE);
@@ -302,10 +340,10 @@ public class LoadNewReleasesService extends WakefulService {
 		 * Set a repeating schedule, so there always is a next alarm even when
 		 * one alarm should fail for some reason
 		 */
-		alarm.setRepeating(AlarmManager.RTC, triggerAtDate.getTime(),
+		alarm.setInexactRepeating(AlarmManager.RTC, triggerAtDate.getTime(),
 				AlarmManager.INTERVAL_DAY * intervalDays, pintent);
 		preferencesService.setNextReleaseRefresh(triggerAtDate);
-		Log.i(Constants.LOG, "Scheduled task to run again every "
+		Log.d(Constants.LOG, "Scheduled task to run again every "
 				+ intervalDays + " days, starting at " + triggerAtDate);
 	}
 
@@ -317,7 +355,7 @@ public class LoadNewReleasesService extends WakefulService {
 	 */
 	public static Intent createIntentRefreshReleases(Context context) {
 		Intent intent = new Intent(context, LoadNewReleasesService.class);
-		intent.putExtra(ARG_REFRESH_ON_START, true);
+		intent.putExtra(EXTRA_REFRESH_ON_START, true);
 		return intent;
 	}
 
@@ -408,7 +446,7 @@ public class LoadNewReleasesService extends WakefulService {
 			// }
 			// On success, keep quiet
 			// } else if (totalArtists > 0) {
-			// Application.notifyInfo("!!SUCESSFULLY FINISHED REFRESHING "
+			// Application.notifyNewReleases("!!SUCESSFULLY FINISHED REFRESHING "
 			// + totalArtists + " ARTISTS!!");
 			// }
 		}

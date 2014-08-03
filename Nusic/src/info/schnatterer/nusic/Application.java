@@ -20,20 +20,21 @@
  */
 package info.schnatterer.nusic;
 
+import info.schnatterer.nusic.Constants.Notification;
 import info.schnatterer.nusic.ui.activities.MainActivity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
 public class Application extends android.app.Application {
-	private static final int NOTIFICATION_ID_WARNING = 0;
-	private static final int NOTIFICATION_ID_INFO = 1;
 	private static String versionName;
 
 	private static Context context;
@@ -98,51 +99,84 @@ public class Application extends android.app.Application {
 	 * previous instances of this notification.
 	 * 
 	 * @param text
+	 *            first line of text to put out
+	 * @param subtext
+	 *            second line of text to put out
 	 */
-	public static void notifyWarning(String text, Object... args) {
-		notify(NOTIFICATION_ID_WARNING, String.format(text, args),
-				android.R.drawable.ic_dialog_alert, MainActivity.class);
+	public static void notifyWarning(String text, String subtext) {
+		/*
+		 * Don't pass any extras, make Activity open in the default tab.
+		 */
+		notify(Notification.WARNING, text, subtext,
+				android.R.drawable.ic_dialog_alert, null, MainActivity.class,
+				null);
 	}
 
+	/**
+	 * Puts out a notification containing a warning symbol. Overwrites any
+	 * previous instances of this notification.
+	 * 
+	 * @param text
+	 *            text to put out verbatim
+	 */
+	public static void notifyWarning(String text, Object... args) {
+		/*
+		 * Don't pass any extras, make Activity open in the default tab.
+		 */
+		notify(Notification.WARNING, String.format(text, args), null,
+				android.R.drawable.ic_dialog_alert, null, MainActivity.class,
+				null);
+	}
+
+	/**
+	 * Puts out a notification containing a warning symbol. Overwrites any
+	 * previous instances of this notification.
+	 * 
+	 * @param stringId
+	 *            ID of a localized string
+	 */
 	public static void notifyWarning(int stringId, Object... args) {
 		notifyWarning(getContext().getString(stringId), args);
 	}
 
 	/**
-	 * Puts out a notification containing an info symbol. Overwrites any
-	 * previous instances of this notification.
-	 * 
-	 * @param text
-	 */
-	public static void notifyInfo(String text, Object... args) {
-		// TODO create and use a nusic icon here
-		notify(NOTIFICATION_ID_INFO, String.format(text, args),
-				android.R.drawable.ic_dialog_info, MainActivity.class);
-	}
-
-	public static void notifyInfo(int stringId, Object... args) {
-		notifyInfo(getContext().getString(stringId), args);
-	}
-
-	/**
-	 * Writes an android notification. Overwrites any previous with the same
-	 * <code>id</code>.
+	 * Writes an android notification that has the localized title of the app.
+	 * Overwrites any previous with the same <code>id</code>.
 	 * 
 	 * @param id
-	 * @param title
+	 *            An identifier for this notification unique within your
+	 *            application, can be used to change the notification later
 	 * @param text
+	 *            first line of text bellow the title
+	 * @param subtext
+	 *            second line of text bellow the title
 	 * @param smallIconId
-	 * @param context
+	 *            A resource ID in the application's package of the drawable to
+	 *            use.
+	 * @param largeIcon
+	 *            large icon that is shown in the ticker and notification.
+	 * @param cls
+	 *            activity to be launched on click
+	 * @param extras
+	 *            extended data to be passed to the activity
 	 */
-	private static void notify(int id, String text, int smallIconId,
-			Class<? extends Context> context) {
-		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(
-				getContext()).setSmallIcon(smallIconId)
-				.setContentTitle(getContext().getString(R.string.app_name))
-				.setContentText(text);
+	public static void notify(Notification id, String text, String subtext,
+			int smallIconId, Bitmap largeIcon, Class<? extends Context> cls,
+			Bundle extras) {
 		// Creates an explicit intent for an Activity in your app
-		Intent resultIntent = new Intent(getContext(), context);
-
+		Intent resultIntent = new Intent(getContext(), cls);
+		/*
+		 * Make sure the intent is also delivered when the application is
+		 * already running in a task.
+		 * 
+		 * Note: On Android 2.x the intent is not delivered when another
+		 * activity of the same application is running. Instead the application
+		 * is only brought to foreground.
+		 */
+		resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		if (extras != null) {
+			resultIntent.putExtras(extras);
+		}
 		/*
 		 * The stack builder object will contain an artificial back stack for
 		 * the started Activity. This ensures that navigating backward from the
@@ -150,17 +184,25 @@ public class Application extends android.app.Application {
 		 */
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(getContext());
 		// Adds the back stack for the Intent (but not the Intent itself)
-		stackBuilder.addParentStack(context);
+		stackBuilder.addParentStack(cls);
 		// Adds the Intent that starts the Activity to the top of the stack
 		stackBuilder.addNextIntent(resultIntent);
-		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,
-				PendingIntent.FLAG_UPDATE_CURRENT);
-		notificationBuilder.setContentIntent(resultPendingIntent);
-		notificationBuilder.setAutoCancel(true);
-		NotificationManager mNotificationManager = (NotificationManager) getContext()
+		/*
+		 * Make sure to deliver the intent just created even though there
+		 * already is an intent with the same request ID.
+		 */
+		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
+				id.ordinal(), PendingIntent.FLAG_UPDATE_CURRENT);
+		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(
+				getContext()).setSmallIcon(smallIconId)
+				.setContentTitle(getContext().getString(R.string.app_name))
+				.setContentText(text).setSubText(subtext)
+				.setLargeIcon(largeIcon).setContentIntent(resultPendingIntent)
+				.setAutoCancel(true);
+		NotificationManager notificationManager = (NotificationManager) getContext()
 				.getSystemService(Context.NOTIFICATION_SERVICE);
-		// mId allows you to update the notification later on.
-		mNotificationManager.notify(id, notificationBuilder.build());
+		// id allows you to update the notification later on.
+		notificationManager.notify(id.ordinal(), notificationBuilder.build());
 		Log.i(Constants.LOG, "Notifcation: " + text);
 	}
 

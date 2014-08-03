@@ -86,6 +86,16 @@ public interface ReleaseService {
 	List<Release> findJustCreated(long beforeRefresh) throws ServiceException;
 
 	/**
+	 * Finds all releases that are released today. That is all releases whose
+	 * release date is greater than or equal today midnight and less than
+	 * tomorrow midnight.
+	 * 
+	 * @return all releases that will be released today
+	 * @throws ServiceException
+	 */
+	List<Release> findReleasedToday() throws ServiceException;
+
+	/**
 	 * Set <code>isHidden</code> to <code>false</code> for all {@link Release}s
 	 * <b>and {@link Artist}s</b>.
 	 */

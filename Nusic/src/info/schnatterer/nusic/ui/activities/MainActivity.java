@@ -24,11 +24,14 @@ import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.service.android.LoadNewReleasesService;
+import info.schnatterer.nusic.service.android.ReleasedTodayService;
+import info.schnatterer.nusic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.nusic.ui.LoadNewRelasesServiceBinding;
 import info.schnatterer.nusic.ui.fragments.ReleaseListFragment;
 import info.schnatterer.nusic.ui.fragments.ReleaseListFragment.ReleaseQuery;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -44,18 +47,67 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+/**
+ * The activity that is started when the app starts.
+ * 
+ * The tab that is shown can parameterized using the {@link #EXTRA_ACTIVE_TAB},
+ * that contains a {@link TabDefinition}.
+ * 
+ * @author schnatterer
+ *
+ */
 public class MainActivity extends SherlockFragmentActivity {
+	/** The request code used when starting {@link PreferenceActivity}. */
 	private static final int REQUEST_CODE_PREFERENCE_ACTIVITY = 0;
+	/**
+	 * Key to the creating intent's extras that contains a {@link TabDefinition}
+	 * (as int) that can be passed to this activity within the bundle of an
+	 * intent. The corresponding value represents the Tab that is set active
+	 * with the intent.
+	 */
+	public static final String EXTRA_ACTIVE_TAB = "nusic.intent.extra.main.activeTab";
 
-	private static final int RELEASE_DB_LOADER_ALL = 0;
-	private static final int RELEASE_DB_LOADER_JUST_ADDED = 1;
-	private static final int RELEASE_DB_LOADER_AVAILABLE = 2;
-	private static final int RELEASE_DB_LOADER_ANNOUNCED = 3;
+	/**
+	 * Holds the basic information for each tab.
+	 * 
+	 * @author schnatterer
+	 */
+	public static enum TabDefinition {
+		/** First tab: Just added */
+		JUST_ADDED(R.string.MainActivity_TabJustAdded, ReleaseQuery.JUST_ADDED),
+		/** Second tab: Available releases */
+		AVAILABLE(R.string.MainActivity_TabAvailable, ReleaseQuery.AVAILABLE),
+		/** Third tab: Announced releases */
+		ANNOUNCED(R.string.MainActivity_TabAnnounced, ReleaseQuery.ANNOUNCED),
+		/** Fourth tab: All releases */
+		ALL(R.string.MainActivity_TabAll, ReleaseQuery.ALL);
+
+		private final int position;
+		private final int titleId;
+		private final int loaderId;
+		private final ReleaseQuery releaseQuery;
+
+		private TabDefinition(int titleId, ReleaseQuery releaseQuery) {
+			this.position = ordinal();
+			this.titleId = titleId;
+			/*
+			 * For now just "reuse" the position. TODO define application wide
+			 * loader ids in Constants
+			 */
+			this.loaderId = this.position;
+			this.releaseQuery = releaseQuery;
+		}
+
+	}
 
 	/** Start and bind the {@link LoadNewReleasesService}. */
 	private static LoadNewRelasesServiceBinding loadNewRelasesServiceBinding = null;
-	/** Stores the selected tab, even when the configuration changes. */
-	private static int currentTabPosition = 0;
+	/**
+	 * Stores the selected tab, even when the configuration changes. The tab
+	 * assigned here is the one that is shown when the application is started
+	 * for the first time.
+	 */
+	private static TabDefinition currentTab = TabDefinition.JUST_ADDED;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -83,12 +135,16 @@ public class MainActivity extends SherlockFragmentActivity {
 				getSupportFragmentManager());
 		pager.setAdapter(tabAdapter);
 
+		if (getIntent().hasExtra(EXTRA_ACTIVE_TAB)) {
+			currentTab = ((TabDefinition) getIntent().getExtras().get(
+					EXTRA_ACTIVE_TAB));
+		}
 		// Create all tabs as defined in adapter
 		TabListener tabListener = new TabListener(pager);
-		for (int i = 0; i < tabAdapter.tabs.length; i++) {
-			TabHolder tab = tabAdapter.tabs[i];
+		for (TabDefinition tab : TabDefinition.values()) {
 			actionBar.addTab(actionBar.newTab().setText(tab.titleId)
-					.setTabListener(tabListener), i, isTabSelected(i));
+					.setTabListener(tabListener), tab.position,
+					isTabSelected(tab));
 		}
 
 		if (loadNewRelasesServiceBinding == null) {
@@ -98,15 +154,51 @@ public class MainActivity extends SherlockFragmentActivity {
 		} else {
 			registerListeners();
 		}
+
+		/*
+		 * Make sure the Release Today service is scheduled (if not switched off
+		 * in preferences). Schedule it only after updates and new installations
+		 * to avoid overhead.
+		 */
+		switch (PreferencesServiceSharedPreferences.getInstance()
+				.checkAppStart()) {
+		case FIRST_TIME_VERSION:
+		case FIRST_TIME:
+			ReleasedTodayService.schedule(this);
+			break;
+		default:
+			break;
+		}
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		/*
+		 * This is needed for Android 2.x when clicking a notification an the
+		 * task is already running, the notification is not delivered, but
+		 * instead this method is called. getIntent() seems to always return the
+		 * first intent that started the app.
+		 * 
+		 * For Android 4.4.2 this seems not to be called anymore. However, the
+		 * intent is delivered anyway and getIntent() always returns the last
+		 * intent that was delivered.
+		 */
+		if (intent.hasExtra(EXTRA_ACTIVE_TAB)) {
+			getSupportActionBar()
+					.setSelectedNavigationItem(
+							((TabDefinition) intent.getExtras().get(
+									EXTRA_ACTIVE_TAB)).position);
+		}
 	}
 
 	/**
-	 * @param position
-	 * @return <code>true</code> if <code>position</code> is selected, otherwise
+	 * @param tab
+	 * @return <code>true</code> if <code>tab</code> is selected, otherwise
 	 *         <code>false</code>
 	 */
-	private boolean isTabSelected(int position) {
-		if (currentTabPosition == position) {
+	private boolean isTabSelected(TabDefinition tab) {
+		if (currentTab.equals(tab)) {
 			return true;
 		}
 		return false;
@@ -156,12 +248,12 @@ public class MainActivity extends SherlockFragmentActivity {
 				&& requestCode == REQUEST_CODE_PREFERENCE_ACTIVITY) {
 			// Change in preferences require a full refresh
 			if (data.getBooleanExtra(
-					NusicPreferencesActivity.RETURN_KEY_IS_REFRESH_NECESSARY,
+					NusicPreferencesActivity.EXTRA_RESULT_IS_REFRESH_NECESSARY,
 					false)) {
 				startLoadingReleasesFromInternet(false);
 			}
 			if (data.getBooleanExtra(
-					NusicPreferencesActivity.RETURN_KEY_IS_CONTENT_CHANGED,
+					NusicPreferencesActivity.EXTRA_RESULT_IS_CONTENT_CHANGED,
 					false)) {
 				onContentChanged();
 			}
@@ -230,16 +322,8 @@ public class MainActivity extends SherlockFragmentActivity {
 	 * 
 	 */
 	public class TabFragmentPagerAdapter extends FragmentPagerAdapter {
-		/** This basically defines the content of the tabs. */
-		final TabHolder[] tabs = {
-				new TabHolder(R.string.MainActivity_TabJustAdded,
-						RELEASE_DB_LOADER_JUST_ADDED, ReleaseQuery.JUST_ADDED),
-				new TabHolder(R.string.MainActivity_TabAvailable,
-						RELEASE_DB_LOADER_AVAILABLE, ReleaseQuery.AVAILABLE),
-				new TabHolder(R.string.MainActivity_TabAnnounced,
-						RELEASE_DB_LOADER_ANNOUNCED, ReleaseQuery.ANNOUNCED),
-				new TabHolder(R.string.MainActivity_TabAll,
-						RELEASE_DB_LOADER_ALL, ReleaseQuery.ALL) };
+		ReleaseListFragment[] fragments = new ReleaseListFragment[TabDefinition
+				.values().length];
 
 		public TabFragmentPagerAdapter(FragmentManager fm) {
 			super(fm);
@@ -249,9 +333,9 @@ public class MainActivity extends SherlockFragmentActivity {
 		 * Marks the content of all tabs as changed.
 		 */
 		public void onContentChanged() {
-			for (TabHolder tab : tabs) {
-				if (tab.fragment != null) {
-					tab.fragment.onContentChanged();
+			for (ReleaseListFragment tabFragment : fragments) {
+				if (tabFragment != null) {
+					tabFragment.onContentChanged();
 				}
 			}
 		}
@@ -259,13 +343,14 @@ public class MainActivity extends SherlockFragmentActivity {
 		@Override
 		public Fragment getItem(int position) {
 			int actualPos = position;
-			if (tabs.length <= position) {
+			if (fragments.length <= position) {
 				// Default tab
 				actualPos = 0;
 			}
-			ReleaseListFragment fragment = createTabFragment(tabs[actualPos]);
-			if (position < tabs.length) {
-				tabs[position].fragment = fragment;
+			ReleaseListFragment fragment = createTabFragment(TabDefinition
+					.values()[actualPos]);
+			if (position < fragments.length) {
+				fragments[position] = fragment;
 			}
 			return fragment;
 		}
@@ -273,17 +358,17 @@ public class MainActivity extends SherlockFragmentActivity {
 		@Override
 		public void destroyItem(ViewGroup container, int position, Object object) {
 			super.destroyItem(container, position, object);
-			if (position < tabs.length) {
-				tabs[position].fragment = null;
+			if (position < fragments.length) {
+				fragments[position] = null;
 			}
 		}
 
-		private ReleaseListFragment createTabFragment(TabHolder tab) {
+		private ReleaseListFragment createTabFragment(TabDefinition tab) {
 			// Create fragment
 			Bundle bundle = new Bundle();
-			bundle.putString(ReleaseListFragment.ARG_RELEASE_QUERY,
+			bundle.putString(ReleaseListFragment.EXTRA_RELEASE_QUERY,
 					tab.releaseQuery.name());
-			bundle.putInt(ReleaseListFragment.ARG_LOADER_ID, tab.loaderId);
+			bundle.putInt(ReleaseListFragment.EXTRA_LOADER_ID, tab.loaderId);
 			return (ReleaseListFragment) Fragment.instantiate(
 					MainActivity.this, ReleaseListFragment.class.getName(),
 					bundle);
@@ -291,25 +376,7 @@ public class MainActivity extends SherlockFragmentActivity {
 
 		@Override
 		public int getCount() {
-			return tabs.length;
-		}
-	}
-
-	/**
-	 * Holds the basic information for each tab.
-	 * 
-	 * @author schnatterer
-	 */
-	public static class TabHolder {
-		final int titleId;
-		final int loaderId;
-		final ReleaseQuery releaseQuery;
-		ReleaseListFragment fragment = null;
-
-		public TabHolder(int titleId, int loaderId, ReleaseQuery releaseQuery) {
-			this.titleId = titleId;
-			this.loaderId = loaderId;
-			this.releaseQuery = releaseQuery;
+			return fragments.length;
 		}
 	}
 
@@ -329,6 +396,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		public void onTabSelected(Tab tab, FragmentTransaction ft) {
 			// Pass the position on tab click to ViewPager
 			pager.setCurrentItem(tab.getPosition());
+			currentTab = TabDefinition.values()[tab.getPosition()];
 		}
 
 		@Override

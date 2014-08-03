@@ -48,7 +48,10 @@ public class Release implements Entity {
 	private Date releaseDate;
 	private Date dateCreated;
 	// private ? releaseType;
-	private Bitmap artwork = null;
+
+	// Workaround before individual artworks are implemented
+	private static Bitmap defaultArtwork = BitmapFactory.decodeResource(
+			Application.getContext().getResources(), DEFAULT_ARTWORK);
 	private String artworkPath = null;
 	private Boolean isHidden;
 
@@ -60,15 +63,7 @@ public class Release implements Entity {
 	}
 
 	public Bitmap getArtwork() {
-		if (artwork == null) {
-			return BitmapFactory.decodeResource(Application.getContext()
-					.getResources(), DEFAULT_ARTWORK);
-		}
-		return artwork;
-	}
-
-	public void setArtwork(Bitmap artwork) {
-		this.artwork = artwork;
+		return defaultArtwork;
 	}
 
 	public String getArtworkPath() {
@@ -198,9 +193,9 @@ public class Release implements Entity {
 		return "Release [id=" + id + ", musicBrainzId=" + musicBrainzId
 				+ ", artist=" + getArtistName() + ", releaseName="
 				+ releaseName + ", releaseDate=" + releaseDate
-				+ ", dateCreated=" + dateCreated + ", artwork=" + artwork
-				+ ", artworkPath=" + artworkPath + ", isHidden=" + isHidden
-				+ "]";
+				+ ", dateCreated=" + dateCreated + ", artwork="
+				+ defaultArtwork + ", artworkPath=" + artworkPath
+				+ ", isHidden=" + isHidden + "]";
 	}
 
 }

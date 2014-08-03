@@ -91,6 +91,18 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	public final String KEY_REFRESH_PERIOD;
 	public final String DEFAULT_REFRESH_PERIOD;
 
+	public final String KEY_ENABLED_NOTIFY_RELEASED_TODAY;
+	public final Boolean DEFAULT_ENABLED_NOTIFY_RELEASED_TODAY;
+
+	public final String KEY_ENABLED_NOTIFY_NEW_RELEASES;
+	public final Boolean DEFAULT_ENABLED_NOTIFY_NEW_RELEASES;
+
+	public final String KEY_RELEASED_TODAY_HOUR_OF_DAY;
+	public final Integer DEFAULT_RELEASED_TODAY_HOUR_OF_DAY;
+
+	public final String KEY_RELEASED_TODAY_MINUTE;
+	public final Integer DEFAULT_RELEASED_TODAY_MINUTE;
+
 	private final SharedPreferences sharedPreferences;
 	// private static Context context = null;
 	private static PreferencesServiceSharedPreferences instance = new PreferencesServiceSharedPreferences();
@@ -159,6 +171,36 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 
 			DEFAULT_JUST_ADDED_TIME_PERIOD = parseIntOrThrow(
 					KEY_REFRESH_PERIOD, DEFAULT_REFRESH_PERIOD);
+
+			KEY_ENABLED_NOTIFY_RELEASED_TODAY = getContext().getString(
+					R.string.preferences_key_is_enabled_notify_released_today);
+			DEFAULT_ENABLED_NOTIFY_RELEASED_TODAY = getContext()
+					.getResources()
+					.getBoolean(
+							R.bool.preferences_default_is_enabled_notify_released_today);
+
+			KEY_ENABLED_NOTIFY_NEW_RELEASES = getContext().getString(
+					R.string.preferences_key_is_enabled_notify_new_releases);
+			DEFAULT_ENABLED_NOTIFY_NEW_RELEASES = getContext()
+					.getResources()
+					.getBoolean(
+							R.bool.preferences_default_is_enabled_notify_new_releases);
+
+			KEY_RELEASED_TODAY_HOUR_OF_DAY = getContext().getString(
+					R.string.preferences_key_released_today_hour_of_day);
+			DEFAULT_RELEASED_TODAY_HOUR_OF_DAY = parseIntOrThrow(
+					KEY_RELEASED_TODAY_HOUR_OF_DAY,
+					getContext()
+							.getString(
+									R.string.preferences_default_released_today_hour_of_day));
+
+			KEY_RELEASED_TODAY_MINUTE = getContext().getString(
+					R.string.preferences_key_released_today_minute);
+			DEFAULT_RELEASED_TODAY_MINUTE = parseIntOrThrow(
+					KEY_RELEASED_TODAY_MINUTE,
+					getContext().getString(
+							R.string.preferences_default_released_today_minute));
+
 		} else {
 			// e.g. for Testing
 			KEY_DOWLOAD_ONLY_ON_WIFI = null;
@@ -177,6 +219,18 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 			DEFAULT_REFRESH_PERIOD = null;
 
 			DEFAULT_JUST_ADDED_TIME_PERIOD = null;
+
+			KEY_ENABLED_NOTIFY_RELEASED_TODAY = null;
+			DEFAULT_ENABLED_NOTIFY_RELEASED_TODAY = null;
+
+			KEY_ENABLED_NOTIFY_NEW_RELEASES = null;
+			DEFAULT_ENABLED_NOTIFY_NEW_RELEASES = null;
+
+			KEY_RELEASED_TODAY_HOUR_OF_DAY = null;
+			DEFAULT_RELEASED_TODAY_HOUR_OF_DAY = null;
+
+			KEY_RELEASED_TODAY_MINUTE = null;
+			DEFAULT_RELEASED_TODAY_MINUTE = null;
 		}
 	}
 
@@ -363,4 +417,36 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	protected static Context getContext() {
 		return Application.getContext();
 	}
+
+	@Override
+	public boolean isEnabledNotifyReleasedToday() {
+		return sharedPreferences.getBoolean(KEY_ENABLED_NOTIFY_RELEASED_TODAY,
+				DEFAULT_ENABLED_NOTIFY_RELEASED_TODAY);
+	}
+
+	@Override
+	public boolean isEnabledNotifyNewReleases() {
+		return sharedPreferences.getBoolean(KEY_ENABLED_NOTIFY_NEW_RELEASES,
+				DEFAULT_ENABLED_NOTIFY_NEW_RELEASES);
+	}
+
+	@Override
+	public int getReleasedTodayScheduleHourOfDay() {
+		return sharedPreferences.getInt(KEY_RELEASED_TODAY_HOUR_OF_DAY,
+				DEFAULT_RELEASED_TODAY_HOUR_OF_DAY);
+	}
+
+	@Override
+	public boolean setReleasedTodaySchedule(int hourOfDay, int minute) {
+		return sharedPreferences.edit()
+				.putInt(KEY_RELEASED_TODAY_HOUR_OF_DAY, hourOfDay)
+				.putInt(KEY_RELEASED_TODAY_MINUTE, minute).commit();
+	}
+
+	@Override
+	public int getReleasedTodayScheduleMinute() {
+		return sharedPreferences.getInt(KEY_RELEASED_TODAY_MINUTE,
+				DEFAULT_RELEASED_TODAY_MINUTE);
+	}
+
 }

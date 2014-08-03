@@ -90,8 +90,24 @@ public interface ReleaseDao extends GenericDao<Release> {
 			throws DatabaseException;
 
 	/**
+	 * Finds all releases whose release date is within a specific range.
+	 * 
+	 * @param gtEqReleaseDate
+	 *            all releases whose release date greater than or equal to this
+	 *            date are returned
+	 * @param ltReleaseDate
+	 *            all releases whose release date is less than this date are
+	 *            returned
+	 * @return all releases whose release date is at or after
+	 *         <code>gtEqReleaseDate</code> and before
+	 *         <code>ltReleaseDate</code>
+	 * @throws DatabaseException
+	 */
+	List<Release> findByReleaseDateGreaterThanEqualAndReleaseDateLessThan(long gtEqReleaseDate,
+			long ltRealaseDate) throws DatabaseException;
+
+	/**
 	 * Set <code>isHidden</code> to <code>false</code> for all {@link Release}s.
 	 */
 	void showAll() throws DatabaseException;
-
 }

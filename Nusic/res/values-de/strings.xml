@@ -20,6 +20,12 @@
     <string name="MainActivity_TabAvailable">Verfügbar</string>
     <string name="MainActivity_TabAnnounced">Angekündigt</string>
     <!-- <string name="MainActivity_JustAddedInformation">Alle Alben, die in den letzten %1$d Tagen hinzugefügt wurden</string> -->
+    <plurals name="LoadNewReleasesService_foundNewReleases">
+        <item quantity="one">%1$d neues Album gefunden.</item>
+        <item quantity="other">%1$d neue Alben gefunden</item>
+    </plurals>
+    <string name="ReleasedTodayService_ReleasedToday">Heute erscheint:</string>
+    <string name="ReleasedTodayService_MultipleReleasedToday">%1$d Alben werden heute veröffentlicht</string>
     
     <!-- Prefrences -->
     <string name="preferences_category_releases">Alben</string>
@@ -44,6 +50,14 @@
     <string name="preferences_title_download_only_on_wifi">Nur über WLAN herunterladen</string>
     <string name="preferences_summary_download_only_on_wifi">Keine Internetverbindung über Mobilfunknetzwerke verwenden</string>
     
+    <string name="preferences_category_notifications">Benachrichtigungen</string>
+    <string name="preferences_title_is_enabled_notify_new_releases">Neue Alben</string>
+    <string name="preferences_summary_is_enabled_notify_new_releases">Wenn neue Alben gefunden werden benachrichtigen</string>
+    <string name="preferences_title_is_enabled_notify_released_today">Erscheinungstermine</string>
+    <string name="preferences_summary_is_enabled_notify_released_today">Am Tag der Veröffentlichung von Alben benachrichtigen</string>
+    <string name="preferences_title_released_today_hour_of_day">Zeit der Benachrichtigung</string>
+    <string name="preferences_summary_released_hour_of_day">Ungefähre Zeit zu der die Benachrichtigung über Erscheinungstermine erscheint. Android kann die Ausführung verzögern um Strom zu sparen.</string>
+    
     <!-- (Error) messages -->
     <string name="GenericError">Etwas beinahe unmögliches ist geschehen: %1s!</string>
     <string name="NotOnline">Keine Verbindung zum Internet (Einstellungen prüfen, um die Verwendung des mobilen Internet zu ermöglichen)</string>
@@ -55,10 +69,6 @@
     <string name="LoadNewReleasesBinding_errorFindingReleases">Aktualisieren der Alben fehlgeschlagen: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">Unfassbarer Fehler beim Aktualiseren der Alben: </string>
     <string name="LoadNewReleasesBinding_finishedWithErrors">Update der Alben für %1$d Interpreten von %2$d fehlgeschlagen</string>
-    <plurals name="LoadNewReleasesService_foundNewReleases">
-        <item quantity="one">%1$d neues Album gefunden.</item>
-        <item quantity="other">%1$d neue Alben gefunden</item>
-    </plurals>
     
     <string name="ServiceException_errorLoadingArtists">Fehler beim Laden der Interpreten vom Gerät</string>
     <string name="ServiceException_errorFindingReleasesArtist">Fehler beim Finden von Alben für Interpret %1$s</string>
@@ -66,4 +76,5 @@
     <string name="ServiceException_errorReadingFromDb">Fehler beim Lesen von der Anwendungsdatenbank</string>
     <string name="ServiceException_errorWritingToDb">Fehler beim Schreiben in die Anwendungsdatenbank</string>
     
+    <string name="ReleasedTodayService_ReleasedTodayError">Fehler beim Finden heutiger Veröffentlichungen</string>
 </resources>
