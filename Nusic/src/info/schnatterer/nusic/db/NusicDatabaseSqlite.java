@@ -109,8 +109,8 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 			 * start.
 			 */
 			ContentValues contentValues = new ContentValues();
-			contentValues.put(TableRelease.COLUMN_DATE_RELEASED,
-					(Integer) null);
+			contentValues
+					.put(TableRelease.COLUMN_DATE_RELEASED, (Integer) null);
 			db.update(TableRelease.NAME, contentValues, null, null);
 		}
 		// When changing the database, don't forget to create a new version
@@ -175,8 +175,8 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 		 */
 		int APP_VERSION_0_4 = 4;
 		/**
-		 * v0.5: Reset {@link TableRelease#COLUMN_DATE_RELEASED} due to
-		 * invalid values (no UTC values)
+		 * v0.5: Reset {@link TableRelease#COLUMN_DATE_RELEASED} due to invalid
+		 * values (no UTC values)
 		 */
 		int APP_VERSION_0_5 = 5;
 	}
@@ -229,9 +229,9 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 		public static final int INDEX_COLUMN_IS_HIDDEN = 7;
 
 		public static final String[] COLUMNS = { COLUMN_ID, COLUMN_MB_ID,
-				COLUMN_NAME, COLUMN_DATE_RELEASED,
-				COLUMN_DATE_CREATED, COLUMN_RELEASEARTWORK_PATH,
-				COLUMN_FK_ID_ARTIST, COLUMN_IS_HIDDEN };
+				COLUMN_NAME, COLUMN_DATE_RELEASED, COLUMN_DATE_CREATED,
+				COLUMN_RELEASEARTWORK_PATH, COLUMN_FK_ID_ARTIST,
+				COLUMN_IS_HIDDEN };
 
 		public static final String COLUMNS_ALL = new StringBuilder(NAME)
 				.append(".").append(COLUMN_ID).append(",").append(NAME)
@@ -252,8 +252,8 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 			Release release = new Release(SqliteUtil.loadDate(cursor,
 					startIndex + INDEX_COLUMN_RELEASEDATE_CREATED));
 			release.setId(toId(cursor, startIndex));
-			release.setArtworkPath(cursor.getString(startIndex
-					+ INDEX_COLUMN_RELEASEARTWORK_PATH));
+			// release.setArtworkPath(cursor.getString(startIndex
+			// + INDEX_COLUMN_RELEASEARTWORK_PATH));
 			release.setMusicBrainzId(cursor.getString(startIndex
 					+ INDEX_COLUMN_MB_ID));
 			release.setReleaseDate(SqliteUtil.loadDate(cursor, startIndex
@@ -276,8 +276,8 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 					DateUtil.toLong(release.getReleaseDate()));
 			SqliteUtil.putIfNotNull(values, COLUMN_DATE_CREATED,
 					DateUtil.toLong(release.getDateCreated()));
-			SqliteUtil.putIfNotNull(values, COLUMN_RELEASEARTWORK_PATH,
-					release.getArtworkPath());
+			// SqliteUtil.putIfNotNull(values, COLUMN_RELEASEARTWORK_PATH,
+			// release.getArtworkPath());
 			SqliteUtil.putIfNotNull(values, COLUMN_FK_ID_ARTIST, release
 					.getArtist().getId());
 			SqliteUtil.putIfNotNull(values, COLUMN_IS_HIDDEN,
@@ -288,10 +288,8 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 		public static String create() {
 			return createTable(NAME, COLUMN_ID, TYPE_COLUMN_ID, COLUMN_MB_ID,
 					TYPE_COLUMN_MB_ID, COLUMN_NAME, TYPE_COLUMN_RELEASENAME,
-					COLUMN_DATE_RELEASED,
-					TYPE_COLUMN_RELEASEDATE_RELEASED,
-					COLUMN_DATE_CREATED,
-					TYPE_COLUMN_RELEASEDATE_CREATED,
+					COLUMN_DATE_RELEASED, TYPE_COLUMN_RELEASEDATE_RELEASED,
+					COLUMN_DATE_CREATED, TYPE_COLUMN_RELEASEDATE_CREATED,
 					COLUMN_RELEASEARTWORK_PATH,
 					TYPE_COLUMN_RELEASEARTWORK_PATH, COLUMN_FK_ID_ARTIST,
 					TYPE_COLUMN_FK_ID_ARTIST, COLUMN_IS_HIDDEN,

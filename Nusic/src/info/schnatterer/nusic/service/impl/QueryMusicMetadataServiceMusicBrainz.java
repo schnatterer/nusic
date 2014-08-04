@@ -1,3 +1,5 @@
+package info.schnatterer.nusic.service.impl;
+
 /* Copyright (C) 2013 Johannes Schnatterer
  * 
  * See the NOTICE file distributed with this work for additional
@@ -18,20 +20,31 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.service.impl;
 
+import fm.last.musicbrainz.coverart.CoverArt;
+import fm.last.musicbrainz.coverart.CoverArtArchiveClient;
+import fm.last.musicbrainz.coverart.CoverArtImage;
+import fm.last.musicbrainz.coverart.impl.DefaultCoverArtArchiveClient;
+import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.db.DatabaseException;
+import info.schnatterer.nusic.db.dao.ArtworkDao;
+import info.schnatterer.nusic.db.dao.ArtworkDao.ArtworkType;
+import info.schnatterer.nusic.db.dao.fs.ArtworkDaoFileSystem;
 import info.schnatterer.nusic.db.model.Artist;
 import info.schnatterer.nusic.db.model.Release;
 import info.schnatterer.nusic.service.QueryMusicMetadataService;
 import info.schnatterer.nusic.service.ServiceException;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.musicbrainz.MBWS2Exception;
@@ -41,25 +54,12 @@ import org.musicbrainz.model.entity.ReleaseWs2;
 import org.musicbrainz.model.searchresult.ReleaseResultWs2;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import com.google.common.util.concurrent.RateLimiter;
 
 public class QueryMusicMetadataServiceMusicBrainz implements
 		QueryMusicMetadataService {
-	/**
-	 * MusicBrainz allows at max 22 requests in 20 seconds. However, we still
-	 * get 503s then. Try 1 request per second.
-	 */
-	private static final double PERMITS_PER_SECOND = 1.0;
-	final RateLimiter rateLimiter = RateLimiter.create(PERMITS_PER_SECOND);
-	/** Application name used in user agent string of request. */
-	private String appName;
-	/** Application version used in user agent string of request. */
-	private String appVersion;
-	/**
-	 * Contact URL or author email used in user agent string of request.
-	 */
-	private String appContact;
 	/**
 	 * See http://musicbrainz.org/doc/Development/XML_Web_Service/Version_2#
 	 * Release_Type_and_Status
@@ -71,6 +71,23 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 	private static final String SEARCH_DATE_FINAL = "]";
 	private static final String SEARCH_ARTIST_1 = " AND artist:\"";
 	private static final String SEARCH_ARTIST_2 = "\"";
+
+	/**
+	 * MusicBrainz allows at max 22 requests in 20 seconds. However, we still
+	 * get 503s then. Try 1 request per second.
+	 */
+	private static final double PERMITS_PER_SECOND = 1.0;
+	private final RateLimiter rateLimiter = RateLimiter.create(PERMITS_PER_SECOND);
+	private CoverArtArchiveClient client = new DefaultCoverArtArchiveClient();
+	/** Application name used in user agent string of request. */
+	private String appName;
+	/** Application version used in user agent string of request. */
+	private String appVersion;
+	/**
+	 * Contact URL or author email used in user agent string of request.
+	 */
+	private String appContact;
+	private ArtworkDao artworkDao = new ArtworkDaoFileSystem();
 
 	static {
 		/*
@@ -102,7 +119,7 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 
 	@SuppressLint("SimpleDateFormat")
 	private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
+	
 	@Override
 	public Artist findReleases(Artist artist, Date fromDate, Date endDate)
 			throws ServiceException {
@@ -189,6 +206,16 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 				userAgentVersion, userAgentContact);
 	}
 
+	/**
+	 * Iterates over the results of a MusicBrainz query and converts them to
+	 * nusic entities. In addition, tries to download artwork for each release
+	 * group.
+	 * 
+	 * @param artistName
+	 * @param artist
+	 * @param releases
+	 * @param releaseResults
+	 */
 	protected void processReleaseResults(String artistName, Artist artist,
 			Map<String, Release> releases, List<ReleaseResultWs2> releaseResults) {
 		for (ReleaseResultWs2 releaseResultWs2 : releaseResults) {
@@ -214,16 +241,82 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 					release.setReleaseName(releaseResult.getTitle());
 					release.setReleaseDate(newDate);
 					release.setMusicBrainzId(releaseGroupId);
+					// Log.d(Constants.LOG, "Release: " + artist.getArtistName()
+					// + "-" + releaseResult.getTitle() + "-"
+					// + releaseGroupId);
+					try {
+						downloadFrontCover(release);
+					} catch (IOException e) {
+						Log.w(Constants.LOG, "Unable to download cover", e);
+					} catch (DatabaseException e) {
+						Log.w(Constants.LOG, "Unable to store cover", e);
+					}
 
-					releases.put(releaseGroupId, release);
-					artist.getReleases().add(release);
 					// TODO store all release dates and their countries?
+					artist.getReleases().add(release);
+					releases.put(releaseGroupId, release);
 				} else {
 					if (existingRelease.getReleaseDate() == null
 							|| (newDate != null && existingRelease
 									.getReleaseDate().after(newDate))) {
 						// Change date of existing release
 						existingRelease.setReleaseDate(newDate);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Downloads the front cover of the release and persists it.
+	 * 
+	 * @param release
+	 * @throws IOException
+	 *             error downloading the artwork
+	 * @throws DatabaseException
+	 */
+	private void downloadFrontCover(Release release) throws IOException,
+			DatabaseException {
+		CoverArt coverArt = null;
+		UUID mbid = UUID.fromString(release.getMusicBrainzId());
+		coverArt = client.getReleaseGroupByMbid(mbid);
+
+		if (coverArt != null && coverArt.getImages() != null) {
+			for (CoverArtImage coverArtImage : coverArt.getImages()) {
+				if (coverArtImage.isFront()) {
+					/*
+					 * TODO load large thumbnail for certain screen
+					 * resolutions?
+					 */
+					if (!artworkDao.exists(release, ArtworkType.SMALL)) {
+						InputStream smallThumbnail = coverArtImage
+								.getSmallThumbnail();
+
+						/*
+						 * As transactions are not used yet, the cover that is
+						 * persisted here won't be deleted, if the corresponding
+						 * release could not be saved.
+						 * 
+						 * This is ignored here as the app will try it again. As
+						 * the artwork is needed anyway we might as well keep
+						 * it.
+						 */
+						artworkDao.save(release, ArtworkType.SMALL,
+								smallThumbnail);
+
+						release.setCoverartArchiveId(coverArtImage.getId());
+						// Log.d(Constants.LOG,
+						// "Cover:   " + artist.getArtistName() + "-"
+						// + release.getReleaseName() + "_"
+						// + release.getMusicBrainzId() + "_"
+						// + coverArtImage.getId() + ". Size: "
+						// + output.length());
+
+						/*
+						 * We successfully downloaded the cover! Stop trying to
+						 * get another one
+						 */
+						break;
 					}
 				}
 			}

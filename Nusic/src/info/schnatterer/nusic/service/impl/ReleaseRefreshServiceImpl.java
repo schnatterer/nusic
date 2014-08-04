@@ -176,11 +176,6 @@ public class ReleaseRefreshServiceImpl implements ReleaseRefreshService {
 						continue;
 					}
 
-					// TODO query images from lastfm
-					// de.umass.lastfm.Artist artistInfo =
-					// de.umass.lastfm.Artist.getInfo(artist.getArtistName(),
-					// Constants.LASTFM_API_KEY);
-
 					if (artist.getReleases().size() > 0) {
 						artistService.saveOrUpdate(artist);
 						// After saving, release memory for releases

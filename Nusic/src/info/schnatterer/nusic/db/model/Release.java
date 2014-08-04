@@ -20,17 +20,9 @@
  */
 package info.schnatterer.nusic.db.model;
 
-import info.schnatterer.nusic.Application;
-import info.schnatterer.nusic.R;
-
 import java.util.Date;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 public class Release implements Entity {
-	private static final int DEFAULT_ARTWORK = R.drawable.ic_launcher;
-
 	private static final String HTTP = "http://";
 	private static final String HTTPS = "https://";
 	private static final String MUSIC_BRAINZ_BASE_URI = "musicbrainz.org/release-group/";
@@ -42,6 +34,8 @@ public class Release implements Entity {
 	private Long id;
 	/** MusicBrainz Id of the release group */
 	private String musicBrainzId;
+	/** ID of the cover art at Cover Art Archive. */
+	private Long coverartArchiveId;
 
 	private Artist artist;
 	private String releaseName;
@@ -49,10 +43,6 @@ public class Release implements Entity {
 	private Date dateCreated;
 	// private ? releaseType;
 
-	// Workaround before individual artworks are implemented
-	private static Bitmap defaultArtwork = BitmapFactory.decodeResource(
-			Application.getContext().getResources(), DEFAULT_ARTWORK);
-	private String artworkPath = null;
 	private Boolean isHidden;
 
 	public Release() {
@@ -60,18 +50,6 @@ public class Release implements Entity {
 
 	public Release(Date dateCreated) {
 		setDateCreated(dateCreated);
-	}
-
-	public Bitmap getArtwork() {
-		return defaultArtwork;
-	}
-
-	public String getArtworkPath() {
-		return artworkPath;
-	}
-
-	public void setArtworkPath(String artworkPath) {
-		this.artworkPath = artworkPath;
 	}
 
 	public String getArtistName() {
@@ -193,9 +171,16 @@ public class Release implements Entity {
 		return "Release [id=" + id + ", musicBrainzId=" + musicBrainzId
 				+ ", artist=" + getArtistName() + ", releaseName="
 				+ releaseName + ", releaseDate=" + releaseDate
-				+ ", dateCreated=" + dateCreated + ", artwork="
-				+ defaultArtwork + ", artworkPath=" + artworkPath
-				+ ", isHidden=" + isHidden + "]";
+				+ ", dateCreated=" + dateCreated + ", isHidden=" + isHidden
+				+ "]";
+	}
+
+	public void setCoverartArchiveId(Long coverartArchiveId) {
+		this.coverartArchiveId = coverartArchiveId;
+	}
+
+	public Long getCoverartArchiveId() {
+		return coverartArchiveId;
 	}
 
 }
