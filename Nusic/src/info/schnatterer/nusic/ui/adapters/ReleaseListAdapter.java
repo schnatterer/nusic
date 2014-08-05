@@ -54,6 +54,15 @@ public class ReleaseListAdapter extends BaseAdapter {
 			.decodeResource(Application.getContext().getResources(),
 					DEFAULT_ARTWORK);
 
+	private static ThreadLocal<DateFormat> dateFormatHolder = new ThreadLocal<DateFormat>() {
+		@Override
+		protected DateFormat initialValue() {
+			DateFormat dateFormat = DateFormat.getDateInstance();
+			dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+			return dateFormat;
+		}
+	};
+
 	private static ArtworkDao artworkDao = new ArtworkDaoFileSystem();
 	private List<Release> listData;
 	private static LayoutInflater layoutInflater = null;
@@ -105,10 +114,8 @@ public class ReleaseListAdapter extends BaseAdapter {
 		holder.artistView.get().setText(release.getArtistName());
 		Date releaseDate = release.getReleaseDate();
 		if (releaseDate != null) {
-			DateFormat dateFormat = DateFormat.getDateInstance();
-			dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-			holder.releaseDateView.get()
-					.setText(dateFormat.format(releaseDate));
+			holder.releaseDateView.get().setText(
+					dateFormatHolder.get().format(releaseDate));
 		} else {
 			holder.releaseDateView.get().setText("");
 		}
