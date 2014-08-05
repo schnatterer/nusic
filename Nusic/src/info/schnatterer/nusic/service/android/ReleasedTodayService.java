@@ -185,7 +185,7 @@ public class ReleasedTodayService extends Service {
 			 * when one alarm should fail for some reason
 			 */
 			((AlarmManager) context.getSystemService(Context.ALARM_SERVICE))
-					.setInexactRepeating(AlarmManager.RTC,
+					.setRepeating(AlarmManager.RTC,
 							triggerAtCal.getTimeInMillis(),
 							AlarmManager.INTERVAL_DAY,
 							createPendingIntent(context));
