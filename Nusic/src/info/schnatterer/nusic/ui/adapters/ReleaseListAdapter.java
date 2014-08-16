@@ -20,7 +20,6 @@
  */
 package info.schnatterer.nusic.ui.adapters;
 
-import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.db.DatabaseException;
@@ -29,7 +28,6 @@ import info.schnatterer.nusic.db.dao.ArtworkDao.ArtworkType;
 import info.schnatterer.nusic.db.dao.fs.ArtworkDaoFileSystem;
 import info.schnatterer.nusic.db.model.Release;
 
-import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.text.DateFormat;
 import java.util.Date;
@@ -37,8 +35,6 @@ import java.util.List;
 import java.util.TimeZone;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,12 +43,22 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 public class ReleaseListAdapter extends BaseAdapter {
 	private static final int DEFAULT_ARTWORK = R.drawable.ic_launcher;
 
-	private static transient Bitmap defaultArtwork = BitmapFactory
-			.decodeResource(Application.getContext().getResources(),
-					DEFAULT_ARTWORK);
+	/**
+	 * Options for asynchronous image loading.
+	 */
+	private static final DisplayImageOptions IMAGE_LOADER_OPTIONS = new DisplayImageOptions.Builder()
+			.showImageOnLoading(DEFAULT_ARTWORK)
+			.showImageForEmptyUri(DEFAULT_ARTWORK)
+			.showImageOnFail(DEFAULT_ARTWORK).cacheInMemory(true).build();
+
+	private static transient ImageLoader imageLoader = ImageLoader
+			.getInstance();
 
 	private static ThreadLocal<DateFormat> dateFormatHolder = new ThreadLocal<DateFormat>() {
 		@Override
@@ -93,7 +99,7 @@ public class ReleaseListAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ReleaseListHolder holder;
+		final ReleaseListHolder holder;
 		if (convertView == null) {
 			convertView = layoutInflater.inflate(R.layout.release_list_row,
 					parent, false);
@@ -119,20 +125,14 @@ public class ReleaseListAdapter extends BaseAdapter {
 		} else {
 			holder.releaseDateView.get().setText("");
 		}
-		// TODO use async loading here
 		try {
-			InputStream artwork = artworkDao.findByRelease(release,
-					ArtworkType.SMALL);
-			if (artwork != null) {
-				holder.thumbnailView.get().setImageBitmap(
-						BitmapFactory.decodeStream(artwork));
-			} else {
-				holder.thumbnailView.get().setImageBitmap(defaultArtwork);
-			}
+			imageLoader.displayImage(
+					artworkDao.findUriByRelease(release, ArtworkType.SMALL),
+					holder.thumbnailView.get(), IMAGE_LOADER_OPTIONS);
 		} catch (DatabaseException e) {
 			Log.w(Constants.LOG, "Unable to load artwork for release "
 					+ release, e);
-			holder.thumbnailView.get().setImageBitmap(defaultArtwork);
+			holder.thumbnailView.get().setImageResource(DEFAULT_ARTWORK);
 		}
 		return convertView;
 	}

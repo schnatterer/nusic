@@ -35,6 +35,10 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
 public class Application extends android.app.Application {
 	private static String versionName;
 
@@ -45,6 +49,16 @@ public class Application extends android.app.Application {
 		super.onCreate();
 		Application.context = getApplicationContext();
 		versionName = createVersionName();
+
+		/*
+		 * Create global configuration and initialize ImageLoader with this
+		 * configuration
+		 */
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+				getApplicationContext())
+				.memoryCache(new LruMemoryCache(2 * 1024 * 1024))
+				.memoryCacheSize(2 * 1024 * 1024).build();
+		ImageLoader.getInstance().init(config);
 	}
 
 	/**

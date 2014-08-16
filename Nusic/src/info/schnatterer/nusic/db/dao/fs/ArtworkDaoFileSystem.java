@@ -23,6 +23,8 @@ public class ArtworkDaoFileSystem implements ArtworkDao {
 	public static final File BASEDIR = Application.getContext().getDir(
 			BASEDIR_PATH, Context.MODE_PRIVATE);
 
+	private static final String FILE_SCHEME = "file://";
+
 	@Override
 	public boolean save(Release release, ArtworkType type, InputStream artwork)
 			throws DatabaseException {
@@ -58,7 +60,8 @@ public class ArtworkDaoFileSystem implements ArtworkDao {
 	}
 
 	@Override
-	public boolean exists(Release release, ArtworkType type) throws DatabaseException {
+	public boolean exists(Release release, ArtworkType type)
+			throws DatabaseException {
 		if (release.getMusicBrainzId() == null) {
 			return false;
 		}
@@ -67,7 +70,25 @@ public class ArtworkDaoFileSystem implements ArtworkDao {
 	}
 
 	@Override
-	public InputStream findByRelease(Release release, ArtworkType type)
+	public String findUriByRelease(Release release, ArtworkType type)
+			throws DatabaseException {
+		File possibleArtwork;
+		try {
+			possibleArtwork = new File(BASEDIR, createFileName(release, type));
+			if (!possibleArtwork.exists()) {
+				return null;
+			}
+			return FILE_SCHEME + BASEDIR + '/' + createFileName(release, type);
+			// return possibleArtwork.toURI().toString(); // returns only
+			// file:<path> but we want file://<path>
+		} catch (DatabaseException e) {
+			throw new DatabaseException(
+					"Unable to read artwork from file system", e);
+		}
+	}
+
+	@Override
+	public InputStream findStreamByRelease(Release release, ArtworkType type)
 			throws DatabaseException {
 		if (release.getMusicBrainzId() != null) {
 			File possibleArtwork = new File(BASEDIR, createFileName(release,

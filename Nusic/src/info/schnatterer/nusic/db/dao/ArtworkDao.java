@@ -34,9 +34,22 @@ public interface ArtworkDao {
 	 * @return a stream to artwork data or <code>null</code> if there is none
 	 * @throws DatabaseException
 	 */
-	public InputStream findByRelease(Release release, ArtworkType type)
+	public InputStream findStreamByRelease(Release release, ArtworkType type)
 			throws DatabaseException;
 
 	boolean exists(Release release, ArtworkType type) throws DatabaseException;
+
+	/**
+	 * Provides an URI String to the artwork data, e.g.
+	 * <code>file:////my/directory/myfile.ext</code>
+	 * 
+	 * @param release
+	 * @param type
+	 * @return an URI string to artwork data or <code>null</code> if there is
+	 *         none
+	 * @throws DatabaseException
+	 */
+	String findUriByRelease(Release release, ArtworkType type)
+			throws DatabaseException;
 
 }

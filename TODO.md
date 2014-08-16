@@ -1,29 +1,46 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Feature: Notification: Release "is published today", can be disabled in prefs. Notification for new ablums can be disabled in prefs.
+- Proguard for new libraries
+- Don't show releases that are older than the range in preferences
+- Store artwork ID in SQL
+
+- Covers: Download using HTTPS
+- Remove Preference "Show future releases"
+
+BUILD
+- Refactoring: Optimize Maven build: parent,  app,  "forked" libraries
+- Refactoring: Maven build: Extract MusicBrainz lib into separate maven project. Separate GitHub repo?
+- Refactoring: Maven build: Extract coverartarchive-api into seprare maven project
+
+
+- db.loader package belongs to ui.loaders. The logic and DB access belongs to ReleaseService! Define explicit loader IDs in Constants as enum (the use ordinal())
 - Feature: Info dialog
-=== RELEASE v.0.7
 
-- Feature: Use WeakReferences to improve performance while scrolling list: http://stackoverflow.com/questions/3243215/how-to-use-weakreference-in-java-and-android-development
-=== RELEASE v.0.8
-
-
-- Feature: Query and display album covers: Last fm? (See Apollo Music player) or Discogs? Store covers in sqlite oder in file system? Get Last.FM ID/Discogs ID from MusicBrainz?
 === Release v1.0
 
 
 ................... More TODOs
+LOGGING 
+- Switch off logging for artwork. Using logback-android via slf4j and config in assets/logback.xml?
+- https://github.com/tony19/logback-android#configuration-in-code
+- Switch app to use slf4j?
+- Provide means to send log via email?
+
+- Use the same algorithm for displaying notifations for loadNewReleasesService as in released today service: When only one album is found display infos and cover, when several are found show only nusic icon and the amount of albums
+- Show artwork in context menu (on long tab)
+
+- Refactoring: Mavenize test project
+- Implement an Artwork Entity using a "proxy" that takes care of the writing from/to FS?
+- Replace today's date with "today"? How to refresh at midnight?
+- Use WeakReferences in ReleaseRefreshService in order to allow longer time ranges
 - Display additional album info like "remastered special edition", "anniversary edition", etc. or use only the "oldest" release in a release group
 - Display MusicBrainz side in internal Webview -> Better usability
-- In app search
-- Refactor testing: Maven? JUnit4, separtion of "normal" and android tests?
 - Feature: Tablet optimization: Layout + Screens for 7" + 10"
 
 .....Build
-- Refactoring: Optimize Maven build: parent,  app,  test
-- Refactoring: Maven build: Extract MusicBrainz lib into separate maven project. Separate GitHub repo?
 - Refactoring: Maven Build: update manifest
 - Refactoring: Maven Use profiles for release (signing...)
+- Refactor testing: Maven? JUnit4, separtion of "normal" and android tests?
 
 ....Stores
 - Stores: Publish on F-Droid

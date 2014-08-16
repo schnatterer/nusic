@@ -128,7 +128,7 @@ public class ReleasedTodayService extends Service {
 		try {
 			artwork = Bitmap.createScaledBitmap(
 					BitmapFactory.decodeStream(new ArtworkDaoFileSystem()
-							.findByRelease(release, ArtworkType.SMALL)),
+							.findStreamByRelease(release, ArtworkType.SMALL)),
 					(int) this.getResources().getDimension(
 							android.R.dimen.notification_large_icon_width),
 					(int) this.getResources().getDimension(
