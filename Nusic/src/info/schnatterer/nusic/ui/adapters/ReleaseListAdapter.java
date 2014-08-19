@@ -163,4 +163,8 @@ public class ReleaseListAdapter extends BaseAdapter {
 		}
 	}
 
+	public ImageLoader getImageLoader() {
+		return imageLoader;
+	}
+
 }
