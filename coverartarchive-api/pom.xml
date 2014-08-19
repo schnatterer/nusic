@@ -1,0 +1,105 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>fm.last</groupId>
+    <artifactId>lastfm-oss-parent</artifactId>
+    <version>1.1.0</version>
+  </parent>
+
+  <groupId>fm.last</groupId>
+  <artifactId>coverartarchive-api</artifactId>
+  <packaging>jar</packaging>
+  <version>2.0.1-SNAPSHOT</version>
+  <name>${project.artifactId}</name>
+  <url>${project.scm.url}</url>
+  <description>Java bindings for the MusicBrainz Cover Art Archive</description>
+
+  <scm>
+    <connection>scm:git:git@github.com:lastfm/${project.artifactId}.git</connection>
+    <developerConnection>scm:git:git@github.com:lastfm/${project.artifactId}.git</developerConnection>
+    <url>https://github.com/lastfm/${project.artifactId}</url>
+  </scm>
+
+  <developers>
+    <developer>
+      <name>Stefan Sperber</name>
+      <email>stefan.sperber@gmail.com</email>
+      <url>http://www.stefansperber.com</url>
+      <roles>
+        <role>Java Developer</role>
+        <role>Documentation</role>
+      </roles>
+      <organization>Last.fm</organization>
+      <organizationUrl>http://www.last.fm/</organizationUrl>
+    </developer>
+  </developers>
+
+  <properties>
+    <slf4jVersion>1.6.6</slf4jVersion>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>12.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>4.2.1</version>
+      <!--Similar to the version used in android. Alpha 4.0-alpha4 does not contain ResponseHandler yet, which is included in android.-->
+      <!-- <version>4.0-beta1</version> -->
+     
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>2.0.5</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.0.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4jVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.4</version>
+    </dependency>
+
+    <!-- test -->
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-library</artifactId>
+      <version>1.3.RC2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.10</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>1.9.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>${slf4jVersion}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>
