@@ -3,11 +3,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
  http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>info.schnatterer.nusic</groupId>
-	<artifactId>nusic</artifactId>
-	<version>0.6</version>
+
+	<parent>
+		<groupId>info.schnatterer.nusic</groupId>
+		<artifactId>nusic-parent</artifactId>
+		<version>0.6</version>
+	</parent>
+
+	<artifactId>nusic-app</artifactId>
 	<packaging>apk</packaging>
-	<name>nusic</name>
+	<name>nusic-app</name>
 
 	<properties>
 		<abs.version>4.4.0</abs.version>
@@ -74,6 +79,7 @@
 		<dependency>
 			<groupId>fm.last</groupId>
 			<artifactId>coverartarchive-api</artifactId>
+			<!--  TODO replace this with the proper version, once it is published. Then remove "sibling" project "coverartarchive-api" from parent pom and from repo -->
 			<version>2.0.1-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>

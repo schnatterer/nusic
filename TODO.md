@@ -1,30 +1,29 @@
 TODOs - Features, enhancements, refactoring, ...
-
-- Proguard for new libraries
-- Don't show releases that are older than the range in preferences
-- Store artwork ID in SQL
-
-- Covers: Download using HTTPS
-- Remove Preference "Show future releases"
-
 BUILD
-- Refactoring: Optimize Maven build: parent,  app,  "forked" libraries
-- Refactoring: Maven build: Extract MusicBrainz lib into separate maven project. Separate GitHub repo?
-- Refactoring: Maven build: Extract coverartarchive-api into seprare maven project
+- Store artwork ID in SQL
+== Close Feature Coverart
 
+- Refactoring: Maven build: Extract MusicBrainz lib into separate maven project+repo. Pull as subtree.
 
-- db.loader package belongs to ui.loaders. The logic and DB access belongs to ReleaseService! Define explicit loader IDs in Constants as enum (the use ordinal())
+- db.loader package belongs to ui.loaders. The logic and DB access belongs to ReleaseService! Define explicit loader IDs in Constants as enum (then use ordinal())
+
+- Remove Preference "Show future releases"
+- Don't show releases that are older than the range in preferences
+
 - Feature: Info dialog
 
 === Release v1.0
 
 
 ................... More TODOs
+- Add SCM info to pom(s)
 LOGGING 
 - Switch off logging for artwork. Using logback-android via slf4j and config in assets/logback.xml?
 - https://github.com/tony19/logback-android#configuration-in-code
 - Switch app to use slf4j?
 - Provide means to send log via email?
+
+- Covers: Download using HTTPS. Problem with certificate chain at coverartarchive.org ONLY on android. In addition, links to images are HTTP. Force using HTTPS?
 
 - Use the same algorithm for displaying notifations for loadNewReleasesService as in released today service: When only one album is found display infos and cover, when several are found show only nusic icon and the amount of albums
 - Show artwork in context menu (on long tab)
