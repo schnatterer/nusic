@@ -38,29 +38,25 @@ public class ArtistQueryServiceImpl implements ArtistQueryService {
 			.getArtistProjection();
 	private static final Uri ARTIST_URI = Audio.Artists.EXTERNAL_CONTENT_URI;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * info.schnatterer.nusic.service.impl.ArtistQueryService#getArtists
-	 * (android.content.ContentResolver)
-	 */
 	@Override
 	public Artist[] getArtists(ContentResolver contentResolver)
 			throws ServiceException {
 		Cursor cursor = null;
-		Artist[] artists  = null;
+		Artist[] artists = null;
 		try {
 			cursor = contentResolver.query(ARTIST_URI, ARTIST_PROJECTION, null,
 					null, ARTIST_SORT_ORDER);
-			artists = new Artist[cursor.getCount()];
-			int i = 0;
-			while (cursor.moveToNext()) {
-				Artist artist = new Artist();
-				artist.setAndroidAudioArtistId(cursor.getLong(ArtistProjection.ID.getIndex()));
-				artist.setArtistName(cursor.getString(ArtistProjection.ARTIST
-						.getIndex()));
-				artists[i++] = artist;
+			if (cursor != null) {
+				artists = new Artist[cursor.getCount()];
+				int i = 0;
+				while (cursor.moveToNext()) {
+					Artist artist = new Artist();
+					artist.setAndroidAudioArtistId(cursor
+							.getLong(ArtistProjection.ID.getIndex()));
+					artist.setArtistName(cursor
+							.getString(ArtistProjection.ARTIST.getIndex()));
+					artists[i++] = artist;
+				}
 			}
 		} catch (Throwable t) {
 			throw new ServiceException(

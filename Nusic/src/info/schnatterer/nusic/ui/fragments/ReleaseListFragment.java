@@ -63,6 +63,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 
 /**
  * Fragment that loads a list of releases from the local database and displays
@@ -161,6 +162,8 @@ public class ReleaseListFragment extends SherlockFragment {
 		});
 		releasesListViewAdapter = new ReleaseListAdapter(getActivity());
 		releasesListView.setAdapter(releasesListViewAdapter);
+		releasesListView.setOnScrollListener(new PauseOnScrollListener(
+				releasesListViewAdapter.getImageLoader(), false, true));
 
 		displayLoading();
 		// Load releases from local db

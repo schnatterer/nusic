@@ -28,11 +28,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class Application extends android.app.Application {
 	private static String versionName;
@@ -44,6 +48,15 @@ public class Application extends android.app.Application {
 		super.onCreate();
 		Application.context = getApplicationContext();
 		versionName = createVersionName();
+
+		/*
+		 * Create global configuration and initialize ImageLoader with this
+		 * configuration
+		 */
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+				getApplicationContext()).memoryCacheSize(2 * 1024 * 1024)
+				.build();
+		ImageLoader.getInstance().init(config);
 	}
 
 	/**
@@ -194,16 +207,27 @@ public class Application extends android.app.Application {
 		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
 				id.ordinal(), PendingIntent.FLAG_UPDATE_CURRENT);
 		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(
-				getContext()).setSmallIcon(smallIconId)
-				.setContentTitle(getContext().getString(R.string.app_name))
-				.setContentText(text).setSubText(subtext)
-				.setLargeIcon(largeIcon).setContentIntent(resultPendingIntent)
-				.setAutoCancel(true);
+				getContext()).setSmallIcon(smallIconId).setLargeIcon(largeIcon)
+				.setContentIntent(resultPendingIntent).setAutoCancel(true);
+		if (subtext != null
+				&& Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+			/*
+			 * Subtext seems to be available starting with 4.1?! So we don't
+			 * show the app name in order to have more room for information. The
+			 * user still has the icon to identify the app.
+			 */
+
+			notificationBuilder.setContentTitle(text).setContentText(subtext);
+		} else {
+			notificationBuilder
+					.setContentTitle(getContext().getString(R.string.app_name))
+					.setContentText(text).setSubText(subtext);
+		}
 		NotificationManager notificationManager = (NotificationManager) getContext()
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		// id allows you to update the notification later on.
 		notificationManager.notify(id.ordinal(), notificationBuilder.build());
-		Log.i(Constants.LOG, "Notifcation: " + text);
+		Log.i(Constants.LOG, "Notifcation: " + text + subtext);
 	}
 
 	/**

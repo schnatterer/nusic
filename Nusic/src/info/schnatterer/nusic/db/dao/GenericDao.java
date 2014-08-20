@@ -26,8 +26,24 @@ import android.content.ContentValues;
 
 public interface GenericDao<T extends Entity> {
 
+	/**
+	 * Stores an entity, if does not exist yet.
+	 * 
+	 * @param entity
+	 * @return
+	 * @throws DatabaseException
+	 *             entity already exists, error writing data, etc.
+	 */
 	long save(T entity) throws DatabaseException;
 
+	/**
+	 * Updates an entity, if does exist.
+	 * 
+	 * @param entity
+	 * @return
+	 * @throws DatabaseException
+	 *             entity does not exist, error writing data, etc.
+	 */
 	int update(T entity) throws DatabaseException;
 
 	/**

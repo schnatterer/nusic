@@ -3,15 +3,21 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
  http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>info.schnatterer.nusic</groupId>
-	<artifactId>nusic</artifactId>
-	<version>0.6</version>
+
+	<parent>
+		<groupId>info.schnatterer.nusic</groupId>
+		<artifactId>nusic-parent</artifactId>
+		<version>0.6</version>
+	</parent>
+
+	<artifactId>nusic-app</artifactId>
 	<packaging>apk</packaging>
-	<name>nusic</name>
+	<name>nusic-app</name>
 
 	<properties>
 		<abs.version>4.4.0</abs.version>
 		<final.name>${project.artifactId}-${project.version}</final.name>
+		<sdk.version>19</sdk.version>
 	</properties>
 
 	<!-- Use Profiles to distinguish between the "implicit" builds of the eclipse 
@@ -65,6 +71,31 @@
 			<artifactId>guava</artifactId>
 			<version>14.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.nostra13.universalimageloader</groupId>
+			<artifactId>universal-image-loader</artifactId>
+			<version>1.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>fm.last</groupId>
+			<artifactId>coverartarchive-api</artifactId>
+			<!--  TODO replace this with the proper version, once it is published. Then remove "sibling" project "coverartarchive-api" from parent pom and from repo -->
+			<version>2.0.1-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<!-- Android ships its own implementation of httpclient anyway -->
+					<artifactId>httpclient</artifactId>
+					<groupId>org.apache.httpcomponents</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- coverartarchive uses slf4j, propagate its logs to android.util.Log -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-android</artifactId>
+			<version>1.7.7</version>
+			<scope>runtime</scope>
+		</dependency>
 
 		<!-- For musicbrainzws2-java (not available on maven repos) -->
 		<dependency>
@@ -86,11 +117,6 @@
 			<groupId>jdom</groupId>
 			<artifactId>jdom</artifactId>
 			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -159,7 +185,7 @@
 				<configuration>
 					<sdk>
 						<!-- targetSdkVersion -->
-						<platform>18</platform>
+						<platform>${sdk.version}</platform>
 					</sdk>
 					<manifest>
 						<debuggable>false</debuggable>

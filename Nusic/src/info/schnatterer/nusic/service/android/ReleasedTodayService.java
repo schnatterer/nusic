@@ -24,6 +24,9 @@ import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.Constants.Notification;
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.db.DatabaseException;
+import info.schnatterer.nusic.db.dao.ArtworkDao.ArtworkType;
+import info.schnatterer.nusic.db.dao.fs.ArtworkDaoFileSystem;
 import info.schnatterer.nusic.db.model.Release;
 import info.schnatterer.nusic.service.PreferencesService;
 import info.schnatterer.nusic.service.ReleaseService;
@@ -36,13 +39,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -78,10 +85,7 @@ public class ReleasedTodayService extends Service {
 						.notifyWarning(
 								getString(R.string.ReleasedTodayService_ReleasedTodayError),
 								e.getLocalizedMessage());
-			}// finally {
-				// Make sure the service runs again tomorrow
-				// schedule(this);
-			// }
+			}
 		} else {
 			// Stop schedule
 			stopSchedule(this);
@@ -100,13 +104,52 @@ public class ReleasedTodayService extends Service {
 	 * 
 	 */
 	private void notifyReleaseToday(Release release) {
+		Bitmap createScaledBitmap = createScaledBitmap(release);
+
 		Application.notify(
 				Notification.RELEASED_TODAY,
 				getString(R.string.ReleasedTodayService_ReleasedToday),
 				release.getArtist().getArtistName() + " - "
 						+ release.getReleaseName(), R.drawable.ic_launcher,
-				/* TODO insert the releases icon here */null,
-				MainActivity.class, createExtraActiveTab());
+				createScaledBitmap, MainActivity.class, createExtraActiveTab());
+	}
+
+	private Bitmap createScaledBitmap(Release release) {
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+			return createScaledBitmapLegacy(release);
+		} else {
+			return createScaledBitmapModern(release);
+		}
+	}
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private Bitmap createScaledBitmapModern(Release release) {
+		Bitmap artwork = null;
+		try {
+			artwork = Bitmap.createScaledBitmap(
+					BitmapFactory.decodeStream(new ArtworkDaoFileSystem()
+							.findStreamByRelease(release, ArtworkType.SMALL)),
+					(int) this.getResources().getDimension(
+							android.R.dimen.notification_large_icon_width),
+					(int) this.getResources().getDimension(
+							android.R.dimen.notification_large_icon_height),
+					false);
+		} catch (DatabaseException e) {
+			Log.w(Constants.LOG, "Unable to load artwork for notification. "
+					+ release, e);
+		} catch (IllegalArgumentException e) {
+			Log.w(Constants.LOG, "Unable scale artwork for notification. "
+					+ release, e);
+		}
+		return artwork;
+	}
+
+	private Bitmap createScaledBitmapLegacy(Release release) {
+		/*
+		 * As we don't know the size of the notification icon bellow API lvl 11,
+		 * theses devices will just use the standard icon.
+		 */
+		return null;
 	}
 
 	/**
@@ -185,7 +228,7 @@ public class ReleasedTodayService extends Service {
 			 * when one alarm should fail for some reason
 			 */
 			((AlarmManager) context.getSystemService(Context.ALARM_SERVICE))
-					.setInexactRepeating(AlarmManager.RTC,
+					.setRepeating(AlarmManager.RTC,
 							triggerAtCal.getTimeInMillis(),
 							AlarmManager.INTERVAL_DAY,
 							createPendingIntent(context));
