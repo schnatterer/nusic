@@ -1,8 +1,4 @@
 TODOs - Features, enhancements, refactoring, ...
-BUILD
-- Store artwork ID in SQL
-== Close Feature Coverart
-
 - Refactoring: Maven build: Extract MusicBrainz lib into separate maven project+repo. Pull as subtree.
 
 - db.loader package belongs to ui.loaders. The logic and DB access belongs to ReleaseService! Define explicit loader IDs in Constants as enum (then use ordinal())
@@ -16,6 +12,7 @@ BUILD
 
 
 ................... More TODOs
+- Download and display disambiguation, e.g >20th Anniversary Edition< https://musicbrainz.org/ws/2/release/?limit=100&offset=0&query=type%3Aalbum+AND+date%3A[2014-02-20+TO+%3F]+AND+artist%3A%22%3Cpantera%3E%22
 - Add SCM info to pom(s)
 LOGGING 
 - Switch off logging for artwork. Using logback-android via slf4j and config in assets/logback.xml?

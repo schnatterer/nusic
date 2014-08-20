@@ -44,7 +44,7 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "nusic";
 
 	/** Last app version that needed a database update. */
-	private static final int DATABASE_VERSION = SqliteDatabaseVersion.APP_VERSION_0_5;
+	private static final int DATABASE_VERSION = SqliteDatabaseVersion.V6;
 
 	private static final String DATABASE_TABLE_CREATE = "CREATE TABLE ";
 	private static final String DATABASE_TABLE_DROP = "DROP TABLE ";
@@ -83,7 +83,7 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		if (oldVersion == SqliteDatabaseVersion.APP_VERSION_0_1) {
+		if (oldVersion == SqliteDatabaseVersion.V1) {
 			/*
 			 * In v.2.1: Column releases.TYPE_COLUMN_RELEASEMB_ID now
 			 * corresponds to MusicBrainz's "release group ID" instead of the
@@ -94,7 +94,7 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 			db.execSQL(DATABASE_TABLE_DROP + TableRelease.NAME);
 			db.execSQL(TableRelease.create());
 		}
-		if (oldVersion < SqliteDatabaseVersion.APP_VERSION_0_4) {
+		if (oldVersion < SqliteDatabaseVersion.V4) {
 			// Just append new columns, they can be null
 			db.execSQL(addColumn(TableArtist.NAME,
 					TableArtist.COLUMN_IS_HIDDEN,
@@ -103,7 +103,7 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 					TableRelease.COLUMN_IS_HIDDEN,
 					TableRelease.TYPE_COLUMN_IS_HIDDEN));
 		}
-		if (oldVersion < SqliteDatabaseVersion.APP_VERSION_0_5) {
+		if (oldVersion < SqliteDatabaseVersion.V5) {
 			/*
 			 * Set all release dates to null. They are filled again on app
 			 * start.
@@ -112,6 +112,11 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 			contentValues
 					.put(TableRelease.COLUMN_DATE_RELEASED, (Integer) null);
 			db.update(TableRelease.NAME, contentValues, null, null);
+		}
+		if (oldVersion < SqliteDatabaseVersion.V6) {
+			db.execSQL(addColumn(TableRelease.NAME,
+					TableRelease.COLUMN_COVERARTARCHIVE_ID,
+					TableRelease.TYPE_COLUMN_COVERARTARCHIVE_ID));
 		}
 		// When changing the database, don't forget to create a new version
 	}
@@ -162,23 +167,25 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 
 	public static interface SqliteDatabaseVersion {
 		/**
-		 * v0.1: Very first release of this app
+		 * Very first release of this app
 		 */
-		int APP_VERSION_0_1 = 1;
+		int V1 = 1;
 		/**
-		 * v0.2.1: Update DB schema because release.musicbrainzId is now stores
-		 * the releaseGroupId.
+		 * Update DB schema because release.musicbrainzId is now stores the
+		 * releaseGroupId.
 		 */
-		int APP_VERSION_0_2_1 = 3;
+		int V3 = 3;
 		/**
-		 * v0.4: Added Artist.isHidden and Release.isHidden
+		 * Added Artist.isHidden and Release.isHidden
 		 */
-		int APP_VERSION_0_4 = 4;
+		int V4 = 4;
 		/**
-		 * v0.5: Reset {@link TableRelease#COLUMN_DATE_RELEASED} due to invalid
-		 * values (no UTC values)
+		 * Reset {@link TableRelease#COLUMN_DATE_RELEASED} due to invalid values
+		 * (no UTC values)
 		 */
-		int APP_VERSION_0_5 = 5;
+		int V5 = 5;
+		/** Added column for release cover art archive ID. */
+		int V6 = 6;
 	}
 
 	/**
@@ -228,10 +235,14 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 		public static final String TYPE_COLUMN_IS_HIDDEN = "INTEGER";
 		public static final int INDEX_COLUMN_IS_HIDDEN = 7;
 
+		public static final String COLUMN_COVERARTARCHIVE_ID = "coverArtArchiveId";
+		public static final String TYPE_COLUMN_COVERARTARCHIVE_ID = "INTEGER";
+		public static final int INDEX_COLUMN_COVERARTARCHIVE_ID = 8;
+
 		public static final String[] COLUMNS = { COLUMN_ID, COLUMN_MB_ID,
 				COLUMN_NAME, COLUMN_DATE_RELEASED, COLUMN_DATE_CREATED,
 				COLUMN_RELEASEARTWORK_PATH, COLUMN_FK_ID_ARTIST,
-				COLUMN_IS_HIDDEN };
+				COLUMN_IS_HIDDEN, COLUMN_COVERARTARCHIVE_ID };
 
 		public static final String COLUMNS_ALL = new StringBuilder(NAME)
 				.append(".").append(COLUMN_ID).append(",").append(NAME)
@@ -242,7 +253,9 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 				.append(",").append(NAME).append(".")
 				.append(COLUMN_RELEASEARTWORK_PATH).append(",").append(NAME)
 				.append(".").append(COLUMN_FK_ID_ARTIST).append(",")
-				.append(NAME).append(".").append(COLUMN_IS_HIDDEN).toString();
+				.append(NAME).append(".").append(COLUMN_IS_HIDDEN).append(",")
+				.append(NAME).append(".").append(COLUMN_COVERARTARCHIVE_ID)
+				.toString();
 
 		public static Long toId(Cursor cursor, int startIndex) {
 			return cursor.getLong(startIndex + INDEX_COLUMN_RELEASEID);
@@ -262,6 +275,8 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 					+ INDEX_COLUMN_RELEASENAME));
 			release.setHidden(SqliteUtil.loadBoolean(cursor,
 					INDEX_COLUMN_IS_HIDDEN));
+			release.setCoverartArchiveId(cursor
+					.getLong(INDEX_COLUMN_COVERARTARCHIVE_ID));
 
 			return release;
 		}
@@ -282,6 +297,8 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 					.getArtist().getId());
 			SqliteUtil.putIfNotNull(values, COLUMN_IS_HIDDEN,
 					release.isHidden());
+			SqliteUtil.putIfNotNull(values, COLUMN_COVERARTARCHIVE_ID,
+					release.getCoverartArchiveId());
 			return values;
 		}
 
@@ -293,7 +310,8 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 					COLUMN_RELEASEARTWORK_PATH,
 					TYPE_COLUMN_RELEASEARTWORK_PATH, COLUMN_FK_ID_ARTIST,
 					TYPE_COLUMN_FK_ID_ARTIST, COLUMN_IS_HIDDEN,
-					TYPE_COLUMN_IS_HIDDEN,
+					TYPE_COLUMN_IS_HIDDEN, COLUMN_COVERARTARCHIVE_ID,
+					TYPE_COLUMN_COVERARTARCHIVE_ID,
 					// Constraints
 					TYPE_COLUMN_FK_ID_CONSTRAINT_FK,
 					TYPE_COLUMN_FK_ID_CONSTRAINT_REFERENCES);
