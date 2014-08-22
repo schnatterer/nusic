@@ -79,9 +79,6 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	public final String KEY_DOWLOAD_ONLY_ON_WIFI;
 	public final Boolean DEFAULT_DOWLOAD_ONLY_ON_WIFI;
 
-	public final String KEY_INCLUDE_FUTURE_RELEASES;
-	public final Boolean DEFAULT_INCLUDE_FUTURE_RELEASES;
-
 	public final String KEY_DOWNLOAD_RELEASES_TIME_PERIOD;
 	public final String DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD;
 
@@ -146,12 +143,6 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 					.getBoolean(
 							R.bool.preferences_default_download_only_on_wifi);
 
-			KEY_INCLUDE_FUTURE_RELEASES = getContext().getString(
-					R.string.preferences_key_include_future_releases);
-			DEFAULT_INCLUDE_FUTURE_RELEASES = getContext().getResources()
-					.getBoolean(
-							R.bool.preferences_default_include_future_releases);
-
 			KEY_DOWNLOAD_RELEASES_TIME_PERIOD = getContext().getString(
 					R.string.preferences_key_download_releases_time_period);
 			DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD = getContext()
@@ -205,9 +196,6 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 			// e.g. for Testing
 			KEY_DOWLOAD_ONLY_ON_WIFI = null;
 			DEFAULT_DOWLOAD_ONLY_ON_WIFI = null;
-
-			KEY_INCLUDE_FUTURE_RELEASES = null;
-			DEFAULT_INCLUDE_FUTURE_RELEASES = null;
 
 			KEY_DOWNLOAD_RELEASES_TIME_PERIOD = null;
 			DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD = null;
@@ -348,12 +336,6 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	public boolean isUseOnlyWifi() {
 		return sharedPreferences.getBoolean(KEY_DOWLOAD_ONLY_ON_WIFI,
 				DEFAULT_DOWLOAD_ONLY_ON_WIFI);
-	}
-
-	@Override
-	public boolean isIncludeFutureReleases() {
-		return sharedPreferences.getBoolean(KEY_INCLUDE_FUTURE_RELEASES,
-				DEFAULT_INCLUDE_FUTURE_RELEASES);
 	}
 
 	@Override

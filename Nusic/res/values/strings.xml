@@ -37,8 +37,6 @@
         <item>Six months</item>
         <item>One year</item>
     </string-array>
-    <string name="preferences_title_include_future_releases">Include future releases</string>
-    <string name="preferences_summary_include_future_releases">Also download and display releases that are not available yet</string>
     <string name="preferences_title_display_all_releases">Make hidden albums reappear</string>
     <string name="preferences_summary_display_all_releases">Albums can be hidden by long tapping them. This option resets all hidden albums and artists.</string>
     <string name="preferences_message_display_all_releases">Do you really want to reset all hidden albums and artists?</string>

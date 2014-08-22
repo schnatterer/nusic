@@ -94,13 +94,6 @@ public interface PreferencesService {
 	boolean isUseOnlyWifi();
 
 	/**
-	 * >Also download and display releases that are not available yet.
-	 * 
-	 * @return
-	 */
-	boolean isIncludeFutureReleases();
-
-	/**
 	 * Returns time period in months (from today back in time) for which
 	 * releases are downloaded and displayed.
 	 * 

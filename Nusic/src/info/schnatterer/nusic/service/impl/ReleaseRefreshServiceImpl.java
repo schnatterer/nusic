@@ -105,22 +105,12 @@ public class ReleaseRefreshServiceImpl implements ReleaseRefreshService {
 		Date startDate = createStartDate(fullUpdate,
 				preferencesService.getDownloadReleasesTimePeriod(),
 				preferencesService.getLastReleaseRefresh());
-		Date endDate = createEndDate(preferencesService
-				.isIncludeFutureReleases());
 
 		// Use a date before the refresh to store afterwards in order to
 		Date dateCreated = new Date();
-		refreshReleases(startDate, endDate);
+		refreshReleases(startDate, null);
 		preferencesService.setLastReleaseRefresh(dateCreated);
 		return true;
-	}
-
-	private Date createEndDate(boolean includeFutureReleases) {
-		if (!includeFutureReleases) {
-			return new Date(); // Today
-		} else {
-			return null;
-		}
 	}
 
 	private Date createStartDate(boolean isFullUpdate, int months,
