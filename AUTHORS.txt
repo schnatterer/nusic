@@ -1,0 +1,28 @@
+Authors:
+
+   Marco Curti <marcoc1712 #at# gmail #dot# com>
+   - Java implementation of the MusicBrainz web service version 2.0 client 
+
+-------------------------------------------------------------------
+Original Authors of jmb-wsc 
+
+   Patrick Ruhkopf <patrick #at# ruhkopf #dot# name>
+   - Java implementation of the MusicBrainz web service client
+
+-------------------------------------------------------------------
+
+Original Authors of python-musicbrainz-2
+
+   Matthias Friedrich <matt at mafr dot de>
+    - Designed, implemented and documented this package.
+
+Contributors:
+
+   Lukáš Lalinský <lalinsky at gmail dot com>
+    - Fixed several bugs and tested windows/ctypes compatibility.
+    - Patch for changing TRMs to PUIDs.
+    - Created and submitted Debian/Ubuntu packages.
+
+   Nikki <nikki at lmfao dot org dot uk>
+    - Tested compatibility with python-2.3 on Debian.
+    - Provided country/language/script lists.
