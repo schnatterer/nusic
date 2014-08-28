@@ -1,6 +1,4 @@
 TODOs - Features, enhancements, refactoring, ...
-- Remove coverartarchive-api subtree in favor of v.2.1.0 from maven.org
-
 - db.loader package belongs to ui.loaders. The logic and DB access belongs to ReleaseService! Define explicit loader IDs in Constants as enum (then use ordinal())
 
 - Remove Preference "Show future releases"
