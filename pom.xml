@@ -20,5 +20,6 @@
 		<module>nusic</module>
 		<!-- TODO remove as soon as a proper version is published and nusic-app does not reference this any more -->
 		<module>coverartarchive-api</module>
+        <module>musicbrainzws2-java</module>
 	</modules>
 </project>
