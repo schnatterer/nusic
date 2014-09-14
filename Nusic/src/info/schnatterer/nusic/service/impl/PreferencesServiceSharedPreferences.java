@@ -20,9 +20,8 @@
  */
 package info.schnatterer.nusic.service.impl;
 
-import info.schnatterer.nusic.Application;
-import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.application.NusicApplication;
 import info.schnatterer.nusic.service.PreferencesService;
 import info.schnatterer.nusic.service.event.PreferenceChangedListener;
 import info.schnatterer.nusic.util.DateUtil;
@@ -34,10 +33,7 @@ import java.util.Set;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 /**
  * Implements {@link PreferencesService} using Android's
@@ -53,9 +49,6 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	 * Preferences that are not accessible through preferences menu
 	 * (preferences.xml)
 	 */
-	private final String KEY_LAST_APP_VERSION = "last_app_version";
-	private final int DEFAULT_LAST_APP_VERSION = -1;
-
 	public final String KEY_LAST_RELEASES_REFRESH = "last_release_refresh";
 	public final Date DEFAULT_LAST_RELEASES_REFRESH = null;
 
@@ -103,12 +96,6 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	private final SharedPreferences sharedPreferences;
 	// private static Context context = null;
 	private static PreferencesServiceSharedPreferences instance = new PreferencesServiceSharedPreferences();
-
-	/**
-	 * Caches the result of {@link #checkAppStart()}. To allow idempotent method
-	 * calls.
-	 */
-	private static AppStart appStart = null;
 
 	private Set<PreferenceChangedListener> preferenceChangedListeners = new HashSet<PreferenceChangedListener>();
 
@@ -239,46 +226,6 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	}
 
 	@Override
-	public AppStart checkAppStart() {
-		if (appStart == null) {
-			PackageInfo pInfo;
-			try {
-				pInfo = getContext().getPackageManager().getPackageInfo(
-						getContext().getPackageName(), 0);
-				int lastVersionCode = sharedPreferences.getInt(
-						KEY_LAST_APP_VERSION, DEFAULT_LAST_APP_VERSION);
-				// String versionName = pInfo.versionName;
-				int currentVersionCode = pInfo.versionCode;
-				appStart = checkAppStart(currentVersionCode, lastVersionCode);
-				// Update version in preferences
-				sharedPreferences.edit()
-						.putInt(KEY_LAST_APP_VERSION, currentVersionCode)
-						.commit();
-			} catch (NameNotFoundException e) {
-				Log.w(Constants.LOG,
-						"Unable to determine current app version from pacakge manager. Defenisvely assuming normal app start.");
-			}
-		}
-		return appStart;
-	}
-
-	public AppStart checkAppStart(int currentVersionCode, int lastVersionCode) {
-		if (lastVersionCode == -1) {
-			return AppStart.FIRST_TIME;
-		} else if (lastVersionCode < currentVersionCode) {
-			return AppStart.FIRST_TIME_VERSION;
-		} else if (lastVersionCode > currentVersionCode) {
-			Log.w(Constants.LOG, "Current version code (" + currentVersionCode
-					+ ") is less then the one recognized on last startup ("
-					+ lastVersionCode
-					+ "). Defenisvely assuming normal app start.");
-			return AppStart.NORMAL;
-		} else {
-			return AppStart.NORMAL;
-		}
-	}
-
-	@Override
 	public Date getLastReleaseRefresh() {
 		long lastReleaseRefreshMillis = sharedPreferences.getLong(
 				KEY_LAST_RELEASES_REFRESH, 0);
@@ -397,7 +344,7 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	}
 
 	protected static Context getContext() {
-		return Application.getContext();
+		return NusicApplication.getContext();
 	}
 
 	@Override

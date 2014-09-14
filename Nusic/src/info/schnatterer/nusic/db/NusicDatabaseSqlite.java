@@ -20,8 +20,8 @@
  */
 package info.schnatterer.nusic.db;
 
-import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
+import info.schnatterer.nusic.application.NusicApplication;
 import info.schnatterer.nusic.db.model.Artist;
 import info.schnatterer.nusic.db.model.Release;
 import info.schnatterer.nusic.db.util.SqliteUtil;
@@ -53,7 +53,7 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 	private static final String DATABASE_REFERENCES = "REFERENCES ";
 
 	private static final NusicDatabaseSqlite instance = new NusicDatabaseSqlite(
-			Application.getContext());
+			NusicApplication.getContext());
 
 	protected NusicDatabaseSqlite(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);

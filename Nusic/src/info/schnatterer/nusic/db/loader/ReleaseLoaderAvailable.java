@@ -20,9 +20,12 @@
  */
 package info.schnatterer.nusic.db.loader;
 
+import static info.schnatterer.nusic.util.DateUtil.todayMidnightUtc;
 import static info.schnatterer.nusic.util.DateUtil.tomorrowMidnightUtc;
 import info.schnatterer.nusic.db.dao.sqlite.ReleaseDaoSqlite;
 import info.schnatterer.nusic.db.model.Release;
+import info.schnatterer.nusic.service.PreferencesService;
+import info.schnatterer.nusic.service.impl.PreferencesServiceSharedPreferences;
 
 import java.util.List;
 
@@ -31,6 +34,7 @@ import android.content.Context;
 public class ReleaseLoaderAvailable extends
 		AbstractAsyncSqliteLoader<List<Release>, Release, ReleaseDaoSqlite> {
 
+	private PreferencesService preferencesService =  PreferencesServiceSharedPreferences.getInstance();
 	/**
 	 * <code>true</code> if releases available today should be display.
 	 * Otherwise <code>false</code>.
@@ -56,6 +60,10 @@ public class ReleaseLoaderAvailable extends
 	@Override
 	public List<Release> doLoadInBackground() throws Exception {
 		if (isAvailable) {
+			// TODO find limit from preferences
+			
+//			return getDao().findByReleaseDateGreaterThanEqualAndReleaseDateLessThan(createStartDateFullUpdate(preferencesService.getDownloadReleasesTimePeriod()),
+//					tomorrowMidnightUtc())
 			return getDao().findByReleaseDateLessThan(tomorrowMidnightUtc());
 		} else {
 			return getDao().findByReleaseDateGreaterThanEqual(

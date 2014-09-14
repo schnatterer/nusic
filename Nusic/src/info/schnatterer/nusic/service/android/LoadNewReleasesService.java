@@ -20,10 +20,10 @@
  */
 package info.schnatterer.nusic.service.android;
 
-import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.Constants.Notification;
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.application.NusicApplication;
 import info.schnatterer.nusic.db.DatabaseException;
 import info.schnatterer.nusic.db.model.Artist;
 import info.schnatterer.nusic.db.model.Release;
@@ -279,9 +279,10 @@ public class LoadNewReleasesService extends WakefulService {
 	 * @param text
 	 */
 	private void notifyNewReleases(String text, Object... args) {
-		Application.notify(Notification.NEW_RELEASE, String.format(text, args),
-				null, android.R.drawable.ic_dialog_info, null,
-				MainActivity.class, createExtraActiveTab());
+		NusicApplication.notify(Notification.NEW_RELEASE,
+				String.format(text, args), null,
+				android.R.drawable.ic_dialog_info, null, MainActivity.class,
+				createExtraActiveTab());
 	}
 
 	/**
@@ -458,15 +459,15 @@ public class LoadNewReleasesService extends WakefulService {
 				Log.e(Constants.LOG, potentialException.getMessage(),
 						potentialException);
 				if (potentialException instanceof ServiceException) {
-					Application
-							.notifyWarning(Application
+					NusicApplication
+							.notifyWarning(NusicApplication
 									.getContext()
 									.getString(
 											R.string.LoadNewReleasesBinding_errorFindingReleases)
 									+ potentialException.getLocalizedMessage());
 				} else {
-					Application
-							.notifyWarning(Application
+					NusicApplication
+							.notifyWarning(NusicApplication
 									.getContext()
 									.getString(
 											R.string.LoadNewReleasesBinding_errorFindingReleasesGeneric)

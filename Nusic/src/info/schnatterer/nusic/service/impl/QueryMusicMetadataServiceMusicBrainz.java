@@ -77,7 +77,8 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 	 * get 503s then. Try 1 request per second.
 	 */
 	private static final double PERMITS_PER_SECOND = 1.0;
-	private final RateLimiter rateLimiter = RateLimiter.create(PERMITS_PER_SECOND);
+	private final RateLimiter rateLimiter = RateLimiter
+			.create(PERMITS_PER_SECOND);
 	private CoverArtArchiveClient client = new DefaultCoverArtArchiveClient();
 	/** Application name used in user agent string of request. */
 	private String appName;
@@ -87,7 +88,7 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 	 * Contact URL or author email used in user agent string of request.
 	 */
 	private String appContact;
-	private ArtworkDao artworkDao = new ArtworkDaoFileSystem();
+	private ArtworkDao artworkDao;
 
 	static {
 		/*
@@ -115,11 +116,12 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 		this.appName = appName;
 		this.appVersion = appVersion;
 		this.appContact = appContact;
+		artworkDao = new ArtworkDaoFileSystem();
 	}
 
 	@SuppressLint("SimpleDateFormat")
 	private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	
+
 	@Override
 	public Artist findReleases(Artist artist, Date fromDate, Date endDate)
 			throws ServiceException {
@@ -285,8 +287,7 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 			for (CoverArtImage coverArtImage : coverArt.getImages()) {
 				if (coverArtImage.isFront()) {
 					/*
-					 * TODO load large thumbnail for certain screen
-					 * resolutions?
+					 * TODO load large thumbnail for certain screen resolutions?
 					 */
 					if (!artworkDao.exists(release, ArtworkType.SMALL)) {
 						InputStream smallThumbnail = coverArtImage

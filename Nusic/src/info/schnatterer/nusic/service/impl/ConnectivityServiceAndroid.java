@@ -20,7 +20,7 @@
  */
 package info.schnatterer.nusic.service.impl;
 
-import info.schnatterer.nusic.Application;
+import info.schnatterer.nusic.application.NusicApplication;
 import info.schnatterer.nusic.service.ConnectivityService;
 import info.schnatterer.nusic.service.PreferencesService;
 import android.content.Context;
@@ -54,7 +54,7 @@ public class ConnectivityServiceAndroid implements ConnectivityService {
 		final boolean isOnlyOnWifi = preferencesService.isUseOnlyWifi();
 
 		/* Monitor network connections */
-		final ConnectivityManager connectivityManager = (ConnectivityManager) Application
+		final ConnectivityManager connectivityManager = (ConnectivityManager) NusicApplication
 				.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
 		/* Wi-Fi connection */

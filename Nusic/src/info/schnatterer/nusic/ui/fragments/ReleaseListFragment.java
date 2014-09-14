@@ -20,9 +20,9 @@
  */
 package info.schnatterer.nusic.ui.fragments;
 
-import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.application.NusicApplication;
 import info.schnatterer.nusic.db.loader.AsyncResult;
 import info.schnatterer.nusic.db.loader.ReleaseLoaderAvailable;
 import info.schnatterer.nusic.db.loader.ReleaseLoaderJustCreated;
@@ -213,7 +213,7 @@ public class ReleaseListFragment extends SherlockFragment {
 				}
 			} catch (ServiceException e) {
 				Log.w(Constants.LOG, "Error hiding release/artist", e);
-				Application.toast(e.getLocalizedMessageId());
+				NusicApplication.toast(e.getLocalizedMessageId());
 			}
 			return true; // Finish processing fragment instances
 		} else {

@@ -1,6 +1,6 @@
 package info.schnatterer.nusic.db.dao.fs;
 
-import info.schnatterer.nusic.Application;
+import info.schnatterer.nusic.application.NusicApplication;
 import info.schnatterer.nusic.db.DatabaseException;
 import info.schnatterer.nusic.db.dao.ArtworkDao;
 import info.schnatterer.nusic.db.model.Release;
@@ -20,7 +20,7 @@ public class ArtworkDaoFileSystem implements ArtworkDao {
 	public static final String BASEDIR_PATH = "artwork";
 
 	// path to /data/data/../app_data/..
-	public static final File BASEDIR = Application.getContext().getDir(
+	public static final File BASEDIR = NusicApplication.getContext().getDir(
 			BASEDIR_PATH, Context.MODE_PRIVATE);
 
 	private static final String FILE_SCHEME = "file://";

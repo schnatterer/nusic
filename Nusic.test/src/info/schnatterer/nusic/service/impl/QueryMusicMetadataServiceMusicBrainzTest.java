@@ -23,15 +23,23 @@ package info.schnatterer.nusic.service.impl;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
-import junit.framework.TestCase;
+import org.musicbrainz.MBWS2Exception;
+import org.musicbrainz.model.entity.ReleaseWs2;
+import org.musicbrainz.model.searchresult.ReleaseResultWs2;
+
 import android.annotation.SuppressLint;
+import android.test.InstrumentationTestCase;
 
-public class QueryMusicMetadataServiceMusicBrainzTest extends TestCase {
+public class QueryMusicMetadataServiceMusicBrainzTest extends
+		InstrumentationTestCase {
+
 	@SuppressLint("SimpleDateFormat")
 	private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-	private QueryMusicMetadataServiceMusicBrainzMock queryMusicMetadataService = new QueryMusicMetadataServiceMusicBrainzMock();
+	private QueryMusicMetadataServiceMusicBrainz queryMusicMetadataService;
 
 	private final String expectedFromDateStr = "2013-01-01";
 	private Date expectedFromDate = null;
@@ -50,6 +58,12 @@ public class QueryMusicMetadataServiceMusicBrainzTest extends TestCase {
 			+ expectedFromDateStr + " TO " + expectedToDateStr + "]";
 
 	protected void setUp() throws Exception {
+		// Workaround for mockito
+		System.setProperty("dexmaker.dexcache", getInstrumentation()
+				.getTargetContext().getCacheDir().toString());
+
+		queryMusicMetadataService = new QueryMusicMetadataServiceMusicUnderTest();
+
 		expectedFromDate = dateFormat.parse(expectedFromDateStr);
 		expectedToDate = dateFormat.parse(expectedToDateStr);
 		// expectedReleaseDate = dateFormat.parse(expectedReleaseDateStr);
@@ -123,4 +137,72 @@ public class QueryMusicMetadataServiceMusicBrainzTest extends TestCase {
 	// release.setTitle(releaseName);
 	// return release;
 	// }
+
+	public class QueryMusicMetadataServiceMusicUnderTest extends
+			QueryMusicMetadataServiceMusicBrainz {
+
+		public QueryMusicMetadataServiceMusicUnderTest() {
+			super(null, null, null);
+		}
+
+		private String lastSearchText;
+		private List<ReleaseWs2> mockedReleases;
+
+		public String getLastSearchText() {
+			return lastSearchText;
+		}
+
+		public List<ReleaseWs2> getMockedReleases() {
+			return mockedReleases;
+		}
+
+		public void setMockedReleases(List<ReleaseWs2> mockedReleases) {
+			this.mockedReleases = mockedReleases;
+		}
+
+		@Override
+		protected org.musicbrainz.controller.Release createReleaseSearch(
+				String userAgentName, String userAgentVersion,
+				String userAgentContact) {
+			return new org.musicbrainz.controller.Release() {
+				@Override
+				public boolean hasMore() {
+					return false;
+				}
+
+				@Override
+				public void search(String searchText) {
+					super.search(searchText);
+					lastSearchText = searchText;
+				}
+
+				@Override
+				public List<ReleaseResultWs2> getFirstSearchResultPage()
+						throws MBWS2Exception {
+					List<ReleaseResultWs2> ret = new LinkedList<ReleaseResultWs2>();
+					for (ReleaseWs2 releaseWs2 : mockedReleases) {
+						ReleaseResultWs2 result = new ReleaseResultWs2();
+						result.setRelease(releaseWs2);
+						result.getEntity().setIdUri("someId");
+						ret.add(result);
+					}
+
+					return ret;
+				}
+			};
+		}
+
+		// @Override
+		// protected List<ReleaseResultWs2> findReleases(String searchText) {
+		// lastSearchText = searchText;
+		// List<ReleaseResultWs2> ret = new LinkedList<ReleaseResultWs2>();
+		// for (ReleaseWs2 releaseWs2 : mockedReleases) {
+		// ReleaseResultWs2 result = new ReleaseResultWs2();
+		// result.setRelease(releaseWs2);
+		// ret.add(result);
+		// }
+		//
+		// return ret;
+		// }
+	}
 }

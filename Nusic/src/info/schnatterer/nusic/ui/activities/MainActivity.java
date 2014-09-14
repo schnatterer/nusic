@@ -20,12 +20,10 @@
  */
 package info.schnatterer.nusic.ui.activities;
 
-import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.application.NusicApplication;
 import info.schnatterer.nusic.service.android.LoadNewReleasesService;
-import info.schnatterer.nusic.service.android.ReleasedTodayService;
-import info.schnatterer.nusic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.nusic.ui.LoadNewRelasesServiceBinding;
 import info.schnatterer.nusic.ui.fragments.ReleaseListFragment;
 import info.schnatterer.nusic.ui.fragments.ReleaseListFragment.ReleaseQuery;
@@ -154,21 +152,6 @@ public class MainActivity extends SherlockFragmentActivity {
 		} else {
 			registerListeners();
 		}
-
-		/*
-		 * Make sure the Release Today service is scheduled (if not switched off
-		 * in preferences). Schedule it only after updates and new installations
-		 * to avoid overhead.
-		 */
-		switch (PreferencesServiceSharedPreferences.getInstance()
-				.checkAppStart()) {
-		case FIRST_TIME_VERSION:
-		case FIRST_TIME:
-			ReleasedTodayService.schedule(this);
-			break;
-		default:
-			break;
-		}
 	}
 
 	@Override
@@ -233,7 +216,7 @@ public class MainActivity extends SherlockFragmentActivity {
 				 */
 				// TODO cancel service and restart if necessary after changing
 				// of preferences?
-				Application
+				NusicApplication
 						.toast(R.string.MainActivity_pleaseWaitUntilRefreshIsFinished);
 				loadNewRelasesServiceBinding.showDialog();
 			}
@@ -268,7 +251,8 @@ public class MainActivity extends SherlockFragmentActivity {
 
 		if (wasRunning && !updateOnlyIfNeccesary) {
 			// Task is already running, just show dialog
-			Application.toast(R.string.MainActivity_refreshAlreadyInProgress);
+			NusicApplication
+					.toast(R.string.MainActivity_refreshAlreadyInProgress);
 			loadNewRelasesServiceBinding.showDialog();
 		}
 	}

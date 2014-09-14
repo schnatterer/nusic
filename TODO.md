@@ -1,10 +1,12 @@
 TODOs - Features, enhancements, refactoring, ...
 - Refactoring: Maven build: Extract MusicBrainz lib into separate maven project+repo. Pull as subtree.
 
-- db.loader package belongs to ui.loaders. The logic and DB access belongs to ReleaseService! Define explicit loader IDs in Constants as enum (then use ordinal())
+- Delete Preference? http://stackoverflow.com/questions/3687315/deleting-shared-preferences
 
-- Remove Preference "Show future releases"
-- Don't show releases that are older than the range in preferences
+- db.loader package belongs to ui.loaders. The logic and DB access belongs to ReleaseService! Define explicit loader IDs in Constants as enum (then use ordinal())
+- Don't show releases that are older than the range in preferences for tabs available and all. Don't show hidden releases in "all" tabs.
+
+- Update dependencies to android and compatibility library
 
 - Feature: Info dialog
 

@@ -20,8 +20,8 @@
  */
 package info.schnatterer.nusic.service;
 
-import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
+import info.schnatterer.nusic.application.NusicApplication;
 import info.schnatterer.nusic.util.DefaultLocale;
 
 import java.util.Locale;
@@ -46,7 +46,7 @@ public class ServiceException extends Exception {
 	@Override
 	public String getLocalizedMessage() {
 		try {
-			String localizedString = Application.getContext().getString(
+			String localizedString = NusicApplication.getContext().getString(
 					localizedMessageId);
 			if (args != null) {
 				localizedString = String.format(Locale.US, localizedString,

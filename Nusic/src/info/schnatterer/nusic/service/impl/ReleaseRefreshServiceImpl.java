@@ -20,15 +20,14 @@
  */
 package info.schnatterer.nusic.service.impl;
 
-import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.application.NusicApplication;
 import info.schnatterer.nusic.db.DatabaseException;
 import info.schnatterer.nusic.db.model.Artist;
 import info.schnatterer.nusic.service.ArtistQueryService;
 import info.schnatterer.nusic.service.ArtistService;
 import info.schnatterer.nusic.service.PreferencesService;
-import info.schnatterer.nusic.service.PreferencesService.AppStart;
 import info.schnatterer.nusic.service.QueryMusicMetadataService;
 import info.schnatterer.nusic.service.ReleaseRefreshService;
 import info.schnatterer.nusic.service.ServiceException;
@@ -66,21 +65,14 @@ public class ReleaseRefreshServiceImpl implements ReleaseRefreshService {
 		}
 		queryMusicMetadataService = new QueryMusicMetadataServiceMusicBrainz(
 				context.getString(R.string.app_name),
-				Application.getVersionName(), Constants.APPLICATION_URL);
+				NusicApplication.getVersionName(), Constants.APPLICATION_URL);
 	}
 
 	@Override
 	public boolean isUpdateNeccesarry() {
-		AppStart appStart = PreferencesServiceSharedPreferences.getInstance()
-				.checkAppStart();
-
-		switch (appStart) {
-		case FIRST_TIME_VERSION:
-		case FIRST_TIME:
+		if (NusicApplication.wasUpgraded())
 			return true;
-		default:
-			break;
-		}
+
 		/*
 		 * TODO check if there are new artists on the device and refresh if
 		 * neccessary. Then update interface comment for this method!

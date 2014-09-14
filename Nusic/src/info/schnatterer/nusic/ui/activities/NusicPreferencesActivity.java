@@ -20,8 +20,8 @@
  */
 package info.schnatterer.nusic.ui.activities;
 
-import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.application.NusicApplication;
 import info.schnatterer.nusic.db.model.Artist;
 import info.schnatterer.nusic.service.ReleaseService;
 import info.schnatterer.nusic.service.ServiceException;
@@ -197,7 +197,7 @@ public class NusicPreferencesActivity extends SherlockPreferenceActivity {
 											// Trigger reload in main activity
 											activity.onContentChanged();
 										} catch (ServiceException e) {
-											Application.toast(e
+											NusicApplication.toast(e
 													.getLocalizedMessageId());
 										}
 									}

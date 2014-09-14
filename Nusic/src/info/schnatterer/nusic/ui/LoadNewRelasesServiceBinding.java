@@ -20,9 +20,9 @@
  */
 package info.schnatterer.nusic.ui;
 
-import info.schnatterer.nusic.Application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.application.NusicApplication;
 import info.schnatterer.nusic.db.model.Artist;
 import info.schnatterer.nusic.service.ReleaseRefreshService;
 import info.schnatterer.nusic.service.ServiceException;
@@ -208,7 +208,7 @@ public class LoadNewRelasesServiceBinding {
 		ProgressDialog dialog = null;
 		if (activity != null) {
 			dialog = new ProgressDialog(activity);
-			dialog.setMessage(Application.getContext().getString(
+			dialog.setMessage(NusicApplication.getContext().getString(
 					R.string.LoadNewReleasesBinding_CheckingArtists));
 			dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			dialog.setMax(max);
@@ -259,7 +259,7 @@ public class LoadNewRelasesServiceBinding {
 				public void run() {
 					hideProgressDialog();
 					if (errorArtists != null && errorArtists.size() > 0) {
-						Application
+						NusicApplication
 								.toast(R.string.LoadNewReleasesBinding_finishedWithErrors,
 										errorArtists.size(), totalArtists);
 					}
@@ -278,16 +278,16 @@ public class LoadNewRelasesServiceBinding {
 					hideProgressDialog();
 					if (potentialException != null) {
 						if (potentialException instanceof ServiceException) {
-							Application
-									.toast(Application
+							NusicApplication
+									.toast(NusicApplication
 											.getContext()
 											.getString(
 													R.string.LoadNewReleasesBinding_errorFindingReleases)
 											+ potentialException
 													.getLocalizedMessage());
 						} else {
-							Application
-									.toast(Application
+							NusicApplication
+									.toast(NusicApplication
 											.getContext()
 											.getString(
 													R.string.LoadNewReleasesBinding_errorFindingReleasesGeneric)
