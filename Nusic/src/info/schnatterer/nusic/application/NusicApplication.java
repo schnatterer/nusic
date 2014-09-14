@@ -75,6 +75,7 @@ public class NusicApplication extends AbstractApplication {
 			SharedPreferences sharedPreferences = PreferenceManager
 					.getDefaultSharedPreferences(getContext());
 			sharedPreferences.edit().remove("includeFutureReleases").commit();
+			sharedPreferences.edit().remove("last_app_version").commit();
 		}
 		/*
 		 * Make sure the Release Today service is scheduled (if not switched off
