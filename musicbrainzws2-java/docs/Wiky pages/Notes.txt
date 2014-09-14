@@ -1,0 +1,43 @@
+#summary Some advanced setting notes
+#sidebar TableOfContents
+
+= Notes =
+
+== Changing connection parameters or XML Parser ==
+
+You could change the Webservice implementation, that means mainly the HTTP client parameters and XML parser, this way:
+
+# make a new Class implementing the org.musicbrainz.webservice.WebService interface. maybe extending org.musicbrainz.webservice.DefaultWebService. (i.e. call it MyWebServiceImplementation).
+
+# set RUNTIME controllers to use it:
+<code>
+Controller controller = new Controller();
+controller.setQueryWs(new MyWebServiceImplementation());
+...
+</code>
+
+remember that annotations reside in a different host domain, so if you change the webservice implementation you should do the same for annotations.
+
+=== Example ===
+<code>(see: org.muscibrainz.junit.unitTests.synopsisUseCase10)
+
+
+String name = "pink floyd";
+        
+MyWebServiceImplementation myQueryWs = new MyWebServiceImplementation();
+
+MyWebServiceImplementation myAnnotationsWs = new MyWebServiceImplementation();
+        
+((DefaultWebServiceWs2)myAnnotationsWs).setHost("search.musicbrainz.org");
+        
+Artist artist = new Artist();
+artist.setQueryWs(myQueryWs);
+artist.setAnnotationWs(myAnnotationsWs);
+artist.search(name);
+...
+artist = new Artist();
+artist.setQueryWs(myQueryWs);
+artist.setAnnotationWs(myAnnotationsWs);
+artist.getComplete(pinkFloyd);
+</code>
+  * Automatic links to other wiki pages
