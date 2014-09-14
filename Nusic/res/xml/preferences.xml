@@ -16,17 +16,6 @@
             android:summary="@string/preferences_summary_display_all_releases"
             android:title="@string/preferences_title_display_all_releases" />
 
-        <!--
-        TODO Before enabling this as a preference, implement logic to do full updates whenever necessary.
-        That is, for example when there are new artists, when the time period changed, when ?, ...
-        -->
-        <!--
-            <CheckBoxPreference
-            android:defaultValue="@bool/preferences_default_full_update"
-            android:key="@string/preferences_key_full_update"
-            android:summary="@string/preferences_summary_full_update"
-            android:title="@string/preferences_title_full_update" />
-        -->
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/preferences_category_notifications" >
         <CheckBoxPreference

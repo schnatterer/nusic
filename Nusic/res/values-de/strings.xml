@@ -41,9 +41,6 @@
     <string name="preferences_summary_display_all_releases">Mittels langem Tap auf ein Album können diese ausgeblendet werden. Diese Option setzt ausgeblendete Alben und Interpreten zurück.</string>
     <string name="preferences_message_display_all_releases">Wirklich alle ausgeblendeten Alben und Interpreten wieder anzeigen?</string>
     
-    <!-- <string name="preferences_title_full_update">Vollständige Updates</string>
-    <string name="preferences_summary_full_update">Updates immer für die Gesamte Zeitspanne ausführen. Wesentlich höherer Datenbedarf, dafür werden auch Alben hinzugefügt, die erst nach ihrer Veröffentlichung in der Datenbank aufgenommen werden (falls das jemals passiert).</string> -->
-    
     <string name="preferences_category_bandwitdth">Datennutzung</string>
     <string name="preferences_title_download_only_on_wifi">Nur über WLAN herunterladen</string>
     <string name="preferences_summary_download_only_on_wifi">Keine Internetverbindung über Mobilfunknetzwerke verwenden</string>

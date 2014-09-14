@@ -86,35 +86,15 @@ public class ReleaseRefreshServiceImpl implements ReleaseRefreshService {
 			progressUpdater.progressFinished(false);
 			return false;
 		}
-		// TODO write test for logic!
-		boolean fullUpdate;
-		if (preferencesService.isForceFullRefresh())
-			fullUpdate = true;
-		else {
-			fullUpdate = preferencesService.isFullUpdate();
-		}
 
-		Date startDate = createStartDate(fullUpdate,
-				preferencesService.getDownloadReleasesTimePeriod(),
-				preferencesService.getLastReleaseRefresh());
+		Date startDate = createStartDateFullUpdate(preferencesService
+				.getDownloadReleasesTimePeriod());
 
 		// Use a date before the refresh to store afterwards in order to
 		Date dateCreated = new Date();
 		refreshReleases(startDate, null);
 		preferencesService.setLastReleaseRefresh(dateCreated);
 		return true;
-	}
-
-	private Date createStartDate(boolean isFullUpdate, int months,
-			Date lastReleaseRefresh) {
-		if (lastReleaseRefresh == null) {
-			// Same as full Update
-			return createStartDateFullUpdate(months);
-		}
-		if (isFullUpdate) {
-			return createStartDateFullUpdate(months);
-		}
-		return lastReleaseRefresh;
 	}
 
 	private Date createStartDateFullUpdate(int months) {
@@ -188,21 +168,10 @@ public class ReleaseRefreshServiceImpl implements ReleaseRefreshService {
 				} catch (Throwable t) {
 					Log.w(Constants.LOG, t);
 					progressUpdater.progressFailed(artist, i + 1, t, null);
-					preferencesService.setForceFullRefresh(true);
 					return;
 				}
 
 				progressUpdater.progress(artist, i + 1, potentialException);
-			}
-			if (potentialException == null) {
-				// "Full" Success
-				preferencesService.setForceFullRefresh(false);
-			} else {
-				/*
-				 * "Partial" Success, some artists failed. Force a full refresh
-				 * next time. Maybe better luck then.
-				 */
-				preferencesService.setForceFullRefresh(false);
 			}
 			progressUpdater.progressFinished(true);
 			return;

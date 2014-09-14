@@ -40,8 +40,6 @@
     <string name="preferences_title_display_all_releases">Make hidden albums reappear</string>
     <string name="preferences_summary_display_all_releases">Albums can be hidden by long tapping them. This option resets all hidden albums and artists.</string>
     <string name="preferences_message_display_all_releases">Do you really want to reset all hidden albums and artists?</string>
-    <!-- <string name="preferences_title_full_update">Full update</string>
-    <string name="preferences_summary_full_update">Always update the complete time period. Significantly higher bandwitdth consumption but finds also releases that are added to the database after they are release (if that ever happens))</string> -->
     
     <string name="preferences_category_bandwitdth">Bandwidth usage</string>
     <string name="preferences_title_download_only_on_wifi">Download via Wi-Fi only</string>

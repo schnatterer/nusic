@@ -55,9 +55,6 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	public final String KEY_NEXT_RELEASES_REFRESH = "next_release_refresh";
 	public final Date DEFAULT_NEXT_RELEASES_REFRESH = null;
 
-	public final String KEY_LAST_RELEASES_REFRESH_SUCCESSFULL = "last_release_refresh_succesful";
-	public final Boolean DEFAULT_LAST_RELEASES_REFRESH_SUCCESSFULL = Boolean.FALSE;
-
 	private final String KEY_JUST_ADDED_TIME_PERIOD = "just_added_time_period";
 	// Define in constructor!
 	private final Integer DEFAULT_JUST_ADDED_TIME_PERIOD;
@@ -74,9 +71,6 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 
 	public final String KEY_DOWNLOAD_RELEASES_TIME_PERIOD;
 	public final String DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD;
-
-	public final String KEY_FULL_UPDATE;
-	public final Boolean DEFAULT_FULL_UPDATE;
 
 	public final String KEY_REFRESH_PERIOD;
 	public final String DEFAULT_REFRESH_PERIOD;
@@ -137,11 +131,6 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 					.getString(
 							R.string.preferences_default_download_releases_time_period);
 
-			KEY_FULL_UPDATE = getContext().getString(
-					R.string.preferences_key_full_update);
-			DEFAULT_FULL_UPDATE = getContext().getResources().getBoolean(
-					R.bool.preferences_default_full_update);
-
 			KEY_REFRESH_PERIOD = getContext().getString(
 					R.string.preferences_key_refresh_period);
 			DEFAULT_REFRESH_PERIOD = getContext().getResources().getString(
@@ -186,9 +175,6 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 
 			KEY_DOWNLOAD_RELEASES_TIME_PERIOD = null;
 			DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD = null;
-
-			KEY_FULL_UPDATE = null;
-			DEFAULT_FULL_UPDATE = null;
 
 			KEY_REFRESH_PERIOD = null;
 			DEFAULT_REFRESH_PERIOD = null;
@@ -260,21 +246,6 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	}
 
 	@Override
-	public boolean isForceFullRefresh() {
-		return sharedPreferences.getBoolean(
-				KEY_LAST_RELEASES_REFRESH_SUCCESSFULL,
-				DEFAULT_LAST_RELEASES_REFRESH_SUCCESSFULL);
-	}
-
-	@Override
-	public boolean setForceFullRefresh(boolean isSuccessfull) {
-		return sharedPreferences
-				.edit()
-				.putBoolean(KEY_LAST_RELEASES_REFRESH_SUCCESSFULL,
-						isSuccessfull).commit();
-	}
-
-	@Override
 	public void clearPreferences() {
 		sharedPreferences.edit().clear().commit();
 	}
@@ -295,12 +266,6 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	public int getRefreshPeriod() {
 		return parseIntFromPreferenceOrThrow(KEY_REFRESH_PERIOD,
 				DEFAULT_REFRESH_PERIOD);
-	}
-
-	@Override
-	public boolean isFullUpdate() {
-		return sharedPreferences.getBoolean(KEY_FULL_UPDATE,
-				DEFAULT_FULL_UPDATE);
 	}
 
 	@Override

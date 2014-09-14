@@ -75,38 +75,11 @@ public interface PreferencesService {
 	 */
 	int getDownloadReleasesTimePeriod();
 
-	/**
-	 * Always update the complete time period.
-	 * 
-	 * @return
-	 */
-	boolean isFullUpdate();
-
 	void registerOnSharedPreferenceChangeListener(
 			PreferenceChangedListener preferenceChangedListener);
 
 	void unregisterOnSharedPreferenceChangeListener(
 			PreferenceChangedListener preferenceChangedListener);
-
-	/**
-	 * Ignores the value of {@link PreferencesService#isFullUpdate()} and does a
-	 * full update. Useful when
-	 * {@link PreferencesService#getDownloadReleasesTimePeriod()} changed, or
-	 * some artists were refreshed with errors.
-	 * 
-	 * @return
-	 */
-	boolean isForceFullRefresh();
-
-	/**
-	 * Forces the next refresh of the releases to be a full refresh. That is,
-	 * ignores {@link PreferencesService#isFullUpdate()}. Useful when
-	 * {@link PreferencesService#getDownloadReleasesTimePeriod()} changed, or
-	 * some artists were refreshed with errors.
-	 * 
-	 * @return
-	 */
-	boolean setForceFullRefresh(boolean forceFullRefresh);
 
 	/**
 	 * Amount of days between two scheduled (as opposed to manual) refreshs of
