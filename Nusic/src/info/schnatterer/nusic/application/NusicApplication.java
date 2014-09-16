@@ -54,8 +54,6 @@ public class NusicApplication extends AbstractApplication {
 
 	@Override
 	public void onCreate() {
-		super.onCreate();
-
 		context = getApplicationContext();
 
 		/*
@@ -66,6 +64,9 @@ public class NusicApplication extends AbstractApplication {
 				getApplicationContext()).memoryCacheSize(2 * 1024 * 1024)
 				.build();
 		ImageLoader.getInstance().init(config);
+
+		// Causes onUpgrade() to be called, etc.
+		super.onCreate();
 	}
 
 	@Override

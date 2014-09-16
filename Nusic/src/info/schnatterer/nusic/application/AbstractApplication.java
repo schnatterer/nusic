@@ -29,6 +29,18 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
+/**
+ * Extended version of {@link Application} that contains a version number
+ * mechanism similar to the one of
+ * {@link android.database.sqlite.SQLiteOpenHelper}: It calls
+ * {@link #onUpgrade(int, int)} on the derived concrete application class.<br/>
+ * <br/>
+ * <b>Important:</b> In the concrete class, call <code>super.onCreate()</code>
+ * at the end of the concrete class' {@link #onCreate()} method.
+ * 
+ * @author schnatterer
+ *
+ */
 public abstract class AbstractApplication extends Application {
 	static final String KEY_LAST_APP_VERSION = "last_app_version";
 	static final int DEFAULT_LAST_APP_VERSION = -1;
