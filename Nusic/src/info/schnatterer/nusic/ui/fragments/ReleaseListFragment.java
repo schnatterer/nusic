@@ -86,7 +86,7 @@ public class ReleaseListFragment extends SherlockFragment {
 	public static final String EXTRA_LOADER_ID = "nusic.intent.releaseList.loaderId";
 
 	/** The loader that is connected to the data displayed in the fragment. */
-	private int loaderId;
+	private int loaderId = -1;
 
 	private ListView releasesListView;
 	private ReleaseListAdapter releasesListViewAdapter = null;
@@ -172,6 +172,7 @@ public class ReleaseListFragment extends SherlockFragment {
 			try {
 				switch (item.getItemId()) {
 				case R.id.releaseListMenuHideRelease:
+					displayLoading();
 					release.setHidden(true);
 					getReleaseService().update(release);
 					getActivity().onContentChanged();
@@ -197,17 +198,6 @@ public class ReleaseListFragment extends SherlockFragment {
 
 	protected void setReleases(List<Release> result) {
 		releasesListViewAdapter.show(result);
-	}
-
-	/**
-	 * Marks content as changed, which leads to reloading on the next load.
-	 */
-	public void onContentChanged() {
-		if (isVisible()) {
-			displayLoading();
-		}
-		getActivity().getSupportLoaderManager().getLoader(loaderId)
-				.onContentChanged();
 	}
 
 	protected ReleaseRefreshService getReleaseRefreshService() {

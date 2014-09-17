@@ -34,6 +34,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -272,7 +273,13 @@ public class MainActivity extends SherlockFragmentActivity {
 		if (adapter != null) {
 			runOnUiThread(new Runnable() {
 				public void run() {
-					adapter.onContentChanged();
+					for (TabDefinition tabDefinition : TabDefinition.values()) {
+						Loader<Object> loader = getSupportLoaderManager()
+								.getLoader(tabDefinition.loaderId);
+						if (loader != null) {
+							loader.onContentChanged();
+						}
+					}
 				}
 			});
 		}
@@ -308,17 +315,6 @@ public class MainActivity extends SherlockFragmentActivity {
 
 		public TabFragmentPagerAdapter(FragmentManager fm) {
 			super(fm);
-		}
-
-		/**
-		 * Marks the content of all tabs as changed.
-		 */
-		public void onContentChanged() {
-			for (ReleaseListFragment tabFragment : fragments) {
-				if (tabFragment != null) {
-					tabFragment.onContentChanged();
-				}
-			}
 		}
 
 		@Override
