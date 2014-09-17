@@ -32,7 +32,7 @@ public interface ArtistDao extends GenericDao<Artist> {
 	 * @return the {@link Artist} containing ID and dateCreated, if existing.
 	 *         Otherwise <code>null</code>.
 	 */
-	Artist findIdDateCreatedByMusicBrainzId(long androidId)
+	Artist findByAndroidId(long androidId)
 			throws DatabaseException;
 
 	/**
@@ -51,5 +51,5 @@ public interface ArtistDao extends GenericDao<Artist> {
 	 * 
 	 * @throws DatabaseException
 	 */
-	void showAll() throws DatabaseException;
+	void setIsHiddenFalse() throws DatabaseException;
 }

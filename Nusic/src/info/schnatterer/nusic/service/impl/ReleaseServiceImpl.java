@@ -29,9 +29,11 @@ import info.schnatterer.nusic.db.dao.ReleaseDao;
 import info.schnatterer.nusic.db.dao.sqlite.ArtistDaoSqlite;
 import info.schnatterer.nusic.db.dao.sqlite.ReleaseDaoSqlite;
 import info.schnatterer.nusic.db.model.Release;
+import info.schnatterer.nusic.service.PreferencesService;
 import info.schnatterer.nusic.service.ReleaseService;
 import info.schnatterer.nusic.service.ServiceException;
 
+import java.util.Calendar;
 import java.util.List;
 
 import android.content.Context;
@@ -39,6 +41,8 @@ import android.content.Context;
 public class ReleaseServiceImpl implements ReleaseService {
 	private ReleaseDao releaseDao;
 	private ArtistDao artistDao;
+	private PreferencesService preferencesService = PreferencesServiceSharedPreferences
+			.getInstance();
 
 	public ReleaseServiceImpl(Context context) {
 		releaseDao = new ReleaseDaoSqlite(context);
@@ -96,8 +100,7 @@ public class ReleaseServiceImpl implements ReleaseService {
 		try {
 			if (release.getId() == null) {
 				Release existingRelease = releaseDao
-						.findIdDateCreatedByMusicBrainzId(release
-								.getMusicBrainzId());
+						.findByMusicBrainzId(release.getMusicBrainzId());
 				if (existingRelease != null) {
 					release.setId(existingRelease.getId());
 					// Never overwrite date created!
@@ -117,10 +120,19 @@ public class ReleaseServiceImpl implements ReleaseService {
 	}
 
 	@Override
-	public List<Release> findJustCreated(long gtDateCreated)
+	public List<Release> findJustCreated() throws ServiceException {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DAY_OF_MONTH,
+				-preferencesService.getJustAddedTimePeriod());
+		return findByDateCreatedGreaterThan(cal.getTimeInMillis());
+	}
+
+	@Override
+	public List<Release> findByDateCreatedGreaterThan(long gtDateCreated)
 			throws ServiceException {
 		try {
-			return releaseDao.findByDateCreatedGreaterThan(gtDateCreated);
+			return releaseDao
+					.findByDateCreatedGreaterThanAndIsHiddenNotTrue(gtDateCreated);
 		} catch (DatabaseException e) {
 			throw new ServiceException(
 					R.string.ServiceException_errorReadingFromDb, e);
@@ -135,8 +147,41 @@ public class ReleaseServiceImpl implements ReleaseService {
 			 * before tomorrow 00:00:00h. As the dates are strored as UTC
 			 * values, find out the dates in UTC first.
 			 */
-			return releaseDao.findByReleaseDateGreaterThanEqualAndReleaseDateLessThan(todayMidnightUtc(),
-					tomorrowMidnightUtc());
+			// Don't care about the order
+			return releaseDao
+					.findByReleaseDateGreaterThanEqualsAndReleaseDateLessThanAndIsHiddenNotTrue(
+							todayMidnightUtc(), tomorrowMidnightUtc());
+		} catch (DatabaseException e) {
+			throw new ServiceException(
+					R.string.ServiceException_errorReadingFromDb, e);
+		}
+	}
+
+	@Override
+	public List<Release> findAvailableToday(boolean isAvailable)
+			throws ServiceException {
+		try {
+			if (isAvailable) {
+				return releaseDao
+						.findByReleaseDateGreaterThanEqualsAndReleaseDateLessThanAndIsHiddenNotTrue(
+								createReleaseDateLowerLimit(),
+								tomorrowMidnightUtc());
+			} else {
+				// Announced
+				return releaseDao
+						.findByReleaseDateGreaterThanEqualsAndIsHiddenNotTrueSortByReleaseDateAsc(tomorrowMidnightUtc());
+			}
+		} catch (DatabaseException e) {
+			throw new ServiceException(
+					R.string.ServiceException_errorReadingFromDb, e);
+		}
+	}
+
+	@Override
+	public List<Release> findAllNotHidden() throws ServiceException {
+		try {
+			return releaseDao
+					.findByReleaseDateGreaterThanEqualsAndIsHiddenNotTrueSortByReleaseDateDesc(createReleaseDateLowerLimit());
 		} catch (DatabaseException e) {
 			throw new ServiceException(
 					R.string.ServiceException_errorReadingFromDb, e);
@@ -146,12 +191,34 @@ public class ReleaseServiceImpl implements ReleaseService {
 	@Override
 	public void showAll() throws ServiceException {
 		try {
-			releaseDao.showAll();
-			artistDao.showAll();
+			releaseDao.setIsHiddenFalse();
+			artistDao.setIsHiddenFalse();
 		} catch (DatabaseException e) {
 			throw new ServiceException(
 					R.string.ServiceException_errorWritingToDb, e);
 		}
+	}
 
+	/**
+	 * Calculates the date where the release time period begins.<br/>
+	 * 
+	 * Releases tha were released in the past are only downloaded and displayed
+	 * if there were release within a certain time period. This
+	 * {@link PreferencesService#getDownloadReleasesTimePeriod()} is relative to
+	 * the current date and shows how many months of the past are downloaded and
+	 * displayed. So there is a lower limit for the release date.<br/>
+	 * All releases that were release before this limit are not displayed.
+	 * 
+	 * @return all releases that were released before this date are not
+	 *         displayed.
+	 */
+	private long createReleaseDateLowerLimit() {
+		int months = preferencesService.getDownloadReleasesTimePeriod();
+		if (months <= 0) {
+			return Long.MIN_VALUE;
+		}
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MONTH, -months);
+		return cal.getTimeInMillis();
 	}
 }

@@ -18,32 +18,23 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.db.loader;
+package info.schnatterer.nusic.ui.loaders;
 
 import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.db.dao.sqlite.AbstractSqliteDao;
 import info.schnatterer.nusic.db.model.Entity;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
-public abstract class AbstractAsyncSqliteLoader<RESULT, ENTITY extends Entity, DAO extends AbstractSqliteDao<ENTITY>>
+public abstract class AbstractAsyncSqliteLoader<RESULT, ENTITY extends Entity>
 		extends AsyncTaskLoader<AsyncResult<RESULT>> {
 	private AsyncResult<RESULT> data;
-	private DAO dao;
 
 	public AbstractAsyncSqliteLoader(Context context) {
 		super(context);
-		dao = createDao(context);
 	}
-
-	protected abstract DAO createDao(Context context);
 
 	public abstract RESULT doLoadInBackground() throws Exception;
-
-	protected DAO getDao() {
-		return dao;
-	}
 
 	@Override
 	public void deliverResult(AsyncResult<RESULT> data) {
@@ -105,18 +96,7 @@ public abstract class AbstractAsyncSqliteLoader<RESULT, ENTITY extends Entity, D
 	public void onCanceled(AsyncResult<RESULT> data) {
 		// Attempt to cancel the current asynchronous load.
 		super.onCanceled(data);
-		releaseResources(data);
 		// Allow garbage collection
 		data = null;
-	}
-
-	/**
-	 * Cleanup is taken care of by the {@link AsyncTaskLoader}'s lifecycle.
-	 * 
-	 * @param oldData
-	 */
-	protected void releaseResources(AsyncResult<RESULT> oldData) {
-		// Make sure not to leak a cursor
-		dao.closeCursor();
 	}
 }

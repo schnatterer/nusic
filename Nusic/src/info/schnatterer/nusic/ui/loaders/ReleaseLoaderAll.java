@@ -1,4 +1,4 @@
-/* Copyright (C) 2013 Johannes Schnatterer
+/* Copyright (C) 2014 Johannes Schnatterer
  * 
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
@@ -18,42 +18,28 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.db.loader;
+package info.schnatterer.nusic.ui.loaders;
 
-import info.schnatterer.nusic.db.dao.sqlite.ReleaseDaoSqlite;
 import info.schnatterer.nusic.db.model.Release;
+import info.schnatterer.nusic.service.ReleaseService;
+import info.schnatterer.nusic.service.impl.ReleaseServiceImpl;
 
 import java.util.List;
 
 import android.content.Context;
 
-public class ReleaseLoaderJustCreated extends
-		AbstractAsyncSqliteLoader<List<Release>, Release, ReleaseDaoSqlite> {
+public class ReleaseLoaderAll extends
+		AbstractAsyncSqliteLoader<List<Release>, Release> {
 
-	private Long dateCreatedGt;
+	private ReleaseService releaseService;
 
-	/**
-	 * @param context
-	 * @param dateCreatedGt
-	 *            the releases should all have a date created that is greater
-	 *            than this. If <code>null</code>, all releases are returned.
-	 */
-	public ReleaseLoaderJustCreated(Context context, Long dateCreatedGt) {
+	public ReleaseLoaderAll(Context context) {
 		super(context);
-		this.dateCreatedGt = dateCreatedGt;
-	}
-
-	@Override
-	protected ReleaseDaoSqlite createDao(Context context) {
-		return new ReleaseDaoSqlite(context);
+		releaseService = new ReleaseServiceImpl(context);
 	}
 
 	@Override
 	public List<Release> doLoadInBackground() throws Exception {
-		if (dateCreatedGt == null) {
-			return getDao().findByHiddenFalse();
-		} else {
-			return getDao().findByDateCreatedGreaterThan(dateCreatedGt);
-		}
+		return releaseService.findAllNotHidden();
 	}
 }

@@ -18,26 +18,31 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.db.loader;
+package info.schnatterer.nusic.ui.loaders;
 
-public class AsyncResult<D> {
-	private Exception exception;
-	private D data;
+import info.schnatterer.nusic.db.model.Release;
+import info.schnatterer.nusic.service.ReleaseService;
+import info.schnatterer.nusic.service.impl.ReleaseServiceImpl;
 
-	public void setException(Exception exception) {
-		this.exception = exception;
+import java.util.List;
+
+import android.content.Context;
+
+public class ReleaseLoaderJustCreated extends
+		AbstractAsyncSqliteLoader<List<Release>, Release> {
+
+	private ReleaseService releaseService;
+
+	/**
+	 * @param context
+	 */
+	public ReleaseLoaderJustCreated(Context context) {
+		super(context);
+		releaseService = new ReleaseServiceImpl(context);
 	}
 
-	public Exception getException() {
-		return exception;
+	@Override
+	public List<Release> doLoadInBackground() throws Exception {
+		return releaseService.findJustCreated();
 	}
-
-	public void setData(D data) {
-		this.data = data;
-	}
-
-	public D getData() {
-		return data;
-	}
-
 }

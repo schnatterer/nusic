@@ -21,12 +21,12 @@
 package info.schnatterer.nusic.ui.activities;
 
 import info.schnatterer.nusic.Constants;
+import info.schnatterer.nusic.Constants.Loaders;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.application.NusicApplication;
 import info.schnatterer.nusic.service.android.LoadNewReleasesService;
 import info.schnatterer.nusic.ui.LoadNewRelasesServiceBinding;
 import info.schnatterer.nusic.ui.fragments.ReleaseListFragment;
-import info.schnatterer.nusic.ui.fragments.ReleaseListFragment.ReleaseQuery;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -72,28 +72,25 @@ public class MainActivity extends SherlockFragmentActivity {
 	 */
 	public static enum TabDefinition {
 		/** First tab: Just added */
-		JUST_ADDED(R.string.MainActivity_TabJustAdded, ReleaseQuery.JUST_ADDED),
+		JUST_ADDED(R.string.MainActivity_TabJustAdded,
+				Loaders.RELEASE_LOADER_JUST_ADDED),
 		/** Second tab: Available releases */
-		AVAILABLE(R.string.MainActivity_TabAvailable, ReleaseQuery.AVAILABLE),
+		AVAILABLE(R.string.MainActivity_TabAvailable,
+				Loaders.RELEASE_LOADER_AVAILABLE),
 		/** Third tab: Announced releases */
-		ANNOUNCED(R.string.MainActivity_TabAnnounced, ReleaseQuery.ANNOUNCED),
+		ANNOUNCED(R.string.MainActivity_TabAnnounced,
+				Loaders.RELEASE_LOADER_ANNOUNCED),
 		/** Fourth tab: All releases */
-		ALL(R.string.MainActivity_TabAll, ReleaseQuery.ALL);
+		ALL(R.string.MainActivity_TabAll, Loaders.RELEASE_LOADER_ALL);
 
 		private final int position;
 		private final int titleId;
 		private final int loaderId;
-		private final ReleaseQuery releaseQuery;
 
-		private TabDefinition(int titleId, ReleaseQuery releaseQuery) {
+		private TabDefinition(int titleId, int loaderId) {
 			this.position = ordinal();
 			this.titleId = titleId;
-			/*
-			 * For now just "reuse" the position. TODO define application wide
-			 * loader ids in Constants
-			 */
-			this.loaderId = this.position;
-			this.releaseQuery = releaseQuery;
+			this.loaderId = loaderId;
 		}
 
 	}
@@ -350,8 +347,6 @@ public class MainActivity extends SherlockFragmentActivity {
 		private ReleaseListFragment createTabFragment(TabDefinition tab) {
 			// Create fragment
 			Bundle bundle = new Bundle();
-			bundle.putString(ReleaseListFragment.EXTRA_RELEASE_QUERY,
-					tab.releaseQuery.name());
 			bundle.putInt(ReleaseListFragment.EXTRA_LOADER_ID, tab.loaderId);
 			return (ReleaseListFragment) Fragment.instantiate(
 					MainActivity.this, ReleaseListFragment.class.getName(),

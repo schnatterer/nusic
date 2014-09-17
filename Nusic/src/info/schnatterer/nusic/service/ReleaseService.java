@@ -83,7 +83,8 @@ public interface ReleaseService {
 	 * @return all releases that were created after <code>gtDateCreated</code>
 	 * @throws ServiceException
 	 */
-	List<Release> findJustCreated(long beforeRefresh) throws ServiceException;
+	List<Release> findByDateCreatedGreaterThan(long beforeRefresh)
+			throws ServiceException;
 
 	/**
 	 * Finds all releases that are released today. That is all releases whose
@@ -96,9 +97,32 @@ public interface ReleaseService {
 	List<Release> findReleasedToday() throws ServiceException;
 
 	/**
+	 * Finds all release that are available as of today. *
+	 * 
+	 * @param isAvailable
+	 *            if <code>true</code> all releases that are available today are
+	 *            returned. Otherwise, all releases that are announced are
+	 *            returned.
+	 * @return
+	 * @throws ServiceException
+	 */
+	List<Release> findAvailableToday(boolean isAvailable)
+			throws ServiceException;
+
+	/**
+	 * Finds all releases that are not hidden.
+	 * 
+	 * @return
+	 * @throws ServiceException
+	 */
+	List<Release> findAllNotHidden() throws ServiceException;
+
+	/**
 	 * Set <code>isHidden</code> to <code>false</code> for all {@link Release}s
 	 * <b>and {@link Artist}s</b>.
 	 */
 	void showAll() throws ServiceException;
+
+	List<Release> findJustCreated() throws ServiceException;
 
 }

@@ -38,7 +38,7 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 	}
 
 	@Override
-	public Artist findIdDateCreatedByMusicBrainzId(long androidId)
+	public Artist findByAndroidId(long androidId)
 			throws DatabaseException {
 		try {
 			Cursor cursor = findCursorByAndroidId(androidId, new String[] {
@@ -94,7 +94,7 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 	}
 
 	@Override
-	public void showAll() throws DatabaseException {
+	public void setIsHiddenFalse() throws DatabaseException {
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(TableArtist.COLUMN_IS_HIDDEN, SqliteUtil.FALSE);
 		update(contentValues, null, null);

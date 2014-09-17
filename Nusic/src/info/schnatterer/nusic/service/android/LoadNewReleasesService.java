@@ -260,7 +260,7 @@ public class LoadNewReleasesService extends WakefulService {
 	private void notifyNewReleases(long beforeRefresh) throws ServiceException {
 		if (preferencesService.isEnabledNotifyNewReleases()) {
 			List<Release> newReleases = releaseService
-					.findJustCreated(beforeRefresh);
+					.findByDateCreatedGreaterThan(beforeRefresh);
 			if (newReleases.size() > 0) {
 				notifyNewReleases(getResources().getQuantityString(
 						R.plurals.LoadNewReleasesService_foundNewReleases,

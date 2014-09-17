@@ -18,23 +18,20 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.db.loader;
+package info.schnatterer.nusic.ui.loaders;
 
-import static info.schnatterer.nusic.util.DateUtil.todayMidnightUtc;
-import static info.schnatterer.nusic.util.DateUtil.tomorrowMidnightUtc;
-import info.schnatterer.nusic.db.dao.sqlite.ReleaseDaoSqlite;
 import info.schnatterer.nusic.db.model.Release;
-import info.schnatterer.nusic.service.PreferencesService;
-import info.schnatterer.nusic.service.impl.PreferencesServiceSharedPreferences;
+import info.schnatterer.nusic.service.ReleaseService;
+import info.schnatterer.nusic.service.impl.ReleaseServiceImpl;
 
 import java.util.List;
 
 import android.content.Context;
 
 public class ReleaseLoaderAvailable extends
-		AbstractAsyncSqliteLoader<List<Release>, Release, ReleaseDaoSqlite> {
+		AbstractAsyncSqliteLoader<List<Release>, Release> {
 
-	private PreferencesService preferencesService =  PreferencesServiceSharedPreferences.getInstance();
+	private ReleaseService releaseService;
 	/**
 	 * <code>true</code> if releases available today should be display.
 	 * Otherwise <code>false</code>.
@@ -49,25 +46,12 @@ public class ReleaseLoaderAvailable extends
 	 */
 	public ReleaseLoaderAvailable(Context context, boolean isAvailable) {
 		super(context);
+		releaseService = new ReleaseServiceImpl(context);
 		this.isAvailable = isAvailable;
 	}
 
 	@Override
-	protected ReleaseDaoSqlite createDao(Context context) {
-		return new ReleaseDaoSqlite(context);
-	}
-
-	@Override
 	public List<Release> doLoadInBackground() throws Exception {
-		if (isAvailable) {
-			// TODO find limit from preferences
-			
-//			return getDao().findByReleaseDateGreaterThanEqualAndReleaseDateLessThan(createStartDateFullUpdate(preferencesService.getDownloadReleasesTimePeriod()),
-//					tomorrowMidnightUtc())
-			return getDao().findByReleaseDateLessThan(tomorrowMidnightUtc());
-		} else {
-			return getDao().findByReleaseDateGreaterThanEqual(
-					tomorrowMidnightUtc());
-		}
+		return releaseService.findAvailableToday(isAvailable);
 	}
 }

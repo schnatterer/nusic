@@ -87,7 +87,7 @@ public class ReleaseRefreshServiceImpl implements ReleaseRefreshService {
 			return false;
 		}
 
-		Date startDate = createStartDateFullUpdate(preferencesService
+		Date startDate = createStartDate(preferencesService
 				.getDownloadReleasesTimePeriod());
 
 		// Use a date before the refresh to store afterwards in order to
@@ -97,7 +97,7 @@ public class ReleaseRefreshServiceImpl implements ReleaseRefreshService {
 		return true;
 	}
 
-	private Date createStartDateFullUpdate(int months) {
+	private Date createStartDate(int months) {
 		if (months <= 0) {
 			return null;
 		}

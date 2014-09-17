@@ -1,7 +1,9 @@
 TODOs - Features, enhancements, refactoring, ...
-- db.loader package belongs to ui.loaders. The logic and DB access belongs to ReleaseService! Define explicit loader IDs in Constants as enum (then use ordinal())
+- Rename services so their tasks are clearer? FetchReleasesService? Dependecy to QueryMusicMetadataService? ArtistQueryService -> LocalLibraryService?
 
-- Don't show releases that are older than the range in preferences for tabs available and all. Don't show hidden releases in "all" tabs.
+- Check if tabs are updated correctly after changes. Maybe loader IDs could support this.
+
+- Services can run concurrently! Make sure they don't because of throttling calls to MB.
 
 - Feature: Info dialog
 
@@ -9,6 +11,7 @@ TODOs - Features, enhancements, refactoring, ...
 
 
 ................... More TODOs
+- Construction of objects. Use DI? Or more singletons to save a bit of memory?
 - Download and display disambiguation, e.g >20th Anniversary Edition< https://musicbrainz.org/ws/2/release/?limit=100&offset=0&query=type%3Aalbum+AND+date%3A[2014-02-20+TO+%3F]+AND+artist%3A%22%3Cpantera%3E%22
 - Add SCM info to pom(s)
 LOGGING 

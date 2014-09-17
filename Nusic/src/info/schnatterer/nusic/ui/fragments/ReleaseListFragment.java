@@ -21,25 +21,24 @@
 package info.schnatterer.nusic.ui.fragments;
 
 import info.schnatterer.nusic.Constants;
+import info.schnatterer.nusic.Constants.Loaders;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.application.NusicApplication;
-import info.schnatterer.nusic.db.loader.AsyncResult;
-import info.schnatterer.nusic.db.loader.ReleaseLoaderAvailable;
-import info.schnatterer.nusic.db.loader.ReleaseLoaderJustCreated;
 import info.schnatterer.nusic.db.model.Artist;
 import info.schnatterer.nusic.db.model.Release;
 import info.schnatterer.nusic.service.ArtistService;
-import info.schnatterer.nusic.service.PreferencesService;
 import info.schnatterer.nusic.service.ReleaseRefreshService;
 import info.schnatterer.nusic.service.ReleaseService;
 import info.schnatterer.nusic.service.ServiceException;
 import info.schnatterer.nusic.service.impl.ArtistServiceImpl;
-import info.schnatterer.nusic.service.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.nusic.service.impl.ReleaseRefreshServiceImpl;
 import info.schnatterer.nusic.service.impl.ReleaseServiceImpl;
 import info.schnatterer.nusic.ui.adapters.ReleaseListAdapter;
+import info.schnatterer.nusic.ui.loaders.AsyncResult;
+import info.schnatterer.nusic.ui.loaders.ReleaseLoaderAll;
+import info.schnatterer.nusic.ui.loaders.ReleaseLoaderAvailable;
+import info.schnatterer.nusic.ui.loaders.ReleaseLoaderJustCreated;
 
-import java.util.Calendar;
 import java.util.List;
 
 import android.content.Intent;
@@ -70,10 +69,9 @@ import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
  * it.
  * 
  * Which releases are queried and which loader is used can be decided in the
- * intent that create the fragment using the following extras.
+ * intent that create the fragment using the following extra.
  * 
  * <ul>
- * <li>{@link #EXTRA_RELEASE_QUERY}, the {@link ReleaseQuery} to use</li>
  * <li>{@value #EXTRA_LOADER_ID} the ID of the underlying loader</li>
  * </ul>
  * 
@@ -82,35 +80,13 @@ import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
  */
 public class ReleaseListFragment extends SherlockFragment {
 	/**
-	 * Lists all types of queries whose result are displayed within this
-	 * fragment.
-	 * 
-	 * @author schnatterer
-	 *
-	 */
-	public enum ReleaseQuery {
-		ALL, JUST_ADDED, ANNOUNCED, AVAILABLE;
-	}
-
-	/**
-	 * Key to the creating intent's extras that contains the
-	 * {@link ReleaseQuery}<br/>
-	 * See {@link #releaseQuery}.
-	 */
-	public static final String EXTRA_RELEASE_QUERY = "nusic.intent.releaseList.releaseQuery";
-	/**
-	 * Key to the creating intent's extras that contains the
-	 * {@link ReleaseQuery}<br/>
+	 * Key to the creating intent's extras that contains the {@link Loaders}<br/>
 	 * See {@link #loaderId}.
 	 */
 	public static final String EXTRA_LOADER_ID = "nusic.intent.releaseList.loaderId";
 
-	/** The query that returns the data to be displayed in the fragment. */
-	private ReleaseQuery releaseQuery;
 	/** The loader that is connected to the data displayed in the fragment. */
 	private int loaderId;
-	private PreferencesService preferencesService = PreferencesServiceSharedPreferences
-			.getInstance();
 
 	private ListView releasesListView;
 	private ReleaseListAdapter releasesListViewAdapter = null;
@@ -126,8 +102,6 @@ public class ReleaseListFragment extends SherlockFragment {
 			Bundle savedInstanceState) {
 		try {
 
-			releaseQuery = ReleaseQuery.valueOf(getArguments().getString(
-					EXTRA_RELEASE_QUERY));
 			loaderId = getArguments().getInt(EXTRA_LOADER_ID);
 
 		} catch (Exception e) {
@@ -225,19 +199,6 @@ public class ReleaseListFragment extends SherlockFragment {
 		releasesListViewAdapter.show(result);
 	}
 
-	public ReleaseQuery getReleaseQuery() {
-		return releaseQuery;
-	}
-
-	/**
-	 * Sets the type of releases that are queried from database and displayed.
-	 * 
-	 * @param releaseQuery
-	 */
-	public void setReleaseQuery(ReleaseQuery releaseQuery) {
-		this.releaseQuery = releaseQuery;
-	}
-
 	/**
 	 * Marks content as changed, which leads to reloading on the next load.
 	 */
@@ -289,38 +250,36 @@ public class ReleaseListFragment extends SherlockFragment {
 	}
 
 	/**
-	 * Handles callbacks from {@link ReleaseLoaderJustCreated} that loads the
-	 * {@link Release}s from the local database.
+	 * Handles callbacks from the loader manager for {@link ReleaseListFragment}
+	 * .
 	 * 
 	 * @author schnatterer
 	 * 
 	 */
-	public class ReleaseLoaderCallbacks implements
+	private class ReleaseLoaderCallbacks implements
 			LoaderManager.LoaderCallbacks<AsyncResult<List<Release>>> {
+
+		private int loaderId;
 
 		@Override
 		public Loader<AsyncResult<List<Release>>> onCreateLoader(int id,
 				Bundle args) {
-			// if (id == RELEASE_DB_LOADER)
-			switch (releaseQuery) {
-			case ALL:
-				return new ReleaseLoaderJustCreated(getActivity(), null);
-			case JUST_ADDED:
-				Calendar cal = Calendar.getInstance();
-				cal.add(Calendar.DAY_OF_MONTH,
-						-preferencesService.getJustAddedTimePeriod());
-				return new ReleaseLoaderJustCreated(getActivity(),
-						cal.getTimeInMillis());
-			case ANNOUNCED:
+			loaderId = id;
+			switch (loaderId) {
+			case Loaders.RELEASE_LOADER_ALL:
+				return new ReleaseLoaderAll(getActivity());
+			case Loaders.RELEASE_LOADER_JUST_ADDED:
+				return new ReleaseLoaderJustCreated(getActivity());
+			case Loaders.RELEASE_LOADER_ANNOUNCED:
 				return new ReleaseLoaderAvailable(getActivity(), false);
-			case AVAILABLE:
+			case Loaders.RELEASE_LOADER_AVAILABLE:
 				return new ReleaseLoaderAvailable(getActivity(), true);
 			default:
 				Log.w(Constants.LOG,
-						"Unimplemented " + ReleaseQuery.class.getName()
-								+ " enumeration: \"" + releaseQuery.name()
-								+ "\"");
-				return new ReleaseLoaderJustCreated(getActivity(), null);
+						"Requested loader ID is not a defined release loader: "
+								+ loaderId
+								+ ". Returning loader that loads all releases");
+				return new ReleaseLoaderAll(getActivity());
 			}
 		}
 
@@ -339,7 +298,7 @@ public class ReleaseListFragment extends SherlockFragment {
 					|| (result.getData() != null && result.getData().isEmpty())) {
 				// Set the empty text
 				releasesTextViewNoneFound.setVisibility(View.VISIBLE);
-				if (releaseQuery == ReleaseQuery.JUST_ADDED) {
+				if (loaderId == Loaders.RELEASE_LOADER_JUST_ADDED) {
 					releasesTextViewNoneFound
 							.setText(R.string.MainActivity_noNewReleasesFound);
 				} else {
