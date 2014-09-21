@@ -24,6 +24,10 @@ import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.Constants.Loaders;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.application.NusicApplication;
+import info.schnatterer.nusic.db.DatabaseException;
+import info.schnatterer.nusic.db.dao.ArtworkDao;
+import info.schnatterer.nusic.db.dao.ArtworkDao.ArtworkType;
+import info.schnatterer.nusic.db.dao.fs.ArtworkDaoFileSystem;
 import info.schnatterer.nusic.db.model.Artist;
 import info.schnatterer.nusic.db.model.Release;
 import info.schnatterer.nusic.service.ArtistService;
@@ -57,11 +61,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 
 /**
@@ -96,6 +102,9 @@ public class ReleaseListFragment extends SherlockFragment {
 	private ReleaseRefreshService releaseRefreshService;
 	private ReleaseService releaseService;
 	private ArtistService artistService;
+	private static final int DEFAULT_ARTWORK = R.drawable.ic_launcher;
+
+	private static ArtworkDao artworkDao = new ArtworkDaoFileSystem();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -155,8 +164,26 @@ public class ReleaseListFragment extends SherlockFragment {
 		AdapterView.AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
 		Release release = (Release) releasesListView
 				.getItemAtPosition(info.position);
-		menu.setHeaderTitle(release.getArtistName() + " - "
+		// menu.setHeaderTitle(release.getArtistName() + " - "
+		// + release.getReleaseName());
+		LayoutInflater layoutInflater = getActivity().getLayoutInflater();
+		View view = (View) layoutInflater.inflate(
+				R.layout.release_list_fragment_menu_header, null);
+		TextView textView = (TextView) view
+				.findViewById(R.id.releaseListFragmentMenuHeaderText);
+		textView.setText(release.getArtistName() + " - "
 				+ release.getReleaseName());
+		ImageView imageView = (ImageView) view
+				.findViewById(R.id.releaseListFragmentMenuHeaderImage);
+		try {
+			ImageLoader.getInstance().displayImage(
+					artworkDao.findUriByRelease(release, ArtworkType.SMALL),
+					imageView);
+		} catch (DatabaseException e) {
+			Log.w(Constants.LOG, "Unable to load artwork for release "
+					+ release, e);
+		}
+		menu.setHeaderView(view);
 
 		inflater.inflate(R.menu.release_list_menu, menu);
 	}

@@ -150,11 +150,10 @@ public class ReleaseListAdapter extends BaseAdapter {
 
 		public ReleaseListHolder(View view) {
 			releaseNameView = new WeakReference<TextView>(
-					(TextView) (TextView) view
+					(TextView) view
 							.findViewById(R.id.releaseListRowReleaseName));
 			artistView = new WeakReference<TextView>(
-					(TextView) (TextView) view
-							.findViewById(R.id.releaseListRowArtistName));
+					(TextView) view.findViewById(R.id.releaseListRowArtistName));
 			releaseDateView = new WeakReference<TextView>(
 					(TextView) view
 							.findViewById(R.id.releaseListRowReleaseDate));
