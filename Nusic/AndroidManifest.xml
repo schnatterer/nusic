@@ -38,6 +38,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name=".ui.activities.NusicWebView" >
+        </activity>
 
         <receiver android:name=".service.android.LoadNewReleasesServiceConnectivityReceiver" >
             <intent-filter>

@@ -1,12 +1,12 @@
 TODOs - Features, enhancements, refactoring, ...
 - Rename services so their tasks are clearer? FetchReleasesService? Dependecy to QueryMusicMetadataService? ArtistQueryService -> LocalLibraryService?
 
-- Check if tabs are updated correctly after changes. Maybe loader IDs could support this.
+- Feature: Info dialog. In preferences: Group Information. Privacy Policy (Activity with WebView), Libraries (Acitivity) and Version (shows only version String)
+- Feature: Welcome screen. Note to new users that initial load might take a while. Other users get to see the change log?
 
-- Services can run concurrently! Make sure they don't because of throttling calls to MB.
-
-- Feature: Info dialog
-
+Adapt privacy policy to coverartarchive
+Create new screens
+Update GooglePlay texts
 === Release v1.0
 
 
@@ -30,7 +30,6 @@ LOGGING
 - Replace today's date with "today"? How to refresh at midnight?
 - Use WeakReferences in ReleaseRefreshService in order to allow longer time ranges
 - Display additional album info like "remastered special edition", "anniversary edition", etc. or use only the "oldest" release in a release group
-- Display MusicBrainz side in internal Webview -> Better usability
 - Feature: Tablet optimization: Layout + Screens for 7" + 10"
 
 .....Build

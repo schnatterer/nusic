@@ -33,6 +33,7 @@ import info.schnatterer.nusic.service.ServiceException;
 import info.schnatterer.nusic.service.impl.ArtistServiceImpl;
 import info.schnatterer.nusic.service.impl.ReleaseRefreshServiceImpl;
 import info.schnatterer.nusic.service.impl.ReleaseServiceImpl;
+import info.schnatterer.nusic.ui.activities.NusicWebView;
 import info.schnatterer.nusic.ui.adapters.ReleaseListAdapter;
 import info.schnatterer.nusic.ui.loaders.AsyncResult;
 import info.schnatterer.nusic.ui.loaders.ReleaseLoaderAll;
@@ -128,8 +129,9 @@ public class ReleaseListFragment extends SherlockFragment {
 					long id) {
 				Release release = (Release) releasesListView
 						.getItemAtPosition(position);
-				Intent launchBrowser = new Intent(Intent.ACTION_VIEW, Uri
-						.parse(release.getMusicBrainzUri()));
+				Intent launchBrowser = new Intent("", Uri.parse(release
+						.getMusicBrainzUri()), getActivity(),
+						NusicWebView.class);
 				startActivity(launchBrowser);
 			}
 
