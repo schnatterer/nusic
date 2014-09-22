@@ -21,6 +21,7 @@
 package info.schnatterer.nusic.ui.fragments;
 
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.application.NusicApplication;
 import info.schnatterer.nusic.ui.activities.NusicPreferencesActivity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -43,6 +44,12 @@ public class NusicPreferencesFragment extends PreferenceFragment {
 				.setOnPreferenceClickListener(
 						NusicPreferencesActivity
 								.createReleasedTodayTimePickerListener(getActivity()));
+
+		findPreference(getString(R.string.preferences_key_about)).setTitle(
+				getString(R.string.preferences_category_about,
+						getString(R.string.app_name)));
+		findPreference(getString(R.string.preferences_key_version)).setSummary(
+				NusicApplication.getVersionName());
 	}
 
 }

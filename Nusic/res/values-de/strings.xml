@@ -53,6 +53,11 @@
     <string name="preferences_title_released_today_hour_of_day">Zeit der Benachrichtigung</string>
     <string name="preferences_summary_released_hour_of_day">Ungefähre Zeit zu der die Benachrichtigung über Erscheinungstermine erscheint. Android kann die Ausführung verzögern um Strom zu sparen.</string>
     
+    <string name="preferences_category_about">Über %1$s</string>
+    <string name="preferences_title_version">Version</string>
+    <string name="preferences_title_privacy_policy">Datenschutzrichtlinie</string>
+    <string name="preferences_title_licences">Lizenzen</string>
+    
     <!-- (Error) messages -->
     <string name="GenericError">Etwas beinahe unmögliches ist geschehen: %1s!</string>
     <string name="NotOnline">Keine Verbindung zum Internet (Einstellungen prüfen, um die Verwendung des mobilen Internet zu ermöglichen)</string>

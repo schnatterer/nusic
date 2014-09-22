@@ -2,6 +2,8 @@ TODOs - Features, enhancements, refactoring, ...
 - Rename services so their tasks are clearer? FetchReleasesService? Dependecy to QueryMusicMetadataService? ArtistQueryService -> LocalLibraryService?
 
 - Feature: Info dialog. In preferences: Group Information. Privacy Policy (Activity with WebView), Libraries (Acitivity) and Version (shows only version String)
+  - TODOs in RenderHtmlAssetActivity
+  - TODO load NOTICE.txt into assets folder during maven build and link privacyPolicy file as git subtree
 - Feature: Welcome screen. Note to new users that initial load might take a while. Other users get to see the change log?
 
 Adapt privacy policy to coverartarchive

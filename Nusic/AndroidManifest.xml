@@ -42,6 +42,9 @@
         <activity
             android:name=".ui.activities.NusicWebView" >
         </activity>
+        <activity
+            android:name=".ui.activities.RenderHtmlAssetActivity" >
+        </activity>
 
         <receiver android:name=".service.android.LoadNewReleasesServiceConnectivityReceiver" >
             <intent-filter>

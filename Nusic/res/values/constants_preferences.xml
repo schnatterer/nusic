@@ -36,4 +36,7 @@
     <string name="preferences_key_released_today_minute">releaseTodayMinute</string>
     <string name="preferences_default_released_today_minute">00</string>
     
+    <string name="preferences_key_version">version</string>
+    <string name="preferences_key_about">about</string>
+    
 </resources>

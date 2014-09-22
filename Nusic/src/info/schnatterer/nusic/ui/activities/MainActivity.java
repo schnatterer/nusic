@@ -66,36 +66,6 @@ public class MainActivity extends SherlockFragmentActivity {
 	 */
 	public static final String EXTRA_ACTIVE_TAB = "nusic.intent.extra.main.activeTab";
 
-	/**
-	 * Holds the basic information for each tab.
-	 * 
-	 * @author schnatterer
-	 */
-	public static enum TabDefinition {
-		/** First tab: Just added */
-		JUST_ADDED(R.string.MainActivity_TabJustAdded,
-				Loaders.RELEASE_LOADER_JUST_ADDED),
-		/** Second tab: Available releases */
-		AVAILABLE(R.string.MainActivity_TabAvailable,
-				Loaders.RELEASE_LOADER_AVAILABLE),
-		/** Third tab: Announced releases */
-		ANNOUNCED(R.string.MainActivity_TabAnnounced,
-				Loaders.RELEASE_LOADER_ANNOUNCED),
-		/** Fourth tab: All releases */
-		ALL(R.string.MainActivity_TabAll, Loaders.RELEASE_LOADER_ALL);
-
-		private final int position;
-		private final int titleId;
-		private final int loaderId;
-
-		private TabDefinition(int titleId, int loaderId) {
-			this.position = ordinal();
-			this.titleId = titleId;
-			this.loaderId = loaderId;
-		}
-
-	}
-
 	/** Start and bind the {@link LoadNewReleasesService}. */
 	private static LoadNewRelasesServiceBinding loadNewRelasesServiceBinding = null;
 	/**
@@ -300,6 +270,35 @@ public class MainActivity extends SherlockFragmentActivity {
 	private void unregisterListeners() {
 		loadNewRelasesServiceBinding.updateActivity(null);
 		loadNewRelasesServiceBinding.unbindService();
+	}
+
+	/**
+	 * Holds the basic information for each tab.
+	 * 
+	 * @author schnatterer
+	 */
+	public static enum TabDefinition {
+		/** First tab: Just added */
+		JUST_ADDED(R.string.MainActivity_TabJustAdded,
+				Loaders.RELEASE_LOADER_JUST_ADDED),
+		/** Second tab: Available releases */
+		AVAILABLE(R.string.MainActivity_TabAvailable,
+				Loaders.RELEASE_LOADER_AVAILABLE),
+		/** Third tab: Announced releases */
+		ANNOUNCED(R.string.MainActivity_TabAnnounced,
+				Loaders.RELEASE_LOADER_ANNOUNCED),
+		/** Fourth tab: All releases */
+		ALL(R.string.MainActivity_TabAll, Loaders.RELEASE_LOADER_ALL);
+
+		private final int position;
+		private final int titleId;
+		private final int loaderId;
+
+		private TabDefinition(int titleId, int loaderId) {
+			this.position = ordinal();
+			this.titleId = titleId;
+			this.loaderId = loaderId;
+		}
 	}
 
 	/**

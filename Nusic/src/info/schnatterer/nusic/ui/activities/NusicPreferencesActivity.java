@@ -102,6 +102,12 @@ public class NusicPreferencesActivity extends SherlockPreferenceActivity {
 			Preference releasedTodayTimePicker = findPreferenceActivity(getString(R.string.preferences_key_released_today_hour_of_day));
 			releasedTodayTimePicker
 					.setOnPreferenceClickListener(createReleasedTodayTimePickerListener(this));
+			findPreferenceActivity(getString(R.string.preferences_key_about))
+					.setTitle(
+							getString(R.string.preferences_category_about,
+									getString(R.string.app_name)));
+			findPreferenceActivity(getString(R.string.preferences_key_version))
+					.setSummary(NusicApplication.getVersionName());
 		} else {
 			onCreatePreferenceFragment();
 		}

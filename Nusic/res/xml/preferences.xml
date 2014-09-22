@@ -42,5 +42,33 @@
             android:summary="@string/preferences_summary_download_only_on_wifi"
             android:title="@string/preferences_title_download_only_on_wifi" />
     </PreferenceCategory>
-
+    <PreferenceCategory android:title="@string/preferences_category_about" android:key="@string/preferences_key_about" >
+<!-- 		<Preference android:title="@string/preferences_title_privacy_policy">
+            <intent android:targetPackage="info.schnatterer.nusic"
+                android:targetClass="info.schnatterer.nusic.ui.activities.NusicWebView"
+                android:data="https://schnatterer.github.io/nusic/privacyPolicy.html"/> -->
+<!-- 		<Preference android:title="@string/preferences_title_privacy_policy">
+            <intent android:label="@string/preferences_title_privacy_policy" android:targetPackage="info.schnatterer.nusic" 
+                android:targetClass="info.schnatterer.nusic.ui.activities.RenderHtmlAssetActivity">
+                <extra android:name="nusic.intent.extra.rawResourceId" android:value="privacyPolicy.html" />
+            </intent>
+		</Preference> --> 
+		<Preference android:title="@string/preferences_title_privacy_policy">
+            <intent android:targetPackage="info.schnatterer.nusic" 
+                android:targetClass="info.schnatterer.nusic.ui.activities.RenderHtmlAssetActivity">
+                <extra android:name="nusic.intent.extra.title" android:value="@string/preferences_title_privacy_policy" />
+                <extra android:name="nusic.intent.extra.assetName" android:value="privacyPolicy.html" />
+            </intent>
+		</Preference> 
+		<Preference android:title="@string/preferences_title_licences">
+            <intent android:targetPackage="info.schnatterer.nusic" 
+                android:targetClass="info.schnatterer.nusic.ui.activities.RenderHtmlAssetActivity">
+                <extra android:name="nusic.intent.extra.title" android:value="@string/preferences_title_licences" />
+                <extra android:name="nusic.intent.extra.assetName" android:value="NOTICE.txt" />
+            </intent>
+		</Preference> 
+        <Preference
+            android:key="@string/preferences_key_version"
+            android:title="@string/preferences_title_version" />
+    </PreferenceCategory>
 </PreferenceScreen>
