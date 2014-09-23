@@ -65,6 +65,8 @@
     <string name="MainActivity_refreshAlreadyInProgress">Refresh already in progress.</string>
     <string name="MainActivity_pleaseWaitUntilRefreshIsFinished">Please wait until refreshing releases has finished</string>
     
+    <string name="TextAssetActivity_errorLoadingFile">Error load text file</string>
+    
     <string name="ReleasesService_errorPersistingData">Error saving data on the device</string>
     <string name="LoadNewReleasesBinding_errorFindingReleases">Refreshing releases failed: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">Unbelievable error while trying to refresh releases: </string>

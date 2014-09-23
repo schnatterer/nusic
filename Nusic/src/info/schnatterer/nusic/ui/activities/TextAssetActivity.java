@@ -2,6 +2,7 @@ package info.schnatterer.nusic.ui.activities;
 
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.application.NusicApplication;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,12 +17,38 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 
-public class RenderHtmlAssetActivity extends SherlockFragmentActivity {
+/**
+ * Activity that loads a text from an asset file and displays it in a text view.
+ * If the asset file ends in <code>.htm</code> or <code>.html</code> (case
+ * insensitive) it is rendered as HTML.
+ * 
+ * The assets that is displayed can be passed to the activity using the
+ * {@link #EXTRA_ASSET_NAME} {@link String}. In addition the title of the
+ * activity (also called label) can be set explicitly by passing the
+ * {@link #EXTRA_TITLE} {@link String}.
+ * 
+ * @author schnatterer
+ */
+public class TextAssetActivity extends SherlockFragmentActivity {
 
-	private static final String REGEX_ENDING_HTML = "^.*(\\.htm[l]?)$";
-	// TODO define in constants?
-	public static final String EXTRA_ASSET_NAME = "nusic.intent.extra.assetName";
-	public static final String EXTRA_TITLE = "nusic.intent.extra.title";
+	/**
+	 * Regex that matches file names case insensitively that have common file
+	 * extensions for HTML.
+	 */
+	private static final String REGEX_ENDING_HTML = "(?i)^.*(\\.htm[l]?)$";
+
+	/**
+	 * Key to the creating intent's extras that contains the path (as
+	 * {@link String}) to the asset that is loaded.
+	 */
+	public static final String EXTRA_ASSET_NAME = NusicApplication.getContext()
+			.getString(R.string.extra_asset_name);
+	/**
+	 * Key to the creating intent's extras that contains the title, also known
+	 * as label (as {@link String}) of the activity.
+	 */
+	public static final String EXTRA_TITLE = NusicApplication.getContext()
+			.getString(R.string.extra_activity_title);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +76,7 @@ public class RenderHtmlAssetActivity extends SherlockFragmentActivity {
 					textView.setText(IOUtils.toString(is));
 				}
 			} catch (IOException e) {
-				// TODO i18n
-				textView.setText("Unable to load text file");
+				textView.setText(getString(R.string.TextAssetActivity_errorLoadingFile));
 				Log.w(Constants.LOG, "Unable to load asset from path \""
 						+ assetPath + "\"", e);
 			} finally {

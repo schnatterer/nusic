@@ -1,6 +1,7 @@
 package info.schnatterer.nusic.ui.activities;
 
 import info.schnatterer.nusic.R;
+import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -8,6 +9,14 @@ import android.webkit.WebViewClient;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 
+/**
+ * Activity that loads a website from an URL and displays it in a text view.
+ * 
+ * The URI to the website that is displayed can be passed to the activity using
+ * {@link Intent#setData(android.net.Uri)}.
+ * 
+ * @author schnatterer
+ */
 public class NusicWebView extends SherlockFragmentActivity {
 
 	@Override

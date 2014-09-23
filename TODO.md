@@ -4,7 +4,9 @@ TODOs - Features, enhancements, refactoring, ...
 - Feature: Info dialog. In preferences: Group Information. Privacy Policy (Activity with WebView), Libraries (Acitivity) and Version (shows only version String)
   - TODOs in RenderHtmlAssetActivity
   - TODO load NOTICE.txt into assets folder during maven build and link privacyPolicy file as git subtree
+  
 - Feature: Welcome screen. Note to new users that initial load might take a while. Other users get to see the change log?
+- Feature: Use the same algorithm for displaying notifations for loadNewReleasesService as in released today service: When only one album is found display infos and cover, when several are found show only nusic icon and the amount of albums
 
 Adapt privacy policy to coverartarchive
 Create new screens
@@ -13,7 +15,6 @@ Update GooglePlay texts
 
 
 ................... More TODOs
-- Construction of objects. Use DI? Or more singletons to save a bit of memory?
 - Download and display disambiguation, e.g >20th Anniversary Edition< https://musicbrainz.org/ws/2/release/?limit=100&offset=0&query=type%3Aalbum+AND+date%3A[2014-02-20+TO+%3F]+AND+artist%3A%22%3Cpantera%3E%22
 - Add SCM info to pom(s)
 LOGGING 
@@ -21,10 +22,10 @@ LOGGING
 - https://github.com/tony19/logback-android#configuration-in-code
 - Switch app to use slf4j?
 - Provide means to send log via email?
+- Construction of objects. Use DI? Or more singletons to save a bit of memory?
 
 - Covers: Download using HTTPS. Problem with certificate chain at coverartarchive.org ONLY on android. In addition, links to images are HTTP. Force using HTTPS?
 
-- Use the same algorithm for displaying notifations for loadNewReleasesService as in released today service: When only one album is found display infos and cover, when several are found show only nusic icon and the amount of albums
 - Show artwork in context menu (on long tab)
 
 - Refactoring: Mavenize test project

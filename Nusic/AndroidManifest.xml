@@ -43,7 +43,7 @@
             android:name=".ui.activities.NusicWebView" >
         </activity>
         <activity
-            android:name=".ui.activities.RenderHtmlAssetActivity" >
+            android:name=".ui.activities.TextAssetActivity" >
         </activity>
 
         <receiver android:name=".service.android.LoadNewReleasesServiceConnectivityReceiver" >

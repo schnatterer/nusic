@@ -49,22 +49,22 @@
                 android:data="https://schnatterer.github.io/nusic/privacyPolicy.html"/> -->
 <!-- 		<Preference android:title="@string/preferences_title_privacy_policy">
             <intent android:label="@string/preferences_title_privacy_policy" android:targetPackage="info.schnatterer.nusic" 
-                android:targetClass="info.schnatterer.nusic.ui.activities.RenderHtmlAssetActivity">
+                android:targetClass="info.schnatterer.nusic.ui.activities.TextAssetActivity">
                 <extra android:name="nusic.intent.extra.rawResourceId" android:value="privacyPolicy.html" />
             </intent>
 		</Preference> --> 
 		<Preference android:title="@string/preferences_title_privacy_policy">
             <intent android:targetPackage="info.schnatterer.nusic" 
-                android:targetClass="info.schnatterer.nusic.ui.activities.RenderHtmlAssetActivity">
-                <extra android:name="nusic.intent.extra.title" android:value="@string/preferences_title_privacy_policy" />
-                <extra android:name="nusic.intent.extra.assetName" android:value="privacyPolicy.html" />
+                android:targetClass="info.schnatterer.nusic.ui.activities.TextAssetActivity">
+                <extra android:name="@string/extra_activity_title" android:value="@string/preferences_title_privacy_policy" />
+                <extra android:name="@string/extra_asset_name" android:value="privacyPolicy.html" />
             </intent>
 		</Preference> 
 		<Preference android:title="@string/preferences_title_licences">
             <intent android:targetPackage="info.schnatterer.nusic" 
-                android:targetClass="info.schnatterer.nusic.ui.activities.RenderHtmlAssetActivity">
-                <extra android:name="nusic.intent.extra.title" android:value="@string/preferences_title_licences" />
-                <extra android:name="nusic.intent.extra.assetName" android:value="NOTICE.txt" />
+                android:targetClass="info.schnatterer.nusic.ui.activities.TextAssetActivity">
+                <extra android:name="@string/extra_activity_title" android:value="@string/preferences_title_licences" />
+                <extra android:name="@string/extra_asset_name" android:value="NOTICE.txt" />
             </intent>
 		</Preference> 
         <Preference
