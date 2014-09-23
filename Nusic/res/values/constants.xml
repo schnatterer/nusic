@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Preference details. Don't translate! -->
+<!-- Application-wide technical constants (e.g. for preferences). Don't translate! -->
 <resources>
+     <string name="extra_asset_name">nusic.intent.extra.assetName</string>
+     <string name="extra_activity_title">nusic.intent.extra.activity.title</string>
     
+    <!-- Preferences -->
     <string name="preferences_key_download_releases_time_period">downloadReleasesNumberOfMonths</string>
     <string name="preferences_default_download_releases_time_period">6</string>
     <string-array name="preferences_entry_values_download_releases_time_period">
