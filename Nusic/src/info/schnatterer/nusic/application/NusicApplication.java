@@ -43,6 +43,11 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class NusicApplication extends AbstractApplication {
+	private static final String DEPRECATED_PREFERENCES_KEY_REFRESH_SUCCESFUL = "last_release_refresh_succesful";
+	private static final String DEPRECATED_PREFERENCES_KEY_FULL_UPDATE = "fullUpdate";
+	private static final String DEPRECATED_PREFERENCES_KEY_FUTURE_RELEASES = "includeFutureReleases";
+	private static final String DEPRECATED_PREFERENCES_KEY_LAST_APP_VERSION = "last_app_version";
+
 	public static interface NusicVersion {
 		/**
 		 * v.0.6 last Version before 1.0
@@ -70,17 +75,48 @@ public class NusicApplication extends AbstractApplication {
 	}
 
 	@Override
-	protected void onUpgrade(int oldVersion, int newVersion) {
-		if (oldVersion <= NusicVersion.V_0_6) {
+	protected void onFirstCreate() {
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(getContext());
+
+		/*
+		 * This is actually an upgrade from version < V_0_6. Before using the
+		 * onUpgradeMechanism() from AbstractApplication the last version was
+		 * stored in default shared preferences. Do all the clean up for this
+		 * version.
+		 */
+		if (sharedPreferences.getInt(
+				DEPRECATED_PREFERENCES_KEY_FUTURE_RELEASES, -1) > -1) {
 			// Clean up preferences
-			SharedPreferences sharedPreferences = PreferenceManager
-					.getDefaultSharedPreferences(getContext());
-			sharedPreferences.edit().remove("includeFutureReleases").commit();
-			sharedPreferences.edit().remove("last_app_version").commit();
-			sharedPreferences.edit().remove("fullUpdate").commit();
-			sharedPreferences.edit().remove("last_release_refresh_succesful")
+			sharedPreferences.edit()
+					.remove(DEPRECATED_PREFERENCES_KEY_FUTURE_RELEASES)
 					.commit();
+			sharedPreferences.edit()
+					.remove(DEPRECATED_PREFERENCES_KEY_LAST_APP_VERSION)
+					.commit();
+			sharedPreferences.edit()
+					.remove(DEPRECATED_PREFERENCES_KEY_FULL_UPDATE).commit();
+			sharedPreferences.edit()
+					.remove(DEPRECATED_PREFERENCES_KEY_REFRESH_SUCCESFUL)
+					.commit();
+		} else {
+			// TODO This is actually the first start ever. Show the welcome
+			// first
+			// time screen.
 		}
+		/*
+		 * Make sure the Release Today service is scheduled (if not switched off
+		 * in preferences). Schedule it only after updates and new installations
+		 * to avoid overhead.
+		 */
+		ReleasedTodayService.schedule(this);
+
+	}
+
+	@Override
+	protected void onUpgrade(int oldVersion, int newVersion) {
+		// if (oldVersion <= NusicVersion.V_0_6) {
+		// TODO show the changelog/release notes
 		/*
 		 * Make sure the Release Today service is scheduled (if not switched off
 		 * in preferences). Schedule it only after updates and new installations
