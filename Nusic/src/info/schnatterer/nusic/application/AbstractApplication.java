@@ -58,7 +58,7 @@ public abstract class AbstractApplication extends Application {
 		sharedPreferences = getApplicationContext().getSharedPreferences(
 				"AbstractApplicationPreferences", Context.MODE_PRIVATE);
 		versionName = createVersionName();
-		handleAppVersion();
+		wasUpgraded = handleAppVersion();
 	}
 
 	/**
@@ -84,14 +84,17 @@ public abstract class AbstractApplication extends Application {
 	 * Finds out if app was started for the first time (after an upgrade). If so
 	 * calls {@link #onUpgrade(int, int)}.
 	 * 
+	 * @return
+	 * 
 	 */
-	void handleAppVersion() {
+	boolean handleAppVersion() {
 		PackageInfo pInfo;
 		try {
 			pInfo = getApplicationContext().getPackageManager().getPackageInfo(
 					getApplicationContext().getPackageName(), 0);
 			int lastVersionCode = sharedPreferences.getInt(
 					KEY_LAST_APP_VERSION, DEFAULT_LAST_APP_VERSION);
+
 			// String versionName = pInfo.versionName;
 			int currentVersionCode = pInfo.versionCode;
 
@@ -100,15 +103,36 @@ public abstract class AbstractApplication extends Application {
 				sharedPreferences.edit()
 						.putInt(KEY_LAST_APP_VERSION, currentVersionCode)
 						.commit();
-				wasUpgraded = true;
-				onUpgrade(lastVersionCode, currentVersionCode);
+				if (lastVersionCode == DEFAULT_LAST_APP_VERSION) {
+					onFirstCreate();
+				} else {
+					onUpgrade(lastVersionCode, currentVersionCode);
+				}
+				return true;
 			}
 		} catch (NameNotFoundException e) {
 			Log.w(Constants.LOG,
 					"Unable to determine current app version from pacakge manager. Defenisvely assuming normal app start.");
 		}
+		return false;
 	}
 
+	/**
+	 * Called when app is started for the first time after a new installation.
+	 * This is where an initial welcome screen could be shown.
+	 */
+	protected abstract void onFirstCreate();
+
+	/**
+	 * Called when app was first started after an upgrade. The implementation
+	 * should use this method to clean up preferences no longer needed show
+	 * change log or do anything else it needs to upgrade to the new version.
+	 * 
+	 * @param oldVersion
+	 *            the version the app was last started with
+	 * @param newVersion
+	 *            the current version of the app
+	 */
 	protected abstract void onUpgrade(int oldVersion, int newVersion);
 
 	/**

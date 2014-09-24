@@ -45,18 +45,37 @@ public class AbstractApplicationTest extends TestCase {
 
 	private AbstractApplicationUnderTest abstractApplication = new AbstractApplicationUnderTest();
 
-	public void testHandleAppVersion() {
-		final int expectedLastVersionCode = -1;
+	public void testHandleAppVersionFirstStart() {
 		final int expectedCurrentVersionCode = 1;
+		abstractApplication
+				.setMockedLastVersionCode(AbstractApplication.DEFAULT_LAST_APP_VERSION);
+		abstractApplication
+				.setMockedCurrentVersionCode(expectedCurrentVersionCode);
+
+		assertTrue("handleAppVersion() didn't return true",
+				abstractApplication.handleAppVersion());
+		assertTrue("onFirstCreate() was not called",
+				abstractApplication.isOnFirstCreate());
+
+		verify(abstractApplication.sharedPreferencesEditor).putInt(
+				AbstractApplicationUnderTest.KEY_LAST_APP_VERSION,
+				expectedCurrentVersionCode);
+		verify(abstractApplication.sharedPreferencesEditor).commit();
+	}
+
+	public void testHandleAppVersion() {
+		final int expectedLastVersionCode = 0;
+		final int expectedCurrentVersionCode = 2;
 
 		abstractApplication.setMockedLastVersionCode(expectedLastVersionCode);
 		abstractApplication
 				.setMockedCurrentVersionCode(expectedCurrentVersionCode);
 
-		assertFalse("wasUpgraded() didn't return false",
-				AbstractApplicationUnderTest.wasUpgraded());
+		assertTrue("handleAppVersion() didn't return true",
+				abstractApplication.handleAppVersion());
 
-		abstractApplication.handleAppVersion();
+		assertFalse("onFirstCreate() was called unexpectedly",
+				abstractApplication.isOnFirstCreate());
 
 		assertEquals("Unexpected last version code returned",
 				expectedLastVersionCode,
@@ -64,9 +83,6 @@ public class AbstractApplicationTest extends TestCase {
 		assertEquals("Unexpected current version code returned",
 				expectedCurrentVersionCode,
 				abstractApplication.getActualNewVersion());
-
-		assertTrue("wasUpgraded() didn't return true",
-				AbstractApplicationUnderTest.wasUpgraded());
 
 		verify(abstractApplication.sharedPreferencesEditor).putInt(
 				AbstractApplicationUnderTest.KEY_LAST_APP_VERSION,
@@ -93,6 +109,8 @@ public class AbstractApplicationTest extends TestCase {
 
 		private int actualNewVersion;
 
+		private boolean isOnFirstCreate = false;
+
 		public AbstractApplicationUnderTest() {
 			TestUtil.setPrivateField(this, "sharedPreferences",
 					sharedPreferences, this.getClass().getSuperclass());
@@ -109,6 +127,12 @@ public class AbstractApplicationTest extends TestCase {
 		public void setMockedLastVersionCode(int lastVersionCode) {
 			when(sharedPreferences.getInt(eq(KEY_LAST_APP_VERSION), anyInt()))
 					.thenReturn(lastVersionCode);
+		}
+
+		@Override
+		protected void onFirstCreate() {
+			isOnFirstCreate = true;
+
 		}
 
 		@Override
@@ -145,6 +169,10 @@ public class AbstractApplicationTest extends TestCase {
 					return null;
 				}
 			};
+		}
+
+		protected boolean isOnFirstCreate() {
+			return isOnFirstCreate;
 		}
 	}
 }
