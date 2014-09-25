@@ -107,7 +107,7 @@ public class NusicPreferencesActivity extends SherlockPreferenceActivity {
 							getString(R.string.preferences_category_about,
 									getString(R.string.app_name)));
 			findPreferenceActivity(getString(R.string.preferences_key_version))
-					.setSummary(NusicApplication.getVersionName());
+					.setSummary(NusicApplication.getCurrentVersionName());
 		} else {
 			onCreatePreferenceFragment();
 		}

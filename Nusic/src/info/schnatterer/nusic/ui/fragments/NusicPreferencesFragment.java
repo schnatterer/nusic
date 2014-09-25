@@ -49,7 +49,7 @@ public class NusicPreferencesFragment extends PreferenceFragment {
 				getString(R.string.preferences_category_about,
 						getString(R.string.app_name)));
 		findPreference(getString(R.string.preferences_key_version)).setSummary(
-				NusicApplication.getVersionName());
+				NusicApplication.getCurrentVersionName());
 	}
 
 }

@@ -65,13 +65,20 @@ public class ReleaseRefreshServiceImpl implements ReleaseRefreshService {
 		}
 		queryMusicMetadataService = new QueryMusicMetadataServiceMusicBrainz(
 				context.getString(R.string.app_name),
-				NusicApplication.getVersionName(), Constants.APPLICATION_URL);
+				NusicApplication.getCurrentVersionName(),
+				Constants.APPLICATION_URL);
 	}
 
 	@Override
 	public boolean isUpdateNeccesarry() {
-		if (NusicApplication.wasUpgraded())
+		switch (NusicApplication.getAppStart()) {
+		case FIRST:
+			// Fall through is intended
+		case UPGRADE:
 			return true;
+		default:
+			break;
+		}
 
 		/*
 		 * TODO check if there are new artists on the device and refresh if

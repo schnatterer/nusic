@@ -24,8 +24,10 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import info.schnatterer.nusic.application.AbstractApplication.AppStart;
 import info.schnatterer.testUtil.TestUtil;
 import junit.framework.TestCase;
 import android.content.Context;
@@ -52,10 +54,17 @@ public class AbstractApplicationTest extends TestCase {
 		abstractApplication
 				.setMockedCurrentVersionCode(expectedCurrentVersionCode);
 
-		assertTrue("handleAppVersion() didn't return true",
-				abstractApplication.handleAppVersion());
+		assertEquals("handleAppVersion() returned unexpected result ",
+				AppStart.FIRST, abstractApplication.handleAppVersion());
+
 		assertTrue("onFirstCreate() was not called",
 				abstractApplication.isOnFirstCreate());
+		assertEquals("onUpgrade() was called unexpectedly",
+				AbstractApplication.DEFAULT_LAST_APP_VERSION,
+				abstractApplication.getAcutalOldVersion());
+		assertEquals("onUpgrade() was called unexpectedly",
+				AbstractApplication.DEFAULT_LAST_APP_VERSION,
+				abstractApplication.getActualNewVersion());
 
 		verify(abstractApplication.sharedPreferencesEditor).putInt(
 				AbstractApplicationUnderTest.KEY_LAST_APP_VERSION,
@@ -63,7 +72,7 @@ public class AbstractApplicationTest extends TestCase {
 		verify(abstractApplication.sharedPreferencesEditor).commit();
 	}
 
-	public void testHandleAppVersion() {
+	public void testHandleAppVersionUpgrade() {
 		final int expectedLastVersionCode = 0;
 		final int expectedCurrentVersionCode = 2;
 
@@ -71,8 +80,8 @@ public class AbstractApplicationTest extends TestCase {
 		abstractApplication
 				.setMockedCurrentVersionCode(expectedCurrentVersionCode);
 
-		assertTrue("handleAppVersion() didn't return true",
-				abstractApplication.handleAppVersion());
+		assertEquals("handleAppVersion() returned unexpected result ",
+				AppStart.UPGRADE, abstractApplication.handleAppVersion());
 
 		assertFalse("onFirstCreate() was called unexpectedly",
 				abstractApplication.isOnFirstCreate());
@@ -90,6 +99,31 @@ public class AbstractApplicationTest extends TestCase {
 		verify(abstractApplication.sharedPreferencesEditor).commit();
 	}
 
+	public void testHandleAppVersionNormal() {
+		final int expectedLastVersionCode = 2;
+		final int expectedCurrentVersionCode = 2;
+
+		abstractApplication.setMockedLastVersionCode(expectedLastVersionCode);
+		abstractApplication
+				.setMockedCurrentVersionCode(expectedCurrentVersionCode);
+
+		assertEquals("handleAppVersion() returned unexpected result ",
+				AppStart.NORMAL, abstractApplication.handleAppVersion());
+
+		assertFalse("onFirstCreate() was called unexpectedly",
+				abstractApplication.isOnFirstCreate());
+		assertEquals("onUpgrade() was called unexpectedly",
+				AbstractApplication.DEFAULT_LAST_APP_VERSION,
+				abstractApplication.getAcutalOldVersion());
+		assertEquals("onUpgrade() was called unexpectedly",
+				AbstractApplication.DEFAULT_LAST_APP_VERSION,
+				abstractApplication.getActualNewVersion());
+
+		verify(abstractApplication.sharedPreferencesEditor, never()).putInt(
+				anyString(), anyInt());
+		verify(abstractApplication.sharedPreferencesEditor, never()).commit();
+	}
+
 	/**
 	 * Implementation of {@link #AbstractApplicationTest()} that facilitates
 	 * testing.
@@ -105,9 +139,9 @@ public class AbstractApplicationTest extends TestCase {
 
 		private Editor sharedPreferencesEditor = mock(SharedPreferences.Editor.class);
 
-		private int acutalOldVersion;
+		private int acutalOldVersion = DEFAULT_LAST_APP_VERSION;
 
-		private int actualNewVersion;
+		private int actualNewVersion = DEFAULT_LAST_APP_VERSION;
 
 		private boolean isOnFirstCreate = false;
 

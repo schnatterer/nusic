@@ -43,13 +43,15 @@ import android.util.Log;
  */
 public abstract class AbstractApplication extends Application {
 	static final String KEY_LAST_APP_VERSION = "last_app_version";
+	/** Last app version on first start ever of the app. */
 	static final int DEFAULT_LAST_APP_VERSION = -1;
 
 	private SharedPreferences sharedPreferences;
 
-	private static boolean wasUpgraded = false;
-
-	private static String versionName;
+	private static int lastVersionCode;
+	private static int currentVersionCode;
+	private static String currentVersionName;
+	private static AppStart appStart = null;
 
 	@Override
 	public void onCreate() {
@@ -57,8 +59,8 @@ public abstract class AbstractApplication extends Application {
 
 		sharedPreferences = getApplicationContext().getSharedPreferences(
 				"AbstractApplicationPreferences", Context.MODE_PRIVATE);
-		versionName = createVersionName();
-		wasUpgraded = handleAppVersion();
+		currentVersionName = createVersionName();
+		appStart = handleAppVersion();
 	}
 
 	/**
@@ -87,16 +89,16 @@ public abstract class AbstractApplication extends Application {
 	 * @return
 	 * 
 	 */
-	boolean handleAppVersion() {
+	AppStart handleAppVersion() {
 		PackageInfo pInfo;
 		try {
 			pInfo = getApplicationContext().getPackageManager().getPackageInfo(
 					getApplicationContext().getPackageName(), 0);
-			int lastVersionCode = sharedPreferences.getInt(
-					KEY_LAST_APP_VERSION, DEFAULT_LAST_APP_VERSION);
+			lastVersionCode = sharedPreferences.getInt(KEY_LAST_APP_VERSION,
+					DEFAULT_LAST_APP_VERSION);
 
 			// String versionName = pInfo.versionName;
-			int currentVersionCode = pInfo.versionCode;
+			currentVersionCode = pInfo.versionCode;
 
 			// Update version in preferences
 			if (currentVersionCode != lastVersionCode) {
@@ -105,21 +107,24 @@ public abstract class AbstractApplication extends Application {
 						.commit();
 				if (lastVersionCode == DEFAULT_LAST_APP_VERSION) {
 					onFirstCreate();
+					return AppStart.FIRST;
 				} else {
 					onUpgrade(lastVersionCode, currentVersionCode);
+					return AppStart.UPGRADE;
 				}
-				return true;
 			}
 		} catch (NameNotFoundException e) {
 			Log.w(Constants.LOG,
 					"Unable to determine current app version from pacakge manager. Defenisvely assuming normal app start.");
 		}
-		return false;
+		return AppStart.NORMAL;
 	}
 
 	/**
 	 * Called when app is started for the first time after a new installation.
 	 * This is where an initial welcome screen could be shown.
+	 * 
+	 * @return
 	 */
 	protected abstract void onFirstCreate();
 
@@ -138,15 +143,52 @@ public abstract class AbstractApplication extends Application {
 	/**
 	 * @return the human readable version name.
 	 */
-	public static String getVersionName() {
-		return versionName;
+	public static String getCurrentVersionName() {
+		return currentVersionName;
 	}
 
 	/**
-	 * @return <code>true</code> if the runs the first time after an upgrade.
-	 *         Otherwise <code>false</code>.
+	 * Finds out if app was started for the first time (ever or in the current
+	 * version).
+	 *
+	 * @return the type of app start
 	 */
-	public static boolean wasUpgraded() {
-		return wasUpgraded;
+	public static AppStart getAppStart() {
+		return appStart;
+	}
+
+	/**
+	 * Distinguishes different kinds of app starts: <li>
+	 * <ul>
+	 * First start ever ({@link #FIRST})
+	 * </ul>
+	 * <ul>
+	 * First start in this version ({@link #UPGRADE})
+	 * </ul>
+	 * <ul>
+	 * Normal app start ({@link #NORMAL})
+	 * </ul>
+	 *
+	 * @author schnatterer
+	 *
+	 */
+	public enum AppStart {
+		FIRST, UPGRADE, NORMAL;
+	}
+
+	public static int getLastVersionCode() {
+		return lastVersionCode;
+	}
+
+	public static int getCurrentVersionCode() {
+		return currentVersionCode;
+	}
+
+	protected static void setAppStart(AppStart appStart) {
+		AbstractApplication.appStart = appStart;
+	}
+
+	protected static void setLastVersionCode(int lastVersionCode) {
+		AbstractApplication.lastVersionCode = lastVersionCode;
 	}
 }

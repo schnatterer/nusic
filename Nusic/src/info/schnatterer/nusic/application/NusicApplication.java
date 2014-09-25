@@ -80,13 +80,15 @@ public class NusicApplication extends AbstractApplication {
 				.getDefaultSharedPreferences(getContext());
 
 		/*
-		 * This is actually an upgrade from version < V_0_6. Before using the
-		 * onUpgradeMechanism() from AbstractApplication the last version was
-		 * stored in default shared preferences. Do all the clean up for this
-		 * version.
+		 * Is this actually an first start ever or is it an upgrade from version
+		 * < V_0_6? Before using the onUpgrade() mechanism from
+		 * AbstractApplication the last version was stored in default shared
+		 * preferences. Do all the clean up for this version here.
 		 */
-		if (sharedPreferences.getInt(
-				DEPRECATED_PREFERENCES_KEY_FUTURE_RELEASES, -1) > -1) {
+		int lastAppVersion = sharedPreferences.getInt(
+				DEPRECATED_PREFERENCES_KEY_FUTURE_RELEASES,
+				DEFAULT_LAST_APP_VERSION);
+		if (lastAppVersion > DEFAULT_LAST_APP_VERSION) {
 			// Clean up preferences
 			sharedPreferences.edit()
 					.remove(DEPRECATED_PREFERENCES_KEY_FUTURE_RELEASES)
@@ -99,6 +101,8 @@ public class NusicApplication extends AbstractApplication {
 			sharedPreferences.edit()
 					.remove(DEPRECATED_PREFERENCES_KEY_REFRESH_SUCCESFUL)
 					.commit();
+			setLastVersionCode(lastAppVersion);
+			setAppStart(AppStart.UPGRADE);
 		} else {
 			// TODO This is actually the first start ever. Show the welcome
 			// first
@@ -110,7 +114,6 @@ public class NusicApplication extends AbstractApplication {
 		 * to avoid overhead.
 		 */
 		ReleasedTodayService.schedule(this);
-
 	}
 
 	@Override
