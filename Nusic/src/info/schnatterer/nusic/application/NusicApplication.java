@@ -55,12 +55,8 @@ public class NusicApplication extends AbstractApplication {
 		int V_0_6 = 10;
 	}
 
-	private static Context context;
-
 	@Override
 	public void onCreate() {
-		context = getApplicationContext();
-
 		/*
 		 * Create global configuration and initialize ImageLoader with this
 		 * configuration
@@ -263,17 +259,17 @@ public class NusicApplication extends AbstractApplication {
 	 * @return
 	 */
 	public static String createGenericErrorMessage(Throwable t) {
-		return String.format(context.getString(R.string.GenericError), t
+		return String.format(getContext().getString(R.string.GenericError), t
 				.getClass().getSimpleName());
 	}
 
 	public static void toast(String message) {
-		Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+		Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
 	}
 
 	public static void toast(int stringId) {
-		Toast.makeText(context, context.getString(stringId), Toast.LENGTH_LONG)
-				.show();
+		Toast.makeText(getContext(), getContext().getString(stringId),
+				Toast.LENGTH_LONG).show();
 	}
 
 	public static void toast(String message, Object... args) {
@@ -281,15 +277,6 @@ public class NusicApplication extends AbstractApplication {
 	}
 
 	public static void toast(int stringId, Object... args) {
-		toast(String.format(context.getString(stringId), args));
-	}
-
-	/**
-	 * Returns a "static" application context.
-	 * 
-	 * @return
-	 */
-	public static Context getContext() {
-		return context;
+		toast(String.format(getContext().getString(stringId), args));
 	}
 }

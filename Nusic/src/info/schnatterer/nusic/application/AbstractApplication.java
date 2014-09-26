@@ -46,6 +46,8 @@ public abstract class AbstractApplication extends Application {
 	/** Last app version on first start ever of the app. */
 	static final int DEFAULT_LAST_APP_VERSION = -1;
 
+	private static Context context;
+
 	private SharedPreferences sharedPreferences;
 
 	private static int lastVersionCode;
@@ -56,6 +58,7 @@ public abstract class AbstractApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		context = getApplicationContext();
 
 		sharedPreferences = getApplicationContext().getSharedPreferences(
 				"AbstractApplicationPreferences", Context.MODE_PRIVATE);
@@ -190,5 +193,15 @@ public abstract class AbstractApplication extends Application {
 
 	protected static void setLastVersionCode(int lastVersionCode) {
 		AbstractApplication.lastVersionCode = lastVersionCode;
+	}
+
+	/**
+	 * Returns a "static" application context. Don't try to create dialogs on
+	 * this, it's not gonna work!
+	 * 
+	 * @return
+	 */
+	public static Context getContext() {
+		return context;
 	}
 }
