@@ -1,11 +1,15 @@
 TODOs - Features, enhancements, refactoring, ...
 - Rename services so their tasks are clearer? FetchReleasesService? Dependecy to QueryMusicMetadataService? ArtistQueryService -> LocalLibraryService?
   
-- Feature: Welcome screen. Note to new users that initial load might take a while. Other users get to see the change log?
+- Feature: Welcome screen. Note to new users that initial load might take a while. Other users get to see the change log? Also add change log to preferences.
+- Add dummy files to /assets for the files added by maven.
+
 - Feature: Use the same algorithm for displaying notifations for loadNewReleasesService as in released today service: When only one album is found display infos and cover, when several are found show only nusic icon and the amount of albums
 
-Adapt privacy policy to coverartarchive
-Create new screens
+- util -> common.util?!
+
+Adapt privacy policy to coverartarchive. + Header: "nusic Privacy Policy" + Footer: "Effective Date: x Oktober 2014"
+Create new screenshots
 Update GooglePlay texts
 === Release v1.0
 

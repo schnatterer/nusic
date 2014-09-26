@@ -20,6 +20,7 @@
 		<sdk.version>19</sdk.version>
 		<assets.dir.input>${project.basedir}/assets</assets.dir.input>
 		<assets.dir.output>${project.build.directory}/filtered-assets</assets.dir.output>
+		<raw.mardkown.dir>${project.build.directory}/md-assets</raw.mardkown.dir>
 	</properties>
 
 	<!-- Use Profiles to distinguish between the "implicit" builds of the eclipse 
@@ -159,7 +160,7 @@
 				</executions>
 			</plugin>
 
-			<!-- Include NOTICE.txt in assets -->
+			<!-- Download privacy policy file to assets -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>wagon-maven-plugin</artifactId>
@@ -174,18 +175,19 @@
 						<configuration>
 							<url>https://schnatterer.github.io/nusic/</url>
 							<fromFile>privacyPolicy.html</fromFile>
-							<!-- YES download it in input directory! This way we notice when something changed! -->
+							<!-- YES download it in input directory! This way we notice when something 
+								changed! -->
 							<toDir>${assets.dir.input}</toDir>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
-			
-			<!-- Include NOTICE.txt in assets -->
+
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.6</version>
 				<executions>
+					<!-- Copy input assets to outptut asset dir -->
 					<execution>
 						<id>copy assets</id>
 						<phase>initialize</phase>
@@ -196,20 +198,56 @@
 							<outputDirectory>${assets.dir.output}</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${project.basedir}</directory>
-									<includes>
-										<include>NOTICE.txt</include>
-									</includes>
-									<filtering>false</filtering>
-								</resource>
-								<resource>
 									<directory>${assets.dir.input}</directory>
 									<filtering>false</filtering>
 								</resource>
 							</resources>
 						</configuration>
 					</execution>
+
+					<!-- Include markdown sources to target in assets -->
+					<execution>
+						<id>copy raw markdown</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${raw.mardkown.dir}</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.basedir}/..</directory>
+									<includes>
+										<include>NOTICE.md</include>
+										<include>CHANGELOG.md</include>
+									</includes>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
 				</executions>
+			</plugin>
+
+			<!-- Process Markdown to HTML -->
+			<plugin>
+				<groupId>com.ruleoftech</groupId>
+				<artifactId>markdown-page-generator-plugin</artifactId>
+				<version>0.6</version>
+				<executions>
+					<execution>
+						<id>markdown2html</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<inputDirectory>${raw.mardkown.dir}</inputDirectory>
+					<outputDirectory>${assets.dir.output}</outputDirectory>
+					<copyDirectories></copyDirectories>
+				</configuration>
 			</plugin>
 
 			<!-- Starting with Android SDK Tools 23? you might have to copy zipaling 
