@@ -20,6 +20,8 @@
     <string name="MainActivity_TabAvailable">Verfügbar</string>
     <string name="MainActivity_TabAnnounced">Angekündigt</string>
     <!-- <string name="MainActivity_JustAddedInformation">Alle Alben, die in den letzten %1$d Tagen hinzugefügt wurden</string> -->
+    <string name="WelcomeScreenTitle">Willkommen zu nusic v%1$s</string>
+    
     <plurals name="LoadNewReleasesService_foundNewReleases">
         <item quantity="one">%1$d neues Album gefunden.</item>
         <item quantity="other">%1$d neue Alben gefunden</item>

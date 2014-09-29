@@ -20,6 +20,8 @@
     <string name="MainActivity_TabAvailable">Available</string>
     <string name="MainActivity_TabAnnounced">Announced</string>
     <!-- <string name="MainActivity_JustAddedInformation">All releases that were added within the last %1$d days</string> -->
+    <string name="WelcomeScreenTitle">Welcome to nusic %1$s</string>
+    
     <plurals name="LoadNewReleasesService_foundNewReleases">
         <item quantity="one">Found %1$d new release</item>
         <item quantity="other">Found %1$d new releases</item>

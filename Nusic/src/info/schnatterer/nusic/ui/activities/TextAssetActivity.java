@@ -20,18 +20,10 @@
  */
 package info.schnatterer.nusic.ui.activities;
 
-import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.application.NusicApplication;
-
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.apache.commons.io.IOUtils;
-
+import info.schnatterer.nusic.ui.util.TextUtil;
 import android.os.Bundle;
-import android.text.Html;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -50,13 +42,6 @@ import com.actionbarsherlock.view.MenuItem;
  * @author schnatterer
  */
 public class TextAssetActivity extends SherlockFragmentActivity {
-
-	/**
-	 * Regex that matches file names case insensitively that have common file
-	 * extensions for HTML.
-	 */
-	private static final String REGEX_ENDING_HTML = "(?i)^.*(\\.htm[l]?)$";
-
 	/**
 	 * Key to the creating intent's extras that contains the path (as
 	 * {@link String}) to the asset that is loaded.
@@ -76,7 +61,7 @@ public class TextAssetActivity extends SherlockFragmentActivity {
 		// Display the back arrow in the header (left of the icon)
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		setContentView(R.layout.activity_render_html_asset);
+		setContentView(R.layout.simple_textview_layout);
 
 		String title = getIntent().getStringExtra(EXTRA_TITLE);
 		if (title != null) {
@@ -85,23 +70,9 @@ public class TextAssetActivity extends SherlockFragmentActivity {
 
 		TextView textView = (TextView) findViewById(R.id.renderRawHtmlTextView);
 		String assetPath = getIntent().getStringExtra(EXTRA_ASSET_NAME);
-		if (assetPath != null) {
-			InputStream is = null;
-			try {
-				is = getResources().getAssets().open(assetPath);
-				if (assetPath.matches(REGEX_ENDING_HTML)) {
-					textView.setText(Html.fromHtml(IOUtils.toString(is)
-							.replaceFirst("<title>.*</title>", "")));
-				} else {
-					textView.setText(IOUtils.toString(is));
-				}
-			} catch (IOException e) {
-				textView.setText(getString(R.string.TextAssetActivity_errorLoadingFile));
-				Log.w(Constants.LOG, "Unable to load asset from path \""
-						+ assetPath + "\"", e);
-			} finally {
-				IOUtils.closeQuietly(is);
-			}
+		CharSequence text = TextUtil.loadTextFromAsset(this, assetPath);
+		if (text != null) {
+			textView.setText(text);
 		}
 	}
 

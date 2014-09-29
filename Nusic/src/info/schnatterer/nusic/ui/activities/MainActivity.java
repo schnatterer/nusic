@@ -27,6 +27,9 @@ import info.schnatterer.nusic.application.NusicApplication;
 import info.schnatterer.nusic.service.android.LoadNewReleasesService;
 import info.schnatterer.nusic.ui.LoadNewRelasesServiceBinding;
 import info.schnatterer.nusic.ui.fragments.ReleaseListFragment;
+import info.schnatterer.nusic.ui.util.TextUtil;
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -37,7 +40,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
@@ -120,6 +125,20 @@ public class MainActivity extends SherlockFragmentActivity {
 		} else {
 			registerListeners();
 		}
+
+		switch (NusicApplication.getAppStart()) {
+		case FIRST:
+			showWelcomeDialog(TextUtil
+					.fromHtml("<b>... please be patient :)</b><br/><br/>Depending on the amount of artists on you device, the very first start may take a while. <br/><br/>After that, synchronisation will be done in background. Nusic will send you notifications, as soon as there are any new new releases for you.<br/><br/><b>If you like it, please rate nusic at <a href=\"https://play.google.com/store/apps/details?id=info.schnatterer.nusic\">GooglePlay</a> or support its translation or development via <a href=\"https://github.com/schnatterer/nusic\">GitHub</a></b><br/>"));
+			break;
+		case UPGRADE:
+			showWelcomeDialog(TextUtil
+					.loadTextFromAsset(this, "CHANGELOG.html"));
+			break;
+		default:
+			break;
+		}
+
 	}
 
 	@Override
@@ -270,6 +289,36 @@ public class MainActivity extends SherlockFragmentActivity {
 	private void unregisterListeners() {
 		loadNewRelasesServiceBinding.updateActivity(null);
 		loadNewRelasesServiceBinding.unbindService();
+	}
+
+	/**
+	 * Shows an alert dialog displaying some text. Useful for
+	 * 
+	 * @param text
+	 *            text to display. If loading from an asset, consider using
+	 *            {@link TextUtil#loadTextFromAsset(android.content.Context, String)}
+	 */
+	@SuppressLint("InflateParams")
+	// See http://www.doubleencore.com/2013/05/layout-inflation-as-intended/
+	private void showWelcomeDialog(CharSequence text) {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+		View layout = getLayoutInflater().inflate(
+				R.layout.simple_textview_layout, null, false);
+		TextView textView = (TextView) layout
+				.findViewById(R.id.renderRawHtmlTextView);
+		textView.setText(text);
+		// final SpannableString s = new SpannableString(text);
+		// Linkify.addLinks(s, Linkify.WEB_URLS);
+		// textView.setText(s);
+		// textView.setMovementMethod(LinkMovementMethod.getInstance());
+		alertDialogBuilder
+				.setCancelable(true)
+				.setTitle(
+						getString(R.string.WelcomeScreenTitle,
+								NusicApplication.getCurrentVersionName()))
+				.setIcon(R.drawable.ic_launcher)
+				.setPositiveButton(android.R.string.ok, null).setView(layout)
+				.show();
 	}
 
 	/**
