@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Application-wide technical constants (e.g. for preferences). Don't translate! -->
 <resources>
-     <string name="extra_asset_name">nusic.intent.extra.assetName</string>
-     <string name="extra_activity_title">nusic.intent.extra.activity.title</string>
+    <string name="extra_asset_name">nusic.intent.extra.assetName</string>
+    <string name="extra_activity_title">nusic.intent.extra.activity.title</string>
+     
+    <!-- Plain links -->
+    <string name="link_nusic_google_play">https://play.google.com/store/apps/details?id=info.schnatterer.nusic</string>
+    <string name="link_nusic_git_hub">https://github.com/schnatterer/nusic</string>
+    <!-- Links as HTML (embedded in a <a href"link"></a>) -->
+    <string name="html_link_nusic_google_play">&lt;a href="@string/link_nusic_google_play"&gt;@string/GooglePlay&lt;a&gt;</string>
+    <string name="html_link_nusic_git_hub">&lt;a href="@string/link_nusic_git_hub"&gt;@string/GitHub&lt;a&gt;</string>
     
     <!-- Preferences -->
     <string name="preferences_key_download_releases_time_period">downloadReleasesNumberOfMonths</string>

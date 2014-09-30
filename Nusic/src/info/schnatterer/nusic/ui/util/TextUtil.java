@@ -2,10 +2,13 @@ package info.schnatterer.nusic.ui.util;
 
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.application.AbstractApplication;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.xml.sax.XMLReader;
@@ -21,6 +24,10 @@ import android.util.Log;
 public class TextUtil {
 
 	/**
+	 * Regex that matches a resource string such as <code>@string/a-b_c1</code>.
+	 */
+	private static final String REGEX_RESOURCE_STRING = "@string/([A-Za-z0-9-_]*)";
+	/**
 	 * Regex that matches file names case insensitively that have common file
 	 * extensions for HTML.
 	 */
@@ -30,22 +37,48 @@ public class TextUtil {
 	}
 
 	/**
-	 * Tries to load an asset file as text. If the file ends in
+	 * Convenience method for
+	 * {@link #loadTextFromAsset(Context, String, boolean)} that does <i>not</i>
+	 * try to replace application string resources (e.g.
+	 * <code>@string/abc</code>)in input
 	 * 
+	 * @param context
 	 * @param assetPath
 	 * @return
 	 */
 	public static CharSequence loadTextFromAsset(Context context,
 			String assetPath) {
+		return loadTextFromAsset(context, assetPath, false);
+	}
+
+	/**
+	 * Tries to load an asset file as text. If <code>assetPath</code> ends in
+	 * <code>.html</code>, the HTML code is rendered into "displayable styled"
+	 * text.
+	 * 
+	 * @param context
+	 *            context to load asset and (potential resources) from
+	 * @param assetPath
+	 *            path of the asset to load
+	 * @param replaceResources
+	 *            if <code>true</code>, resources such as
+	 *            <code>@string/abc</code> are replaced with their localized
+	 *            values from the app's resource strings (e.g.
+	 *            <code>strings.xml</code>). Set to <code>false</code> for
+	 *            better performance.
+	 * @return (potentially styled) text from asset
+	 */
+	public static CharSequence loadTextFromAsset(Context context,
+			String assetPath, boolean replaceResources) {
 		if (assetPath != null) {
 			InputStream is = null;
 			try {
 				is = context.getResources().getAssets().open(assetPath);
-				String assetAsString = IOUtils.toString(is);
+				String assetText = IOUtils.toString(is);
 				if (assetPath.matches(REGEX_ENDING_HTML)) {
-					return fromHtml(assetAsString);
+					return fromHtml(replaceResourceStrings(assetText, assetPath));
 				} else {
-					return assetAsString;
+					return assetText;
 				}
 			} catch (IOException e) {
 				Log.w(Constants.LOG, "Unable to load asset from path \""
@@ -57,6 +90,45 @@ public class TextUtil {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Recursively replaces resources such as <code>@string/abc</code> with
+	 * their localized values from the app's resource strings (e.g.
+	 * <code>strings.xml</code>) within a <code>source</code> string.
+	 * 
+	 * Also works recursively, that is, when a resource contains another
+	 * resource that contains another resource, etc.
+	 * 
+	 * @param source
+	 * @param assetPath
+	 * @return <code>source</code> with replaced resources (if they exist)
+	 */
+	private static String replaceResourceStrings(String source, String assetPath) {
+		// Recursively resolve strings
+		Pattern p = Pattern.compile(REGEX_RESOURCE_STRING);
+		Matcher m = p.matcher(source);
+		StringBuffer sb = new StringBuffer();
+		while (m.find()) {
+			String stringFromResources = AbstractApplication.getStringByName(m
+					.group(1));
+			if (stringFromResources == null) {
+				Log.w(Constants.LOG,
+						"No String resource found for ID \"" + m.group(1)
+								+ "\" while inserting resources to asset:"
+								+ assetPath);
+				/*
+				 * No need to try to load from defaults, android is trying that
+				 * for us. If we're here, the resource does not exist. Just
+				 * return its ID.
+				 */
+				stringFromResources = m.group(1);
+			}
+			m.appendReplacement(sb, // Recurse
+					replaceResourceStrings(stringFromResources, assetPath));
+		}
+		m.appendTail(sb);
+		return sb.toString();
 	}
 
 	/**
@@ -128,13 +200,8 @@ public class TextUtil {
 			} else if (tag.equalsIgnoreCase("ol")) {
 				if (opening) {
 					lists.push(tag);
-					olNextIndex.push(Integer.valueOf(1)).toString();// TODO: add
-																	// support
-																	// for lists
-																	// starting
-																	// other
-																	// index
-																	// than 1
+					// TODO: add support for lists starting other index than 1
+					olNextIndex.push(Integer.valueOf(1)).toString();
 				} else {
 					lists.pop();
 					olNextIndex.pop().toString();

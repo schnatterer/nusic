@@ -39,6 +39,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,8 +129,8 @@ public class MainActivity extends SherlockFragmentActivity {
 
 		switch (NusicApplication.getAppStart()) {
 		case FIRST:
-			showWelcomeDialog(TextUtil
-					.fromHtml("<b>... please be patient :)</b><br/><br/>Depending on the amount of artists on you device, the very first start may take a while. <br/><br/>After that, synchronisation will be done in background. Nusic will send you notifications, as soon as there are any new new releases for you.<br/><br/><b>If you like it, please rate nusic at <a href=\"https://play.google.com/store/apps/details?id=info.schnatterer.nusic\">GooglePlay</a> or support its translation or development via <a href=\"https://github.com/schnatterer/nusic\">GitHub</a></b><br/>"));
+			showWelcomeDialog(TextUtil.loadTextFromAsset(this,
+					"welcomeDialog.html", true));
 			break;
 		case UPGRADE:
 			showWelcomeDialog(TextUtil
