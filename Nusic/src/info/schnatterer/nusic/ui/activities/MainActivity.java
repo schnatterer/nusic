@@ -307,10 +307,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		TextView textView = (TextView) layout
 				.findViewById(R.id.renderRawHtmlTextView);
 		textView.setText(text);
-		// final SpannableString s = new SpannableString(text);
-		// Linkify.addLinks(s, Linkify.WEB_URLS);
-		// textView.setText(s);
-		// textView.setMovementMethod(LinkMovementMethod.getInstance());
+		textView.setMovementMethod(LinkMovementMethod.getInstance());
 		alertDialogBuilder
 				.setCancelable(true)
 				.setTitle(
