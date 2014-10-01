@@ -22,7 +22,7 @@
     <string name="MainActivity_TabAvailable">Available</string>
     <string name="MainActivity_TabAnnounced">Announced</string>
     <!-- <string name="MainActivity_JustAddedInformation">All releases that were added within the last %1$d days</string> -->
-    <string name="WelcomeScreenTitle">Welcome to nusic %1$s</string>
+    <string name="WelcomeScreenTitle">Welcome bei nusic %1$s</string>
     <string name="WelcomeScreenPleaseBePatient">&#8230;please be patient :)</string>
     <string name="WelcomeScreenFirstStartMayTakeAWhile">Depending on the amount of artists on you device, the very first start may take a while.</string>
     <string name="WelcomeScreenSyncronisationWillBeDoneBackground">After that, all further synchronisation will be done in the background. Nusic tells you about new releases via system notifications.</string>
@@ -64,7 +64,13 @@
     <string name="preferences_category_about">About %1$s</string>
     <string name="preferences_title_version">Version</string>
     <string name="preferences_title_privacy_policy">Privacy Policy</string>
+    <string name="preferences_summary_privacy_policy">Find out what data is accessed by nusic and what it does with it.</string>
     <string name="preferences_title_licences">Licenses</string>
+    <string name="preferences_title_changelog">Changelog</string>
+    <string name="preferences_summary_changelog">See what\'s new</string>
+    <string name="preferences_category_web">nusic on the web</string>
+    <string name="preferences_summary_google_play">If you like nusic, please rate it. If you don\'t like it, please help us improve by creating an issue at GitHub.</string>
+    <string name="preferences_summary_git_hub">Report issues, parse source code, add translation or support development.</string>
     
     <!-- (Error) messages -->
     <string name="GenericError">Something almost impossible has happened: %1s!</string>

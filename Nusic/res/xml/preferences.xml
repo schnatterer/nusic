@@ -56,42 +56,52 @@
                 <extra android:name="nusic.intent.extra.rawResourceId" android:value="privacyPolicy.html" />
             </intent>
 		</Preference> --> 
-		<Preference android:title="@string/preferences_title_privacy_policy">
+<!-- 		<Preference android:title="@string/WelcomeScreenTitle">
             <intent android:targetPackage="info.schnatterer.nusic" 
                 android:targetClass="info.schnatterer.nusic.ui.activities.TextAssetActivity">
-                <extra android:name="@string/extra_activity_title" android:value="@string/preferences_title_privacy_policy" />
-                <extra android:name="@string/extra_asset_name" android:value="privacyPolicy.html" />
+                <extra android:name="@string/extra_activity_title" android:value="@string/WelcomeScreenTitle" />
+                <extra android:name="@string/extra_asset_name" android:value="welcomeDialog.html" />
             </intent>
-		</Preference> 
-		<Preference android:title="Changelog">
+		</Preference>  -->
+		<Preference android:title="@string/preferences_title_changelog" 
+		    android:summary="@string/preferences_summary_changelog">
             <intent android:targetPackage="info.schnatterer.nusic" 
                 android:targetClass="info.schnatterer.nusic.ui.activities.TextAssetActivity">
                 <extra android:name="@string/extra_activity_title" android:value="Changelog" />
                 <extra android:name="@string/extra_asset_name" android:value="CHANGELOG.html" />
             </intent>
 		</Preference>
+		<Preference android:title="@string/preferences_title_privacy_policy"
+		       android:summary="@string/preferences_summary_privacy_policy">
+            <intent android:targetPackage="info.schnatterer.nusic" 
+                android:targetClass="info.schnatterer.nusic.ui.activities.TextAssetActivity">
+                <extra android:name="@string/extra_activity_title" android:value="@string/preferences_title_privacy_policy" />
+                <extra android:name="@string/extra_asset_name" android:value="privacyPolicy.html" />
+            </intent>
+		</Preference> 
     </PreferenceCategory>
-    <PreferenceCategory android:title="nusic on the web" >
+    <PreferenceCategory android:title="@string/preferences_category_web" >
 <!--         <Preference android:title="GitHub" >
             <intent
                 android:data="https://github.com/schnatterer/nusic"
                 android:targetClass="info.schnatterer.nusic.ui.activities.NusicWebView"
                 android:targetPackage="info.schnatterer.nusic" />
         </Preference> -->
-        <Preference android:title="GitHub"
-            android:summary="Report issues, add translation or support development">
+        <Preference android:title="@string/GooglePlay" 
+            android:summary="@string/preferences_summary_google_play">
                <intent
                    android:action="android.intent.action.VIEW"
                    android:data="@string/link_nusic_google_play" >
+               </intent>
+       </Preference>
+        
+        <Preference android:title="@string/GitHub"
+            android:summary="@string/preferences_summary_git_hub">
+               <intent
+                   android:action="android.intent.action.VIEW"
+                   android:data="@string/link_nusic_git_hub" >
                </intent>
        </Preference> 
 
-        <Preference android:title="PlayStore" 
-            android:summary="If you like nusic, please rate it">
-               <intent
-                   android:action="android.intent.action.VIEW"
-                   android:data="@string/link_nusic_google_play" >
-               </intent>
-       </Preference> 
     </PreferenceCategory>
 </PreferenceScreen>
