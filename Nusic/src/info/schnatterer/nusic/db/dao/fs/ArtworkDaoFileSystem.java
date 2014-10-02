@@ -1,6 +1,6 @@
 package info.schnatterer.nusic.db.dao.fs;
 
-import info.schnatterer.nusic.application.NusicApplication;
+import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.db.DatabaseException;
 import info.schnatterer.nusic.db.dao.ArtworkDao;
 import info.schnatterer.nusic.db.model.Release;

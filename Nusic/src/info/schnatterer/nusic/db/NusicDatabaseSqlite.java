@@ -21,7 +21,7 @@
 package info.schnatterer.nusic.db;
 
 import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.application.NusicApplication;
+import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.db.model.Artist;
 import info.schnatterer.nusic.db.model.Release;
 import info.schnatterer.nusic.db.util.SqliteUtil;

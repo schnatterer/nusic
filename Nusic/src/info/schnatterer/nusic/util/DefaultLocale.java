@@ -20,7 +20,7 @@
  */
 package info.schnatterer.nusic.util;
 
-import info.schnatterer.nusic.application.NusicApplication;
+import info.schnatterer.nusic.android.application.NusicApplication;
 
 import java.util.Locale;
 

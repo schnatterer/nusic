@@ -1,0 +1,151 @@
+/* Copyright (C) 2013 Johannes Schnatterer
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *  
+ * This file is part of nusic.
+ * 
+ * nusic is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * nusic is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package info.schnatterer.nusic.logic;
+
+import info.schnatterer.nusic.db.model.Release;
+import info.schnatterer.nusic.android.service.LoadNewReleasesService;
+import info.schnatterer.nusic.android.service.LoadNewReleasesServiceConnectivityReceiver;
+import info.schnatterer.nusic.logic.event.PreferenceChangedListener;
+
+import java.util.Date;
+
+/**
+ * Provides access to the key-value-preferences of the app.
+ * 
+ * @author schnatterer
+ * 
+ */
+/**
+ * @author schnatterer
+ *
+ */
+public interface PreferencesService {
+	/**
+	 * Resets all your preferences. Careful with that!
+	 */
+	void clearPreferences();
+
+	/**
+	 * Gets the last time the {@link Release}s have been loaded from the
+	 * internet.
+	 * 
+	 * This is useful to determine the start date for the next refresh.
+	 */
+	Date getLastReleaseRefresh();
+
+	/**
+	 * Set last time the {@link Release}s havebeen loaded from the internet.
+	 * 
+	 * This is useful to determine the start date for the next refresh.
+	 * 
+	 * @return <code>true</code> if successfully written, otherwise
+	 *         <code>false</code>
+	 */
+	boolean setLastReleaseRefresh(Date date);
+
+	/**
+	 * @return <code>true</code> if the user has checked to only download images
+	 *         on Wi-Fi. Otherwise <code>false</code>
+	 */
+	boolean isUseOnlyWifi();
+
+	/**
+	 * Returns time period in months (from today back in time) for which
+	 * releases are downloaded and displayed.
+	 * 
+	 * @return
+	 */
+	int getDownloadReleasesTimePeriod();
+
+	void registerOnSharedPreferenceChangeListener(
+			PreferenceChangedListener preferenceChangedListener);
+
+	void unregisterOnSharedPreferenceChangeListener(
+			PreferenceChangedListener preferenceChangedListener);
+
+	/**
+	 * Amount of days between two scheduled (as opposed to manual) refreshs of
+	 * the releases.
+	 * 
+	 * @return
+	 */
+	int getRefreshPeriod();
+
+	/**
+	 * Time period in days beginning now, which defines the "just" in
+	 * "just added".
+	 * 
+	 * @return
+	 */
+	int getJustAddedTimePeriod();
+
+	Date getNextReleaseRefresh();
+
+	boolean setNextReleaseRefresh(Date date);
+
+	/**
+	 * @return <code>true</code> when
+	 *         {@link LoadNewReleasesServiceConnectivityReceiver} is enabled,
+	 *         that is starting {@link LoadNewReleasesService} when receiving
+	 *         broadcast. Otherwise <code>false</code>.
+	 * 
+	 */
+	boolean isEnabledConnectivityReceiver();
+
+	/**
+	 * Setting to <code>true</code> enables
+	 * {@link LoadNewReleasesServiceConnectivityReceiver}, that is starting
+	 * {@link LoadNewReleasesService} when receiving broadcast.
+	 * <code>false</code> disables receiver.
+	 * 
+	 * @param enabled
+	 * @return
+	 */
+	boolean setEnabledConnectivityReceiver(boolean enabled);
+
+	/**
+	 * @return <code>true</code> if the check for albums getting release today
+	 *         is enabled.
+	 */
+	boolean isEnabledNotifyReleasedToday();
+
+	/**
+	 * @return <code>true</code> if a notification is shown when
+	 *         {@link LoadNewReleasesService} finds new releases.
+	 */
+	boolean isEnabledNotifyNewReleases();
+
+	/**
+	 * @return the hour of day where the check for albums getting release today
+	 *         is performed if {@link #isEnabledNotifyReleasedToday()} is
+	 *         <code>true</code>.
+	 */
+	int getReleasedTodayScheduleHourOfDay();
+
+	boolean setReleasedTodaySchedule(int hourOfDay, int minute);
+
+	/**
+	 * @return the minute where the check for albums getting release today is
+	 *         performed if {@link #isEnabledNotifyReleasedToday()} is
+	 *         <code>true</code>.
+	 */
+	int getReleasedTodayScheduleMinute();
+}
