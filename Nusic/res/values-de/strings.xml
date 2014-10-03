@@ -28,12 +28,10 @@
     <string name="WelcomeScreenSyncronisationWillBeDoneBackground">Danach laufen alle weiteren Abfragen im Hintgrund. Nusic informiert dich über Systemnachrichten (notifications), sobald es neue Alben findet.</string>
     <string name="WelcomeScreenIfYouLikeNusicPleaseRate">Wenn dir nusic gefällt, bitte bewerte es bei @string/html_link_nusic_google_play oder unterstütze uns durch Übersetzungen oder durch Weiterentwicklung über @string/html_link_nusic_git_hub.</string>
     
-    <plurals name="LoadNewReleasesService_foundNewReleases">
-        <item quantity="one">%1$d neues Album gefunden.</item>
-        <item quantity="other">%1$d neue Alben gefunden</item>
-    </plurals>
+    <string name="LoadNewReleasesService_newRelease">Neues Album gefunden:</string>
+    <string name="LoadNewReleasesService_newReleaseMultiple">%1$d neue Alben gefunden</string>
     <string name="ReleasedTodayService_ReleasedToday">Heute erscheint:</string>
-    <string name="ReleasedTodayService_MultipleReleasedToday">%1$d Alben werden heute veröffentlicht</string>
+    <string name="ReleasedTodayService_ReleasedTodayMultiple">%1$d Alben werden heute veröffentlicht</string>
     
     <!-- Prefrences -->
     <string name="preferences_category_releases">Alben</string>
