@@ -22,11 +22,11 @@ package info.schnatterer.nusic.android.adapters;
 
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
-import info.schnatterer.nusic.db.DatabaseException;
-import info.schnatterer.nusic.db.dao.ArtworkDao;
-import info.schnatterer.nusic.db.dao.ArtworkDao.ArtworkType;
-import info.schnatterer.nusic.db.dao.fs.ArtworkDaoFileSystem;
-import info.schnatterer.nusic.db.model.Release;
+import info.schnatterer.nusic.data.DatabaseException;
+import info.schnatterer.nusic.data.dao.ArtworkDao;
+import info.schnatterer.nusic.data.dao.ArtworkDao.ArtworkType;
+import info.schnatterer.nusic.data.dao.fs.ArtworkDaoFileSystem;
+import info.schnatterer.nusic.data.model.Release;
 
 import java.lang.ref.WeakReference;
 import java.text.DateFormat;

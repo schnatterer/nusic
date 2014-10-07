@@ -25,7 +25,7 @@ import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.service.LoadNewReleasesService;
 import info.schnatterer.nusic.android.service.LoadNewReleasesServiceConnection;
-import info.schnatterer.nusic.db.model.Artist;
+import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.logic.ReleaseRefreshService;
 import info.schnatterer.nusic.logic.ServiceException;
 import info.schnatterer.nusic.logic.event.ArtistProgressListener;

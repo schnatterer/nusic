@@ -19,13 +19,13 @@
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package info.schnatterer.nusic.db.dao.sqlite;
+package info.schnatterer.nusic.data.dao.sqlite;
 
-import info.schnatterer.nusic.db.DatabaseException;
-import info.schnatterer.nusic.db.NusicDatabaseSqlite.TableArtist;
-import info.schnatterer.nusic.db.dao.ArtistDao;
-import info.schnatterer.nusic.db.model.Artist;
-import info.schnatterer.nusic.db.util.SqliteUtil;
+import info.schnatterer.nusic.data.DatabaseException;
+import info.schnatterer.nusic.data.NusicDatabaseSqlite.TableArtist;
+import info.schnatterer.nusic.data.dao.ArtistDao;
+import info.schnatterer.nusic.data.model.Artist;
+import info.schnatterer.nusic.data.util.SqliteUtil;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;

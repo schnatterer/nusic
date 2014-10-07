@@ -20,7 +20,7 @@
  */
 package info.schnatterer.nusic.logic;
 
-import info.schnatterer.nusic.db.model.Release;
+import info.schnatterer.nusic.data.model.Release;
 import info.schnatterer.nusic.android.service.LoadNewReleasesService;
 import info.schnatterer.nusic.android.service.LoadNewReleasesServiceConnectivityReceiver;
 import info.schnatterer.nusic.logic.event.PreferenceChangedListener;

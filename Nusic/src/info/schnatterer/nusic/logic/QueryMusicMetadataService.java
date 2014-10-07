@@ -20,7 +20,7 @@
  */
 package info.schnatterer.nusic.logic;
 
-import info.schnatterer.nusic.db.model.Artist;
+import info.schnatterer.nusic.data.model.Artist;
 
 import java.util.Date;
 

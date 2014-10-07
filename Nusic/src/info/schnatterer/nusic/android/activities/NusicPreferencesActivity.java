@@ -22,7 +22,7 @@ package info.schnatterer.nusic.android.activities;
 
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.application.NusicApplication;
-import info.schnatterer.nusic.db.model.Artist;
+import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.logic.ReleaseService;
 import info.schnatterer.nusic.logic.ServiceException;
 import info.schnatterer.nusic.android.service.ReleasedTodayService;

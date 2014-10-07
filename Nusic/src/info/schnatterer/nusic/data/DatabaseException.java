@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.db;
+package info.schnatterer.nusic.data;
 
 /**
  * Wrapper class for all Exceptions thrown by DAOs.

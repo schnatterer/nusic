@@ -20,8 +20,8 @@
  */
 package info.schnatterer.nusic.logic;
 
-import info.schnatterer.nusic.db.DatabaseException;
-import info.schnatterer.nusic.db.model.Artist;
+import info.schnatterer.nusic.data.DatabaseException;
+import info.schnatterer.nusic.data.model.Artist;
 
 /**
  * Provides access to the elements stored in Table {@link Artist}. This would be

@@ -21,7 +21,7 @@
 package info.schnatterer.nusic.logic.impl;
 
 import info.schnatterer.nusic.R;
-import info.schnatterer.nusic.db.model.Artist;
+import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.logic.ArtistQueryService;
 import info.schnatterer.nusic.logic.ServiceException;
 import android.content.ContentResolver;

@@ -18,15 +18,15 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.db.dao.sqlite;
+package info.schnatterer.nusic.data.dao.sqlite;
 
-import info.schnatterer.nusic.db.DatabaseException;
-import info.schnatterer.nusic.db.NusicDatabaseSqlite.TableArtist;
-import info.schnatterer.nusic.db.NusicDatabaseSqlite.TableRelease;
-import info.schnatterer.nusic.db.dao.ReleaseDao;
-import info.schnatterer.nusic.db.model.Artist;
-import info.schnatterer.nusic.db.model.Release;
-import info.schnatterer.nusic.db.util.SqliteUtil;
+import info.schnatterer.nusic.data.DatabaseException;
+import info.schnatterer.nusic.data.NusicDatabaseSqlite.TableArtist;
+import info.schnatterer.nusic.data.NusicDatabaseSqlite.TableRelease;
+import info.schnatterer.nusic.data.dao.ReleaseDao;
+import info.schnatterer.nusic.data.model.Artist;
+import info.schnatterer.nusic.data.model.Release;
+import info.schnatterer.nusic.data.util.SqliteUtil;
 
 import java.util.HashMap;
 import java.util.LinkedList;

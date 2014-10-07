@@ -18,13 +18,13 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.db;
+package info.schnatterer.nusic.data;
 
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.android.application.NusicApplication;
-import info.schnatterer.nusic.db.model.Artist;
-import info.schnatterer.nusic.db.model.Release;
-import info.schnatterer.nusic.db.util.SqliteUtil;
+import info.schnatterer.nusic.data.model.Artist;
+import info.schnatterer.nusic.data.model.Release;
+import info.schnatterer.nusic.data.util.SqliteUtil;
 import info.schnatterer.nusic.util.DateUtil;
 import android.content.ContentValues;
 import android.content.Context;

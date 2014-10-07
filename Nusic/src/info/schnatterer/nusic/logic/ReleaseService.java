@@ -20,8 +20,8 @@
  */
 package info.schnatterer.nusic.logic;
 
-import info.schnatterer.nusic.db.model.Artist;
-import info.schnatterer.nusic.db.model.Release;
+import info.schnatterer.nusic.data.model.Artist;
+import info.schnatterer.nusic.data.model.Release;
 
 import java.util.List;
 

@@ -21,7 +21,7 @@
 package info.schnatterer.nusic.android.loaders;
 
 import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.db.model.Entity;
+import info.schnatterer.nusic.data.model.Entity;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;

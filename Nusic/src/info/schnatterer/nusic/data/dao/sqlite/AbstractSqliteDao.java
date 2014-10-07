@@ -18,12 +18,12 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.db.dao.sqlite;
+package info.schnatterer.nusic.data.dao.sqlite;
 
-import info.schnatterer.nusic.db.DatabaseException;
-import info.schnatterer.nusic.db.NusicDatabaseSqlite;
-import info.schnatterer.nusic.db.dao.GenericDao;
-import info.schnatterer.nusic.db.model.Entity;
+import info.schnatterer.nusic.data.DatabaseException;
+import info.schnatterer.nusic.data.NusicDatabaseSqlite;
+import info.schnatterer.nusic.data.dao.GenericDao;
+import info.schnatterer.nusic.data.model.Entity;
 import android.content.AsyncTaskLoader;
 import android.content.ContentValues;
 import android.content.Context;

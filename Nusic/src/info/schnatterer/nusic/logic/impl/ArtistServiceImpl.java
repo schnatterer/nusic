@@ -21,10 +21,10 @@
 package info.schnatterer.nusic.logic.impl;
 
 import info.schnatterer.nusic.R;
-import info.schnatterer.nusic.db.DatabaseException;
-import info.schnatterer.nusic.db.dao.ArtistDao;
-import info.schnatterer.nusic.db.dao.sqlite.ArtistDaoSqlite;
-import info.schnatterer.nusic.db.model.Artist;
+import info.schnatterer.nusic.data.DatabaseException;
+import info.schnatterer.nusic.data.dao.ArtistDao;
+import info.schnatterer.nusic.data.dao.sqlite.ArtistDaoSqlite;
+import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.logic.ArtistService;
 import info.schnatterer.nusic.logic.ReleaseService;
 import info.schnatterer.nusic.logic.ServiceException;

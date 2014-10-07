@@ -18,77 +18,83 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.db.model;
+package info.schnatterer.nusic.data.model;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
-public class Release implements Entity {
+public class Artist implements Entity {
 	private static final String HTTP = "http://";
 	private static final String HTTPS = "https://";
-	private static final String MUSIC_BRAINZ_BASE_URI = "musicbrainz.org/release-group/";
+	private static final String MUSIC_BRAINZ_BASE_URI = "musicbrainz.org/artist/";
 	private static final String MUSIC_BRAINZ_BASE_URI_HTTP = HTTP
 			+ MUSIC_BRAINZ_BASE_URI;
 	private static final String MUSIC_BRAINZ_BASE_URI_HTTPS = HTTPS
 			+ MUSIC_BRAINZ_BASE_URI;
 
 	private Long id;
-	/** MusicBrainz Id of the release group */
+	private Long androidAudioArtistId;
 	private String musicBrainzId;
-	/** ID of the cover art at Cover Art Archive. */
-	private Long coverartArchiveId;
-
-	private Artist artist;
-	private String releaseName;
-	private Date releaseDate;
+	/**
+	 * Artist name from android db
+	 */
+	private String artistName;
+	private List<Release> releases = new LinkedList<Release>();
 	private Date dateCreated;
-	// private ? releaseType;
-
 	private Boolean isHidden;
 
-	public Release() {
+	public Artist() {
 	}
 
-	public Release(Date dateCreated) {
+	public Artist(Date dateCreated) {
 		setDateCreated(dateCreated);
 	}
 
+	public List<Release> getReleases() {
+		return releases;
+	}
+
+	public void setReleases(List<Release> releases) {
+		this.releases = releases;
+	}
+
 	public String getArtistName() {
-		return artist.getArtistName();
+		return artistName;
 	}
 
-	public Artist getArtist() {
-		return artist;
+	public void setArtistName(String artistName) {
+		this.artistName = artistName;
 	}
 
-	public void setArtist(Artist artist) {
-		this.artist = artist;
+	public Release getNewestRelease() {
+		if (releases != null && releases.size() > 0) {
+			return releases.get(0);
+		}
+		return null;
 	}
 
-	public String getReleaseName() {
-		return releaseName;
+	public Long getId() {
+		return id;
 	}
 
-	public void setReleaseName(String releaseName) {
-		this.releaseName = releaseName;
+	public void setId(Long l) {
+		this.id = l;
 	}
 
-	public Date getReleaseDate() {
-		return releaseDate;
+	public Date getDateCreated() {
+		return dateCreated;
 	}
 
-	public void setReleaseDate(Date releaseDate) {
-		this.releaseDate = releaseDate;
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((artist == null) ? 0 : artist.hashCode());
-		result = prime * result
-				+ ((releaseName == null) ? 0 : releaseName.hashCode());
-		result = prime * result
-				+ ((releaseDate == null) ? 0 : releaseDate.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
 		return result;
 	}
 
@@ -100,39 +106,10 @@ public class Release implements Entity {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Release other = (Release) obj;
-		if (artist == null) {
-			if (other.artist != null)
-				return false;
-		} else if (!artist.equals(other.artist))
-			return false;
-		if (releaseName == null) {
-			if (other.releaseName != null)
-				return false;
-		} else if (!releaseName.equals(other.releaseName))
-			return false;
-		if (releaseDate == null) {
-			if (other.releaseDate != null)
-				return false;
-		} else if (!releaseDate.equals(other.releaseDate))
+		Artist other = (Artist) obj;
+		if (id != other.id)
 			return false;
 		return true;
-	}
-
-	public Date getDateCreated() {
-		return dateCreated;
-	}
-
-	public void setDateCreated(Date dateCreated) {
-		this.dateCreated = dateCreated;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getMusicBrainzId() {
@@ -141,6 +118,14 @@ public class Release implements Entity {
 
 	public void setMusicBrainzId(String musicBrainzId) {
 		this.musicBrainzId = musicBrainzId;
+	}
+
+	public Long getAndroidAudioArtistId() {
+		return androidAudioArtistId;
+	}
+
+	public void setAndroidAudioArtistId(Long androidAudioArtistId) {
+		this.androidAudioArtistId = androidAudioArtistId;
 	}
 
 	public Boolean isHidden() {
@@ -168,19 +153,10 @@ public class Release implements Entity {
 
 	@Override
 	public String toString() {
-		return "Release [id=" + id + ", musicBrainzId=" + musicBrainzId
-				+ ", artist=" + getArtistName() + ", releaseName="
-				+ releaseName + ", releaseDate=" + releaseDate
+		return "Artist [id=" + id + ", androidAudioArtistId="
+				+ androidAudioArtistId + ", musicBrainzId=" + musicBrainzId
+				+ ", artistName=" + artistName + ", releases=" + releases
 				+ ", dateCreated=" + dateCreated + ", isHidden=" + isHidden
 				+ "]";
 	}
-
-	public void setCoverartArchiveId(Long coverartArchiveId) {
-		this.coverartArchiveId = coverartArchiveId;
-	}
-
-	public Long getCoverartArchiveId() {
-		return coverartArchiveId;
-	}
-
 }

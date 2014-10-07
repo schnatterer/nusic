@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.db.util;
+package info.schnatterer.nusic.data.util;
 
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.util.DateUtil;

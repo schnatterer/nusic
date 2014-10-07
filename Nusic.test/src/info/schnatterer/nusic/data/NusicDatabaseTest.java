@@ -18,8 +18,9 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.db;
+package info.schnatterer.nusic.data;
 
+import info.schnatterer.nusic.data.NusicDatabaseSqlite;
 import junit.framework.TestCase;
 
 public class NusicDatabaseTest extends TestCase {

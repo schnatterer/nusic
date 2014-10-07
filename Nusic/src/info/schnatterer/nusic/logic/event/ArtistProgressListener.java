@@ -20,7 +20,7 @@
  */
 package info.schnatterer.nusic.logic.event;
 
-import info.schnatterer.nusic.db.model.Artist;
+import info.schnatterer.nusic.data.model.Artist;
 
 import org.apache.commons.lang3.ObjectUtils.Null;
 

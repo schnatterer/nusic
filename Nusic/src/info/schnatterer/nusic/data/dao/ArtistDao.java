@@ -18,10 +18,10 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.db.dao;
+package info.schnatterer.nusic.data.dao;
 
-import info.schnatterer.nusic.db.DatabaseException;
-import info.schnatterer.nusic.db.model.Artist;
+import info.schnatterer.nusic.data.DatabaseException;
+import info.schnatterer.nusic.data.model.Artist;
 
 public interface ArtistDao extends GenericDao<Artist> {
 	/**

@@ -27,12 +27,12 @@ import fm.last.musicbrainz.coverart.CoverArtImage;
 import fm.last.musicbrainz.coverart.impl.DefaultCoverArtArchiveClient;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
-import info.schnatterer.nusic.db.DatabaseException;
-import info.schnatterer.nusic.db.dao.ArtworkDao;
-import info.schnatterer.nusic.db.dao.ArtworkDao.ArtworkType;
-import info.schnatterer.nusic.db.dao.fs.ArtworkDaoFileSystem;
-import info.schnatterer.nusic.db.model.Artist;
-import info.schnatterer.nusic.db.model.Release;
+import info.schnatterer.nusic.data.DatabaseException;
+import info.schnatterer.nusic.data.dao.ArtworkDao;
+import info.schnatterer.nusic.data.dao.ArtworkDao.ArtworkType;
+import info.schnatterer.nusic.data.dao.fs.ArtworkDaoFileSystem;
+import info.schnatterer.nusic.data.model.Artist;
+import info.schnatterer.nusic.data.model.Release;
 import info.schnatterer.nusic.logic.QueryMusicMetadataService;
 import info.schnatterer.nusic.logic.ServiceException;
 
