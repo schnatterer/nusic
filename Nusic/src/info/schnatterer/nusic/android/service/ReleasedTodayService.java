@@ -25,6 +25,7 @@ import info.schnatterer.nusic.Constants.Notification;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.activities.MainActivity;
 import info.schnatterer.nusic.android.application.NusicApplication;
+import info.schnatterer.nusic.android.util.ImageUtil;
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.dao.ArtworkDao.ArtworkType;
 import info.schnatterer.nusic.data.dao.fs.ArtworkDaoFileSystem;
@@ -39,7 +40,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -47,9 +47,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Binder;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -104,36 +102,17 @@ public class ReleasedTodayService extends Service {
 	 * 
 	 */
 	private void notifyReleaseToday(Release release) {
-		Bitmap createScaledBitmap = createScaledBitmap(release);
-
-		NusicApplication.notify(
-				Notification.RELEASED_TODAY,
-				getString(R.string.ReleasedTodayService_ReleasedToday),
-				release.getArtist().getArtistName() + " - "
-						+ release.getReleaseName(), R.drawable.ic_launcher,
-				createScaledBitmap, MainActivity.class, createExtraActiveTab());
-	}
-
-	private Bitmap createScaledBitmap(Release release) {
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-			return createScaledBitmapLegacy(release);
-		} else {
-			return createScaledBitmapModern(release);
-		}
-	}
-
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private Bitmap createScaledBitmapModern(Release release) {
-		Bitmap artwork = null;
 		try {
-			artwork = Bitmap.createScaledBitmap(
-					BitmapFactory.decodeStream(new ArtworkDaoFileSystem()
-							.findStreamByRelease(release, ArtworkType.SMALL)),
-					(int) this.getResources().getDimension(
-							android.R.dimen.notification_large_icon_width),
-					(int) this.getResources().getDimension(
-							android.R.dimen.notification_large_icon_height),
-					false);
+			Bitmap createScaledBitmap = ImageUtil.createScaledBitmap(
+					new ArtworkDaoFileSystem().findStreamByRelease(release,
+							ArtworkType.SMALL), this);
+			NusicApplication.notify(
+					Notification.RELEASED_TODAY,
+					getString(R.string.ReleasedTodayService_ReleasedToday),
+					release.getArtist().getArtistName() + " - "
+							+ release.getReleaseName(), R.drawable.ic_launcher,
+					createScaledBitmap, MainActivity.class,
+					createExtraActiveTab());
 		} catch (DatabaseException e) {
 			Log.w(Constants.LOG, "Unable to load artwork for notification. "
 					+ release, e);
@@ -141,28 +120,6 @@ public class ReleasedTodayService extends Service {
 			Log.w(Constants.LOG, "Unable scale artwork for notification. "
 					+ release, e);
 		}
-		return artwork;
-	}
-
-	private Bitmap createScaledBitmapLegacy(Release release) {
-		/*
-		 * As we don't know the size of the notification icon bellow API lvl 11,
-		 * theses devices will just use the standard icon.
-		 */
-		return null;
-	}
-
-	/**
-	 * Creates an extra bundle that contains the tab to be shown when
-	 * {@link MainActivity} is launched.
-	 * 
-	 * @return
-	 */
-	private Bundle createExtraActiveTab() {
-		Bundle extras = new Bundle();
-		extras.putSerializable(MainActivity.EXTRA_ACTIVE_TAB,
-				MainActivity.TabDefinition.AVAILABLE);
-		return extras;
 	}
 
 	/**
@@ -179,9 +136,22 @@ public class ReleasedTodayService extends Service {
 	 */
 	private void notifyReleaseToday(int nReleases) {
 		NusicApplication.notify(Notification.RELEASED_TODAY, String.format(
-				getString(R.string.ReleasedTodayService_MultipleReleasedToday),
+				getString(R.string.ReleasedTodayService_ReleasedTodayMultiple),
 				nReleases), null, R.drawable.ic_launcher, null,
 				MainActivity.class, createExtraActiveTab());
+	}
+
+	/**
+	 * Creates an extra bundle that contains the tab to be shown when
+	 * {@link MainActivity} is launched.
+	 * 
+	 * @return
+	 */
+	private Bundle createExtraActiveTab() {
+		Bundle extras = new Bundle();
+		extras.putSerializable(MainActivity.EXTRA_ACTIVE_TAB,
+				MainActivity.TabDefinition.AVAILABLE);
+		return extras;
 	}
 
 	/**

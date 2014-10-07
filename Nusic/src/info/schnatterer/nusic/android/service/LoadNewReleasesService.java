@@ -25,7 +25,10 @@ import info.schnatterer.nusic.Constants.Notification;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.activities.MainActivity;
 import info.schnatterer.nusic.android.application.NusicApplication;
+import info.schnatterer.nusic.android.util.ImageUtil;
 import info.schnatterer.nusic.data.DatabaseException;
+import info.schnatterer.nusic.data.dao.ArtworkDao.ArtworkType;
+import info.schnatterer.nusic.data.dao.fs.ArtworkDaoFileSystem;
 import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.data.model.Release;
 import info.schnatterer.nusic.logic.ConnectivityService;
@@ -50,6 +53,7 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -261,28 +265,62 @@ public class LoadNewReleasesService extends WakefulService {
 		if (preferencesService.isEnabledNotifyNewReleases()) {
 			List<Release> newReleases = releaseService
 					.findByDateCreatedGreaterThan(beforeRefresh);
-			if (newReleases.size() > 0) {
-				notifyNewReleases(getResources().getQuantityString(
-						R.plurals.LoadNewReleasesService_foundNewReleases,
-						newReleases.size(), newReleases.size()));
+			if (newReleases.size() == 1) {
+				notifyNewReleases(newReleases.get(0));
+			} else if (newReleases.size() > 0) {
+				notifyNewReleases(newReleases.size());
 			}
 		}
 	}
 
 	/**
-	 * Puts out a notification containing an info symbol. Overwrites any
-	 * previous instances of this notification..<br/>
+	 * Puts out a notification informing about one release that was just found.<br/>
+	 * <br/>
 	 * <br/>
 	 * Future calls overwrite any previous instances of this notification still
 	 * on display.
 	 * 
+	 * @param release
+	 * 
+	 */
+	private void notifyNewReleases(Release release) {
+		try {
+			Bitmap createScaledBitmap = ImageUtil.createScaledBitmap(
+					new ArtworkDaoFileSystem().findStreamByRelease(release,
+							ArtworkType.SMALL), this);
+			NusicApplication.notify(
+					Notification.NEW_RELEASE,
+					getString(R.string.LoadNewReleasesService_newRelease),
+					release.getArtist().getArtistName() + " - "
+							+ release.getReleaseName(), R.drawable.ic_launcher,
+					createScaledBitmap, MainActivity.class,
+					createExtraActiveTab());
+		} catch (DatabaseException e) {
+			Log.w(Constants.LOG, "Unable to load artwork for notification. "
+					+ release, e);
+		} catch (IllegalArgumentException e) {
+			Log.w(Constants.LOG, "Unable scale artwork for notification. "
+					+ release, e);
+		}
+	}
+
+	/**
+	 * Puts out a notification informing about multiple releases that were just
+	 * found<br/>
+	 * <br/>
+	 * Future calls overwrite any previous instances of this notification still
+	 * on display.
+	 * 
+	 * @param nReleases
+	 *            the number of releases published today
+	 * 
 	 * @param text
 	 */
-	private void notifyNewReleases(String text, Object... args) {
-		NusicApplication.notify(Notification.NEW_RELEASE,
-				String.format(text, args), null,
-				android.R.drawable.ic_dialog_info, null, MainActivity.class,
-				createExtraActiveTab());
+	private void notifyNewReleases(int nReleases) {
+		NusicApplication.notify(Notification.NEW_RELEASE, String.format(
+				getString(R.string.LoadNewReleasesService_newReleaseMultiple),
+				nReleases), null, R.drawable.ic_launcher, null,
+				MainActivity.class, createExtraActiveTab());
 	}
 
 	/**

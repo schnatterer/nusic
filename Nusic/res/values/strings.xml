@@ -22,18 +22,16 @@
     <string name="MainActivity_TabAvailable">Available</string>
     <string name="MainActivity_TabAnnounced">Announced</string>
     <!-- <string name="MainActivity_JustAddedInformation">All releases that were added within the last %1$d days</string> -->
-    <string name="WelcomeScreenTitle">Welcome bei nusic %1$s</string>
+    <string name="WelcomeScreenTitle">Welcome to nusic %1$s</string>
     <string name="WelcomeScreenPleaseBePatient">&#8230;please be patient :)</string>
     <string name="WelcomeScreenFirstStartMayTakeAWhile">Depending on the amount of artists on you device, the very first start may take a while.</string>
     <string name="WelcomeScreenSyncronisationWillBeDoneBackground">After that, all further synchronisation will be done in the background. Nusic tells you about new releases via system notifications.</string>
     <string name="WelcomeScreenIfYouLikeNusicPleaseRate">If you like it, please rate nusic at @string/html_link_nusic_google_play or support its translation or development via @string/html_link_nusic_git_hub.</string>
     
-    <plurals name="LoadNewReleasesService_foundNewReleases">
-        <item quantity="one">Found %1$d new release</item>
-        <item quantity="other">Found %1$d new releases</item>
-    </plurals>
+    <string name="LoadNewReleasesService_newRelease">Found new release:</string>
+    <string name="LoadNewReleasesService_newReleaseMultiple">Found %1$d new releases</string>
     <string name="ReleasedTodayService_ReleasedToday">Published today:</string>
-    <string name="ReleasedTodayService_MultipleReleasedToday">%1$d releases are published today</string>
+    <string name="ReleasedTodayService_ReleasedTodayMultiple">%1$d releases are published today</string>
     
      <!-- Prefrences -->
      <string name="preferences_category_releases">Releases</string>
