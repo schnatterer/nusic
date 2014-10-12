@@ -64,6 +64,7 @@
     <string name="preferences_title_privacy_policy">Privacy Policy</string>
     <string name="preferences_summary_privacy_policy">Find out what data is accessed by nusic and what it does with it.</string>
     <string name="preferences_title_licences">Licenses</string>
+    <string name="preferences_summary_licences">Licenses that apply to nusic and its dependencies</string>
     <string name="preferences_title_changelog">Changelog</string>
     <string name="preferences_summary_changelog">See what\'s new</string>
     <string name="preferences_category_web">nusic on the web</string>

@@ -48,17 +48,17 @@
             android:title="@string/preferences_title_version" />
 <!-- 		<Preference android:title="@string/preferences_title_privacy_policy">
             <intent android:targetPackage="info.schnatterer.nusic"
-                android:targetClass="info.schnatterer.nusic.ui.activities.NusicWebView"
+                android:targetClass="info.schnatterer.nusic.android.activities.NusicWebView"
                 android:data="https://schnatterer.github.io/nusic/privacyPolicy.html"/> -->
 <!-- 		<Preference android:title="@string/preferences_title_privacy_policy">
             <intent android:label="@string/preferences_title_privacy_policy" android:targetPackage="info.schnatterer.nusic" 
-                android:targetClass="info.schnatterer.nusic.ui.activities.TextAssetActivity">
+                android:targetClass="info.schnatterer.nusic.android.activities.TextAssetActivity">
                 <extra android:name="nusic.intent.extra.rawResourceId" android:value="privacyPolicy.html" />
             </intent>
 		</Preference> --> 
 <!-- 		<Preference android:title="@string/WelcomeScreenTitle">
             <intent android:targetPackage="info.schnatterer.nusic" 
-                android:targetClass="info.schnatterer.nusic.ui.activities.TextAssetActivity">
+                android:targetClass="info.schnatterer.nusic.android.activities.TextAssetActivity">
                 <extra android:name="@string/extra_activity_title" android:value="@string/WelcomeScreenTitle" />
                 <extra android:name="@string/extra_asset_name" android:value="welcomeDialog.html" />
             </intent>
@@ -66,15 +66,22 @@
 		<Preference android:title="@string/preferences_title_changelog" 
 		    android:summary="@string/preferences_summary_changelog">
             <intent android:targetPackage="info.schnatterer.nusic" 
-                android:targetClass="info.schnatterer.nusic.ui.activities.TextAssetActivity">
+                android:targetClass="info.schnatterer.nusic.android.activities.TextAssetActivity">
                 <extra android:name="@string/extra_activity_title" android:value="Changelog" />
                 <extra android:name="@string/extra_asset_name" android:value="CHANGELOG.html" />
             </intent>
 		</Preference>
+		<Preference android:title="@string/preferences_title_licences" android:summary="@string/preferences_summary_licences">
+            <intent android:targetPackage="info.schnatterer.nusic" 
+                android:targetClass="info.schnatterer.nusic.android.activities.TextAssetActivity">
+                <extra android:name="@string/extra_activity_title" android:value="@string/preferences_title_licences" />
+                <extra android:name="@string/extra_asset_name" android:value="NOTICE.html" />
+            </intent>
+		</Preference> 
 		<Preference android:title="@string/preferences_title_privacy_policy"
 		       android:summary="@string/preferences_summary_privacy_policy">
             <intent android:targetPackage="info.schnatterer.nusic" 
-                android:targetClass="info.schnatterer.nusic.ui.activities.TextAssetActivity">
+                android:targetClass="info.schnatterer.nusic.android.activities.TextAssetActivity">
                 <extra android:name="@string/extra_activity_title" android:value="@string/preferences_title_privacy_policy" />
                 <extra android:name="@string/extra_asset_name" android:value="privacyPolicy.html" />
             </intent>
@@ -84,7 +91,7 @@
 <!--         <Preference android:title="GitHub" >
             <intent
                 android:data="https://github.com/schnatterer/nusic"
-                android:targetClass="info.schnatterer.nusic.ui.activities.NusicWebView"
+                android:targetClass="info.schnatterer.nusic.android.activities.NusicWebView"
                 android:targetPackage="info.schnatterer.nusic" />
         </Preference> -->
         <Preference android:title="@string/GooglePlay" 

@@ -63,6 +63,7 @@
     <string name="preferences_title_privacy_policy">Datenschutzrichtlinie</string>
     <string name="preferences_summary_privacy_policy">Finde heraus auf welche Daten nusic zugreift und was mit ihnen geschieht.</string>
     <string name="preferences_title_licences">Lizenzen</string>
+    <string name="preferences_summary_licences">Lizenzen, unter denen nusic und seine Abhängigkeiten veröffentlicht wurden.</string>
     <string name="preferences_summary_released_hour_of_day">Ungefähre Zeit zu der die Benachrichtigung über Erscheinungstermine erscheint. Android kann die Ausführung verzögern um Strom zu sparen.</string>
     <string name="preferences_title_changelog">Änderungshistorie</string>
     <string name="preferences_summary_changelog">Schau dir an was es Neues gibt</string>
