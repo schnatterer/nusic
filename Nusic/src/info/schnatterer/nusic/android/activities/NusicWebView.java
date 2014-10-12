@@ -49,6 +49,9 @@ import com.actionbarsherlock.view.MenuItem;
  */
 public class NusicWebView extends SherlockFragmentActivity {
 
+	/** "Protocol" prefix of a link for E-mails. */
+	private static final String MAILTO_LINK = "mailto:";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -58,7 +61,7 @@ public class NusicWebView extends SherlockFragmentActivity {
 		setContentView(R.layout.activity_web_view);
 
 		String url = getIntent().getData().toString();
-		if (url.startsWith("mailto:")) {
+		if (url.startsWith(MAILTO_LINK)) {
 			Intent send = new Intent(Intent.ACTION_SENDTO);
 			Uri uri = Uri.parse(TextUtil.replaceResourceStrings(url));
 

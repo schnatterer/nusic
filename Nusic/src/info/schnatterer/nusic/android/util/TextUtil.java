@@ -6,6 +6,8 @@ import info.schnatterer.nusic.android.application.AbstractApplication;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -170,6 +172,12 @@ public class TextUtil {
 	 */
 	private static class MyTagHandler implements Html.TagHandler {
 		/**
+		 * A list of tags that do not influence rendering. We don't want to have
+		 * them on the log as unsupported tags.
+		 */
+		public static final List<String> IGNORED_TAGS = Arrays
+				.asList(new String[] { "html", "head", "body" });
+		/**
 		 * Keeps track of lists (ol, ul). On bottom of Stack is the outermost
 		 * list and on top of Stack is the most nested list
 		 */
@@ -257,8 +265,11 @@ public class TextUtil {
 					}
 				}
 			} else {
-				if (opening)
-					Log.d("TagHandler", "Found an unsupported tag " + tag);
+				if (opening) {
+					// Log unknown tags
+					if (!IGNORED_TAGS.contains(tag))
+						Log.d("TagHandler", "Found an unsupported tag " + tag);
+				}
 			}
 		}
 
