@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Application-wide technical constants (e.g. for preferences). Don't translate! -->
 <resources>
+    <string name="versionName">0.6</string>
+    
     <string name="extra_asset_name">nusic.intent.extra.assetName</string>
     <string name="extra_activity_title">nusic.intent.extra.activity.title</string>
      

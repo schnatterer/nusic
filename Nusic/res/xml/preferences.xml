@@ -43,6 +43,7 @@
             android:title="@string/preferences_title_download_only_on_wifi" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/preferences_category_about" android:key="@string/preferences_key_about" >
+          <!-- Version summary is set in preference activity-->
           <Preference
             android:key="@string/preferences_key_version"
             android:title="@string/preferences_title_version" />
@@ -109,6 +110,16 @@
                    android:data="@string/link_nusic_git_hub" >
                </intent>
        </Preference> 
-
+        <Preference android:title="@string/preferences_title_email"
+		       android:summary="@string/preferences_summary_email">
+             <intent android:targetPackage="info.schnatterer.nusic"
+                android:targetClass="info.schnatterer.nusic.android.activities.NusicWebView"
+                android:data="mailto:android@schnatterer.info?subject=[nusic @string/versionName]&amp;body="/> 
+				<!-- <intent
+				  android:action="android.intent.action.VIEW"
+				  android:data="mailto:android@schnatterer.info?subject=nusic&amp;body=Your message here">
+				  <!- <extra android:name="android.intent.extra.TEXT" android:value="Your message here" /> ->
+				</intent> -->
+       </Preference>
     </PreferenceCategory>
 </PreferenceScreen>

@@ -76,7 +76,7 @@ public class TextUtil {
 				is = context.getResources().getAssets().open(assetPath);
 				String assetText = IOUtils.toString(is);
 				if (assetPath.matches(REGEX_ENDING_HTML)) {
-					return fromHtml(replaceResourceStrings(assetText, assetPath));
+					return fromHtml(replaceResourceStrings(assetText));
 				} else {
 					return assetText;
 				}
@@ -101,10 +101,9 @@ public class TextUtil {
 	 * resource that contains another resource, etc.
 	 * 
 	 * @param source
-	 * @param assetPath
 	 * @return <code>source</code> with replaced resources (if they exist)
 	 */
-	private static String replaceResourceStrings(String source, String assetPath) {
+	public static String replaceResourceStrings(String source) {
 		// Recursively resolve strings
 		Pattern p = Pattern.compile(REGEX_RESOURCE_STRING);
 		Matcher m = p.matcher(source);
@@ -115,8 +114,7 @@ public class TextUtil {
 			if (stringFromResources == null) {
 				Log.w(Constants.LOG,
 						"No String resource found for ID \"" + m.group(1)
-								+ "\" while inserting resources to asset:"
-								+ assetPath);
+								+ "\" while inserting resources");
 				/*
 				 * No need to try to load from defaults, android is trying that
 				 * for us. If we're here, the resource does not exist. Just
@@ -125,7 +123,7 @@ public class TextUtil {
 				stringFromResources = m.group(1);
 			}
 			m.appendReplacement(sb, // Recurse
-					replaceResourceStrings(stringFromResources, assetPath));
+					replaceResourceStrings(stringFromResources));
 		}
 		m.appendTail(sb);
 		return sb.toString();

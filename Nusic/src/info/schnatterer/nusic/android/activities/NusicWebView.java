@@ -21,7 +21,9 @@
 package info.schnatterer.nusic.android.activities;
 
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.android.util.TextUtil;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -33,7 +35,15 @@ import com.actionbarsherlock.view.MenuItem;
  * Activity that loads a website from an URL and displays it in a text view.
  * 
  * The URI to the website that is displayed can be passed to the activity using
- * {@link Intent#setData(android.net.Uri)}.
+ * {@link Intent#setData(android.net.Uri)}.<br/>
+ * <br/>
+ * This will also work for email links (<code>mailto:</code>).URLs like<br/>
+ * <code>mailto:x@y.z?subject=@string/someResource&amp;body=Your message here</code>
+ * <br/>
+ * will result in an intent {@link Intent#ACTION_SENDTO}, i.e. the user's
+ * preferred email app is initialized with the parameters passed to this
+ * activity. Note that any <code>@string/</code> parameters are localized before
+ * starting the new activity.
  * 
  * @author schnatterer
  */
@@ -47,18 +57,28 @@ public class NusicWebView extends SherlockFragmentActivity {
 
 		setContentView(R.layout.activity_web_view);
 
-		WebView webView = (WebView) findViewById(R.id.webview);
-		/* Activate JavaScript */
-		// webView.getSettings().setJavaScriptEnabled(true);
+		String url = getIntent().getData().toString();
+		if (url.startsWith("mailto:")) {
+			Intent send = new Intent(Intent.ACTION_SENDTO);
+			Uri uri = Uri.parse(TextUtil.replaceResourceStrings(url));
 
-		// webView.getSettings().setLoadWithOverviewMode(true);
-		webView.getSettings().setUseWideViewPort(true);
-		webView.getSettings().setBuiltInZoomControls(true);
+			send.setData(uri);
+			startActivity(send);
+			finish();
+		} else {
+			WebView webView = (WebView) findViewById(R.id.webview);
+			/* Activate JavaScript */
+			// webView.getSettings().setJavaScriptEnabled(true);
 
-		webView.loadUrl(getIntent().getData().toString());
+			// webView.getSettings().setLoadWithOverviewMode(true);
+			webView.getSettings().setUseWideViewPort(true);
+			webView.getSettings().setBuiltInZoomControls(true);
 
-		/* Prevent WebView from Opening the Browser */
-		webView.setWebViewClient(new InsideWebViewClient());
+			webView.loadUrl(url);
+
+			/* Prevent WebView from Opening the Browser on external links */
+			webView.setWebViewClient(new InsideWebViewClient());
+		}
 	}
 
 	/* Class that prevents opening the Browser */
