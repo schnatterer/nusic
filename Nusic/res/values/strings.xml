@@ -23,10 +23,11 @@
     <string name="MainActivity_TabAnnounced">Announced</string>
     <!-- <string name="MainActivity_JustAddedInformation">All releases that were added within the last %1$d days</string> -->
     <string name="WelcomeScreenTitle">Welcome to nusic %1$s</string>
-    <string name="WelcomeScreenPleaseBePatient">&#8230;please be patient :)</string>
+    <string name="WelcomeScreenPleaseBePatient">&#8230;please be patient ;)</string>
     <string name="WelcomeScreenFirstStartMayTakeAWhile">Depending on the amount of artists on you device, the very first start may take a while.</string>
     <string name="WelcomeScreenSyncronisationWillBeDoneBackground">After that, all further synchronisation will be done in the background. Nusic tells you about new releases via system notifications.</string>
     <string name="WelcomeScreenIfYouLikeNusicPleaseRate">If you like it, please rate nusic at @string/html_link_nusic_google_play or support its translation or development via @string/html_link_nusic_git_hub.</string>
+    <string name="WelcomeScreenAndroid444">Please note: android 4.4.4 does not support music on external SD cards, so this will not work with nusic either :(</string>
     
     <string name="LoadNewReleasesService_newRelease">Found new release:</string>
     <string name="LoadNewReleasesService_newReleaseMultiple">Found %1$d new releases</string>
