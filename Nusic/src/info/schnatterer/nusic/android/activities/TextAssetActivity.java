@@ -25,7 +25,6 @@ import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.util.TextUtil;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -72,7 +71,13 @@ public class TextAssetActivity extends SherlockFragmentActivity {
 
 		TextView textView = (TextView) findViewById(R.id.renderRawHtmlTextView);
 		textView.setMovementMethod(LinkMovementMethod.getInstance());
-		textView.setAutoLinkMask(Linkify.WEB_URLS);
+
+		/*
+		 * This results in not clickable HTML links However, without this
+		 * non-html URLs are not auto linked. So: use <a href="http://..">xz</a>
+		 * syntax!
+		 */
+		// textView.setAutoLinkMask(Linkify.ALL);
 		String assetPath = getIntent().getStringExtra(EXTRA_ASSET_NAME);
 		CharSequence text = TextUtil.loadTextFromAsset(this, assetPath);
 		if (text != null) {

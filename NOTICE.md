@@ -8,23 +8,23 @@ This product depends on the following libraries.
 
 **ActionBarSherlock**  
 published under The Apache Software License, Version 2.0  
-http://actionbarsherlock.com/
+[Website](http://actionbarsherlock.com/)
 
 **Universal Image Loader**  
 published under The Apache Software License, Version 2.0  
-https://github.com/nostra13/Android-Universal-Image-Loader
+[Website](https://github.com/nostra13/Android-Universal-Image-Loader)
 
 **musicbrainzws2-java**  
 published under GNU General Public License (GPL), Version 3.0  
-https://code.google.com/p/musicbrainzws2-java/
+[Website](https://code.google.com/p/musicbrainzws2-java/)
 
 **coverartarchive-api**  
 published under The Apache Software License, Version 2.0  
-https://github.com/lastfm/coverartarchive-api
+[Website](https://github.com/lastfm/coverartarchive-api)
 
 **Google guava**  
 published under The Apache Software License, Version 2.0  
-https://code.google.com/p/guava-libraries/
+[Website](https://code.google.com/p/guava-libraries/)
   
 The nusic logo bases on Wikitracks Vinyl by Fleshgrinder (released under the Public domain)  
-https://en.wikipedia.org/wiki/File:Wikitracks_Vinyl.svg
+[Website](https://en.wikipedia.org/wiki/File:Wikitracks_Vinyl.svg)
