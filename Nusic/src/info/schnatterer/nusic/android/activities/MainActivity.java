@@ -30,6 +30,9 @@ import info.schnatterer.nusic.android.service.LoadNewReleasesService;
 import info.schnatterer.nusic.android.util.TextUtil;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -119,6 +122,35 @@ public class MainActivity extends SherlockFragmentActivity {
 					isTabSelected(tab));
 		}
 
+		switch (NusicApplication.getAppStart()) {
+		case FIRST:
+			showWelcomeDialog(TextUtil.loadTextFromAsset(this,
+					"welcomeDialog.html", true));
+			/*
+			 * The initialization is finished once the user dismisses the dialog
+			 * in order to avoid overlapping dialogs.
+			 */
+			return;
+		case UPGRADE:
+			showWelcomeDialog(TextUtil
+					.loadTextFromAsset(this, "CHANGELOG.html"));
+			/*
+			 * The initialization is finished once the user dismisses the dialog
+			 * in order to avoid overlapping dialogs.
+			 */
+			return;
+		default:
+			// Finish initialization, because no dialog was opened
+			registerListenersAndStartLoading();
+			break;
+		}
+	}
+
+	/**
+	 * Calls {@link #registerListeners()} and also
+	 * {@link #startLoadingReleasesFromInternet(boolean)} if necessary.
+	 */
+	private void registerListenersAndStartLoading() {
 		if (loadNewRelasesServiceBinding == null) {
 			loadNewRelasesServiceBinding = new LoadNewRelasesServiceBinding();
 			registerListeners();
@@ -126,20 +158,6 @@ public class MainActivity extends SherlockFragmentActivity {
 		} else {
 			registerListeners();
 		}
-
-		switch (NusicApplication.getAppStart()) {
-		case FIRST:
-			showWelcomeDialog(TextUtil.loadTextFromAsset(this,
-					"welcomeDialog.html", true));
-			break;
-		case UPGRADE:
-			showWelcomeDialog(TextUtil
-					.loadTextFromAsset(this, "CHANGELOG.html"));
-			break;
-		default:
-			break;
-		}
-
 	}
 
 	@Override
@@ -248,9 +266,11 @@ public class MainActivity extends SherlockFragmentActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		registerListeners();
-		if (loadNewRelasesServiceBinding.checkDataChanged()) {
-			onContentChanged();
+		if (loadNewRelasesServiceBinding != null) {
+			registerListeners();
+			if (loadNewRelasesServiceBinding.checkDataChanged()) {
+				onContentChanged();
+			}
 		}
 	}
 
@@ -278,13 +298,17 @@ public class MainActivity extends SherlockFragmentActivity {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		unregisterListeners();
+		if (loadNewRelasesServiceBinding != null) {
+			unregisterListeners();
+		}
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		unregisterListeners();
+		if (loadNewRelasesServiceBinding != null) {
+			unregisterListeners();
+		}
 	}
 
 	private void unregisterListeners() {
@@ -293,7 +317,9 @@ public class MainActivity extends SherlockFragmentActivity {
 	}
 
 	/**
-	 * Shows an alert dialog displaying some text. Useful for
+	 * Shows an alert dialog displaying some text. Useful for welcome messages.
+	 * Calls {@link #registerListenersAndStartLoading()} when the dialog is
+	 * dismissed.
 	 * 
 	 * @param text
 	 *            text to display. If loading from an asset, consider using
@@ -310,13 +336,22 @@ public class MainActivity extends SherlockFragmentActivity {
 		textView.setText(text);
 		textView.setMovementMethod(LinkMovementMethod.getInstance());
 		alertDialogBuilder
-				.setCancelable(true)
 				.setTitle(
 						getString(R.string.WelcomeScreenTitle,
 								NusicApplication.getCurrentVersionName()))
 				.setIcon(R.drawable.ic_launcher)
-				.setPositiveButton(android.R.string.ok, null).setView(layout)
-				.show();
+				.setOnCancelListener(new OnCancelListener() {
+					@Override
+					public void onCancel(DialogInterface dialog) {
+						registerListenersAndStartLoading();
+					}
+				})
+				.setPositiveButton(android.R.string.ok, new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						registerListenersAndStartLoading();
+					}
+				}).setView(layout).show();
 	}
 
 	/**
