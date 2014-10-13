@@ -162,7 +162,15 @@ public abstract class AbstractApplication extends Application {
 
 	/**
 	 * Finds out if app was started for the first time (ever or in the current
-	 * version).
+	 * version).<br/>
+	 * <b>Note:</b> Be careful when using this for creating welcome screens,
+	 * e.g. in {@link android.app.Activity}.onCreate(), as this information is gathered on
+	 * the first start and kept in memory statically. The app might be redrawn
+	 * multiple times during the lifetime of this information. That is
+	 * onCreate() will be called multiple times but the welcome screen is
+	 * supposed to be shown only once. So addition logic is necessary within the
+	 * activity to distinguish if this is the first time the activity is
+	 * created.
 	 *
 	 * @return the type of app start
 	 */
