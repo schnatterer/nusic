@@ -70,7 +70,7 @@ public class LoadNewReleasesServiceConnection implements ServiceConnection {
 	 *            <code>true</code>)<br/>
 	 * 
 	 *            if <code>true</code> the refresh is only done when
-	 *            {@link ReleaseRefreshService#isUpdateNeccesarry()} returns
+	 *            {@link ReleaseRefreshService#isFirstStart()} returns
 	 *            <code>true</code>. Otherwise, the refresh is done at any case.
 	 * 
 	 * @return

@@ -199,8 +199,7 @@ public class LoadNewReleasesService extends WakefulService {
 			if (!connectivityService.isOnline()) {
 				Log.d(Constants.LOG, "Service thread: Not online!");
 				// If not online and update necessary, postpone run
-				if (!updateOnlyIfNeccesary
-						|| getReleasesService().isUpdateNeccesarry()) {
+				if (!updateOnlyIfNeccesary) {
 					Log.d(Constants.LOG,
 							"Postponing service until online or next schedule");
 					LoadNewReleasesServiceConnectivityReceiver
@@ -222,18 +221,22 @@ public class LoadNewReleasesService extends WakefulService {
 				LoadNewReleasesServiceConnectivityReceiver
 						.disableReceiver(LoadNewReleasesService.this);
 
-				getReleasesService().addArtistProcessedListener(
-						artistProgressListener);
-				getReleasesService().addArtistProcessedListener(
-						progressListenerNotifications);
+				if (!updateOnlyIfNeccesary) {
+					getReleasesService().addArtistProcessedListener(
+							artistProgressListener);
+					getReleasesService().addArtistProcessedListener(
+							progressListenerNotifications);
 
-				long beforeRefresh = System.currentTimeMillis();
-				Log.d(Constants.LOG,
-						"Service thread: Calling refreshReleases()");
-				if (getReleasesService().refreshReleases(updateOnlyIfNeccesary)) {
+					long beforeRefresh = System.currentTimeMillis();
+
+					Log.d(Constants.LOG,
+							"Service thread: Calling refreshReleases()");
+					getReleasesService().refreshReleases();
+
 					// Schedule next run
 					schedule(LoadNewReleasesService.this,
 							preferencesService.getRefreshPeriod(), null);
+
 					try {
 						notifyNewReleases(beforeRefresh);
 					} catch (ServiceException e) {
@@ -242,10 +245,10 @@ public class LoadNewReleasesService extends WakefulService {
 								"Refresh succeeded, but databse error when trying to find out about new releases",
 								e);
 					}
-				}
 
-				// Remove all listeners
-				getReleasesService().removeArtistProcessedListeners();
+					// Remove all listeners
+					getReleasesService().removeArtistProcessedListeners();
+				}
 			}
 
 			// stop service

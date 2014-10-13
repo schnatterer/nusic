@@ -70,30 +70,7 @@ public class ReleaseRefreshServiceImpl implements ReleaseRefreshService {
 	}
 
 	@Override
-	public boolean isUpdateNeccesarry() {
-		switch (NusicApplication.getAppStart()) {
-		case FIRST:
-			// Fall through is intended
-		case UPGRADE:
-			return true;
-		default:
-			break;
-		}
-
-		/*
-		 * TODO check if there are new artists on the device and refresh if
-		 * neccessary. Then update interface comment for this method!
-		 */
-		return false;
-	}
-
-	@Override
-	public boolean refreshReleases(boolean updateOnlyIfNeccesary) {
-		if (updateOnlyIfNeccesary && !isUpdateNeccesarry()) {
-			progressUpdater.progressFinished(false);
-			return false;
-		}
-
+	public void refreshReleases() {
 		Date startDate = createStartDate(preferencesService
 				.getDownloadReleasesTimePeriod());
 
@@ -101,7 +78,6 @@ public class ReleaseRefreshServiceImpl implements ReleaseRefreshService {
 		Date dateCreated = new Date();
 		refreshReleases(startDate, null);
 		preferencesService.setLastReleaseRefresh(dateCreated);
-		return true;
 	}
 
 	private Date createStartDate(int months) {

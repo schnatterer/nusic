@@ -37,23 +37,8 @@ public interface ReleaseRefreshService {
 	 * {@link PreferencesService#isIncludeFutureReleases()} and
 	 * {@link PreferencesService#isForceFullRefresh()}.
 	 * 
-	 * @param updateOnlyIfNeccesary
-	 *            if <code>true</code> the refresh is only done when
-	 *            {@link ReleaseRefreshService#isUpdateNeccesarry()} returns
-	 *            <code>true</code>. Otherwise, the refresh is done at any case.
-	 * @return <code>false</code> if no update was necessary. Otherwise
-	 *         <code>true</code>.
 	 */
-	boolean refreshReleases(boolean updateOnlyIfNeccesary);
-
-	/**
-	 * Finds out if an update is necessary. An update definitely is necessary
-	 * whenever the app runs for the first time ever or in this version.
-	 * 
-	 * @return <code>true</code> if the app run the first time ever or the first
-	 *         time this version. Otherwise returns <code>false</code>
-	 */
-	boolean isUpdateNeccesarry();
+	void refreshReleases();
 
 	/**
 	 * Adds an {@link ArtistProgressListener} to the Service. This is called

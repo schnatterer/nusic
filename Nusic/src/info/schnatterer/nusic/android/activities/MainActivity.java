@@ -77,6 +77,13 @@ public class MainActivity extends SherlockFragmentActivity {
 
 	/** Start and bind the {@link LoadNewReleasesService}. */
 	private static LoadNewRelasesServiceBinding loadNewRelasesServiceBinding = null;
+
+	/**
+	 * <code>false</code>, if {@link #onCreate(Bundle)} has never been called.
+	 * Useful for not showing the welcome screen multiple times.
+	 */
+	private static boolean onCreateCalled = false;
+
 	/**
 	 * Stores the selected tab, even when the configuration changes. The tab
 	 * assigned here is the one that is shown when the application is started
@@ -122,42 +129,69 @@ public class MainActivity extends SherlockFragmentActivity {
 					isTabSelected(tab));
 		}
 
-		switch (NusicApplication.getAppStart()) {
-		case FIRST:
-			showWelcomeDialog(TextUtil.loadTextFromAsset(this,
-					"welcomeDialog.html", true));
-			/*
-			 * The initialization is finished once the user dismisses the dialog
-			 * in order to avoid overlapping dialogs.
-			 */
-			return;
-		case UPGRADE:
-			showWelcomeDialog(TextUtil
-					.loadTextFromAsset(this, "CHANGELOG.html"));
-			/*
-			 * The initialization is finished once the user dismisses the dialog
-			 * in order to avoid overlapping dialogs.
-			 */
-			return;
-		default:
-			// Finish initialization, because no dialog was opened
-			registerListenersAndStartLoading();
-			break;
+		// Handle first app start, if necessary
+		if (!onCreateCalled) {
+			onCreateCalled = true;
+			switch (NusicApplication.getAppStart()) {
+			case FIRST:
+				showWelcomeDialog(TextUtil.loadTextFromAsset(this,
+						"welcomeDialog.html", true));
+				/*
+				 * The initialization is finished once the user dismisses the
+				 * dialog in order to avoid overlapping dialogs.
+				 */
+				return;
+			case UPGRADE:
+				showWelcomeDialog(TextUtil.loadTextFromAsset(this,
+						"CHANGELOG.html"));
+				/*
+				 * The initialization is finished once the user dismisses the
+				 * dialog in order to avoid overlapping dialogs.
+				 */
+				return;
+			default:
+				break;
+			}
 		}
+		// Finish initialization, because no dialog was opened
+		registerListenersAndStartLoading(false);
 	}
 
 	/**
 	 * Calls {@link #registerListeners()} and also
 	 * {@link #startLoadingReleasesFromInternet(boolean)} if necessary.
 	 */
-	private void registerListenersAndStartLoading() {
+	private void registerListenersAndStartLoading(boolean forceUpdate) {
 		if (loadNewRelasesServiceBinding == null) {
 			loadNewRelasesServiceBinding = new LoadNewRelasesServiceBinding();
 			registerListeners();
-			startLoadingReleasesFromInternet(true);
+			if (forceUpdate) {
+				startLoadingReleasesFromInternet(false);
+			} else {
+				// Update ony if necessary
+				startLoadingReleasesFromInternet(true);
+			}
+
 		} else {
 			registerListeners();
 		}
+	}
+
+	public boolean isFirstStart() {
+		switch (NusicApplication.getAppStart()) {
+		case FIRST:
+			// Fall through is intended
+		case UPGRADE:
+			return true;
+		default:
+			break;
+		}
+
+		/*
+		 * TODO check if there are new artists on the device and refresh if
+		 * neccessary. Then update interface comment for this method!
+		 */
+		return false;
 	}
 
 	@Override
@@ -343,13 +377,13 @@ public class MainActivity extends SherlockFragmentActivity {
 				.setOnCancelListener(new OnCancelListener() {
 					@Override
 					public void onCancel(DialogInterface dialog) {
-						registerListenersAndStartLoading();
+						registerListenersAndStartLoading(true);
 					}
 				})
 				.setPositiveButton(android.R.string.ok, new OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						registerListenersAndStartLoading();
+						registerListenersAndStartLoading(true);
 					}
 				}).setView(layout).show();
 	}
