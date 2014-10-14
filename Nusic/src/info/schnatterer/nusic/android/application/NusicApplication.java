@@ -23,8 +23,8 @@ package info.schnatterer.nusic.android.application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.Constants.Notification;
 import info.schnatterer.nusic.R;
-import info.schnatterer.nusic.android.service.ReleasedTodayService;
 import info.schnatterer.nusic.android.activities.MainActivity;
+import info.schnatterer.nusic.android.service.ReleasedTodayService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -82,7 +82,7 @@ public class NusicApplication extends AbstractApplication {
 		 * preferences. Do all the clean up for this version here.
 		 */
 		int lastAppVersion = sharedPreferences.getInt(
-				DEPRECATED_PREFERENCES_KEY_FUTURE_RELEASES,
+				DEPRECATED_PREFERENCES_KEY_LAST_APP_VERSION,
 				DEFAULT_LAST_APP_VERSION);
 		if (lastAppVersion > DEFAULT_LAST_APP_VERSION) {
 			// Clean up preferences
@@ -99,10 +99,6 @@ public class NusicApplication extends AbstractApplication {
 					.commit();
 			setLastVersionCode(lastAppVersion);
 			setAppStart(AppStart.UPGRADE);
-		} else {
-			// TODO This is actually the first start ever. Show the welcome
-			// first
-			// time screen.
 		}
 		/*
 		 * Make sure the Release Today service is scheduled (if not switched off
@@ -114,15 +110,12 @@ public class NusicApplication extends AbstractApplication {
 
 	@Override
 	protected void onUpgrade(int oldVersion, int newVersion) {
-		// if (oldVersion <= NusicVersion.V_0_6) {
-		// TODO show the changelog/release notes
 		/*
 		 * Make sure the Release Today service is scheduled (if not switched off
 		 * in preferences). Schedule it only after updates and new installations
 		 * to avoid overhead.
 		 */
 		ReleasedTodayService.schedule(this);
-
 	}
 
 	/**
