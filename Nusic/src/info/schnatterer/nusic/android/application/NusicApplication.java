@@ -257,12 +257,12 @@ public class NusicApplication extends AbstractApplication {
 	}
 
 	public static void toast(String message) {
+		Log.i(Constants.LOG, "Toast: " + message);
 		Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
 	}
 
 	public static void toast(int stringId) {
-		Toast.makeText(getContext(), getContext().getString(stringId),
-				Toast.LENGTH_LONG).show();
+		toast(getContext().getString(stringId));
 	}
 
 	public static void toast(String message, Object... args) {
