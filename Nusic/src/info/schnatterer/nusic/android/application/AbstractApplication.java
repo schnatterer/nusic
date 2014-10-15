@@ -73,7 +73,7 @@ public abstract class AbstractApplication extends Application {
 		sharedPreferences = getApplicationContext().getSharedPreferences(
 				"AbstractApplicationPreferences", Context.MODE_PRIVATE);
 		currentVersionName = createVersionName();
-		appStart = handleAppVersion();
+		handleAppVersion();
 	}
 
 	/**
@@ -102,7 +102,7 @@ public abstract class AbstractApplication extends Application {
 	 * @return
 	 * 
 	 */
-	AppStart handleAppVersion() {
+	void handleAppVersion() {
 		PackageInfo pInfo;
 		try {
 			pInfo = getApplicationContext().getPackageManager().getPackageInfo(
@@ -114,23 +114,29 @@ public abstract class AbstractApplication extends Application {
 			currentVersionCode = pInfo.versionCode;
 
 			// Update version in preferences
+			Log.d(Constants.LOG, "handleAppVersion(): currentVersionCode="
+					+ currentVersionCode + "; lastVersionCode="
+					+ lastVersionCode);
 			if (currentVersionCode != lastVersionCode) {
 				sharedPreferences.edit()
 						.putInt(KEY_LAST_APP_VERSION, currentVersionCode)
 						.commit();
 				if (lastVersionCode == DEFAULT_LAST_APP_VERSION) {
+					appStart = AppStart.FIRST;
 					onFirstCreate();
-					return AppStart.FIRST;
+					return;
 				} else {
 					onUpgrade(lastVersionCode, currentVersionCode);
-					return AppStart.UPGRADE;
+					appStart = AppStart.UPGRADE;
+					return;
 				}
 			}
 		} catch (NameNotFoundException e) {
 			Log.w(Constants.LOG,
 					"Unable to determine current app version from pacakge manager. Defenisvely assuming normal app start.");
 		}
-		return AppStart.NORMAL;
+		appStart = AppStart.NORMAL;
+		return;
 	}
 
 	/**
@@ -164,10 +170,10 @@ public abstract class AbstractApplication extends Application {
 	 * Finds out if app was started for the first time (ever or in the current
 	 * version).<br/>
 	 * <b>Note:</b> Be careful when using this for creating welcome screens,
-	 * e.g. in {@link android.app.Activity}.onCreate(), as this information is gathered on
-	 * the first start and kept in memory statically. The app might be redrawn
-	 * multiple times during the lifetime of this information. That is
-	 * onCreate() will be called multiple times but the welcome screen is
+	 * e.g. in {@link android.app.Activity}.onCreate(), as this information is
+	 * gathered on the first start and kept in memory statically. The app might
+	 * be redrawn multiple times during the lifetime of this information. That
+	 * is onCreate() will be called multiple times but the welcome screen is
 	 * supposed to be shown only once. So addition logic is necessary within the
 	 * activity to distinguish if this is the first time the activity is
 	 * created.
@@ -285,5 +291,4 @@ public abstract class AbstractApplication extends Application {
 		 */
 		return null;
 	}
-
 }

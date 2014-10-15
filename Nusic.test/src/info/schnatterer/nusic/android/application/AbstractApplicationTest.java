@@ -54,8 +54,10 @@ public class AbstractApplicationTest extends TestCase {
 		abstractApplication
 				.setMockedCurrentVersionCode(expectedCurrentVersionCode);
 
-		assertEquals("handleAppVersion() returned unexpected result ",
-				AppStart.FIRST, abstractApplication.handleAppVersion());
+		abstractApplication.handleAppVersion();
+
+		assertEquals("getAppStart() returned unexpected result ",
+				AppStart.FIRST, AbstractApplication.getAppStart());
 
 		assertTrue("onFirstCreate() was not called",
 				abstractApplication.isOnFirstCreate());
@@ -80,8 +82,10 @@ public class AbstractApplicationTest extends TestCase {
 		abstractApplication
 				.setMockedCurrentVersionCode(expectedCurrentVersionCode);
 
-		assertEquals("handleAppVersion() returned unexpected result ",
-				AppStart.UPGRADE, abstractApplication.handleAppVersion());
+		abstractApplication.handleAppVersion();
+
+		assertEquals("getAppStart() returned unexpected result ",
+				AppStart.UPGRADE, AbstractApplication.getAppStart());
 
 		assertFalse("onFirstCreate() was called unexpectedly",
 				abstractApplication.isOnFirstCreate());
@@ -107,8 +111,10 @@ public class AbstractApplicationTest extends TestCase {
 		abstractApplication
 				.setMockedCurrentVersionCode(expectedCurrentVersionCode);
 
-		assertEquals("handleAppVersion() returned unexpected result ",
-				AppStart.NORMAL, abstractApplication.handleAppVersion());
+		abstractApplication.handleAppVersion();
+
+		assertEquals("getAppStart() returned unexpected result ",
+				AppStart.NORMAL, AbstractApplication.getAppStart());
 
 		assertFalse("onFirstCreate() was called unexpectedly",
 				abstractApplication.isOnFirstCreate());
