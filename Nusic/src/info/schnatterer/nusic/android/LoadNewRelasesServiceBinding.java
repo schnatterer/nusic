@@ -227,6 +227,7 @@ public class LoadNewRelasesServiceBinding {
 	private class ProgressListener implements ArtistProgressListener {
 		@Override
 		public void onProgressStarted(final int nEntities) {
+			totalArtists = nEntities;
 			runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
