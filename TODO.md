@@ -1,8 +1,24 @@
 TODOs - Features, enhancements, refactoring, ...
-- Feature: Use the same algorithm for displaying notifications for loadNewReleasesService as in released today service: When only one album is found display infos and cover, when several are found show only nusic icon and the amount of albums
 
-Adapt privacy policy to coverartarchive. + Header: "nusic Privacy Policy" + Footer: "Effective Date: x Oktober 2014"
-Create new screenshots
+Prepared new version
+
+Updated Changelog
+
+
+
+- Feature: Now showing cover art from Cover Art Archive
+- Feautre: Get notified on the day of a release
+- Added changelog, licenses, privacy policy as well as links to GitHub and Google Play and an email contact to preferences.
+- Added welcome screen for new users and new versions
+- Multiple minor enhancements/fixes
+
+- Feature: Album Covers von Cover Art Archive werden angezeigt
+- Feature: Benachrichtigungen am Tag der Veröffentlichung
+- Änderungshistorie, Lizenzen, Datenschutzrichtline sowie Links zu GitHub und Google Play und Kontakt per E-Mail zu den Einstelungen hinzugefügt
+- Wilkommensbildschirm für neue Nutzer und für neue Versionen hinzugefügt
+- Mehrere kleinere Erweiterungen/Fehlerkorrekturen
+
+
 Update GooglePlay texts
 === Release v1.0
 Make Development Branch default in GH
