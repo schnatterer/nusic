@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+ http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>info.schnatterer.nusic</groupId>
+	<artifactId>nusic-parent</artifactId>
+	<version>1.0</version>
+	<packaging>pom</packaging>
+	<name>nusic</name>
+
+	<licenses>
+		<license>
+			<name>GNU General Public License 3.0</name>
+			<url>http://www.gnu.org/copyleft/gpl.html</url>
+		</license>
+	</licenses>
+
+	<modules>
+		<module>nusic</module>
+		<!-- TODO remove as soon as a proper version is published and nusic-app does not reference this any more -->
+        <module>musicbrainzws2-java</module>
+	</modules>
+</project>

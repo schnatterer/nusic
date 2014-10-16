@@ -1,44 +1,69 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Feature: Info dialog
-- Feature: Tabs: Available, Announced
-- Feature: Use WeakReferences to improve performance while scrolling list: http://stackoverflow.com/questions/3243215/how-to-use-weakreference-in-java-and-android-development
-=== RELEASE v.0.6
+Prepared new version
+
+Updated Changelog
 
 
-- Feature: Query and display album covers: Last fm? (See Apollo Music player) or Discogs? Store covers in sqlite oder in file system? Get Last.FM ID/Discogs ID from MusicBrainz?
+
+- Feature: Now showing cover art from Cover Art Archive
+- Feautre: Get notified on the day of a release
+- Added changelog, licenses, privacy policy as well as links to GitHub and Google Play and an email contact to preferences.
+- Added welcome screen for new users and new versions
+- Multiple minor enhancements/fixes
+
+- Feature: Album Covers von Cover Art Archive werden angezeigt
+- Feature: Benachrichtigungen am Tag der Veröffentlichung
+- Änderungshistorie, Lizenzen, Datenschutzrichtline sowie Links zu GitHub und Google Play und Kontakt per E-Mail zu den Einstelungen hinzugefügt
+- Wilkommensbildschirm für neue Nutzer und für neue Versionen hinzugefügt
+- Mehrere kleinere Erweiterungen/Fehlerkorrekturen
+
+
+Update GooglePlay texts
 === Release v1.0
-
+Make Development Branch default in GH
 
 ................... More TODOs
-- Display additional album info like "remastered special edition", "anniversary edition", etc. or use only the "oldest" release in a release group
-- Display MusicBrainz side in internal Webview -> Better usability
-- In app search
-- Refactor testing: Maven? JUnit4, separtion of "normal" and android tests?
+- Show artwork in context menu (on long tab)
+- Download and display disambiguation, e.g "remastered special edition", "anniversary edition", >20th Anniversary Edition< (or display only the "oldest" release of all releases with the same name?) https://musicbrainz.org/ws/2/release/?limit=100&offset=0&query=type%3Aalbum+AND+date%3A[2014-02-20+TO+%3F]+AND+artist%3A%22%3Cpantera%3E%22
+- Rename services so their tasks are clearer? FetchReleasesService? Dependecy to QueryMusicMetadataService? ArtistQueryService -> LocalLibraryService?- util -> common.util?!
+
+LOGGING 
+- Switch off logging for artwork. Using logback-android via slf4j and config in assets/logback.xml?
+- https://github.com/tony19/logback-android#configuration-in-code
+- Switch app to use slf4j?
+- Provide means to send log via email?
+- Construction of objects. Use DI? Or more singletons to save a bit of memory?
+
+- Covers: Download using HTTPS. Problem with certificate chain at coverartarchive.org ONLY on android. In addition, links to images are HTTP. Force using HTTPS?
+
+- Implement an Artwork Entity using a "proxy" that takes care of the writing from/to FS?
+- Replace today's date with "today"? How to refresh at midnight?
+- Use WeakReferences in ReleaseRefreshService in order to allow longer time ranges
+
 - Feature: Tablet optimization: Layout + Screens for 7" + 10"
 
 .....Build
-- Refactoring: Optimize Maven build: parent,  app,  test
-- Refactoring: Maven build: Extract MusicBrainz lib into separate maven project. Separate GitHub repo?
+- Refactoring: Mavenize test project
+- Insert Built timestamp to version
+- Add SCM info to pom(s)
 - Refactoring: Maven Build: update manifest
 - Refactoring: Maven Use profiles for release (signing...)
+- Refactor testing: Maven? JUnit4, separtion of "normal" and android tests?
 
 ....Stores
 - Stores: Publish on F-Droid
-- Stores: "Google Play: Feature" Graphic
 - Stores: Publish on Amazon: https://developer.amazon.com/welcome.html
 
 
 .... Even more ideas
 - Feature: Kind of releases: Album, Release, Live ...
-- Feature: Error reporter; Or a simpler workaround: Log errors to SD (microlog4android? http://stackoverflow.com/a/13479675/1845976)
 - Feature: Check connectivity while refreshing and cancel with error when lost: http://developer.android.com/training/monitoring-device-state/connectivity-monitoring.html
+- Feature: Error reporter; Or a simpler workaround: Log errors to SD (microlog4android? http://stackoverflow.com/a/13479675/1845976)
 - Feature: Show number of artists and releases, show date of last refresh (in status/statistik dialog?)
+- Feature: Clean up DB, remove older entries
 - Refactoring: Delete LoadNewServiceBinding and split its functionality to MainActivity and  ServiceConnection?
-- Feature: Custom Notifications icons?
-- Feature: Custom Notification: Line break in Warning: You might want to try refreshing manually
 - Feature: Schedule frequence configurable via preferences (at the moment always once per day). When changed: Adapt interval.
-- Feature: Preferences: Delete old releases
 - Feature: Preference Time period: infinitely. TODO Refactor refreshing release to decrease memory consumption.
 
 .... Lower priority ideas

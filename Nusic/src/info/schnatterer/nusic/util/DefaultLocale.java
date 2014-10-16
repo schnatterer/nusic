@@ -20,7 +20,7 @@
  */
 package info.schnatterer.nusic.util;
 
-import info.schnatterer.nusic.Application;
+import info.schnatterer.nusic.android.application.NusicApplication;
 
 import java.util.Locale;
 
@@ -49,7 +49,8 @@ public final class DefaultLocale {
 	 * @return
 	 */
 	public static String getStringInDefaultLocale(int resId) {
-		Resources currentResources = Application.getContext().getResources();
+		Resources currentResources = NusicApplication.getContext()
+				.getResources();
 		AssetManager assets = currentResources.getAssets();
 		DisplayMetrics metrics = currentResources.getDisplayMetrics();
 		Configuration config = new Configuration(

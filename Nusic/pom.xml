@@ -3,15 +3,24 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
  http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>info.schnatterer.nusic</groupId>
-	<artifactId>nusic</artifactId>
-	<version>0.6</version>
+
+	<parent>
+		<groupId>info.schnatterer.nusic</groupId>
+		<artifactId>nusic-parent</artifactId>
+		<version>1.0</version>
+	</parent>
+
+	<artifactId>nusic-app</artifactId>
 	<packaging>apk</packaging>
-	<name>nusic</name>
+	<name>nusic-app</name>
 
 	<properties>
 		<abs.version>4.4.0</abs.version>
-		<final.name>${project.artifactId}-${project.version}</final.name>
+		<final.name>nusic-${project.version}</final.name>
+		<sdk.version>19</sdk.version>
+		<assets.dir.input>${project.basedir}/assets</assets.dir.input>
+		<assets.dir.output>${project.build.directory}/filtered-assets</assets.dir.output>
+		<raw.mardkown.dir>${project.build.directory}/md-assets</raw.mardkown.dir>
 	</properties>
 
 	<!-- Use Profiles to distinguish between the "implicit" builds of the eclipse 
@@ -30,7 +39,7 @@
 				<dependency>
 					<groupId>android</groupId>
 					<artifactId>android</artifactId>
-					<version>4.4.2_r2</version>
+					<version>4.4.2_r3</version>
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>
@@ -42,7 +51,7 @@
 		<dependency>
 			<groupId>android.support</groupId>
 			<artifactId>compatibility-v4</artifactId>
-			<version>19.0.1</version>
+			<version>20.0.0</version>
 		</dependency>
 
 		<dependency>
@@ -65,32 +74,44 @@
 			<artifactId>guava</artifactId>
 			<version>14.0.1</version>
 		</dependency>
-
-		<!-- For musicbrainzws2-java (not available on maven repos) -->
 		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-			<version>1.4</version>
+			<groupId>com.nostra13.universalimageloader</groupId>
+			<artifactId>universal-image-loader</artifactId>
+			<version>1.9.2</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.1</version>
+			<groupId>fm.last</groupId>
+			<artifactId>coverartarchive-api</artifactId>
+			<version>2.1.0</version>
+			<exclusions>
+				<exclusion>
+					<!-- Android ships its own implementation of httpclient anyway -->
+					<artifactId>httpclient</artifactId>
+					<groupId>org.apache.httpcomponents</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- coverartarchive uses slf4j, propagate its logs to android.util.Log -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-android</artifactId>
+			<version>1.7.7</version>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>jdom</groupId>
-			<artifactId>jdom</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
+			<groupId>musicbrainzws2-java</groupId>
+			<artifactId>musicbrainzws2-java</artifactId>
+			<!-- TODO replace this with the proper version, once it is published. 
+				Then remove "sibling" project "coverartarchive-api" from parent pom and from 
+				repo -->
+			<version>2.01beta-nusicEdition</version>
+			<exclusions>
+				<exclusion>
+					<!-- Android ships its own implementation of httpclient anyway -->
+					<artifactId>httpclient</artifactId>
+					<groupId>org.apache.httpcomponents</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 	<build>
@@ -139,6 +160,96 @@
 				</executions>
 			</plugin>
 
+			<!-- Download privacy policy file to assets -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+				<version>1.0-beta-5</version>
+				<executions>
+					<execution>
+						<id>update-privacy-policy</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>download-single</goal>
+						</goals>
+						<configuration>
+							<url>https://schnatterer.github.io/nusic/</url>
+							<fromFile>privacyPolicy.html</fromFile>
+							<!-- YES download it in input directory! This way we notice when something 
+								changed! -->
+							<toDir>${assets.dir.input}</toDir>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<!-- Copy input assets to outptut asset dir -->
+					<execution>
+						<id>copy assets</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${assets.dir.output}</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${assets.dir.input}</directory>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+
+					<!-- Include markdown sources to target in assets -->
+					<execution>
+						<id>copy raw markdown</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${raw.mardkown.dir}</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.basedir}/..</directory>
+									<includes>
+										<include>NOTICE.md</include>
+										<include>CHANGELOG.md</include>
+									</includes>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Process Markdown to HTML -->
+			<plugin>
+				<groupId>com.ruleoftech</groupId>
+				<artifactId>markdown-page-generator-plugin</artifactId>
+				<version>0.6</version>
+				<executions>
+					<execution>
+						<id>markdown2html</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<inputDirectory>${raw.mardkown.dir}</inputDirectory>
+					<outputDirectory>${assets.dir.output}</outputDirectory>
+					<copyDirectories></copyDirectories>
+				</configuration>
+			</plugin>
+
 			<!-- Starting with Android SDK Tools 23? you might have to copy zipaling 
 				from sdk/build-tools/<version> to sdk/tools -->
 			<plugin>
@@ -159,7 +270,7 @@
 				<configuration>
 					<sdk>
 						<!-- targetSdkVersion -->
-						<platform>18</platform>
+						<platform>${sdk.version}</platform>
 					</sdk>
 					<manifest>
 						<debuggable>false</debuggable>
@@ -177,6 +288,7 @@
 						<inputApk>${project.build.directory}/${final.name}.apk</inputApk>
 						<outputApk>${project.build.directory}/${final.name}.apk</outputApk>
 					</zipalign>
+					<assetsDirectory>${project.build.directory}/filtered-assets</assetsDirectory>
 				</configuration>
 			</plugin>
 		</plugins>

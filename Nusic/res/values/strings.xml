@@ -10,6 +10,8 @@
     <string name="releaseListMenu_HideAllByArtist">Hide all by artist</string>
     
      <!-- GUI captions -->
+     <string name="GooglePlay">Google Play</string>
+     <string name="GitHub">GitHub</string>
     <string name="releaseListRow_RightArrow">Click to show details</string>
     <string name="releaseListRow_Thumbnail">Thumbnail of album art</string>
     <string name="LoadNewReleasesBinding_CheckingArtists">Checking all artists for new releases</string>
@@ -20,6 +22,17 @@
     <string name="MainActivity_TabAvailable">Available</string>
     <string name="MainActivity_TabAnnounced">Announced</string>
     <!-- <string name="MainActivity_JustAddedInformation">All releases that were added within the last %1$d days</string> -->
+    <string name="WelcomeScreenTitle">Welcome to nusic %1$s</string>
+    <string name="WelcomeScreenPleaseBePatient">&#8230;please be patient ;)</string>
+    <string name="WelcomeScreenFirstStartMayTakeAWhile">Depending on the amount of artists on you device, the very first start may take a while.</string>
+    <string name="WelcomeScreenSyncronisationWillBeDoneBackground">After that, all further synchronisation will be done in the background. Nusic tells you about new releases via system notifications.</string>
+    <string name="WelcomeScreenIfYouLikeNusicPleaseRate">If you like it, please rate nusic at @string/html_link_nusic_google_play or support its translation or development via @string/html_link_nusic_git_hub.</string>
+    <string name="WelcomeScreenAndroid444">Please note: android 4.4.4 does not support music on external SD cards, so this will not work with nusic either :(</string>
+    
+    <string name="LoadNewReleasesService_newRelease">Found new release:</string>
+    <string name="LoadNewReleasesService_newReleaseMultiple">Found %1$d new releases</string>
+    <string name="ReleasedTodayService_ReleasedToday">Published today:</string>
+    <string name="ReleasedTodayService_ReleasedTodayMultiple">%1$d releases are published today</string>
     
      <!-- Prefrences -->
      <string name="preferences_category_releases">Releases</string>
@@ -31,17 +44,35 @@
         <item>Six months</item>
         <item>One year</item>
     </string-array>
-    <string name="preferences_title_include_future_releases">Include future releases</string>
-    <string name="preferences_summary_include_future_releases">Also download and display releases that are not available yet</string>
     <string name="preferences_title_display_all_releases">Make hidden albums reappear</string>
     <string name="preferences_summary_display_all_releases">Albums can be hidden by long tapping them. This option resets all hidden albums and artists.</string>
     <string name="preferences_message_display_all_releases">Do you really want to reset all hidden albums and artists?</string>
-    <!-- <string name="preferences_title_full_update">Full update</string>
-    <string name="preferences_summary_full_update">Always update the complete time period. Significantly higher bandwitdth consumption but finds also releases that are added to the database after they are release (if that ever happens))</string> -->
     
     <string name="preferences_category_bandwitdth">Bandwidth usage</string>
     <string name="preferences_title_download_only_on_wifi">Download via Wi-Fi only</string>
     <string name="preferences_summary_download_only_on_wifi">Don\'t use mobile networks</string>
+    
+    <string name="preferences_category_notifications">Notifications</string>
+    <string name="preferences_title_is_enabled_notify_new_releases">New releases</string>
+    <string name="preferences_summary_is_enabled_notify_new_releases">Notify when new releases are found.</string>
+    <string name="preferences_title_is_enabled_notify_released_today">Release dates</string>
+    <string name="preferences_summary_is_enabled_notify_released_today">Notify on the day releases are published</string>
+    <string name="preferences_title_released_today_hour_of_day">Time of notification</string>
+    <string name="preferences_summary_released_hour_of_day">Approximate time of notification that informas of releases dates. Android might delay execution in order to save energy.</string>
+    
+    <string name="preferences_category_about">About %1$s</string>
+    <string name="preferences_title_version">Version</string>
+    <string name="preferences_title_privacy_policy">Privacy Policy</string>
+    <string name="preferences_summary_privacy_policy">Find out what data is accessed by nusic and what it does with it.</string>
+    <string name="preferences_title_licences">Licenses</string>
+    <string name="preferences_summary_licences">Licenses that apply to nusic and its dependencies</string>
+    <string name="preferences_title_changelog">Changelog</string>
+    <string name="preferences_summary_changelog">See what\'s new</string>
+    <string name="preferences_category_web">nusic on the web</string>
+    <string name="preferences_summary_google_play">If you like nusic, please rate it. If you don\'t like it, please help us improve by creating an issue at GitHub.</string>
+    <string name="preferences_summary_git_hub">Report issues, parse source code, add translation or support development.</string>
+    <string name="preferences_title_email">E-mail</string>
+    <string name="preferences_summary_email">Contact us via E-mail.</string>
     
     <!-- (Error) messages -->
     <string name="GenericError">Something almost impossible has happened: %1s!</string>
@@ -50,18 +81,18 @@
     <string name="MainActivity_refreshAlreadyInProgress">Refresh already in progress.</string>
     <string name="MainActivity_pleaseWaitUntilRefreshIsFinished">Please wait until refreshing releases has finished</string>
     
+    <string name="TextAssetActivity_errorLoadingFile">Error load text file</string>
+    
     <string name="ReleasesService_errorPersistingData">Error saving data on the device</string>
     <string name="LoadNewReleasesBinding_errorFindingReleases">Refreshing releases failed: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">Unbelievable error while trying to refresh releases: </string>
     <string name="LoadNewReleasesBinding_finishedWithErrors">Updating releases failed for %1$d of %2$d artists</string>
-    <plurals name="LoadNewReleasesService_foundNewReleases">
-        <item quantity="one">Found %1$d new release</item>
-        <item quantity="other">Found %1$d new releases</item>
-    </plurals>
     
     <string name="ServiceException_errorLoadingArtists">Error loading artists from the device</string>
     <string name="ServiceException_errorFindingReleasesArtist">Error finding releases for artist %1$s</string>
     <string name="ServiceException_errorQueryingMusicBrainz">Error querying releases for artist %1$s from the internet. No connection to the internet?</string>
     <string name="ServiceException_errorReadingFromDb">Error reading from application database</string>
     <string name="ServiceException_errorWritingToDb">Error writing to application datbase</string>
+    
+     <string name="ReleasedTodayService_ReleasedTodayError">Error finding today\'s releases</string>
 </resources>

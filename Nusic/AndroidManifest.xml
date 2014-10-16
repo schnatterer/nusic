@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="info.schnatterer.nusic"
-    android:versionCode="10"
-    android:versionName="0.6" >
+    android:versionCode="11"
+    android:versionName="@string/versionName" >
 
     <uses-sdk
         android:minSdkVersion="9"
@@ -15,13 +15,13 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".Application"
+        android:name=".android.application.NusicApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".ui.activities.MainActivity"
+            android:name=".android.activities.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +29,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activities.NusicPreferencesActivity"
+        <activity
+            android:name=".android.activities.NusicPreferencesActivity"
             android:label="@string/action_settings" >
             <intent-filter>
                 <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
@@ -37,22 +38,43 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name=".android.activities.NusicWebView" >
+        </activity>
+        <activity
+            android:name=".android.activities.TextAssetActivity" >
+        </activity>
 
-        <receiver android:name=".service.android.LoadNewReleasesServiceConnectivityReceiver" >
+        <receiver android:name=".android.service.LoadNewReleasesServiceConnectivityReceiver" >
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <!-- <action android:name="android.net.wifi.WIFI_STATE_CHANGED" /> -->
             </intent-filter>
         </receiver>
-        <receiver android:name=".service.android.LoadNewReleasesServiceBootReceiver" >
+        <receiver android:name=".android.service.LoadNewReleasesServiceBootReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                 <category android:name="android.intent.category.HOME" />
+
+                <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".service.android.LoadNewReleasesService$LoadNewReleasesServiceAlarmReceiver" />
+        <!-- Register receiver that starts service after alarm -->
+        <receiver android:name=".android.service.LoadNewReleasesService$LoadNewReleasesServiceAlarmReceiver" />
 
-        <service android:name=".service.android.LoadNewReleasesService" />
+        <service android:name=".android.service.LoadNewReleasesService" />
+
+        <!-- Schedule execution of released today check after boot and timezone changed -->
+        <receiver android:name=".android.service.ReleasedTodayService$ReleasedTodaySchedulerReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+        </receiver>
+        <!-- Register receiver that starts service after alarm -->
+        <receiver android:name=".android.service.ReleasedTodayService$ReleasedTodayServiceStarterReceiver" />
+
+        <service android:name=".android.service.ReleasedTodayService" />
     </application>
 
 </manifest>
