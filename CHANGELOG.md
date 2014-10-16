@@ -1,6 +1,16 @@
 nusic Changelog
 =========
 
+Please note: android 4.4.4 does not support music on external SD cards, so this will not work with nusic either :(
+
+**v.1.0 Cover art and notifications**
+
+* Feature: Now showing cover art from Cover Art Archive
+* Feautre: Get notified on the day of a release
+* Added changelog, licenses, privacy policy as well as links to GitHub and Google Play and an email contact to preferences.
+* Added welcome screen for new users and new versions
+* Multiple minor enhancements/fixes
+
 **v.0.6 New Tabs & UTC Fix**
 
 * New Tabs for available and announced releases

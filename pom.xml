@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>info.schnatterer.nusic</groupId>
 	<artifactId>nusic-parent</artifactId>
-	<version>0.6</version>
+	<version>1.0</version>
 	<packaging>pom</packaging>
 	<name>nusic</name>
 

@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>info.schnatterer.nusic</groupId>
 		<artifactId>nusic-parent</artifactId>
-		<version>0.6</version>
+		<version>1.0</version>
 	</parent>
 
 	<artifactId>nusic-app</artifactId>
@@ -16,7 +16,7 @@
 
 	<properties>
 		<abs.version>4.4.0</abs.version>
-		<final.name>${project.artifactId}-${project.version}</final.name>
+		<final.name>nusic-${project.version}</final.name>
 		<sdk.version>19</sdk.version>
 		<assets.dir.input>${project.basedir}/assets</assets.dir.input>
 		<assets.dir.output>${project.build.directory}/filtered-assets</assets.dir.output>
