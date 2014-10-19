@@ -1,29 +1,5 @@
 TODOs - Features, enhancements, refactoring, ...
 
-Prepared new version
-
-Updated Changelog
-
-
-
-- Feature: Now showing cover art from Cover Art Archive
-- Feautre: Get notified on the day of a release
-- Added changelog, licenses, privacy policy as well as links to GitHub and Google Play and an email contact to preferences.
-- Added welcome screen for new users and new versions
-- Multiple minor enhancements/fixes
-
-- Feature: Album Covers von Cover Art Archive werden angezeigt
-- Feature: Benachrichtigungen am Tag der Veröffentlichung
-- Änderungshistorie, Lizenzen, Datenschutzrichtline sowie Links zu GitHub und Google Play und Kontakt per E-Mail zu den Einstelungen hinzugefügt
-- Wilkommensbildschirm für neue Nutzer und für neue Versionen hinzugefügt
-- Mehrere kleinere Erweiterungen/Fehlerkorrekturen
-
-
-Update GooglePlay texts
-=== Release v1.0
-Make Development Branch default in GH
-
-................... More TODOs
 - Show artwork in context menu (on long tab)
 - Download and display disambiguation, e.g "remastered special edition", "anniversary edition", >20th Anniversary Edition< (or display only the "oldest" release of all releases with the same name?) https://musicbrainz.org/ws/2/release/?limit=100&offset=0&query=type%3Aalbum+AND+date%3A[2014-02-20+TO+%3F]+AND+artist%3A%22%3Cpantera%3E%22
 - Rename services so their tasks are clearer? FetchReleasesService? Dependecy to QueryMusicMetadataService? ArtistQueryService -> LocalLibraryService?- util -> common.util?!
