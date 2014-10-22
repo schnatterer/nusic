@@ -38,6 +38,12 @@ import java.util.List;
 
 import android.content.Context;
 
+/**
+ * Default implementation of {@link ReleaseService}.
+ * 
+ * @author schnatterer
+ *
+ */
 public class ReleaseServiceImpl implements ReleaseService {
 	private ReleaseDao releaseDao;
 	private ArtistDao artistDao;

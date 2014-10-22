@@ -30,6 +30,12 @@ import info.schnatterer.nusic.logic.ReleaseService;
 import info.schnatterer.nusic.logic.ServiceException;
 import android.content.Context;
 
+/**
+ * Default implementation of {@link ArtistService}.
+ * 
+ * @author schnatterer
+ *
+ */
 public class ArtistServiceImpl implements ArtistService {
 
 	private ReleaseService releaseService;
@@ -70,9 +76,8 @@ public class ArtistServiceImpl implements ArtistService {
 		try {
 			// Does artist exist?
 			if (artist.getId() == null) {
-				Artist existingArtist = artistDao
-						.findByAndroidId(artist
-								.getAndroidAudioArtistId());
+				Artist existingArtist = artistDao.findByAndroidId(artist
+						.getAndroidAudioArtistId());
 				if (existingArtist != null) {
 					artist.setId(existingArtist.getId());
 					artist.setDateCreated(existingArtist.getDateCreated());

@@ -33,7 +33,7 @@ import info.schnatterer.nusic.data.dao.ArtworkDao.ArtworkType;
 import info.schnatterer.nusic.data.dao.fs.ArtworkDaoFileSystem;
 import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.data.model.Release;
-import info.schnatterer.nusic.logic.QueryMusicMetadataService;
+import info.schnatterer.nusic.logic.RemoteMusicDatabaseService;
 import info.schnatterer.nusic.logic.ServiceException;
 
 import java.io.IOException;
@@ -58,8 +58,14 @@ import android.util.Log;
 
 import com.google.common.util.concurrent.RateLimiter;
 
-public class QueryMusicMetadataServiceMusicBrainz implements
-		QueryMusicMetadataService {
+/**
+ * {@link RemoteMusicDatabaseService} that queries information from MusicBrainz.
+ * 
+ * @author schnatterer
+ *
+ */
+public class RemoteMusicDatabaseServiceMusicBrainz implements
+		RemoteMusicDatabaseService {
 	/**
 	 * See http://musicbrainz.org/doc/Development/XML_Web_Service/Version_2#
 	 * Release_Type_and_Status
@@ -111,7 +117,7 @@ public class QueryMusicMetadataServiceMusicBrainz implements
 	 *            contact URL or author email used in user agent string of
 	 *            request
 	 */
-	public QueryMusicMetadataServiceMusicBrainz(String appName,
+	public RemoteMusicDatabaseServiceMusicBrainz(String appName,
 			String appVersion, String appContact) {
 		this.appName = appName;
 		this.appVersion = appVersion;

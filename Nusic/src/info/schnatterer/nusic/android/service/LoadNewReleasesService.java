@@ -33,13 +33,13 @@ import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.data.model.Release;
 import info.schnatterer.nusic.logic.ConnectivityService;
 import info.schnatterer.nusic.logic.PreferencesService;
-import info.schnatterer.nusic.logic.ReleaseRefreshService;
+import info.schnatterer.nusic.logic.SyncReleasesService;
 import info.schnatterer.nusic.logic.ReleaseService;
 import info.schnatterer.nusic.logic.ServiceException;
 import info.schnatterer.nusic.logic.event.ArtistProgressListener;
 import info.schnatterer.nusic.logic.impl.ConnectivityServiceAndroid;
 import info.schnatterer.nusic.logic.impl.PreferencesServiceSharedPreferences;
-import info.schnatterer.nusic.logic.impl.ReleaseRefreshServiceImpl;
+import info.schnatterer.nusic.logic.impl.SyncReleasesServiceImpl;
 import info.schnatterer.nusic.logic.impl.ReleaseServiceImpl;
 
 import java.util.Calendar;
@@ -61,7 +61,7 @@ import android.util.Log;
 
 /**
  * Wraps the android implementation of the business logic service
- * {@link ReleaseRefreshService} in an android {@link Service} in order to allow
+ * {@link SyncReleasesService} in an android {@link Service} in order to allow
  * running outside of the application. In addition, it takes care of the
  * scheduling.
  * 
@@ -82,7 +82,7 @@ public class LoadNewReleasesService extends WakefulService {
 			.getInstance();
 	private ConnectivityService connectivityService = ConnectivityServiceAndroid
 			.getInstance();
-	private ReleaseRefreshService releasesService;
+	private SyncReleasesService releasesService;
 	private ReleaseService releaseService = new ReleaseServiceImpl(this);
 
 	private List<Artist> errorArtists;
@@ -142,7 +142,7 @@ public class LoadNewReleasesService extends WakefulService {
 	 * 
 	 * @param updateOnlyIfNeccesary
 	 *            if <code>true</code> the refresh is only done when
-	 *            {@link ReleaseRefreshService#isUpdateNeccesarry()} returns
+	 *            {@link SyncReleasesService#isUpdateNeccesarry()} returns
 	 *            <code>true</code>. Otherwise, the refresh is done at any case.
 	 * @param artistProcessedListener
 	 * @return <code>true</code> if refresh was started. <code>false</code> if
@@ -231,7 +231,7 @@ public class LoadNewReleasesService extends WakefulService {
 
 					Log.d(Constants.LOG,
 							"Service thread: Calling refreshReleases()");
-					getReleasesService().refreshReleases();
+					getReleasesService().syncReleases();
 
 					// Schedule next run
 					schedule(LoadNewReleasesService.this,
@@ -520,9 +520,9 @@ public class LoadNewReleasesService extends WakefulService {
 		}
 	}
 
-	protected ReleaseRefreshService getReleasesService() {
+	protected SyncReleasesService getReleasesService() {
 		if (releasesService == null) {
-			releasesService = new ReleaseRefreshServiceImpl(this);
+			releasesService = new SyncReleasesServiceImpl(this);
 		}
 
 		return releasesService;

@@ -24,11 +24,10 @@ import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.model.Artist;
 
 /**
- * Provides access to the elements stored in Table {@link Artist}. This would be
- * the place to implement transaction handling.
+ * Provides access to the {@link Artist}s stored locally. This would be the
+ * place to implement transaction handling.
  * 
  * @author schnatterer
- * 
  */
 public interface ArtistService {
 

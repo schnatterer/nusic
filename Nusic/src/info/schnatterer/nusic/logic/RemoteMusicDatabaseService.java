@@ -21,17 +21,35 @@
 package info.schnatterer.nusic.logic;
 
 import info.schnatterer.nusic.data.model.Artist;
-import android.content.ContentResolver;
+import info.schnatterer.nusic.data.model.Release;
 
-public interface ArtistQueryService {
+import java.util.Date;
+
+/**
+ * Wraps access to a remote service that provides information about releases.
+ * This service hides (technical) querying of the releases and mapping the data
+ * to the local entities such as {@link Release} or {@link Artist}.
+ * 
+ * @author schnatterer
+ *
+ */
+public interface RemoteMusicDatabaseService {
 
 	/**
-	 * Gets the artist names from the local android database
+	 * Finds releases by artist.
 	 * 
-	 * @return
+	 * @param artist
+	 *            the artist to query releases for.
+	 * @param fromDate
+	 *            the lower boundary of the time range in which release were
+	 *            published
+	 * @param endDate
+	 *            the upper boundary of the time range in which release were
+	 *            published
+	 * @return an artists object that contains all the releases that were
+	 *         published in the specified time range
 	 * @throws ServiceException
 	 */
-	Artist[] getArtists(ContentResolver contentResolver)
+	Artist findReleases(Artist artist, Date fromDate, Date endDate)
 			throws ServiceException;
-
 }

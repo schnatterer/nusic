@@ -39,7 +39,7 @@ public class QueryMusicMetadataServiceMusicBrainzTest extends
 	@SuppressLint("SimpleDateFormat")
 	private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-	private QueryMusicMetadataServiceMusicBrainz queryMusicMetadataService;
+	private RemoteMusicDatabaseServiceMusicBrainz queryMusicMetadataService;
 
 	private final String expectedFromDateStr = "2013-01-01";
 	private Date expectedFromDate = null;
@@ -139,7 +139,7 @@ public class QueryMusicMetadataServiceMusicBrainzTest extends
 	// }
 
 	public class QueryMusicMetadataServiceMusicUnderTest extends
-			QueryMusicMetadataServiceMusicBrainz {
+			RemoteMusicDatabaseServiceMusicBrainz {
 
 		public QueryMusicMetadataServiceMusicUnderTest() {
 			super(null, null, null);

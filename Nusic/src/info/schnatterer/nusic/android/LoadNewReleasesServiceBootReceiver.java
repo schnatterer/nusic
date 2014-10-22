@@ -42,12 +42,12 @@ import android.util.Log;
  */
 public class LoadNewReleasesServiceBootReceiver extends BroadcastReceiver {
 	private static final int BOOT_DELAY_MINUTES = 10;
-	private static PreferencesService preferencesService = PreferencesServiceSharedPreferences
+	private static PreferencesService preferenceService = PreferencesServiceSharedPreferences
 			.getInstance();
 
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
-		Date nextReleaseRefresh = preferencesService.getNextReleaseRefresh();
+		Date nextReleaseRefresh = preferenceService.getNextReleaseRefresh();
 		Log.d(Constants.LOG, "Boot Receiver: Boot completed!");
 
 		if (nextReleaseRefresh == null || isHistorical(nextReleaseRefresh)) {
@@ -56,13 +56,13 @@ public class LoadNewReleasesServiceBootReceiver extends BroadcastReceiver {
 			Log.d(Constants.LOG, "Boot Receiver: Delaying service to start at "
 					+ delayedRefresh);
 			LoadNewReleasesService.schedule(context,
-					preferencesService.getRefreshPeriod(), delayedRefresh);
+					preferenceService.getRefreshPeriod(), delayedRefresh);
 		} else {
 			// Schedule service
 			Log.d(Constants.LOG, "Boot Receiver: Scheduling service to "
 					+ nextReleaseRefresh);
 			LoadNewReleasesService.schedule(context,
-					preferencesService.getRefreshPeriod(), nextReleaseRefresh);
+					preferenceService.getRefreshPeriod(), nextReleaseRefresh);
 		}
 	}
 

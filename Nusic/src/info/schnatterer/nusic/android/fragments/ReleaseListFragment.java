@@ -27,11 +27,11 @@ import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.data.model.Release;
 import info.schnatterer.nusic.logic.ArtistService;
-import info.schnatterer.nusic.logic.ReleaseRefreshService;
+import info.schnatterer.nusic.logic.SyncReleasesService;
 import info.schnatterer.nusic.logic.ReleaseService;
 import info.schnatterer.nusic.logic.ServiceException;
 import info.schnatterer.nusic.logic.impl.ArtistServiceImpl;
-import info.schnatterer.nusic.logic.impl.ReleaseRefreshServiceImpl;
+import info.schnatterer.nusic.logic.impl.SyncReleasesServiceImpl;
 import info.schnatterer.nusic.logic.impl.ReleaseServiceImpl;
 import info.schnatterer.nusic.android.activities.NusicWebView;
 import info.schnatterer.nusic.android.adapters.ReleaseListAdapter;
@@ -94,7 +94,7 @@ public class ReleaseListFragment extends SherlockFragment {
 	private TextView releasesTextViewNoneFound;
 	/** Progress animation when loading releases from db */
 	private ProgressBar progressBar;
-	private ReleaseRefreshService releaseRefreshService;
+	private SyncReleasesService syncReleasesService;
 	private ReleaseService releaseService;
 	private ArtistService artistService;
 
@@ -202,13 +202,13 @@ public class ReleaseListFragment extends SherlockFragment {
 		releasesListViewAdapter.show(result);
 	}
 
-	protected ReleaseRefreshService getReleaseRefreshService() {
-		if (releaseRefreshService == null) {
-			releaseRefreshService = new ReleaseRefreshServiceImpl(
+	protected SyncReleasesService getReleaseRefreshService() {
+		if (syncReleasesService == null) {
+			syncReleasesService = new SyncReleasesServiceImpl(
 					getSherlockActivity());
 		}
 
-		return releaseRefreshService;
+		return syncReleasesService;
 	}
 
 	protected ReleaseService getReleaseService() {

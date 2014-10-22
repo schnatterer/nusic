@@ -36,11 +36,11 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
 
 /**
- * Implements {@link PreferencesService} using Android's
+ * Provides access to the preferences of the application via android's
  * {@link SharedPreferences}.
  * 
  * @author schnatterer
- * 
+ *
  */
 public class PreferencesServiceSharedPreferences implements PreferencesService,
 		OnSharedPreferenceChangeListener {

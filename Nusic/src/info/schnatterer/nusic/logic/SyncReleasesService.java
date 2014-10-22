@@ -24,35 +24,50 @@ import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.logic.event.ArtistProgressListener;
 
 /**
+ * Service that realizes the logic for getting all artists from the local device
+ * (see {@link DeviceMusicService}) and synchronizing all their releases with
+ * the some remote service (see {@link RemoteMusicDatabaseService}).
+ * 
  * @author schnatterer
  * 
  */
-public interface ReleaseRefreshService {
+public interface SyncReleasesService {
 
 	/**
-	 * Updates the releases in the database from the internet. The time period
-	 * queried depends on
+	 * Synchronizes the releases in the local database with the one from the
+	 * internet. The time period queried depends on
 	 * {@link PreferencesService#getDownloadReleasesTimePeriod()},
 	 * {@link PreferencesService#getLastReleaseRefresh()},
 	 * {@link PreferencesService#isIncludeFutureReleases()} and
 	 * {@link PreferencesService#isForceFullRefresh()}.
 	 * 
 	 */
-	void refreshReleases();
+	void syncReleases();
 
 	/**
 	 * Adds an {@link ArtistProgressListener} to the Service. This is called
 	 * whenever an {@link Artist} was processed by one of the method calls.
 	 * 
-	 * @param l
-	 *            the <code>ProgressListener</code> to be added
+	 * @param artistProcessedListener
+	 *            the progress lListener to be added
 	 */
 	void addArtistProcessedListener(
 			ArtistProgressListener artistProcessedListener);
 
+	/**
+	 * Return an {@link ArtistProgressListener} from the service.
+	 * 
+	 * @param artistProcessedListener
+	 *            the progress lListener to be removed
+	 * @return <code>true</code> if the listener was present and is now removed.
+	 *         <code>false</code> otherwise.
+	 */
 	boolean removeArtistProcessedListener(
 			ArtistProgressListener artistProcessedListener);
 
+	/**
+	 * Removes all process listeners.
+	 */
 	void removeArtistProcessedListeners();
 
 }

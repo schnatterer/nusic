@@ -26,8 +26,8 @@ import info.schnatterer.nusic.data.model.Release;
 import java.util.List;
 
 /**
- * Provides access to the elements stored in Table {@link Release}. This would
- * be the place to implement transaction handling.
+ * Provides access to the {@link Release}s stored locally. This would be the
+ * place to implement transaction handling.
  * 
  * @author schnatterer
  * 

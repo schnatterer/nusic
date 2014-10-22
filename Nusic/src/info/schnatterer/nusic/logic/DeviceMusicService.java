@@ -21,10 +21,23 @@
 package info.schnatterer.nusic.logic;
 
 import info.schnatterer.nusic.data.model.Artist;
+import android.content.ContentResolver;
 
-import java.util.Date;
+/**
+ * Provides access to music located on the local device.
+ * 
+ * @author schnatterer
+ *
+ */
+public interface DeviceMusicService {
 
-public interface QueryMusicMetadataService {
+	/**
+	 * Gets the names of all artists stored on local device. Note that the
+	 * 
+	 * @return
+	 * @throws ServiceException
+	 */
+	Artist[] getArtists(ContentResolver contentResolver)
+			throws ServiceException;
 
-	Artist findReleases(Artist artist, Date fromDate, Date endDate) throws ServiceException;
 }

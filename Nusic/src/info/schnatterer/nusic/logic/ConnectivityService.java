@@ -20,15 +20,19 @@
  */
 package info.schnatterer.nusic.logic;
 
-
-
+/**
+ * Provides access to information about the internet connection.
+ * 
+ * @author schnatterer
+ * 
+ */
 public interface ConnectivityService {
 	/**
 	 * Used to determine if there is an active data connection and what type of
 	 * connection it is if there is one.
 	 * 
-	 * Queries {@link PreferencesService#isUseOnlyWifi()} to see if a mobile
-	 * data connection can be used.
+	 * Queries {@link PreferencesService#isUseOnlyWifi()} to see if a mobile data
+	 * connection can be used.
 	 * 
 	 * @return <code>true</code> if there is an active data connection.
 	 *         Otherwise <code>false</code>.
