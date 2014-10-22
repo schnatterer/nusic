@@ -18,20 +18,20 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic.impl;
+package info.schnatterer.nusic.core.impl;
 
 import static info.schnatterer.nusic.util.DateUtil.todayMidnightUtc;
 import static info.schnatterer.nusic.util.DateUtil.tomorrowMidnightUtc;
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.core.PreferencesService;
+import info.schnatterer.nusic.core.ReleaseService;
+import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.dao.ArtistDao;
 import info.schnatterer.nusic.data.dao.ReleaseDao;
 import info.schnatterer.nusic.data.dao.sqlite.ArtistDaoSqlite;
 import info.schnatterer.nusic.data.dao.sqlite.ReleaseDaoSqlite;
 import info.schnatterer.nusic.data.model.Release;
-import info.schnatterer.nusic.logic.PreferencesService;
-import info.schnatterer.nusic.logic.ReleaseService;
-import info.schnatterer.nusic.logic.ServiceException;
 
 import java.util.Calendar;
 import java.util.List;

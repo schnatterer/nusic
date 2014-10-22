@@ -1,4 +1,4 @@
-/* Copyright (C) 2014 Johannes Schnatterer
+/* Copyright (C) 2013 Johannes Schnatterer
  * 
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
@@ -18,31 +18,24 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic;
-
-import info.schnatterer.nusic.data.DatabaseException;
-import info.schnatterer.nusic.data.model.Artist;
+package info.schnatterer.nusic.core;
 
 /**
- * Provides access to the {@link Artist}s stored locally. This would be the
- * place to implement transaction handling.
+ * Provides access to information about the internet connection.
  * 
  * @author schnatterer
+ * 
  */
-public interface ArtistService {
-
-	long save(Artist artist) throws ServiceException;
-
-	int update(Artist artist) throws ServiceException;
-
+public interface ConnectivityService {
 	/**
-	 * Creates a new {@link Artist} or updates an existing one (matching by
-	 * {@link Artist#getAndroidAudioArtistId()}).
+	 * Used to determine if there is an active data connection and what type of
+	 * connection it is if there is one.
 	 * 
-	 * @param artist
-	 * @return
-	 * @throws DatabaseException
+	 * Queries {@link PreferencesService#isUseOnlyWifi()} to see if a mobile data
+	 * connection can be used.
+	 * 
+	 * @return <code>true</code> if there is an active data connection.
+	 *         Otherwise <code>false</code>.
 	 */
-	long saveOrUpdate(Artist artist) throws ServiceException;
-
+	boolean isOnline();
 }

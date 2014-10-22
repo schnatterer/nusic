@@ -18,26 +18,20 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic;
+package info.schnatterer.nusic.core.event;
 
 import info.schnatterer.nusic.data.model.Artist;
-import android.content.ContentResolver;
+
+import org.apache.commons.lang3.ObjectUtils.Null;
 
 /**
- * Provides access to music located on the local device.
+ * Returns <code>true</code>, if anything changed, otherwise <code>false</code>
+ * or {@link Null}.
  * 
  * @author schnatterer
- *
+ * 
  */
-public interface DeviceMusicService {
-
-	/**
-	 * Gets the names of all artists stored on local device. Note that the
-	 * 
-	 * @return
-	 * @throws ServiceException
-	 */
-	Artist[] getArtists(ContentResolver contentResolver)
-			throws ServiceException;
+public interface ArtistProgressListener extends
+		ProgressListener<Artist, Boolean> {
 
 }

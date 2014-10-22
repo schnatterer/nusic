@@ -25,10 +25,10 @@ import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.service.LoadNewReleasesService;
 import info.schnatterer.nusic.android.service.LoadNewReleasesServiceConnection;
+import info.schnatterer.nusic.core.ServiceException;
+import info.schnatterer.nusic.core.SyncReleasesService;
 import info.schnatterer.nusic.data.model.Artist;
-import info.schnatterer.nusic.logic.SyncReleasesService;
-import info.schnatterer.nusic.logic.ServiceException;
-import info.schnatterer.nusic.logic.event.ArtistProgressListener;
+import info.schnatterer.nusic.core.event.ArtistProgressListener;
 
 import java.util.LinkedList;
 import java.util.List;

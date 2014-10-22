@@ -18,10 +18,10 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic;
+package info.schnatterer.nusic.core;
 
 import info.schnatterer.nusic.data.model.Release;
-import info.schnatterer.nusic.logic.event.PreferenceChangedListener;
+import info.schnatterer.nusic.core.event.PreferenceChangedListener;
 
 import java.util.Date;
 

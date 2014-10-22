@@ -22,8 +22,8 @@ package info.schnatterer.nusic.android;
 
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.android.service.LoadNewReleasesService;
-import info.schnatterer.nusic.logic.PreferencesService;
-import info.schnatterer.nusic.logic.impl.PreferencesServiceSharedPreferences;
+import info.schnatterer.nusic.core.PreferencesService;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.nusic.util.DateUtil;
 
 import java.util.Date;

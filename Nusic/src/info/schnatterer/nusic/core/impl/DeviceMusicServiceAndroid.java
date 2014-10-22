@@ -18,12 +18,12 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic.impl;
+package info.schnatterer.nusic.core.impl;
 
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.core.DeviceMusicService;
+import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.data.model.Artist;
-import info.schnatterer.nusic.logic.DeviceMusicService;
-import info.schnatterer.nusic.logic.ServiceException;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;

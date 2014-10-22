@@ -18,12 +18,12 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic.impl;
+package info.schnatterer.nusic.core.impl;
 
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.application.NusicApplication;
-import info.schnatterer.nusic.logic.PreferencesService;
-import info.schnatterer.nusic.logic.event.PreferenceChangedListener;
+import info.schnatterer.nusic.core.PreferencesService;
+import info.schnatterer.nusic.core.event.PreferenceChangedListener;
 import info.schnatterer.nusic.util.DateUtil;
 
 import java.util.Date;

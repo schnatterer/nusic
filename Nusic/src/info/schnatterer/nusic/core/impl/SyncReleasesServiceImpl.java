@@ -18,22 +18,22 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic.impl;
+package info.schnatterer.nusic.core.impl;
 
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.application.NusicApplication;
+import info.schnatterer.nusic.core.ArtistService;
+import info.schnatterer.nusic.core.DeviceMusicService;
+import info.schnatterer.nusic.core.PreferencesService;
+import info.schnatterer.nusic.core.RemoteMusicDatabaseService;
+import info.schnatterer.nusic.core.ServiceException;
+import info.schnatterer.nusic.core.SyncReleasesService;
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.model.Artist;
-import info.schnatterer.nusic.logic.ArtistService;
-import info.schnatterer.nusic.logic.DeviceMusicService;
-import info.schnatterer.nusic.logic.PreferencesService;
-import info.schnatterer.nusic.logic.RemoteMusicDatabaseService;
-import info.schnatterer.nusic.logic.ServiceException;
-import info.schnatterer.nusic.logic.SyncReleasesService;
-import info.schnatterer.nusic.logic.event.ArtistProgressListener;
-import info.schnatterer.nusic.logic.event.ProgressListener;
-import info.schnatterer.nusic.logic.event.ProgressUpdater;
+import info.schnatterer.nusic.core.event.ArtistProgressListener;
+import info.schnatterer.nusic.core.event.ProgressListener;
+import info.schnatterer.nusic.core.event.ProgressUpdater;
 
 import java.util.Calendar;
 import java.util.Date;

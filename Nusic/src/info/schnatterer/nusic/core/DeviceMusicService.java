@@ -18,24 +18,26 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic;
+package info.schnatterer.nusic.core;
+
+import info.schnatterer.nusic.data.model.Artist;
+import android.content.ContentResolver;
 
 /**
- * Provides access to information about the internet connection.
+ * Provides access to music located on the local device.
  * 
  * @author schnatterer
- * 
+ *
  */
-public interface ConnectivityService {
+public interface DeviceMusicService {
+
 	/**
-	 * Used to determine if there is an active data connection and what type of
-	 * connection it is if there is one.
+	 * Gets the names of all artists stored on local device. Note that the
 	 * 
-	 * Queries {@link PreferencesService#isUseOnlyWifi()} to see if a mobile data
-	 * connection can be used.
-	 * 
-	 * @return <code>true</code> if there is an active data connection.
-	 *         Otherwise <code>false</code>.
+	 * @return
+	 * @throws ServiceException
 	 */
-	boolean isOnline();
+	Artist[] getArtists(ContentResolver contentResolver)
+			throws ServiceException;
+
 }

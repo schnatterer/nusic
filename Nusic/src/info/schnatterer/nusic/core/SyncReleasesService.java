@@ -18,10 +18,10 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic;
+package info.schnatterer.nusic.core;
 
 import info.schnatterer.nusic.data.model.Artist;
-import info.schnatterer.nusic.logic.event.ArtistProgressListener;
+import info.schnatterer.nusic.core.event.ArtistProgressListener;
 
 /**
  * Service that realizes the logic for getting all artists from the local device
