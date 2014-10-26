@@ -23,8 +23,10 @@ package info.schnatterer.nusic.android.application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.Constants.Notification;
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.android.NusicModule;
 import info.schnatterer.nusic.android.activities.MainActivity;
 import info.schnatterer.nusic.android.service.ReleasedTodayService;
+import roboguice.RoboGuice;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -39,6 +41,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.inject.util.Modules;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
@@ -68,6 +71,18 @@ public class NusicApplication extends AbstractApplication {
 
 		// Causes onUpgrade() to be called, etc.
 		super.onCreate();
+
+		/*
+		 * As some injected implementations might rely on getContext() and
+		 * getContext() is initialized in super.onCreate() it's crucial to set
+		 * the custom module AFTER super.onCreate().
+		 */
+		RoboGuice.setBaseApplicationInjector(
+				// RoboGuice.getOrCreateBaseApplicationInjector(
+				this,
+				RoboGuice.DEFAULT_STAGE,
+				Modules.override(RoboGuice.newDefaultRoboModule(this)).with(
+						new NusicModule()));
 	}
 
 	@Override

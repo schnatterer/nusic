@@ -22,28 +22,39 @@ package info.schnatterer.nusic.android.fragments;
 
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.application.NusicApplication;
-import info.schnatterer.nusic.android.activities.NusicPreferencesActivity;
+import info.schnatterer.nusic.android.listeners.PreferenceReleasedTodayTimePickerListener;
+import info.schnatterer.nusic.android.listeners.PreferenceVisibilityButtonListener;
+
+import javax.inject.Inject;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
 @SuppressLint("NewApi")
 public class NusicPreferencesFragment extends PreferenceFragment {
+
+	@Inject
+	private PreferenceReleasedTodayTimePickerListener releaseTodayTimePickerListener;
+	@Inject
+	private PreferenceVisibilityButtonListener preferenceVisibilityButtonListener;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.preferences);
+
+		preferenceVisibilityButtonListener.setActivity(getActivity());
 		findPreference(getString(R.string.preferences_key_display_all_releases))
 				.setOnPreferenceClickListener(
-						NusicPreferencesActivity
-								.createVisibilityButtonListener(getActivity()));
+						preferenceVisibilityButtonListener);
+
+		releaseTodayTimePickerListener.setContext(getActivity());
 		findPreference(
 				getString(R.string.preferences_key_released_today_hour_of_day))
-				.setOnPreferenceClickListener(
-						NusicPreferencesActivity
-								.createReleasedTodayTimePickerListener(getActivity()));
+				.setOnPreferenceClickListener(releaseTodayTimePickerListener);
 
 		findPreference(getString(R.string.preferences_key_about)).setTitle(
 				getString(R.string.preferences_category_about,
@@ -51,5 +62,4 @@ public class NusicPreferencesFragment extends PreferenceFragment {
 		findPreference(getString(R.string.preferences_key_version)).setSummary(
 				NusicApplication.getCurrentVersionName());
 	}
-
 }

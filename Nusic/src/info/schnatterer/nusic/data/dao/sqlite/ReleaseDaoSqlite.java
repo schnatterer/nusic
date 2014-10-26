@@ -33,6 +33,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -102,6 +104,8 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
 			.append(TableRelease.COLUMN_DATE_RELEASED).append(" <")
 			.append(" ?").append(ORDER_BY_RELEASE_DATE_DESC).toString();
 
+	// TODO DI Remove constructor
+	@Inject
 	public ReleaseDaoSqlite(Context context) {
 		super(context);
 	}

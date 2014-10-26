@@ -22,28 +22,22 @@ package info.schnatterer.nusic.android.activities;
 
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.application.NusicApplication;
-import info.schnatterer.nusic.core.ReleaseService;
-import info.schnatterer.nusic.core.ServiceException;
-import info.schnatterer.nusic.data.model.Artist;
-import info.schnatterer.nusic.android.service.ReleasedTodayService;
+import info.schnatterer.nusic.android.fragments.NusicPreferencesFragment;
+import info.schnatterer.nusic.android.listeners.PreferenceReleasedTodayTimePickerListener;
+import info.schnatterer.nusic.android.listeners.PreferenceVisibilityButtonListener;
+import info.schnatterer.nusic.core.PreferencesService;
 import info.schnatterer.nusic.core.event.PreferenceChangedListener;
 import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences;
-import info.schnatterer.nusic.core.impl.ReleaseServiceImpl;
-import info.schnatterer.nusic.android.fragments.NusicPreferencesFragment;
+import roboguice.RoboGuice;
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.Preference.OnPreferenceClickListener;
-import android.widget.TimePicker;
 
-import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.MenuItem;
+import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockPreferenceActivity;
+import javax.inject.Inject;
 
 /**
  * Activity that realizes the preferences of the app.
@@ -58,7 +52,7 @@ import com.actionbarsherlock.view.MenuItem;
  * @author schnatterer
  *
  */
-public class NusicPreferencesActivity extends SherlockPreferenceActivity {
+public class NusicPreferencesActivity extends RoboSherlockPreferenceActivity {
 	/**
 	 * Key to the resulting intent's extras that contains the boolean value that
 	 * informs if a check for new releases must be performed.<br/>
@@ -73,8 +67,15 @@ public class NusicPreferencesActivity extends SherlockPreferenceActivity {
 	public static final String EXTRA_RESULT_IS_CONTENT_CHANGED = "nusic.intent.extra.preferences.result.isContentChanged";
 
 	private TimePeriodPreferenceChangedListener timePeriodPreferenceChangedListener = new TimePeriodPreferenceChangedListener();
-	private static PreferencesServiceSharedPreferences preferencesService = PreferencesServiceSharedPreferences
-			.getInstance();
+
+	@Inject
+	private PreferencesService preferencesService;
+	@Inject
+	private PreferenceReleasedTodayTimePickerListener releaseTodayTimePickerListener;
+
+	@Inject
+	private PreferenceVisibilityButtonListener preferenceVisibilityButtonListener;
+
 	/**
 	 * <code>true</code> if a check for new releases must be performed. <br/>
 	 * Value is passed back to the calling activity, see
@@ -96,12 +97,18 @@ public class NusicPreferencesActivity extends SherlockPreferenceActivity {
 
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
 			onCreatePreferenceActivity();
-			Preference resetVisibilityButton = findPreferenceActivity(getString(R.string.preferences_key_display_all_releases));
-			resetVisibilityButton
-					.setOnPreferenceClickListener(createVisibilityButtonListener(this));
-			Preference releasedTodayTimePicker = findPreferenceActivity(getString(R.string.preferences_key_released_today_hour_of_day));
-			releasedTodayTimePicker
-					.setOnPreferenceClickListener(createReleasedTodayTimePickerListener(this));
+
+			preferenceVisibilityButtonListener.setActivity(this);
+			findPreferenceActivity(
+					getString(R.string.preferences_key_display_all_releases))
+					.setOnPreferenceClickListener(
+							preferenceVisibilityButtonListener);
+
+			releaseTodayTimePickerListener.setContext(this);
+			findPreferenceActivity(
+					getString(R.string.preferences_key_released_today_hour_of_day))
+					.setOnPreferenceClickListener(
+							releaseTodayTimePickerListener);
 			findPreferenceActivity(getString(R.string.preferences_key_about))
 					.setTitle(
 							getString(R.string.preferences_category_about,
@@ -143,9 +150,16 @@ public class NusicPreferencesActivity extends SherlockPreferenceActivity {
 	 */
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void onCreatePreferenceFragment() {
-		getFragmentManager().beginTransaction()
-				.replace(android.R.id.content, new NusicPreferencesFragment())
-				.commit();
+		/*
+		 * A Provider<NusicPreferencesFragment> won't do here because lower API
+		 * levels won't know the type NusicPreferencesFragment
+		 */
+		getFragmentManager()
+				.beginTransaction()
+				.replace(
+						android.R.id.content,
+						RoboGuice.getInjector(this).getInstance(
+								NusicPreferencesFragment.class)).commit();
 	}
 
 	@Override
@@ -172,98 +186,6 @@ public class NusicPreferencesActivity extends SherlockPreferenceActivity {
 		super.finish();
 	}
 
-	/**
-	 * Creates a preference listener that opens an {@link AlertDialog}. If it is
-	 * answered with yes, all releases and artists are set to visible (
-	 * {@link Artist#setHidden(Boolean)}=<code>true</code>).
-	 * 
-	 * @param activity
-	 * @return
-	 */
-	public static OnPreferenceClickListener createVisibilityButtonListener(
-			final Activity activity) {
-		return new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				new AlertDialog.Builder(activity)
-						// .setTitle(
-						// R.string.preferences_title_display_all_releases)
-						.setMessage(
-								R.string.preferences_message_display_all_releases)
-						// .setIcon(android.R.drawable.ic_dialog_alert)
-						.setNegativeButton(android.R.string.no, null)
-						.setPositiveButton(android.R.string.yes,
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int whichButton) {
-										ReleaseService releaseService = new ReleaseServiceImpl(
-												activity);
-										try {
-											releaseService.showAll();
-											// Trigger reload in main activity
-											activity.onContentChanged();
-										} catch (ServiceException e) {
-											NusicApplication.toast(e
-													.getLocalizedMessageId());
-										}
-									}
-								}).show();
-				return true;
-			}
-		};
-	}
-
-	/**
-	 * Creates a preference listener that opens a {@link TimePicker}. If a new
-	 * time is persisted
-	 * {@link ReleasedTodayService#schedule(android.content.Context)} is called.
-	 * 
-	 * @param activity
-	 * @return
-	 */
-	public static OnPreferenceClickListener createReleasedTodayTimePickerListener(
-			final Activity activity) {
-		return new Preference.OnPreferenceClickListener() {
-
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				new TimePickerDialog(
-						activity,
-						new TimePickerDialog.OnTimeSetListener() {
-							// Workaround for onTimeSet() being called twice
-							boolean isTimeSet = false;
-
-							@Override
-							public void onTimeSet(TimePicker view,
-									int hourOfDay, int minute) {
-								if (!isTimeSet) {
-									isTimeSet = true;
-									if (preferencesService
-											.setReleasedTodaySchedule(
-													hourOfDay, minute)) {
-										ReleasedTodayService.schedule(activity);
-									}
-								}
-							}
-						}, preferencesService
-								.getReleasedTodayScheduleHourOfDay(),
-						preferencesService.getReleasedTodayScheduleMinute(),
-						true).show();
-				return true;
-			}
-		};
-	}
-
-	// @Override
-	// public boolean onMenuItemSelected(int featureId, MenuItem item) {
-	// if (item.getItemId() == android.R.id.home) {
-	// // When the back arrow in the header (left of the icon) is clicked,
-	// // "go back one activity"
-	// finish();
-	// }
-	// return super.onMenuItemSelected(featureId, item);
-	// }
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == android.R.id.home) {
@@ -286,7 +208,8 @@ public class NusicPreferencesActivity extends SherlockPreferenceActivity {
 			PreferenceChangedListener {
 		@Override
 		public void onPreferenceChanged(String key, Object newValue) {
-			if (key.equals(preferencesService.KEY_DOWNLOAD_RELEASES_TIME_PERIOD)) {
+			if (key.equals(NusicPreferencesActivity.this
+					.getString(R.string.preferences_key_download_releases_time_period))) {
 				// Trigger refresh
 				isRefreshNecessary = true;
 			}

@@ -26,6 +26,9 @@ import info.schnatterer.nusic.data.NusicDatabaseSqlite.TableArtist;
 import info.schnatterer.nusic.data.dao.ArtistDao;
 import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.data.util.SqliteUtil;
+
+import javax.inject.Inject;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -33,13 +36,14 @@ import android.database.Cursor;
 public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 		ArtistDao {
 
+	// TODO DI Remove constructor
+	@Inject
 	public ArtistDaoSqlite(Context context) {
 		super(context);
 	}
 
 	@Override
-	public Artist findByAndroidId(long androidId)
-			throws DatabaseException {
+	public Artist findByAndroidId(long androidId) throws DatabaseException {
 		try {
 			Cursor cursor = findCursorByAndroidId(androidId, new String[] {
 					TableArtist.COLUMN_ID, TableArtist.COLUMN_DATE_CREATED });

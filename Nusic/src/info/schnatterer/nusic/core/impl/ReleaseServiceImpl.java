@@ -36,6 +36,8 @@ import info.schnatterer.nusic.data.model.Release;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import android.content.Context;
 
 /**
@@ -45,14 +47,21 @@ import android.content.Context;
  *
  */
 public class ReleaseServiceImpl implements ReleaseService {
+	@Inject
 	private ReleaseDao releaseDao;
+	@Inject
 	private ArtistDao artistDao;
-	private PreferencesService preferencesService = PreferencesServiceSharedPreferences
-			.getInstance();
+	@Inject
+	private PreferencesService preferencesService;
 
+	public ReleaseServiceImpl() {
+	}
+
+	// TODO DI remove constructors once DI is use throughout the whole system
 	public ReleaseServiceImpl(Context context) {
 		releaseDao = new ReleaseDaoSqlite(context);
 		artistDao = new ArtistDaoSqlite(context);
+		preferencesService = PreferencesServiceSharedPreferences.getInstance();
 	}
 
 	@Override
