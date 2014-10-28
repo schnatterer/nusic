@@ -1,4 +1,8 @@
 TODOs - Features, enhancements, refactoring, ...
+
+- Introduce DI: TODO inject imageloader? use DI in Web and TextView
+- Upgrade to Guice 3.0 and Blender
+
 - Show artwork in context menu (on long tab)
 - Download and display disambiguation, e.g "remastered special edition", "anniversary edition", >20th Anniversary Edition< (or display only the "oldest" release of all releases with the same name?) https://musicbrainz.org/ws/2/release/?limit=100&offset=0&query=type%3Aalbum+AND+date%3A[2014-02-20+TO+%3F]+AND+artist%3A%22%3Cpantera%3E%22
 

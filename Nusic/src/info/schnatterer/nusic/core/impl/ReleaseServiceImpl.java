@@ -29,16 +29,12 @@ import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.dao.ArtistDao;
 import info.schnatterer.nusic.data.dao.ReleaseDao;
-import info.schnatterer.nusic.data.dao.sqlite.ArtistDaoSqlite;
-import info.schnatterer.nusic.data.dao.sqlite.ReleaseDaoSqlite;
 import info.schnatterer.nusic.data.model.Release;
 
 import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import android.content.Context;
 
 /**
  * Default implementation of {@link ReleaseService}.
@@ -53,16 +49,6 @@ public class ReleaseServiceImpl implements ReleaseService {
 	private ArtistDao artistDao;
 	@Inject
 	private PreferencesService preferencesService;
-
-	public ReleaseServiceImpl() {
-	}
-
-	// TODO DI remove constructors once DI is use throughout the whole system
-	public ReleaseServiceImpl(Context context) {
-		releaseDao = new ReleaseDaoSqlite(context);
-		artistDao = new ArtistDaoSqlite(context);
-		preferencesService = PreferencesServiceSharedPreferences.getInstance();
-	}
 
 	@Override
 	public int update(Release release) throws ServiceException {

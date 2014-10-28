@@ -21,7 +21,8 @@
 package info.schnatterer.nusic.android.service;
 
 import info.schnatterer.nusic.Constants;
-import android.app.Service;
+import roboguice.service.RoboService;
+import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
@@ -40,11 +41,7 @@ import android.util.Log;
  * @author schnatterer
  * 
  */
-/**
- * @author schnatterer
- * 
- */
-public abstract class WakefulService extends Service {
+public abstract class WakefulService extends RoboService {
 	private static final String LOCK_NAME = "info.schnatterer.nusic.android.service.WakefulService";
 
 	private static volatile PowerManager.WakeLock lockStatic = null;
@@ -56,6 +53,11 @@ public abstract class WakefulService extends Service {
 	 * itself!
 	 */
 	protected boolean keepLock = false;
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+	}
 
 	abstract protected int onStartCommandWakeful(Intent intent, int flags,
 			int startId);

@@ -21,7 +21,6 @@
 package info.schnatterer.nusic.core.impl;
 
 import info.schnatterer.nusic.R;
-import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.core.PreferencesService;
 import info.schnatterer.nusic.core.event.PreferenceChangedListener;
 import info.schnatterer.nusic.util.DateUtil;
@@ -46,8 +45,7 @@ import com.google.inject.Provider;
  * @author schnatterer
  *
  */
-
-// TODO DI make singleton, so final fields won't have to be injected everytime.
+// TODO DI make singleton, so final fields won't have to be injected every time.
 public class PreferencesServiceSharedPreferences implements PreferencesService,
 		OnSharedPreferenceChangeListener {
 
@@ -155,33 +153,6 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 				KEY_RELEASED_TODAY_MINUTE,
 				context.getString(R.string.preferences_default_released_today_minute));
 	}
-
-	// TODO DI remove legacy constructor and get instance
-	/**
-	 * 
-	 * @return A singleton of this class
-	 */
-	public static final PreferencesServiceSharedPreferences getInstance() {
-		return instance;
-	}
-
-	private static PreferencesServiceSharedPreferences instance = new PreferencesServiceSharedPreferences(
-			true);
-
-	/**
-	 * Creates a {@link PreferencesService} the default shared preferences.
-	 */
-	public PreferencesServiceSharedPreferences(boolean ignore) {
-		this(new Provider<Context>() {
-			@Override
-			public Context get() {
-				return NusicApplication.getContext();
-			}
-
-		});
-	}
-
-	// END OF REMOVE
 
 	private Integer parseIntFromPreferenceOrThrow(String key,
 			String defaultValue) {

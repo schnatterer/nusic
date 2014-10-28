@@ -23,9 +23,9 @@ package info.schnatterer.nusic.android.application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.Constants.Notification;
 import info.schnatterer.nusic.R;
-import info.schnatterer.nusic.android.NusicModule;
+import info.schnatterer.nusic.android.NusicAndroidModule;
 import info.schnatterer.nusic.android.activities.MainActivity;
-import info.schnatterer.nusic.android.service.ReleasedTodayService;
+import info.schnatterer.nusic.android.service.ReleasedTodayService.ReleasedTodayServiceScheduler;
 import roboguice.RoboGuice;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -58,6 +58,8 @@ public class NusicApplication extends AbstractApplication {
 		int V_0_6 = 10;
 	}
 
+	private ReleasedTodayServiceScheduler releasedTodayServiceScheduler;
+
 	@Override
 	public void onCreate() {
 		/*
@@ -82,7 +84,14 @@ public class NusicApplication extends AbstractApplication {
 				this,
 				RoboGuice.DEFAULT_STAGE,
 				Modules.override(RoboGuice.newDefaultRoboModule(this)).with(
-						new NusicModule()));
+						new NusicAndroidModule(getApplicationContext())));
+		/*
+		 * Can't use annotations in this class, because the module is set up in
+		 * this very method. So get instances explicitly here.
+		 */
+		// RoboGuice.getInjector(getContext()).injectMembers(this);
+		releasedTodayServiceScheduler = RoboGuice.getInjector(this)
+				.getInstance(ReleasedTodayServiceScheduler.class);
 	}
 
 	@Override
@@ -120,7 +129,7 @@ public class NusicApplication extends AbstractApplication {
 		 * in preferences). Schedule it only after updates and new installations
 		 * to avoid overhead.
 		 */
-		ReleasedTodayService.schedule(this);
+		releasedTodayServiceScheduler.schedule();
 	}
 
 	@Override
@@ -130,7 +139,7 @@ public class NusicApplication extends AbstractApplication {
 		 * in preferences). Schedule it only after updates and new installations
 		 * to avoid overhead.
 		 */
-		ReleasedTodayService.schedule(this);
+		releasedTodayServiceScheduler.schedule();
 	}
 
 	/**

@@ -36,7 +36,6 @@ import android.database.Cursor;
 public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
 		ArtistDao {
 
-	// TODO DI Remove constructor
 	@Inject
 	public ArtistDaoSqlite(Context context) {
 		super(context);

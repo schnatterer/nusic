@@ -24,9 +24,6 @@ import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.NusicDatabaseSqlite;
 import info.schnatterer.nusic.data.dao.GenericDao;
 import info.schnatterer.nusic.data.model.Entity;
-
-import javax.inject.Inject;
-
 import android.content.AsyncTaskLoader;
 import android.content.ContentValues;
 import android.content.Context;
@@ -56,7 +53,6 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
 	private Cursor cursor = null;
 	private Context context;
 
-	@Inject
 	public AbstractSqliteDao(Context context) {
 		this.context = context;
 		// Opens database connection

@@ -2,14 +2,16 @@ package info.schnatterer.nusic.android.listeners;
 
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.android.service.ReleasedTodayService;
+import info.schnatterer.nusic.android.service.ReleasedTodayService.ReleasedTodayServiceScheduler;
 import info.schnatterer.nusic.core.PreferencesService;
+
+import javax.inject.Inject;
+
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.preference.Preference;
 import android.util.Log;
 import android.widget.TimePicker;
-
-import javax.inject.Inject;
 
 /**
  * Creates a preference listener that opens a {@link TimePicker}. If a new time
@@ -23,7 +25,10 @@ public class PreferenceReleasedTodayTimePickerListener implements
 	@Inject
 	private PreferencesService preferencesService;
 
+	@Inject
 	private Context context;
+	@Inject
+	private ReleasedTodayServiceScheduler releasedTodayService;
 
 	@Override
 	public boolean onPreferenceClick(Preference preference) {
@@ -42,7 +47,7 @@ public class PreferenceReleasedTodayTimePickerListener implements
 					isTimeSet = true;
 					if (preferencesService.setReleasedTodaySchedule(hourOfDay,
 							minute)) {
-						ReleasedTodayService.schedule(context);
+						releasedTodayService.schedule();
 					}
 				}
 			}

@@ -31,26 +31,24 @@ import info.schnatterer.nusic.core.PreferencesService;
 import info.schnatterer.nusic.core.ReleaseService;
 import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.core.SyncReleasesService;
+import info.schnatterer.nusic.core.event.ArtistProgressListener;
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.dao.ArtworkDao.ArtworkType;
 import info.schnatterer.nusic.data.dao.fs.ArtworkDaoFileSystem;
 import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.data.model.Release;
-import info.schnatterer.nusic.core.event.ArtistProgressListener;
-import info.schnatterer.nusic.core.impl.ConnectivityServiceAndroid;
-import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences;
-import info.schnatterer.nusic.core.impl.SyncReleasesServiceImpl;
-import info.schnatterer.nusic.core.impl.ReleaseServiceImpl;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import roboguice.receiver.RoboBroadcastReceiver;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -78,12 +76,18 @@ public class LoadNewReleasesService extends WakefulService {
 	 */
 	public static final String EXTRA_REFRESH_ON_START = "nusic.intent.extra.refreshOnStart";
 
-	private static PreferencesService preferencesService = PreferencesServiceSharedPreferences
-			.getInstance();
-	private ConnectivityService connectivityService = ConnectivityServiceAndroid
-			.getInstance();
-	private SyncReleasesService releasesService;
-	private ReleaseService releaseService = new ReleaseServiceImpl(this);
+	@Inject
+	private PreferencesService preferencesService;
+	@Inject
+	private ConnectivityService connectivityService;
+	@Inject
+	private SyncReleasesService syncReleasesService;
+	@Inject
+	private ReleaseService releaseService;
+	@Inject
+	private LoadNewReleasesServiceConnectivityReceiver loadNewReleasesServiceConnectivityReceiver;
+	@Inject
+	private LoadNewReleasesServiceScheduler loadNewReleasesServiceScheduler;
 
 	private List<Artist> errorArtists;
 	// private int totalArtists = 0;
@@ -155,8 +159,8 @@ public class LoadNewReleasesService extends WakefulService {
 		} else {
 			Log.d(Constants.LOG,
 					"Service thread already working, only adding process listener");
-			getReleasesService().addArtistProcessedListener(
-					artistProcessedListener);
+			syncReleasesService
+					.addArtistProcessedListener(artistProcessedListener);
 			return false;
 		}
 	}
@@ -184,7 +188,7 @@ public class LoadNewReleasesService extends WakefulService {
 		return false;
 	}
 
-	public class WorkerThread implements Runnable {
+	private class WorkerThread implements Runnable {
 		private boolean updateOnlyIfNeccesary;
 		private ArtistProgressListener artistProgressListener;
 
@@ -202,8 +206,7 @@ public class LoadNewReleasesService extends WakefulService {
 				if (!updateOnlyIfNeccesary) {
 					Log.d(Constants.LOG,
 							"Postponing service until online or next schedule");
-					LoadNewReleasesServiceConnectivityReceiver
-							.enableReceiver(LoadNewReleasesService.this);
+					loadNewReleasesServiceConnectivityReceiver.enableReceiver();
 
 					// Send status "not online" back to listener?
 					if (artistProgressListener != null) {
@@ -212,29 +215,28 @@ public class LoadNewReleasesService extends WakefulService {
 					}
 				} else {
 					// Make sure any changes to the online state are ignored
-					LoadNewReleasesServiceConnectivityReceiver
-							.disableReceiver(LoadNewReleasesService.this);
+					loadNewReleasesServiceConnectivityReceiver
+							.disableReceiver();
 				}
 
 			} else {
 				// Make sure any changes to the online state are ignored
-				LoadNewReleasesServiceConnectivityReceiver
-						.disableReceiver(LoadNewReleasesService.this);
+				loadNewReleasesServiceConnectivityReceiver.disableReceiver();
 
 				if (!updateOnlyIfNeccesary) {
-					getReleasesService().addArtistProcessedListener(
-							artistProgressListener);
-					getReleasesService().addArtistProcessedListener(
-							progressListenerNotifications);
+					syncReleasesService
+							.addArtistProcessedListener(artistProgressListener);
+					syncReleasesService
+							.addArtistProcessedListener(progressListenerNotifications);
 
 					long beforeRefresh = System.currentTimeMillis();
 
 					Log.d(Constants.LOG,
 							"Service thread: Calling refreshReleases()");
-					getReleasesService().syncReleases();
+					syncReleasesService.syncReleases();
 
 					// Schedule next run
-					schedule(LoadNewReleasesService.this,
+					loadNewReleasesServiceScheduler.schedule(
 							preferencesService.getRefreshPeriod(), null);
 
 					try {
@@ -247,7 +249,7 @@ public class LoadNewReleasesService extends WakefulService {
 					}
 
 					// Remove all listeners
-					getReleasesService().removeArtistProcessedListeners();
+					syncReleasesService.removeArtistProcessedListeners();
 				}
 			}
 
@@ -340,56 +342,6 @@ public class LoadNewReleasesService extends WakefulService {
 	}
 
 	/**
-	 * /** Schedule this task to run regularly.
-	 * 
-	 * @param context
-	 * @param intervalDays
-	 * @param triggerAt
-	 *            if <code>null</code>, the first start will be now +
-	 *            <code>intervalDays</code>
-	 */
-	public static void schedule(Context context, int intervalDays,
-			Date triggerAt) {
-		Date triggerAtDate = triggerAt;
-		if (triggerAt == null) {
-			Calendar triggerAtCal = Calendar.getInstance();
-			triggerAtCal.add(Calendar.DAY_OF_MONTH, intervalDays);
-			// triggerAtCal.add(Calendar.SECOND, 60);
-			triggerAtDate = triggerAtCal.getTime();
-		}
-
-		// debug: Starts service once per minute
-		// triggerAtDate = DateUtils.addMinutes(60);
-
-		// // Start service directly, on alarm
-		// PendingIntent pintent = PendingIntent.getService(context, 0,
-		// createIntentRefreshReleases(context),
-		// PendingIntent.FLAG_UPDATE_CURRENT);
-
-		/*
-		 * Start service directly via receiver that acquires a wake lock, in
-		 * order to avoid the device falling back to sleep before service is
-		 * started
-		 */
-		PendingIntent pintent = PendingIntent.getBroadcast(context,
-				Constants.Alarms.NEW_RELEASES.ordinal(), new Intent(context,
-						LoadNewReleasesServiceAlarmReceiver.class),
-				PendingIntent.FLAG_UPDATE_CURRENT);
-
-		AlarmManager alarm = (AlarmManager) context
-				.getSystemService(Context.ALARM_SERVICE);
-		/*
-		 * Set a repeating schedule, so there always is a next alarm even when
-		 * one alarm should fail for some reason
-		 */
-		alarm.setInexactRepeating(AlarmManager.RTC, triggerAtDate.getTime(),
-				AlarmManager.INTERVAL_DAY * intervalDays, pintent);
-		preferencesService.setNextReleaseRefresh(triggerAtDate);
-		Log.d(Constants.LOG, "Scheduled task to run again every "
-				+ intervalDays + " days, starting at " + triggerAtDate);
-	}
-
-	/**
 	 * Creates an intent that, when started as service, directly calls
 	 * {@link #refreshReleases(boolean, ArtistProgressListener)}.
 	 * 
@@ -415,11 +367,15 @@ public class LoadNewReleasesService extends WakefulService {
 					"Services destroyed while workerThread is running.");
 		}
 		workerThread = null;
-		if (releasesService != null) {
-			releasesService
+		if (syncReleasesService != null) {
+			syncReleasesService
 					.removeArtistProcessedListener(progressListenerNotifications);
 		}
 		releaseLock(this.getApplicationContext());
+	}
+
+	public boolean isRunning() {
+		return workerThread != null && workerThread.isAlive();
 	}
 
 	/**
@@ -440,9 +396,9 @@ public class LoadNewReleasesService extends WakefulService {
 	 * 
 	 */
 	public static class LoadNewReleasesServiceAlarmReceiver extends
-			BroadcastReceiver {
+			RoboBroadcastReceiver {
 		@Override
-		public void onReceive(final Context context, final Intent intent) {
+		public void handleReceive(final Context context, final Intent intent) {
 			Log.d(Constants.LOG, "Alarm Receiver: Alarm received!");
 			// Acquire lock, making sure device is not going to sleep again
 			acquireLock(context);
@@ -520,15 +476,61 @@ public class LoadNewReleasesService extends WakefulService {
 		}
 	}
 
-	protected SyncReleasesService getReleasesService() {
-		if (releasesService == null) {
-			releasesService = new SyncReleasesServiceImpl(this);
+	public static class LoadNewReleasesServiceScheduler {
+		@Inject
+		private Context context;
+		@Inject
+		private PreferencesService preferencesService;
+
+		/**
+		 * Schedule this task to run regularly.
+		 * 
+		 * @param context
+		 * @param intervalDays
+		 * @param triggerAt
+		 *            if <code>null</code>, the first start will be now +
+		 *            <code>intervalDays</code>
+		 */
+		public void schedule(int intervalDays, Date triggerAt) {
+			Date triggerAtDate = triggerAt;
+			if (triggerAt == null) {
+				Calendar triggerAtCal = Calendar.getInstance();
+				triggerAtCal.add(Calendar.DAY_OF_MONTH, intervalDays);
+				// triggerAtCal.add(Calendar.SECOND, 60);
+				triggerAtDate = triggerAtCal.getTime();
+			}
+
+			// debug: Starts service once per minute
+			// triggerAtDate = DateUtils.addMinutes(60);
+
+			// // Start service directly, on alarm
+			// PendingIntent pintent = PendingIntent.getService(context, 0,
+			// createIntentRefreshReleases(context),
+			// PendingIntent.FLAG_UPDATE_CURRENT);
+
+			/*
+			 * Start service directly via receiver that acquires a wake lock, in
+			 * order to avoid the device falling back to sleep before service is
+			 * started
+			 */
+			PendingIntent pintent = PendingIntent.getBroadcast(context,
+					Constants.Alarms.NEW_RELEASES.ordinal(),
+					new Intent(context,
+							LoadNewReleasesServiceAlarmReceiver.class),
+					PendingIntent.FLAG_UPDATE_CURRENT);
+
+			AlarmManager alarm = (AlarmManager) context
+					.getSystemService(Context.ALARM_SERVICE);
+			/*
+			 * Set a repeating schedule, so there always is a next alarm even
+			 * when one alarm should fail for some reason
+			 */
+			alarm.setInexactRepeating(AlarmManager.RTC,
+					triggerAtDate.getTime(), AlarmManager.INTERVAL_DAY
+							* intervalDays, pintent);
+			preferencesService.setNextReleaseRefresh(triggerAtDate);
+			Log.d(Constants.LOG, "Scheduled task to run again every "
+					+ intervalDays + " days, starting at " + triggerAtDate);
 		}
-
-		return releasesService;
-	}
-
-	public boolean isRunning() {
-		return workerThread != null && workerThread.isAlive();
 	}
 }

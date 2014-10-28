@@ -26,9 +26,9 @@ import info.schnatterer.nusic.core.ReleaseService;
 import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.dao.ArtistDao;
-import info.schnatterer.nusic.data.dao.sqlite.ArtistDaoSqlite;
 import info.schnatterer.nusic.data.model.Artist;
-import android.content.Context;
+
+import javax.inject.Inject;
 
 /**
  * Default implementation of {@link ArtistService}.
@@ -38,13 +38,10 @@ import android.content.Context;
  */
 public class ArtistServiceImpl implements ArtistService {
 
+	@Inject
 	private ReleaseService releaseService;
+	@Inject
 	private ArtistDao artistDao;
-
-	public ArtistServiceImpl(Context context) {
-		releaseService = new ReleaseServiceImpl(context);
-		artistDao = new ArtistDaoSqlite(context);
-	}
 
 	@Override
 	public long save(Artist artist) throws ServiceException {

@@ -23,25 +23,25 @@ package info.schnatterer.nusic.android.fragments;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.Constants.Loaders;
 import info.schnatterer.nusic.R;
-import info.schnatterer.nusic.android.application.NusicApplication;
-import info.schnatterer.nusic.core.ArtistService;
-import info.schnatterer.nusic.core.ReleaseService;
-import info.schnatterer.nusic.core.ServiceException;
-import info.schnatterer.nusic.core.SyncReleasesService;
-import info.schnatterer.nusic.data.model.Artist;
-import info.schnatterer.nusic.data.model.Release;
-import info.schnatterer.nusic.core.impl.ArtistServiceImpl;
-import info.schnatterer.nusic.core.impl.SyncReleasesServiceImpl;
-import info.schnatterer.nusic.core.impl.ReleaseServiceImpl;
 import info.schnatterer.nusic.android.activities.NusicWebView;
 import info.schnatterer.nusic.android.adapters.ReleaseListAdapter;
+import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.loaders.AsyncResult;
 import info.schnatterer.nusic.android.loaders.ReleaseLoaderAll;
 import info.schnatterer.nusic.android.loaders.ReleaseLoaderAvailable;
 import info.schnatterer.nusic.android.loaders.ReleaseLoaderJustCreated;
+import info.schnatterer.nusic.core.ArtistService;
+import info.schnatterer.nusic.core.ReleaseService;
+import info.schnatterer.nusic.core.ServiceException;
+import info.schnatterer.nusic.data.model.Artist;
+import info.schnatterer.nusic.data.model.Release;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
+
+import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -62,7 +62,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockFragment;
+import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 
 /**
@@ -79,7 +79,7 @@ import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
  * @author schnatterer
  *
  */
-public class ReleaseListFragment extends SherlockFragment {
+public class ReleaseListFragment extends RoboSherlockFragment {
 	/**
 	 * Key to the creating intent's extras that contains the {@link Loaders}<br/>
 	 * See {@link #loaderId}.
@@ -89,18 +89,34 @@ public class ReleaseListFragment extends SherlockFragment {
 	/** The loader that is connected to the data displayed in the fragment. */
 	private int loaderId = -1;
 
+	@Inject
+	private ReleaseListAdapter releasesListViewAdapter;
+	@InjectView(R.id.releasesListView)
 	private ListView releasesListView;
-	private ReleaseListAdapter releasesListViewAdapter = null;
+	@InjectView(R.id.releasesTextViewNoneFound)
 	private TextView releasesTextViewNoneFound;
 	/** Progress animation when loading releases from db */
+	@InjectView(R.id.releasesProgressBar)
 	private ProgressBar progressBar;
-	private SyncReleasesService syncReleasesService;
+	@Inject
 	private ReleaseService releaseService;
+	@Inject
 	private ArtistService artistService;
+	@Inject
+	private Provider<ReleaseLoaderAll> releaseLoaderAllProvider;
+	@Inject
+	private Provider<ReleaseLoaderAvailable> releaseLoaderAvailableProvider;
+	@Inject
+	private Provider<ReleaseLoaderJustCreated> releaseLoaderJustCreatedProvider;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.release_list_layout, container, false);
+	}
+
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
 		try {
 
 			loaderId = getArguments().getInt(EXTRA_LOADER_ID);
@@ -111,16 +127,9 @@ public class ReleaseListFragment extends SherlockFragment {
 					e);
 		}
 
-		View view = inflater.inflate(R.layout.release_list_layout, container,
-				false);
-		progressBar = (ProgressBar) view.findViewById(R.id.releasesProgressBar);
 		progressBar.setVisibility(View.GONE);
 
-		releasesTextViewNoneFound = (TextView) view
-				.findViewById(R.id.releasesTextViewNoneFound);
 		releasesTextViewNoneFound.setVisibility(View.GONE);
-
-		releasesListView = (ListView) view.findViewById(R.id.releasesListView);
 
 		registerForContextMenu(releasesListView);
 		releasesListView.setOnItemClickListener(new OnItemClickListener() {
@@ -136,7 +145,6 @@ public class ReleaseListFragment extends SherlockFragment {
 			}
 
 		});
-		releasesListViewAdapter = new ReleaseListAdapter(getActivity());
 		releasesListView.setAdapter(releasesListViewAdapter);
 		releasesListView.setOnScrollListener(new PauseOnScrollListener(
 				releasesListViewAdapter.getImageLoader(), false, true));
@@ -145,7 +153,6 @@ public class ReleaseListFragment extends SherlockFragment {
 		// Load releases from local db
 		getActivity().getSupportLoaderManager().initLoader(loaderId, null,
 				new ReleaseLoaderCallbacks());
-		return view;
 	}
 
 	@Override
@@ -176,13 +183,13 @@ public class ReleaseListFragment extends SherlockFragment {
 				case R.id.releaseListMenuHideRelease:
 					displayLoading();
 					release.setHidden(true);
-					getReleaseService().update(release);
+					releaseService.update(release);
 					getActivity().onContentChanged();
 					break;
 				case R.id.releaseListMenuHideAllByArtist:
 					Artist artist = release.getArtist();
 					artist.setHidden(true);
-					getArtistService().update(artist);
+					artistService.update(artist);
 					getActivity().onContentChanged();
 					break;
 				default:
@@ -200,31 +207,6 @@ public class ReleaseListFragment extends SherlockFragment {
 
 	protected void setReleases(List<Release> result) {
 		releasesListViewAdapter.show(result);
-	}
-
-	protected SyncReleasesService getReleaseRefreshService() {
-		if (syncReleasesService == null) {
-			syncReleasesService = new SyncReleasesServiceImpl(
-					getSherlockActivity());
-		}
-
-		return syncReleasesService;
-	}
-
-	protected ReleaseService getReleaseService() {
-		if (releaseService == null) {
-			releaseService = new ReleaseServiceImpl(getSherlockActivity());
-		}
-
-		return releaseService;
-	}
-
-	protected ArtistService getArtistService() {
-		if (artistService == null) {
-			artistService = new ArtistServiceImpl(getSherlockActivity());
-		}
-
-		return artistService;
 	}
 
 	/**
@@ -259,13 +241,21 @@ public class ReleaseListFragment extends SherlockFragment {
 			loaderId = id;
 			switch (loaderId) {
 			case Loaders.RELEASE_LOADER_ALL:
-				return new ReleaseLoaderAll(getActivity());
+				return releaseLoaderAllProvider.get();
 			case Loaders.RELEASE_LOADER_JUST_ADDED:
-				return new ReleaseLoaderJustCreated(getActivity());
-			case Loaders.RELEASE_LOADER_ANNOUNCED:
-				return new ReleaseLoaderAvailable(getActivity(), false);
-			case Loaders.RELEASE_LOADER_AVAILABLE:
-				return new ReleaseLoaderAvailable(getActivity(), true);
+				return releaseLoaderJustCreatedProvider.get();
+			case Loaders.RELEASE_LOADER_ANNOUNCED: {
+				ReleaseLoaderAvailable releaseLoaderAvailable = releaseLoaderAvailableProvider
+						.get();
+				releaseLoaderAvailable.setAvailable(false);
+				return releaseLoaderAvailable;
+			}
+			case Loaders.RELEASE_LOADER_AVAILABLE: {
+				ReleaseLoaderAvailable releaseLoaderAvailable = releaseLoaderAvailableProvider
+						.get();
+				releaseLoaderAvailable.setAvailable(true);
+				return releaseLoaderAvailable;
+			}
 			default:
 				Log.w(Constants.LOG,
 						"Requested loader ID is not a defined release loader: "

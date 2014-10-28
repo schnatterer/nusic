@@ -21,7 +21,6 @@
 package info.schnatterer.nusic.core;
 
 import info.schnatterer.nusic.data.model.Artist;
-import android.content.ContentResolver;
 
 /**
  * Provides access to music located on the local device.
@@ -32,12 +31,11 @@ import android.content.ContentResolver;
 public interface DeviceMusicService {
 
 	/**
-	 * Gets the names of all artists stored on local device. Note that the
+	 * Gets the names of all artists stored on local device.
 	 * 
 	 * @return
 	 * @throws ServiceException
 	 */
-	Artist[] getArtists(ContentResolver contentResolver)
-			throws ServiceException;
+	Artist[] getArtists() throws ServiceException;
 
 }

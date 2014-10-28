@@ -28,6 +28,8 @@ import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.fragments.ReleaseListFragment;
 import info.schnatterer.nusic.android.service.LoadNewReleasesService;
 import info.schnatterer.nusic.android.util.TextUtil;
+import roboguice.inject.ContentView;
+import roboguice.inject.InjectView;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -50,10 +52,10 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
 
 /**
  * The activity that is started when the app starts.
@@ -64,7 +66,8 @@ import com.actionbarsherlock.view.MenuItem;
  * @author schnatterer
  *
  */
-public class MainActivity extends SherlockFragmentActivity {
+@ContentView(R.layout.activity_main)
+public class MainActivity extends RoboSherlockFragmentActivity {
 	/** The request code used when starting {@link PreferenceActivity}. */
 	private static final int REQUEST_CODE_PREFERENCE_ACTIVITY = 0;
 	/**
@@ -91,18 +94,25 @@ public class MainActivity extends SherlockFragmentActivity {
 	 */
 	private static TabDefinition currentTab = TabDefinition.JUST_ADDED;
 
+	// /**
+	// * Provider that is used to get instances to assign to static
+	// * #loadNewRelasesServiceBinding on demand.
+	// */
+	// @Inject
+	// private Provider<LoadNewRelasesServiceBinding>
+	// loadNewRelasesServiceBindingProvider;
+
+	@InjectView(R.id.mainPager)
+	ViewPager pager;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// Set underlying layout (view pager that captures swipes)
-		setContentView(R.layout.activity_main);
-
 		/* Init tab fragments */
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		// Capture page swipes
-		ViewPager pager = (ViewPager) findViewById(R.id.mainPager);
 		ViewPager.SimpleOnPageChangeListener ViewPagerListener = new ViewPager.SimpleOnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position) {
@@ -163,6 +173,9 @@ public class MainActivity extends SherlockFragmentActivity {
 	 */
 	private void registerListenersAndStartLoading(boolean forceUpdate) {
 		if (loadNewRelasesServiceBinding == null) {
+			// loadNewRelasesServiceBinding =
+			// loadNewRelasesServiceBindingProvider
+			// .get();
 			loadNewRelasesServiceBinding = new LoadNewRelasesServiceBinding();
 			registerListeners();
 			if (forceUpdate) {
@@ -175,23 +188,6 @@ public class MainActivity extends SherlockFragmentActivity {
 		} else {
 			registerListeners();
 		}
-	}
-
-	public boolean isFirstStart() {
-		switch (NusicApplication.getAppStart()) {
-		case FIRST:
-			// Fall through is intended
-		case UPGRADE:
-			return true;
-		default:
-			break;
-		}
-
-		/*
-		 * TODO check if there are new artists on the device and refresh if
-		 * neccessary. Then update interface comment for this method!
-		 */
-		return false;
 	}
 
 	@Override

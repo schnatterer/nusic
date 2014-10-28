@@ -22,15 +22,17 @@ package info.schnatterer.nusic.android.loaders;
 
 import info.schnatterer.nusic.core.ReleaseService;
 import info.schnatterer.nusic.data.model.Release;
-import info.schnatterer.nusic.core.impl.ReleaseServiceImpl;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import android.content.Context;
 
 public class ReleaseLoaderAvailable extends
 		AbstractAsyncSqliteLoader<List<Release>, Release> {
 
+	@Inject
 	private ReleaseService releaseService;
 	/**
 	 * <code>true</code> if releases available today should be display.
@@ -40,18 +42,31 @@ public class ReleaseLoaderAvailable extends
 
 	/**
 	 * @param context
-	 * @param isAvailable
-	 *            <code>true</code> if releases available today should be
-	 *            display. Otherwise <code>false</code>.
 	 */
-	public ReleaseLoaderAvailable(Context context, boolean isAvailable) {
+	@Inject
+	public ReleaseLoaderAvailable(Context context) {
 		super(context);
-		releaseService = new ReleaseServiceImpl(context);
-		this.isAvailable = isAvailable;
 	}
 
 	@Override
 	public List<Release> doLoadInBackground() throws Exception {
 		return releaseService.findAvailableToday(isAvailable);
+	}
+
+	/**
+	 * @return <code>true</code> if releases available today is display.
+	 *         Otherwise <code>false</code>.
+	 */
+	public boolean isAvailable() {
+		return isAvailable;
+	}
+
+	/**
+	 * @param isAvailable
+	 *            <code>true</code> if releases available today should be
+	 *            display. Otherwise <code>false</code>.
+	 */
+	public void setAvailable(boolean isAvailable) {
+		this.isAvailable = isAvailable;
 	}
 }

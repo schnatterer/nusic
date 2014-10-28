@@ -25,7 +25,6 @@ import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.dao.ArtworkDao;
 import info.schnatterer.nusic.data.dao.ArtworkDao.ArtworkType;
-import info.schnatterer.nusic.data.dao.fs.ArtworkDaoFileSystem;
 import info.schnatterer.nusic.data.model.Release;
 
 import java.lang.ref.WeakReference;
@@ -34,7 +33,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import android.content.Context;
+import javax.inject.Inject;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,13 +69,11 @@ public class ReleaseListAdapter extends BaseAdapter {
 		}
 	};
 
-	private static ArtworkDao artworkDao = new ArtworkDaoFileSystem();
+	@Inject
+	private ArtworkDao artworkDao;
 	private List<Release> listData;
-	private static LayoutInflater layoutInflater = null;
-
-	public ReleaseListAdapter(Context context) {
-		layoutInflater = LayoutInflater.from(context);
-	}
+	@Inject
+	private LayoutInflater layoutInflater = null;
 
 	@Override
 	public int getCount() {

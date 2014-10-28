@@ -22,23 +22,25 @@ package info.schnatterer.nusic.android.loaders;
 
 import info.schnatterer.nusic.core.ReleaseService;
 import info.schnatterer.nusic.data.model.Release;
-import info.schnatterer.nusic.core.impl.ReleaseServiceImpl;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import android.content.Context;
 
 public class ReleaseLoaderJustCreated extends
 		AbstractAsyncSqliteLoader<List<Release>, Release> {
 
+	@Inject
 	private ReleaseService releaseService;
 
 	/**
 	 * @param context
 	 */
+	@Inject
 	public ReleaseLoaderJustCreated(Context context) {
 		super(context);
-		releaseService = new ReleaseServiceImpl(context);
 	}
 
 	@Override
