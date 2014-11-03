@@ -71,20 +71,25 @@ public class NusicApplication extends AbstractApplication {
 				.build();
 		ImageLoader.getInstance().init(config);
 
-		// Causes onUpgrade() to be called, etc.
-		super.onCreate();
+		initGlobals();
+
+		/*
+		 * TODO enable annotation database to improve performance. At the
+		 * moment, this results in an ClassNotFoundException (in eclipse).
+		 */
+		RoboGuice.setUseAnnotationDatabases(false);
 
 		/*
 		 * As some injected implementations might rely on getContext() and
 		 * getContext() is initialized in super.onCreate() it's crucial to set
 		 * the custom module AFTER super.onCreate().
 		 */
-		RoboGuice.setBaseApplicationInjector(
+		RoboGuice.getOrCreateBaseApplicationInjector(
 				// RoboGuice.getOrCreateBaseApplicationInjector(
 				this,
 				RoboGuice.DEFAULT_STAGE,
 				Modules.override(RoboGuice.newDefaultRoboModule(this)).with(
-						new NusicAndroidModule(getApplicationContext())));
+						new NusicAndroidModule(this)));
 		/*
 		 * Can't use annotations in this class, because the module is set up in
 		 * this very method. So get instances explicitly here.
@@ -92,6 +97,9 @@ public class NusicApplication extends AbstractApplication {
 		// RoboGuice.getInjector(getContext()).injectMembers(this);
 		releasedTodayServiceScheduler = RoboGuice.getInjector(this)
 				.getInstance(ReleasedTodayServiceScheduler.class);
+
+		// Causes onUpgrade() to be called, etc.
+		super.onCreate();
 	}
 
 	@Override

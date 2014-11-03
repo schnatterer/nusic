@@ -28,7 +28,11 @@ import info.schnatterer.nusic.android.listeners.PreferenceVisibilityButtonListen
 import info.schnatterer.nusic.core.PreferencesService;
 import info.schnatterer.nusic.core.event.PreferenceChangedListener;
 import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences;
+
+import javax.inject.Inject;
+
 import roboguice.RoboGuice;
+import roboguice.activity.RoboSherlockPreferenceActivity;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
@@ -36,8 +40,6 @@ import android.os.Bundle;
 import android.preference.Preference;
 
 import com.actionbarsherlock.view.MenuItem;
-import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockPreferenceActivity;
-import javax.inject.Inject;
 
 /**
  * Activity that realizes the preferences of the app.

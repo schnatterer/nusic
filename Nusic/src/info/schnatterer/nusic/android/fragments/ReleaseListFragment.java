@@ -41,6 +41,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import roboguice.fragment.RoboSherlockFragment;
 import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.net.Uri;
@@ -62,7 +63,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 
 /**

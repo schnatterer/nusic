@@ -59,6 +59,7 @@ public abstract class AbstractApplication extends Application {
 	private static Context context;
 
 	private SharedPreferences sharedPreferences;
+	private static boolean isInitialized = false;
 
 	private static int lastVersionCode;
 	private static int currentVersionCode;
@@ -68,12 +69,27 @@ public abstract class AbstractApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		context = getApplicationContext();
+		initGlobals();
 
-		sharedPreferences = getApplicationContext().getSharedPreferences(
-				"AbstractApplicationPreferences", Context.MODE_PRIVATE);
-		currentVersionName = createVersionName();
 		handleAppVersion();
+	}
+
+	/**
+	 * Initializes "global" variables that are statically provided by the class. <br/>
+	 * <br/>
+	 * Note that this is also called by {@link #onCreate()}, so use this only if
+	 * you might need to initialize the global context before calling
+	 * {@link #onCreate()}.
+	 */
+	protected void initGlobals() {
+		if (!isInitialized) {
+			context = getApplicationContext();
+
+			sharedPreferences = getApplicationContext().getSharedPreferences(
+					"AbstractApplicationPreferences", Context.MODE_PRIVATE);
+			currentVersionName = createVersionName();
+			isInitialized = true;
+		}
 	}
 
 	/**

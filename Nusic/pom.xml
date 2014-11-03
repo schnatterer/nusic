@@ -67,21 +67,20 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
-		<dependency>
-			<groupId>com.github.rtyley</groupId>
-			<artifactId>roboguice-sherlock</artifactId>
-			<version>1.5</version>
-		</dependency>
-
 		<dependency>
 			<groupId>org.roboguice</groupId>
 			<artifactId>roboguice</artifactId>
-			<version>2.0</version>
-			<!-- <version>3.0b-experimental</version> -->
-			<!-- <version>3.0</version> -->
+			<version>3.0</version>
 		</dependency>
-
+	<!-- TODO enable annotation database to improve performance. At the moment, 
+		this results in an ClassNotFoundException (in eclipse). -->
+<!-- 		<dependency>
+			<groupId>org.roboguice</groupId>
+			<artifactId>roboblender</artifactId>
+			<version>3.0</version>
+			<scope>provided</scope>
+		</dependency>
+ -->
 		<!-- Nusic dependencies -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -135,10 +134,11 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>3.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+					<compilerArgument>-AguiceAnnotationDatabasePackageName=info.schnatterer.nusic.android.application</compilerArgument>
 				</configuration>
 			</plugin>
 			<plugin>

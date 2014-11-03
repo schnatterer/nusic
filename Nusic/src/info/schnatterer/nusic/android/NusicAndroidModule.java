@@ -26,6 +26,7 @@ import info.schnatterer.nusic.data.dao.ReleaseDao;
 import info.schnatterer.nusic.data.dao.fs.ArtworkDaoFileSystem;
 import info.schnatterer.nusic.data.dao.sqlite.ArtistDaoSqlite;
 import info.schnatterer.nusic.data.dao.sqlite.ReleaseDaoSqlite;
+import android.app.Application;
 import android.content.Context;
 
 import com.google.inject.AbstractModule;
@@ -40,10 +41,10 @@ import com.google.inject.Provides;
  *
  */
 public class NusicAndroidModule extends AbstractModule {
-	private Context context;
+	private Application application;
 
-	public NusicAndroidModule(Context context) {
-		this.context = context;
+	public NusicAndroidModule(Application application) {
+		this.application = application;
 	}
 
 	@Override
@@ -75,6 +76,6 @@ public class NusicAndroidModule extends AbstractModule {
 
 	@Provides
 	Context provideGlobalContext() {
-		return context;
+		return application;
 	}
 }

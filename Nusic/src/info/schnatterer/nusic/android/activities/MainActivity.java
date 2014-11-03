@@ -28,6 +28,7 @@ import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.fragments.ReleaseListFragment;
 import info.schnatterer.nusic.android.service.LoadNewReleasesService;
 import info.schnatterer.nusic.android.util.TextUtil;
+import roboguice.activity.RoboSherlockFragmentActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 import android.annotation.SuppressLint;
@@ -55,7 +56,6 @@ import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
 
 /**
  * The activity that is started when the app starts.
