@@ -17,7 +17,7 @@
 	<properties>
 		<abs.version>4.4.0</abs.version>
 		<final.name>nusic-${project.version}</final.name>
-		<sdk.version>19</sdk.version>
+		<sdk.version>21</sdk.version>
 		<assets.dir.input>${project.basedir}/assets</assets.dir.input>
 		<assets.dir.output>${project.build.directory}/filtered-assets</assets.dir.output>
 		<raw.mardkown.dir>${project.build.directory}/md-assets</raw.mardkown.dir>
@@ -39,7 +39,7 @@
 				<dependency>
 					<groupId>android</groupId>
 					<artifactId>android</artifactId>
-					<version>4.4.2_r3</version>
+					<version>5.0_r1</version>
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>
@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>android.support</groupId>
 			<artifactId>compatibility-v4</artifactId>
-			<version>20.0.0</version>
+			<version>21.0.1</version>
 		</dependency>
 
 		<dependency>
@@ -66,10 +66,7 @@
 					<artifactId>support-v4</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-
-		<!-- Nusic dependencies -->
-		<dependency>
+		</dependency>		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>14.0.1</version>
