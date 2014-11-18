@@ -42,6 +42,7 @@ import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.nusic.core.impl.SyncReleasesServiceImpl;
 import info.schnatterer.nusic.core.impl.ReleaseServiceImpl;
 
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -288,15 +289,19 @@ public class LoadNewReleasesService extends WakefulService {
 	 */
 	private void notifyNewReleases(Release release) {
 		try {
-			Bitmap createScaledBitmap = ImageUtil.createScaledBitmap(
-					new ArtworkDaoFileSystem().findStreamByRelease(release,
-							ArtworkType.SMALL), this);
+			Bitmap scaledBitmap = null;
+			InputStream artworkStream = new ArtworkDaoFileSystem()
+					.findStreamByRelease(release, ArtworkType.SMALL);
+			if (artworkStream != null) {
+				scaledBitmap = ImageUtil.createScaledBitmap(artworkStream,
+						this);
+			}
 			NusicApplication.notify(
 					Notification.NEW_RELEASE,
 					getString(R.string.LoadNewReleasesService_newRelease),
 					release.getArtist().getArtistName() + " - "
 							+ release.getReleaseName(), R.drawable.ic_launcher,
-					createScaledBitmap, MainActivity.class,
+							scaledBitmap, MainActivity.class,
 					createExtraActiveTab());
 		} catch (DatabaseException e) {
 			Log.w(Constants.LOG, "Unable to load artwork for notification. "
