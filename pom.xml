@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>info.schnatterer.nusic</groupId>
 	<artifactId>nusic-parent</artifactId>
-	<version>1.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>nusic</name>
 
@@ -16,9 +16,17 @@
 		</license>
 	</licenses>
 
+	<scm>
+		<connection>scm:git:ssh://github.com/schnatterer/nusic.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/schnatterer/nusic.git</developerConnection>
+		<url>https://github.com/schnatterer/nusic</url>
+		<tag>HEAD</tag>
+	</scm>
+
 	<modules>
 		<module>nusic</module>
-		<!-- TODO remove as soon as a proper version is published and nusic-app does not reference this any more -->
-        <module>musicbrainzws2-java</module>
+		<!-- TODO remove as soon as a proper version is published and nusic-app 
+			does not reference this any more -->
+		<module>musicbrainzws2-java</module>
 	</modules>
 </project>
