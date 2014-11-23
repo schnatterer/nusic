@@ -176,7 +176,7 @@
 					<include>values/constants.xml</include>
 				</includes>
 			</resource>
-			<!-- Copy all other files from res without filtering-->
+			<!-- Copy all other files from res without filtering -->
 			<resource>
 				<directory>${res.dir.input}</directory>
 				<filtering>false</filtering>
@@ -267,6 +267,15 @@
 				</executions>
 			</plugin>
 
+			<!-- Dont push our release right away. At least for testing -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<localCheckout>true</localCheckout>
+					<pushChanges>false</pushChanges>
+				</configuration>
+			</plugin>
 
 			<!-- Process Markdown to HTML -->
 			<plugin>
