@@ -20,6 +20,8 @@
 		<sdk.version>21</sdk.version>
 		<assets.dir.input>${project.basedir}/assets</assets.dir.input>
 		<assets.dir.output>${project.build.directory}/filtered-assets</assets.dir.output>
+		<res.dir.input>${project.basedir}/res</res.dir.input>
+		<res.dir.output>${project.build.directory}/filtered-res</res.dir.output>
 		<raw.mardkown.dir>${project.build.directory}/md-assets</raw.mardkown.dir>
 	</properties>
 
@@ -165,6 +167,24 @@
 				<filtering>false</filtering>
 				<targetPath>${raw.mardkown.dir}</targetPath>
 			</resource>
+			<!-- Filter specific files from res directory -->
+			<resource>
+				<directory>${res.dir.input}</directory>
+				<filtering>true</filtering>
+				<targetPath>${res.dir.output}</targetPath>
+				<includes>
+					<include>values/constants.xml</include>
+				</includes>
+			</resource>
+			<!-- Copy all other files from res without filtering-->
+			<resource>
+				<directory>${res.dir.input}</directory>
+				<filtering>false</filtering>
+				<targetPath>${res.dir.output}</targetPath>
+				<excludes>
+					<exclude>values/constants.xml</exclude>
+				</excludes>
+			</resource>
 		</resources>
 
 		<plugins>
@@ -307,7 +327,8 @@
 						<inputApk>${project.build.directory}/${final.name}.apk</inputApk>
 						<outputApk>${project.build.directory}/${final.name}.apk</outputApk>
 					</zipalign>
-					<assetsDirectory>${project.build.directory}/filtered-assets</assetsDirectory>
+					<resourceDirectory>{res.dir.output}</resourceDirectory>
+					<assetsDirectory>${assets.dir.output}</assetsDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
