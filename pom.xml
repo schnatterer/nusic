@@ -29,4 +29,22 @@
 			does not reference this any more -->
 		<module>musicbrainzws2-java</module>
 	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<!-- Dont push our release right away. At least for testing -->
+					<localCheckout>true</localCheckout>
+					<pushChanges>false</pushChanges>
+					<!-- Make our tags look like e.g. "v.1.0.1" -->
+					<tagNameFormat>v.@{project.version}</tagNameFormat>
+					<!-- Same version to all submodules -->
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

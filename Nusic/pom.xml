@@ -257,6 +257,7 @@
 				for individual resources -->
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.7</version>
 				<executions>
 					<execution>
 						<phase>initialize</phase>
@@ -265,16 +266,6 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
-
-			<!-- Dont push our release right away. At least for testing -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<configuration>
-					<localCheckout>true</localCheckout>
-					<pushChanges>false</pushChanges>
-				</configuration>
 			</plugin>
 
 			<!-- Process Markdown to HTML -->
@@ -294,7 +285,6 @@
 				<configuration>
 					<inputDirectory>${raw.mardkown.dir}</inputDirectory>
 					<outputDirectory>${assets.dir.output}</outputDirectory>
-					<copyDirectories></copyDirectories>
 				</configuration>
 			</plugin>
 
@@ -336,7 +326,7 @@
 						<inputApk>${project.build.directory}/${final.name}.apk</inputApk>
 						<outputApk>${project.build.directory}/${final.name}.apk</outputApk>
 					</zipalign>
-					<resourceDirectory>{res.dir.output}</resourceDirectory>
+					<resourceDirectory>${res.dir.output}</resourceDirectory>
 					<assetsDirectory>${assets.dir.output}</assetsDirectory>
 				</configuration>
 			</plugin>
