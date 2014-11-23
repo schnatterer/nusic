@@ -44,6 +44,39 @@
 				</dependency>
 			</dependencies>
 		</profile>
+		<profile>
+			<id>release</id>
+			<activation>
+				<property>
+					<!-- Value set by release:perform -->
+					<name>performRelease</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+						<artifactId>android-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>update-manifest</id>
+								<goals>
+									<goal>manifest-update</goal>
+								</goals>
+								<configuration>
+									<manifest>
+										<versionCodeAutoIncrement>
+											true
+										</versionCodeAutoIncrement>
+									</manifest>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 
 	<dependencies>
@@ -114,6 +147,26 @@
 	<build>
 		<finalName>${final.name}</finalName>
 		<sourceDirectory>src</sourceDirectory>
+
+		<resources>
+			<!-- Copy input assets to outptut assets dir -->
+			<resource>
+				<directory>${assets.dir.input}</directory>
+				<filtering>false</filtering>
+				<targetPath>${assets.dir.output}</targetPath>
+			</resource>
+			<!-- Include markdown sources to target in assets -->
+			<resource>
+				<directory>${project.basedir}/..</directory>
+				<includes>
+					<include>NOTICE.md</include>
+					<include>CHANGELOG.md</include>
+				</includes>
+				<filtering>false</filtering>
+				<targetPath>${raw.mardkown.dir}</targetPath>
+			</resource>
+		</resources>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -180,51 +233,20 @@
 				</executions>
 			</plugin>
 
+			<!-- Bind maven resource filtering to initialize phase, see build/resources 
+				for individual resources -->
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.6</version>
 				<executions>
-					<!-- Copy input assets to outptut asset dir -->
 					<execution>
-						<id>copy assets</id>
 						<phase>initialize</phase>
 						<goals>
-							<goal>copy-resources</goal>
+							<goal>resources</goal>
 						</goals>
-						<configuration>
-							<outputDirectory>${assets.dir.output}</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${assets.dir.input}</directory>
-									<filtering>false</filtering>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-
-					<!-- Include markdown sources to target in assets -->
-					<execution>
-						<id>copy raw markdown</id>
-						<phase>initialize</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${raw.mardkown.dir}</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${project.basedir}/..</directory>
-									<includes>
-										<include>NOTICE.md</include>
-										<include>CHANGELOG.md</include>
-									</includes>
-									<filtering>false</filtering>
-								</resource>
-							</resources>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+
 
 			<!-- Process Markdown to HTML -->
 			<plugin>
