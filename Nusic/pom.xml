@@ -25,10 +25,10 @@
 		<raw.mardkown.dir>${project.build.directory}/md-assets</raw.mardkown.dir>
 	</properties>
 
-	<!-- Use Profiles to distinguish between the "implicit" builds of the eclipse 
-		plugin and "explicit" builds triggered by calling mvn install -->
 	<profiles>
 		<profile>
+			<!-- Use this profike to distinguish between the "implicit" builds of 
+				the eclipse plugin and "explicit" builds triggered by calling mvn install -->
 			<id>default</id>
 			<activation>
 				<property>
