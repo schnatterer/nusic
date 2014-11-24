@@ -22,23 +22,6 @@
 		<tag>HEAD</tag>
 	</scm>
 
-	<!-- When releasing, ignore musicbrainzws2-java -->
-	<profiles>
-		<profile>
-			<id>release</id>
-			<activation>
-				<property>
-					<!-- Value set by release:perform -->
-					<name>performRelease</name>
-					<value>true</value>
-				</property>
-			</activation>
-			<modules>
-				<module>nusic</module>
-			</modules>
-		</profile>
-	</profiles>
-
 	<modules>
 		<module>nusic</module>
 		<!-- TODO remove as soon as a proper version is published and nusic-app 
