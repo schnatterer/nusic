@@ -18,13 +18,24 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic;
+package info.schnatterer.nusic.core;
 
-import info.schnatterer.nusic.data.model.Artist;
-
-import java.util.Date;
-
-public interface QueryMusicMetadataService {
-
-	Artist findReleases(Artist artist, Date fromDate, Date endDate) throws ServiceException;
+/**
+ * Provides access to information about the internet connection.
+ * 
+ * @author schnatterer
+ * 
+ */
+public interface ConnectivityService {
+	/**
+	 * Used to determine if there is an active data connection and what type of
+	 * connection it is if there is one.
+	 * 
+	 * Queries {@link PreferencesService#isUseOnlyWifi()} to see if a mobile data
+	 * connection can be used.
+	 * 
+	 * @return <code>true</code> if there is an active data connection.
+	 *         Otherwise <code>false</code>.
+	 */
+	boolean isOnline();
 }

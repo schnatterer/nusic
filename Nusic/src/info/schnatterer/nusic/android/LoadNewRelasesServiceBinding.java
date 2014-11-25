@@ -25,10 +25,10 @@ import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.service.LoadNewReleasesService;
 import info.schnatterer.nusic.android.service.LoadNewReleasesServiceConnection;
+import info.schnatterer.nusic.core.ServiceException;
+import info.schnatterer.nusic.core.SyncReleasesService;
 import info.schnatterer.nusic.data.model.Artist;
-import info.schnatterer.nusic.logic.ReleaseRefreshService;
-import info.schnatterer.nusic.logic.ServiceException;
-import info.schnatterer.nusic.logic.event.ArtistProgressListener;
+import info.schnatterer.nusic.core.event.ArtistProgressListener;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -41,7 +41,7 @@ import android.util.Log;
 /**
  * Holds the binding to the {@link LoadNewReleasesService} via
  * {@link LoadNewReleasesServiceConnection}. Allows for executing the service
- * method {@link ReleaseRefreshService#refreshReleases(boolean)} and visualizes
+ * method {@link SyncReleasesService#refreshReleases(boolean)} and visualizes
  * its result in a {@link ProgressDialog}.
  * 
  * @author schnatterer
@@ -63,7 +63,7 @@ public class LoadNewRelasesServiceBinding {
 	private boolean isDataChanged = false;
 
 	/**
-	 * Executes {@link ReleaseRefreshService#refreshReleases(boolean)} within
+	 * Executes {@link SyncReleasesService#refreshReleases(boolean)} within
 	 * {@link LoadNewReleasesService} in a separate thread.
 	 * 
 	 * @param activity

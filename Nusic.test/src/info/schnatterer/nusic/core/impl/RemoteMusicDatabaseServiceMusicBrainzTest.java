@@ -18,7 +18,9 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic.impl;
+package info.schnatterer.nusic.core.impl;
+
+import info.schnatterer.nusic.core.impl.RemoteMusicDatabaseServiceMusicBrainz;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -33,13 +35,13 @@ import org.musicbrainz.model.searchresult.ReleaseResultWs2;
 import android.annotation.SuppressLint;
 import android.test.InstrumentationTestCase;
 
-public class QueryMusicMetadataServiceMusicBrainzTest extends
+public class RemoteMusicDatabaseServiceMusicBrainzTest extends
 		InstrumentationTestCase {
 
 	@SuppressLint("SimpleDateFormat")
 	private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-	private QueryMusicMetadataServiceMusicBrainz queryMusicMetadataService;
+	private RemoteMusicDatabaseServiceMusicBrainz remoteMusicDatabaseServiceMusicBrainz;
 
 	private final String expectedFromDateStr = "2013-01-01";
 	private Date expectedFromDate = null;
@@ -62,7 +64,7 @@ public class QueryMusicMetadataServiceMusicBrainzTest extends
 		System.setProperty("dexmaker.dexcache", getInstrumentation()
 				.getTargetContext().getCacheDir().toString());
 
-		queryMusicMetadataService = new QueryMusicMetadataServiceMusicUnderTest();
+		remoteMusicDatabaseServiceMusicBrainz = new QueryMusicMetadataServiceMusicUnderTest();
 
 		expectedFromDate = dateFormat.parse(expectedFromDateStr);
 		expectedToDate = dateFormat.parse(expectedToDateStr);
@@ -72,25 +74,25 @@ public class QueryMusicMetadataServiceMusicBrainzTest extends
 	public void testAppendDate() {
 		// Open beginning
 		StringBuffer actual = new StringBuffer();
-		queryMusicMetadataService.appendDate(null, expectedToDate, actual);
+		remoteMusicDatabaseServiceMusicBrainz.appendDate(null, expectedToDate, actual);
 		assertEquals("Unexpected result for open start date",
 				EXPECTED_STRING_OPEN_BEGINNING, actual.toString());
 
 		// Open end
 		actual = new StringBuffer();
-		queryMusicMetadataService.appendDate(expectedFromDate, null, actual);
+		remoteMusicDatabaseServiceMusicBrainz.appendDate(expectedFromDate, null, actual);
 		assertEquals("Unexpected result for open end date",
 				EXPECTED_STRING_OPEN_END, actual.toString());
 
 		// No dates
 		actual = new StringBuffer();
-		queryMusicMetadataService.appendDate(null, null, actual);
+		remoteMusicDatabaseServiceMusicBrainz.appendDate(null, null, actual);
 		assertEquals("Unexpected result for open end date",
 				EXPECTED_STRING_NO_DATES, actual.toString());
 
 		// Defined beginning and end dates
 		actual = new StringBuffer();
-		queryMusicMetadataService.appendDate(expectedFromDate, expectedToDate,
+		remoteMusicDatabaseServiceMusicBrainz.appendDate(expectedFromDate, expectedToDate,
 				actual);
 		assertEquals("Unexpected result for open end date",
 				EXPECTED_STRING_REGULAR_DATES, actual.toString());
@@ -139,7 +141,7 @@ public class QueryMusicMetadataServiceMusicBrainzTest extends
 	// }
 
 	public class QueryMusicMetadataServiceMusicUnderTest extends
-			QueryMusicMetadataServiceMusicBrainz {
+			RemoteMusicDatabaseServiceMusicBrainz {
 
 		public QueryMusicMetadataServiceMusicUnderTest() {
 			super(null, null, null);

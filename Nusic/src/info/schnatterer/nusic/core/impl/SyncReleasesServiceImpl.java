@@ -18,22 +18,22 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic.impl;
+package info.schnatterer.nusic.core.impl;
 
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.application.NusicApplication;
+import info.schnatterer.nusic.core.ArtistService;
+import info.schnatterer.nusic.core.DeviceMusicService;
+import info.schnatterer.nusic.core.PreferencesService;
+import info.schnatterer.nusic.core.RemoteMusicDatabaseService;
+import info.schnatterer.nusic.core.ServiceException;
+import info.schnatterer.nusic.core.SyncReleasesService;
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.model.Artist;
-import info.schnatterer.nusic.logic.ArtistQueryService;
-import info.schnatterer.nusic.logic.ArtistService;
-import info.schnatterer.nusic.logic.PreferencesService;
-import info.schnatterer.nusic.logic.QueryMusicMetadataService;
-import info.schnatterer.nusic.logic.ReleaseRefreshService;
-import info.schnatterer.nusic.logic.ServiceException;
-import info.schnatterer.nusic.logic.event.ArtistProgressListener;
-import info.schnatterer.nusic.logic.event.ProgressListener;
-import info.schnatterer.nusic.logic.event.ProgressUpdater;
+import info.schnatterer.nusic.core.event.ArtistProgressListener;
+import info.schnatterer.nusic.core.event.ProgressListener;
+import info.schnatterer.nusic.core.event.ProgressUpdater;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -44,10 +44,16 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.util.Log;
 
-public class ReleaseRefreshServiceImpl implements ReleaseRefreshService {
+/**
+ * Default implementation of {@link SyncReleasesService}.
+ * 
+ * @author schnatterer
+ *
+ */
+public class SyncReleasesServiceImpl implements SyncReleasesService {
 	private Context context;
-	private final QueryMusicMetadataService queryMusicMetadataService;
-	private ArtistQueryService artistQueryService = new ArtistQueryServiceImpl();
+	private final RemoteMusicDatabaseService remoteMusicDatabaseService;
+	private DeviceMusicService deviceMusicService = new DeviceMusicServiceAndroid();
 	private PreferencesService preferencesService = PreferencesServiceSharedPreferences
 			.getInstance();
 
@@ -58,19 +64,19 @@ public class ReleaseRefreshServiceImpl implements ReleaseRefreshService {
 			listenerList) {
 	};
 
-	public ReleaseRefreshServiceImpl(Context context) {
+	public SyncReleasesServiceImpl(Context context) {
 		this.context = context;
 		if (context != null) {
 			this.artistService = new ArtistServiceImpl(context);
 		}
-		queryMusicMetadataService = new QueryMusicMetadataServiceMusicBrainz(
+		remoteMusicDatabaseService = new RemoteMusicDatabaseServiceMusicBrainz(
 				context.getString(R.string.app_name),
 				NusicApplication.getCurrentVersionName(),
 				Constants.APPLICATION_URL);
 	}
 
 	@Override
-	public void refreshReleases() {
+	public void syncReleases() {
 		Date startDate = createStartDate(preferencesService
 				.getDownloadReleasesTimePeriod());
 
@@ -113,7 +119,7 @@ public class ReleaseRefreshServiceImpl implements ReleaseRefreshService {
 				 * limit of 2048 chars in mind)
 				 */
 				try {
-					artist = queryMusicMetadataService.findReleases(artist,
+					artist = remoteMusicDatabaseService.findReleases(artist,
 							startDate, endDate);
 					if (artist == null) {
 						Log.w(Constants.LOG, "Artist " + i + " of "
@@ -193,7 +199,7 @@ public class ReleaseRefreshServiceImpl implements ReleaseRefreshService {
 	}
 
 	public Artist[] getArtists() throws ServiceException {
-		return artistQueryService.getArtists(getContentResolver());
+		return deviceMusicService.getArtists(getContentResolver());
 	}
 
 }

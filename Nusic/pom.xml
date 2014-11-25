@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
- http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>info.schnatterer.nusic</groupId>
 		<artifactId>nusic-parent</artifactId>
-		<version>1.0</version>
+		<version>1.0.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>nusic-app</artifactId>
@@ -17,16 +15,18 @@
 	<properties>
 		<abs.version>4.4.0</abs.version>
 		<final.name>nusic-${project.version}</final.name>
-		<sdk.version>19</sdk.version>
+		<sdk.version>21</sdk.version>
 		<assets.dir.input>${project.basedir}/assets</assets.dir.input>
 		<assets.dir.output>${project.build.directory}/filtered-assets</assets.dir.output>
+		<res.dir.input>${project.basedir}/res</res.dir.input>
+		<res.dir.output>${project.build.directory}/filtered-res</res.dir.output>
 		<raw.mardkown.dir>${project.build.directory}/md-assets</raw.mardkown.dir>
 	</properties>
 
-	<!-- Use Profiles to distinguish between the "implicit" builds of the eclipse 
-		plugin and "explicit" builds triggered by calling mvn install -->
 	<profiles>
 		<profile>
+			<!-- Use this profike to distinguish between the "implicit" builds of 
+				the eclipse plugin and "explicit" builds triggered by calling mvn install -->
 			<id>default</id>
 			<activation>
 				<property>
@@ -39,7 +39,7 @@
 				<dependency>
 					<groupId>android</groupId>
 					<artifactId>android</artifactId>
-					<version>4.4.2_r3</version>
+					<version>5.0_r1</version>
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>
@@ -51,15 +51,14 @@
 		<dependency>
 			<groupId>android.support</groupId>
 			<artifactId>compatibility-v4</artifactId>
-			<version>20.0.0</version>
+			<version>21.0.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.actionbarsherlock</groupId>
 			<artifactId>actionbarsherlock</artifactId>
 			<version>${abs.version}</version>
-			<type>apklib</type>
-			<scope>compile</scope>
+			<type>aar</type>
 			<exclusions>
 				<exclusion>
 					<groupId>com.google.android</groupId>
@@ -67,8 +66,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
-		<!-- Nusic dependencies -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -117,6 +114,44 @@
 	<build>
 		<finalName>${final.name}</finalName>
 		<sourceDirectory>src</sourceDirectory>
+
+		<resources>
+			<!-- Copy input assets to outptut assets dir -->
+			<resource>
+				<directory>${assets.dir.input}</directory>
+				<filtering>false</filtering>
+				<targetPath>${assets.dir.output}</targetPath>
+			</resource>
+			<!-- Include markdown sources to target in assets -->
+			<resource>
+				<directory>${project.basedir}/..</directory>
+				<includes>
+					<include>NOTICE.md</include>
+					<include>CHANGELOG.md</include>
+				</includes>
+				<filtering>false</filtering>
+				<targetPath>${raw.mardkown.dir}</targetPath>
+			</resource>
+			<!-- Filter specific files from res directory -->
+			<resource>
+				<directory>${res.dir.input}</directory>
+				<filtering>true</filtering>
+				<targetPath>${res.dir.output}</targetPath>
+				<includes>
+					<include>values/constants.xml</include>
+				</includes>
+			</resource>
+			<!-- Copy all other files from res without filtering -->
+			<resource>
+				<directory>${res.dir.input}</directory>
+				<filtering>false</filtering>
+				<targetPath>${res.dir.output}</targetPath>
+				<excludes>
+					<exclude>values/constants.xml</exclude>
+				</excludes>
+			</resource>
+		</resources>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -183,48 +218,17 @@
 				</executions>
 			</plugin>
 
+			<!-- Bind maven resource filtering to initialize phase, see build/resources 
+				for individual resources -->
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.6</version>
+				<version>2.7</version>
 				<executions>
-					<!-- Copy input assets to outptut asset dir -->
 					<execution>
-						<id>copy assets</id>
 						<phase>initialize</phase>
 						<goals>
-							<goal>copy-resources</goal>
+							<goal>resources</goal>
 						</goals>
-						<configuration>
-							<outputDirectory>${assets.dir.output}</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${assets.dir.input}</directory>
-									<filtering>false</filtering>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-
-					<!-- Include markdown sources to target in assets -->
-					<execution>
-						<id>copy raw markdown</id>
-						<phase>initialize</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${raw.mardkown.dir}</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${project.basedir}/..</directory>
-									<includes>
-										<include>NOTICE.md</include>
-										<include>CHANGELOG.md</include>
-									</includes>
-									<filtering>false</filtering>
-								</resource>
-							</resources>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -246,7 +250,6 @@
 				<configuration>
 					<inputDirectory>${raw.mardkown.dir}</inputDirectory>
 					<outputDirectory>${assets.dir.output}</outputDirectory>
-					<copyDirectories></copyDirectories>
 				</configuration>
 			</plugin>
 
@@ -288,7 +291,8 @@
 						<inputApk>${project.build.directory}/${final.name}.apk</inputApk>
 						<outputApk>${project.build.directory}/${final.name}.apk</outputApk>
 					</zipalign>
-					<assetsDirectory>${project.build.directory}/filtered-assets</assetsDirectory>
+					<resourceDirectory>${res.dir.output}</resourceDirectory>
+					<assetsDirectory>${assets.dir.output}</assetsDirectory>
 				</configuration>
 			</plugin>
 		</plugins>

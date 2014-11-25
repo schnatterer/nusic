@@ -26,22 +26,23 @@ import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.activities.MainActivity;
 import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.util.ImageUtil;
+import info.schnatterer.nusic.core.ConnectivityService;
+import info.schnatterer.nusic.core.PreferencesService;
+import info.schnatterer.nusic.core.ReleaseService;
+import info.schnatterer.nusic.core.ServiceException;
+import info.schnatterer.nusic.core.SyncReleasesService;
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.dao.ArtworkDao.ArtworkType;
 import info.schnatterer.nusic.data.dao.fs.ArtworkDaoFileSystem;
 import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.data.model.Release;
-import info.schnatterer.nusic.logic.ConnectivityService;
-import info.schnatterer.nusic.logic.PreferencesService;
-import info.schnatterer.nusic.logic.ReleaseRefreshService;
-import info.schnatterer.nusic.logic.ReleaseService;
-import info.schnatterer.nusic.logic.ServiceException;
-import info.schnatterer.nusic.logic.event.ArtistProgressListener;
-import info.schnatterer.nusic.logic.impl.ConnectivityServiceAndroid;
-import info.schnatterer.nusic.logic.impl.PreferencesServiceSharedPreferences;
-import info.schnatterer.nusic.logic.impl.ReleaseRefreshServiceImpl;
-import info.schnatterer.nusic.logic.impl.ReleaseServiceImpl;
+import info.schnatterer.nusic.core.event.ArtistProgressListener;
+import info.schnatterer.nusic.core.impl.ConnectivityServiceAndroid;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences;
+import info.schnatterer.nusic.core.impl.SyncReleasesServiceImpl;
+import info.schnatterer.nusic.core.impl.ReleaseServiceImpl;
 
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -61,7 +62,7 @@ import android.util.Log;
 
 /**
  * Wraps the android implementation of the business logic service
- * {@link ReleaseRefreshService} in an android {@link Service} in order to allow
+ * {@link SyncReleasesService} in an android {@link Service} in order to allow
  * running outside of the application. In addition, it takes care of the
  * scheduling.
  * 
@@ -82,7 +83,7 @@ public class LoadNewReleasesService extends WakefulService {
 			.getInstance();
 	private ConnectivityService connectivityService = ConnectivityServiceAndroid
 			.getInstance();
-	private ReleaseRefreshService releasesService;
+	private SyncReleasesService releasesService;
 	private ReleaseService releaseService = new ReleaseServiceImpl(this);
 
 	private List<Artist> errorArtists;
@@ -142,7 +143,7 @@ public class LoadNewReleasesService extends WakefulService {
 	 * 
 	 * @param updateOnlyIfNeccesary
 	 *            if <code>true</code> the refresh is only done when
-	 *            {@link ReleaseRefreshService#isUpdateNeccesarry()} returns
+	 *            {@link SyncReleasesService#isUpdateNeccesarry()} returns
 	 *            <code>true</code>. Otherwise, the refresh is done at any case.
 	 * @param artistProcessedListener
 	 * @return <code>true</code> if refresh was started. <code>false</code> if
@@ -231,7 +232,7 @@ public class LoadNewReleasesService extends WakefulService {
 
 					Log.d(Constants.LOG,
 							"Service thread: Calling refreshReleases()");
-					getReleasesService().refreshReleases();
+					getReleasesService().syncReleases();
 
 					// Schedule next run
 					schedule(LoadNewReleasesService.this,
@@ -288,15 +289,19 @@ public class LoadNewReleasesService extends WakefulService {
 	 */
 	private void notifyNewReleases(Release release) {
 		try {
-			Bitmap createScaledBitmap = ImageUtil.createScaledBitmap(
-					new ArtworkDaoFileSystem().findStreamByRelease(release,
-							ArtworkType.SMALL), this);
+			Bitmap scaledBitmap = null;
+			InputStream artworkStream = new ArtworkDaoFileSystem()
+					.findStreamByRelease(release, ArtworkType.SMALL);
+			if (artworkStream != null) {
+				scaledBitmap = ImageUtil.createScaledBitmap(artworkStream,
+						this);
+			}
 			NusicApplication.notify(
 					Notification.NEW_RELEASE,
 					getString(R.string.LoadNewReleasesService_newRelease),
 					release.getArtist().getArtistName() + " - "
 							+ release.getReleaseName(), R.drawable.ic_launcher,
-					createScaledBitmap, MainActivity.class,
+							scaledBitmap, MainActivity.class,
 					createExtraActiveTab());
 		} catch (DatabaseException e) {
 			Log.w(Constants.LOG, "Unable to load artwork for notification. "
@@ -520,9 +525,9 @@ public class LoadNewReleasesService extends WakefulService {
 		}
 	}
 
-	protected ReleaseRefreshService getReleasesService() {
+	protected SyncReleasesService getReleasesService() {
 		if (releasesService == null) {
-			releasesService = new ReleaseRefreshServiceImpl(this);
+			releasesService = new SyncReleasesServiceImpl(this);
 		}
 
 		return releasesService;

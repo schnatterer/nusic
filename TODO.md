@@ -1,32 +1,18 @@
 TODOs - Features, enhancements, refactoring, ...
 
-Prepared new version
+- Introduce DI: TODO inject imageloader? use DI in Web and TextView
+- Upgrade to Guice 3.0 and Blender
 
-Updated Changelog
+- Separate Maven Modules with API and impl: ServiceException: How to get rid of android dependency -> getLocalizedMessage only returns a KEY!?
+How to get rid of LocalMusicService in contentResolver? Factory that provides Context so Impl gets it injected and API can be generic?
 
+- Introduce roboelectric to test project and mavenize it
 
+- Copy images to /sdcard instead of /data: 
+http://www.androidsnippets.com/download-an-http-file-to-sdcard-with-progress-notification
+http://developer.android.com/guide/topics/data/data-storage.html#filesExternal
 
-- Feature: Now showing cover art from Cover Art Archive
-- Feautre: Get notified on the day of a release
-- Added changelog, licenses, privacy policy as well as links to GitHub and Google Play and an email contact to preferences.
-- Added welcome screen for new users and new versions
-- Multiple minor enhancements/fixes
-
-- Feature: Album Covers von Cover Art Archive werden angezeigt
-- Feature: Benachrichtigungen am Tag der Veröffentlichung
-- Änderungshistorie, Lizenzen, Datenschutzrichtline sowie Links zu GitHub und Google Play und Kontakt per E-Mail zu den Einstelungen hinzugefügt
-- Wilkommensbildschirm für neue Nutzer und für neue Versionen hinzugefügt
-- Mehrere kleinere Erweiterungen/Fehlerkorrekturen
-
-
-Update GooglePlay texts
-=== Release v1.0
-Make Development Branch default in GH
-
-................... More TODOs
-- Show artwork in context menu (on long tab)
 - Download and display disambiguation, e.g "remastered special edition", "anniversary edition", >20th Anniversary Edition< (or display only the "oldest" release of all releases with the same name?) https://musicbrainz.org/ws/2/release/?limit=100&offset=0&query=type%3Aalbum+AND+date%3A[2014-02-20+TO+%3F]+AND+artist%3A%22%3Cpantera%3E%22
-- Rename services so their tasks are clearer? FetchReleasesService? Dependecy to QueryMusicMetadataService? ArtistQueryService -> LocalLibraryService?- util -> common.util?!
 
 LOGGING 
 - Switch off logging for artwork. Using logback-android via slf4j and config in assets/logback.xml?
@@ -34,6 +20,11 @@ LOGGING
 - Switch app to use slf4j?
 - Provide means to send log via email?
 - Construction of objects. Use DI? Or more singletons to save a bit of memory?
+
+- Show artwork in context menu (on long tab)
+- Resources XXXHDPI?
+
+- Introduce material design, remove actionbarsherlock
 
 - Covers: Download using HTTPS. Problem with certificate chain at coverartarchive.org ONLY on android. In addition, links to images are HTTP. Force using HTTPS?
 

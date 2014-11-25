@@ -21,9 +21,9 @@
 package info.schnatterer.nusic.android.service;
 
 import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.logic.ReleaseRefreshService;
 import info.schnatterer.nusic.android.service.LoadNewReleasesService.LoadNewReleasesServiceBinder;
-import info.schnatterer.nusic.logic.event.ArtistProgressListener;
+import info.schnatterer.nusic.core.SyncReleasesService;
+import info.schnatterer.nusic.core.event.ArtistProgressListener;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -70,7 +70,7 @@ public class LoadNewReleasesServiceConnection implements ServiceConnection {
 	 *            <code>true</code>)<br/>
 	 * 
 	 *            if <code>true</code> the refresh is only done when
-	 *            {@link ReleaseRefreshService#isFirstStart()} returns
+	 *            {@link SyncReleasesService#isFirstStart()} returns
 	 *            <code>true</code>. Otherwise, the refresh is done at any case.
 	 * 
 	 * @return

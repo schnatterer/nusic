@@ -18,18 +18,24 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic.impl;
+package info.schnatterer.nusic.core.impl;
 
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.core.ArtistService;
+import info.schnatterer.nusic.core.ReleaseService;
+import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.dao.ArtistDao;
 import info.schnatterer.nusic.data.dao.sqlite.ArtistDaoSqlite;
 import info.schnatterer.nusic.data.model.Artist;
-import info.schnatterer.nusic.logic.ArtistService;
-import info.schnatterer.nusic.logic.ReleaseService;
-import info.schnatterer.nusic.logic.ServiceException;
 import android.content.Context;
 
+/**
+ * Default implementation of {@link ArtistService}.
+ * 
+ * @author schnatterer
+ *
+ */
 public class ArtistServiceImpl implements ArtistService {
 
 	private ReleaseService releaseService;
@@ -70,9 +76,8 @@ public class ArtistServiceImpl implements ArtistService {
 		try {
 			// Does artist exist?
 			if (artist.getId() == null) {
-				Artist existingArtist = artistDao
-						.findByAndroidId(artist
-								.getAndroidAudioArtistId());
+				Artist existingArtist = artistDao.findByAndroidId(artist
+						.getAndroidAudioArtistId());
 				if (existingArtist != null) {
 					artist.setId(existingArtist.getId());
 					artist.setDateCreated(existingArtist.getDateCreated());

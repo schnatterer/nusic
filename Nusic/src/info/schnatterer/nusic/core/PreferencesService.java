@@ -18,24 +18,18 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic;
+package info.schnatterer.nusic.core;
 
 import info.schnatterer.nusic.data.model.Release;
-import info.schnatterer.nusic.android.service.LoadNewReleasesService;
-import info.schnatterer.nusic.android.service.LoadNewReleasesServiceConnectivityReceiver;
-import info.schnatterer.nusic.logic.event.PreferenceChangedListener;
+import info.schnatterer.nusic.core.event.PreferenceChangedListener;
 
 import java.util.Date;
 
 /**
- * Provides access to the key-value-preferences of the app.
+ * Provides access to the preferences of the application.
  * 
  * @author schnatterer
  * 
- */
-/**
- * @author schnatterer
- *
  */
 public interface PreferencesService {
 	/**
@@ -52,7 +46,7 @@ public interface PreferencesService {
 	Date getLastReleaseRefresh();
 
 	/**
-	 * Set last time the {@link Release}s havebeen loaded from the internet.
+	 * Set last time the {@link Release}s have been loaded from the internet.
 	 * 
 	 * This is useful to determine the start date for the next refresh.
 	 * 
@@ -102,19 +96,17 @@ public interface PreferencesService {
 	boolean setNextReleaseRefresh(Date date);
 
 	/**
-	 * @return <code>true</code> when
-	 *         {@link LoadNewReleasesServiceConnectivityReceiver} is enabled,
-	 *         that is starting {@link LoadNewReleasesService} when receiving
-	 *         broadcast. Otherwise <code>false</code>.
+	 * @return <code>true</code> synchronization of releases is started when the
+	 *         connection status changes to "connected". Otherwise
+	 *         <code>false</code>.
 	 * 
 	 */
 	boolean isEnabledConnectivityReceiver();
 
 	/**
-	 * Setting to <code>true</code> enables
-	 * {@link LoadNewReleasesServiceConnectivityReceiver}, that is starting
-	 * {@link LoadNewReleasesService} when receiving broadcast.
-	 * <code>false</code> disables receiver.
+	 * Setting to <code>true</code> starts synchronization of releases when the
+	 * connection status changes to "connected". <code>false</code>
+	 * syncronization on connection change.
 	 * 
 	 * @param enabled
 	 * @return
@@ -128,24 +120,30 @@ public interface PreferencesService {
 	boolean isEnabledNotifyReleasedToday();
 
 	/**
-	 * @return <code>true</code> if a notification is shown when
-	 *         {@link LoadNewReleasesService} finds new releases.
+	 * @return <code>true</code> if a notification is shown when new releases
+	 *         are found during syncronization.
 	 */
 	boolean isEnabledNotifyNewReleases();
 
 	/**
-	 * @return the hour of day where the check for albums getting release today
-	 *         is performed if {@link #isEnabledNotifyReleasedToday()} is
-	 *         <code>true</code>.
+	 * @return the hour of day when the check for new releases is performed if
+	 *         {@link #isEnabledNotifyReleasedToday()} is <code>true</code>.
 	 */
 	int getReleasedTodayScheduleHourOfDay();
 
+	/**
+	 * Sets the time when checking for the check for new releases is performed
+	 * if {@link #isEnabledNotifyReleasedToday()} is <code>true</code>.
+	 * 
+	 * @param hourOfDay
+	 * @param minute
+	 * @return
+	 */
 	boolean setReleasedTodaySchedule(int hourOfDay, int minute);
 
 	/**
-	 * @return the minute where the check for albums getting release today is
-	 *         performed if {@link #isEnabledNotifyReleasedToday()} is
-	 *         <code>true</code>.
+	 * @return the minute when the check for new releases is performed if
+	 *         {@link #isEnabledNotifyReleasedToday()} is <code>true</code>.
 	 */
 	int getReleasedTodayScheduleMinute();
 }

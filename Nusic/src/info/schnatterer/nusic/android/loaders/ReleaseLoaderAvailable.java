@@ -20,9 +20,9 @@
  */
 package info.schnatterer.nusic.android.loaders;
 
+import info.schnatterer.nusic.core.ReleaseService;
 import info.schnatterer.nusic.data.model.Release;
-import info.schnatterer.nusic.logic.ReleaseService;
-import info.schnatterer.nusic.logic.impl.ReleaseServiceImpl;
+import info.schnatterer.nusic.core.impl.ReleaseServiceImpl;
 
 import java.util.List;
 

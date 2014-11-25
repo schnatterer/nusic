@@ -18,20 +18,20 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic;
+package info.schnatterer.nusic.core.event;
 
+import info.schnatterer.nusic.data.model.Artist;
 
+import org.apache.commons.lang3.ObjectUtils.Null;
 
-public interface ConnectivityService {
-	/**
-	 * Used to determine if there is an active data connection and what type of
-	 * connection it is if there is one.
-	 * 
-	 * Queries {@link PreferencesService#isUseOnlyWifi()} to see if a mobile
-	 * data connection can be used.
-	 * 
-	 * @return <code>true</code> if there is an active data connection.
-	 *         Otherwise <code>false</code>.
-	 */
-	boolean isOnline();
+/**
+ * Returns <code>true</code>, if anything changed, otherwise <code>false</code>
+ * or {@link Null}.
+ * 
+ * @author schnatterer
+ * 
+ */
+public interface ArtistProgressListener extends
+		ProgressListener<Artist, Boolean> {
+
 }

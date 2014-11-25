@@ -18,15 +18,22 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic.impl;
+package info.schnatterer.nusic.core.impl;
 
 import info.schnatterer.nusic.android.application.NusicApplication;
-import info.schnatterer.nusic.logic.ConnectivityService;
-import info.schnatterer.nusic.logic.PreferencesService;
+import info.schnatterer.nusic.core.ConnectivityService;
+import info.schnatterer.nusic.core.PreferencesService;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+/**
+ * Provides access to information about the internet connection via android's
+ * APIs.
+ * 
+ * @author schnatterer
+ *
+ */
 public class ConnectivityServiceAndroid implements ConnectivityService {
 	private static ConnectivityServiceAndroid instance = new ConnectivityServiceAndroid();
 	// private Set<ConnectivityChangedListener> connectivityChangedListeners =
@@ -65,11 +72,11 @@ public class ConnectivityServiceAndroid implements ConnectivityService {
 		}
 
 		/* Mobile data connection */
-		final NetworkInfo mbobileNetwork = connectivityManager
+		final NetworkInfo mobileNetwork = connectivityManager
 				.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-		if (mbobileNetwork != null) {
+		if (mobileNetwork != null) {
 			if (!isOnlyOnWifi) {
-				state = mbobileNetwork.isConnectedOrConnecting();
+				state = mobileNetwork.isConnectedOrConnecting();
 			}
 		}
 

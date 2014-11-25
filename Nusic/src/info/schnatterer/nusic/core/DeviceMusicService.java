@@ -1,4 +1,4 @@
-/* Copyright (C) 2014 Johannes Schnatterer
+/* Copyright (C) 2013 Johannes Schnatterer
  * 
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
@@ -18,32 +18,26 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic;
+package info.schnatterer.nusic.core;
 
-import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.model.Artist;
+import android.content.ContentResolver;
 
 /**
- * Provides access to the elements stored in Table {@link Artist}. This would be
- * the place to implement transaction handling.
+ * Provides access to music located on the local device.
  * 
  * @author schnatterer
- * 
+ *
  */
-public interface ArtistService {
-
-	long save(Artist artist) throws ServiceException;
-
-	int update(Artist artist) throws ServiceException;
+public interface DeviceMusicService {
 
 	/**
-	 * Creates a new {@link Artist} or updates an existing one (matching by
-	 * {@link Artist#getAndroidAudioArtistId()}).
+	 * Gets the names of all artists stored on local device. Note that the
 	 * 
-	 * @param artist
 	 * @return
-	 * @throws DatabaseException
+	 * @throws ServiceException
 	 */
-	long saveOrUpdate(Artist artist) throws ServiceException;
+	Artist[] getArtists(ContentResolver contentResolver)
+			throws ServiceException;
 
 }

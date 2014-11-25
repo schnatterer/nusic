@@ -18,12 +18,12 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic.impl;
+package info.schnatterer.nusic.core.impl;
 
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.core.DeviceMusicService;
+import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.data.model.Artist;
-import info.schnatterer.nusic.logic.ArtistQueryService;
-import info.schnatterer.nusic.logic.ServiceException;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -31,7 +31,13 @@ import android.provider.BaseColumns;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Audio.ArtistColumns;
 
-public class ArtistQueryServiceImpl implements ArtistQueryService {
+/**
+ * Provides access to music stored on the device via android's APIs.
+ * 
+ * @author schnatterer
+ *
+ */
+public class DeviceMusicServiceAndroid implements DeviceMusicService {
 
 	private static final String ARTIST_SORT_ORDER = Audio.Artists.DEFAULT_SORT_ORDER;
 	private static final String[] ARTIST_PROJECTION = ArtistProjection

@@ -21,10 +21,10 @@
 package info.schnatterer.nusic.android.service;
 
 import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.logic.ConnectivityService;
-import info.schnatterer.nusic.logic.PreferencesService;
-import info.schnatterer.nusic.logic.impl.ConnectivityServiceAndroid;
-import info.schnatterer.nusic.logic.impl.PreferencesServiceSharedPreferences;
+import info.schnatterer.nusic.core.ConnectivityService;
+import info.schnatterer.nusic.core.PreferencesService;
+import info.schnatterer.nusic.core.impl.ConnectivityServiceAndroid;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

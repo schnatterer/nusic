@@ -22,13 +22,13 @@ package info.schnatterer.nusic.android.activities;
 
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.application.NusicApplication;
+import info.schnatterer.nusic.core.ReleaseService;
+import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.data.model.Artist;
-import info.schnatterer.nusic.logic.ReleaseService;
-import info.schnatterer.nusic.logic.ServiceException;
 import info.schnatterer.nusic.android.service.ReleasedTodayService;
-import info.schnatterer.nusic.logic.event.PreferenceChangedListener;
-import info.schnatterer.nusic.logic.impl.PreferencesServiceSharedPreferences;
-import info.schnatterer.nusic.logic.impl.ReleaseServiceImpl;
+import info.schnatterer.nusic.core.event.PreferenceChangedListener;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences;
+import info.schnatterer.nusic.core.impl.ReleaseServiceImpl;
 import info.schnatterer.nusic.android.fragments.NusicPreferencesFragment;
 import android.annotation.TargetApi;
 import android.app.Activity;

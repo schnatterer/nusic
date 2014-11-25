@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic.event;
+package info.schnatterer.nusic.core.event;
 
 import java.util.EventListener;
 

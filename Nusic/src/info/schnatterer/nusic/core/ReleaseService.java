@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic;
+package info.schnatterer.nusic.core;
 
 import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.data.model.Release;
@@ -26,8 +26,8 @@ import info.schnatterer.nusic.data.model.Release;
 import java.util.List;
 
 /**
- * Provides access to the elements stored in Table {@link Release}. This would
- * be the place to implement transaction handling.
+ * Provides access to the {@link Release}s stored locally. This would be the
+ * place to implement transaction handling.
  * 
  * @author schnatterer
  * 

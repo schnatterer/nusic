@@ -18,20 +18,9 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.logic.event;
+package info.schnatterer.nusic.core.event;
 
-import info.schnatterer.nusic.data.model.Artist;
-
-import org.apache.commons.lang3.ObjectUtils.Null;
-
-/**
- * Returns <code>true</code>, if anything changed, otherwise <code>false</code>
- * or {@link Null}.
- * 
- * @author schnatterer
- * 
- */
-public interface ArtistProgressListener extends
-		ProgressListener<Artist, Boolean> {
+public interface PreferenceChangedListener {
+	void onPreferenceChanged(String key, Object newValue);
 
 }
