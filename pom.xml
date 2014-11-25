@@ -45,10 +45,10 @@
 					<arguments>-Prelease</arguments>
 					<!-- Commit all changes, i.e. not only the changes to POMs made by release 
 						plugin but also the auto increased android version code (android-maven-plugin) -->
-					<completionGoals:>scm:checkin
+					<completionGoals>scm:checkin
 						-Dmessage="[maven-release-plugin]
 						prepare for next development iteration
-						-DworkingDirectory=.</completionGoals:>
+						-DworkingDirectory=.</completionGoals>
 					<!-- Don't deploy -->
 					<goals>install</goals>
 				</configuration>
