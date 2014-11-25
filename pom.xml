@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>info.schnatterer.nusic</groupId>
 	<artifactId>nusic-parent</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>nusic</name>
 
@@ -18,7 +18,7 @@
 		<connection>scm:git:ssh://github.com/schnatterer/nusic.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/schnatterer/nusic.git</developerConnection>
 		<url>https://github.com/schnatterer/nusic</url>
-		<tag>v.1.0.1</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<modules>
@@ -41,12 +41,11 @@
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 					<!-- Increase version code in android manifest and commit all changes, 
 						i.e. not only the changes to POMs made by release plugin -->
-					<completionGoals>com.jayway.maven.plugins.android.generation2:android-maven-plugin:3.8.2:manifest-update
-						-Dandroid.manifest.versionCodeAutoIncrement=true scm:checkin
+					<completionGoals>com.jayway.maven.plugins.android.generation2:android-maven-plugin:3.8.2:manifest-update scm:checkin
 						-Dmessage="[maven-release-plugin]
 						prepare for next development
 						iteration
-						-DworkingDirectory=.</completionGoals>
+						-DworkingDirectory=. -Dandroid.manifest.versionCodeAutoIncrement=true</completionGoals>
 					<!-- Don't deploy -->
 					<goals>install</goals>
 				</configuration>
