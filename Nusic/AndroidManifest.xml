@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="12" android:versionName="1.0.2-SNAPSHOT" package="info.schnatterer.nusic">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="13" android:versionName="1.0.2-SNAPSHOT" package="info.schnatterer.nusic">
 
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="21"/>
 
