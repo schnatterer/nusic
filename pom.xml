@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>info.schnatterer.nusic</groupId>
 	<artifactId>nusic-parent</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>nusic</name>
 
@@ -18,7 +18,7 @@
 		<connection>scm:git:ssh://github.com/schnatterer/nusic.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/schnatterer/nusic.git</developerConnection>
 		<url>https://github.com/schnatterer/nusic</url>
-		<tag>v.1.0.1</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<modules>
