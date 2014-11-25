@@ -1,80 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="info.schnatterer.nusic"
-    android:versionCode="11"
-    android:versionName="@string/versionName" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="13" android:versionName="1.0.2-SNAPSHOT" package="info.schnatterer.nusic">
 
-    <uses-sdk
-        android:minSdkVersion="9"
-        android:targetSdkVersion="21" />
+    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="21"/>
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
-    <application
-        android:name=".android.application.NusicApplication"
-        android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <activity
-            android:name=".android.activities.MainActivity"
-            android:label="@string/app_name" >
+    <application android:allowBackup="true" android:debuggable="false" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:name=".android.application.NusicApplication" android:theme="@style/AppTheme">
+        <activity android:label="@string/app_name" android:name=".android.activities.MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".android.activities.NusicPreferencesActivity"
-            android:label="@string/action_settings" >
+        <activity android:label="@string/action_settings" android:name=".android.activities.NusicPreferencesActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
+                <action android:name="android.intent.action.MANAGE_NETWORK_USAGE"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         
-        <activity
-            android:name=".android.activities.NusicWebView" >
+        <activity android:name=".android.activities.NusicWebView">
         </activity>
-        <activity
-            android:name=".android.activities.TextAssetActivity" >
+        <activity android:name=".android.activities.TextAssetActivity">
         </activity>
 
-        <receiver android:name=".android.service.LoadNewReleasesServiceConnectivityReceiver" >
+        <receiver android:name=".android.service.LoadNewReleasesServiceConnectivityReceiver">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
                 <!-- <action android:name="android.net.wifi.WIFI_STATE_CHANGED" /> -->
             </intent-filter>
         </receiver>
-        <receiver android:name=".android.service.LoadNewReleasesServiceBootReceiver" >
+        <receiver android:name=".android.service.LoadNewReleasesServiceBootReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
 
-                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.HOME"/>
             </intent-filter>
         </receiver>
         <!-- Register receiver that starts service after alarm -->
-        <receiver android:name=".android.service.LoadNewReleasesService$LoadNewReleasesServiceAlarmReceiver" />
+        <receiver android:name=".android.service.LoadNewReleasesService$LoadNewReleasesServiceAlarmReceiver"/>
 
-        <service android:name=".android.service.LoadNewReleasesService" />
+        <service android:name=".android.service.LoadNewReleasesService"/>
 
         <!-- Schedule execution of released today check after boot and timezone changed -->
-        <receiver android:name=".android.service.ReleasedTodayService$ReleasedTodaySchedulerReceiver" >
+        <receiver android:name=".android.service.ReleasedTodayService$ReleasedTodaySchedulerReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
             </intent-filter>
         </receiver>
         <!-- Register receiver that starts service after alarm -->
-        <receiver android:name=".android.service.ReleasedTodayService$ReleasedTodayServiceStarterReceiver" />
+        <receiver android:name=".android.service.ReleasedTodayService$ReleasedTodayServiceStarterReceiver"/>
 
-        <service android:name=".android.service.ReleasedTodayService" />
+        <service android:name=".android.service.ReleasedTodayService"/>
     </application>
 
 </manifest>
