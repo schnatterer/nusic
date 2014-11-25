@@ -36,15 +36,21 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.5.1</version>
 				<configuration>
-					<arguments>-Prelease</arguments>
 					<!-- Make our tags look like e.g. "v.1.0.1" -->
 					<tagNameFormat>v.@{project.version}</tagNameFormat>
 					<!-- Same version to all submodules -->
 					<autoVersionSubmodules>true</autoVersionSubmodules>
-					<preparationGoals>scm:checkin
-						-Dmessage="[maven-release-plugin]/[maven-scm-plugin] Increased
-						android version code for next development iteration"
-						-DworkingDirectory=.</preparationGoals>
+					<!-- Enable release profile (also in preparation phase) so the android 
+						version code is increased by android-maven-plugin -->
+					<arguments>-Prelease</arguments>
+					<!-- Commit all changes, i.e. not only the changes to POMs made by release 
+						plugin but also the auto increased android version code (android-maven-plugin) -->
+					<completionGoals:>scm:checkin
+						-Dmessage="[maven-release-plugin]
+						prepare for next development iteration
+						-DworkingDirectory=.</completionGoals:>
+					<!-- Don't deploy -->
+					<goals>install</goals>
 				</configuration>
 			</plugin>
 		</plugins>
