@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>info.schnatterer.nusic</groupId>
 	<artifactId>nusic-parent</artifactId>
@@ -39,8 +40,14 @@
 					<tagNameFormat>v.@{project.version}</tagNameFormat>
 					<!-- Same version to all submodules -->
 					<autoVersionSubmodules>true</autoVersionSubmodules>
-					<!-- Increase version code in android manifest and commit all changes, 
+					<!-- Update version name in android manifest and commit all changes, 
 						i.e. not only the changes to POMs made by release plugin -->
+					<preparationGoals>com.jayway.maven.plugins.android.generation2:android-maven-plugin:3.8.2:manifest-update
+						scm:checkin -Dmessage="[maven-release-plugin] prepare release
+						${project.version}" -DworkingDirectory=.</preparationGoals>
+					<!-- Increase version code and update version name in android manifest 
+						and commit all changes, i.e. not only the changes to POMs made by release 
+						plugin -->
 					<completionGoals>com.jayway.maven.plugins.android.generation2:android-maven-plugin:3.8.2:manifest-update
 						scm:checkin -Dmessage="[maven-release-plugin] prepare for next
 						development iteration" -DworkingDirectory=.
