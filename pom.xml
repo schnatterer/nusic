@@ -40,14 +40,13 @@
 					<tagNameFormat>v.@{project.version}</tagNameFormat>
 					<!-- Same version to all submodules -->
 					<autoVersionSubmodules>true</autoVersionSubmodules>
-					<!-- Enable release profile (also in preparation phase) so the android 
-						version code is increased by android-maven-plugin -->
-					<arguments>-Prelease</arguments>
-					<!-- Commit all changes, i.e. not only the changes to POMs made by release 
-						plugin but also the auto increased android version code (android-maven-plugin) -->
-					<completionGoals>scm:checkin
+					<!-- Increase version code in android manifest and commit all changes, 
+						i.e. not only the changes to POMs made by release plugin -->
+					<completionGoals>com.jayway.maven.plugins.android.generation2:android-maven-plugin:3.8.2:manifest-update
+						-Dandroid.manifest.versionCodeAutoIncrement=true scm:checkin
 						-Dmessage="[maven-release-plugin]
-						prepare for next development iteration
+						prepare for next development
+						iteration
 						-DworkingDirectory=.</completionGoals>
 					<!-- Don't deploy -->
 					<goals>install</goals>
