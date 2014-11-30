@@ -27,9 +27,7 @@ import info.schnatterer.nusic.android.activities.NusicWebView;
 import info.schnatterer.nusic.android.adapters.ReleaseListAdapter;
 import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.loaders.AsyncResult;
-import info.schnatterer.nusic.android.loaders.ReleaseLoaderAll;
-import info.schnatterer.nusic.android.loaders.ReleaseLoaderAvailable;
-import info.schnatterer.nusic.android.loaders.ReleaseLoaderJustCreated;
+import info.schnatterer.nusic.android.loaders.ReleaseLoader;
 import info.schnatterer.nusic.core.ArtistService;
 import info.schnatterer.nusic.core.ReleaseService;
 import info.schnatterer.nusic.core.ServiceException;
@@ -103,11 +101,7 @@ public class ReleaseListFragment extends RoboSherlockFragment {
 	@Inject
 	private ArtistService artistService;
 	@Inject
-	private Provider<ReleaseLoaderAll> releaseLoaderAllProvider;
-	@Inject
-	private Provider<ReleaseLoaderAvailable> releaseLoaderAvailableProvider;
-	@Inject
-	private Provider<ReleaseLoaderJustCreated> releaseLoaderJustCreatedProvider;
+	private Provider<ReleaseLoader> releaseLoaderProvider;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -239,30 +233,10 @@ public class ReleaseListFragment extends RoboSherlockFragment {
 		public Loader<AsyncResult<List<Release>>> onCreateLoader(int id,
 				Bundle args) {
 			loaderId = id;
-			switch (loaderId) {
-			case Loaders.RELEASE_LOADER_ALL:
-				return releaseLoaderAllProvider.get();
-			case Loaders.RELEASE_LOADER_JUST_ADDED:
-				return releaseLoaderJustCreatedProvider.get();
-			case Loaders.RELEASE_LOADER_ANNOUNCED: {
-				ReleaseLoaderAvailable releaseLoaderAvailable = releaseLoaderAvailableProvider
-						.get();
-				releaseLoaderAvailable.setAvailable(false);
-				return releaseLoaderAvailable;
-			}
-			case Loaders.RELEASE_LOADER_AVAILABLE: {
-				ReleaseLoaderAvailable releaseLoaderAvailable = releaseLoaderAvailableProvider
-						.get();
-				releaseLoaderAvailable.setAvailable(true);
-				return releaseLoaderAvailable;
-			}
-			default:
-				Log.w(Constants.LOG,
-						"Requested loader ID is not a defined release loader: "
-								+ loaderId
-								+ ". Returning loader that loads all releases");
-				return new ReleaseLoaderAll(getActivity());
-			}
+			ReleaseLoader releaseLoader = releaseLoaderProvider.get();
+			releaseLoader.setLoaderId(loaderId);
+			return releaseLoader;
+
 		}
 
 		@Override
