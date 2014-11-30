@@ -20,17 +20,20 @@
  */
 package info.schnatterer.nusic.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public final class DateUtilTest extends TestCase {
+public final class DateUtilTest {
 	public static final int ADD_MINUTES = 42;
 	private static final int MILLIS_TO_MINUTES = 1000 * 60;
 
+	@Test
 	public void testAddMinutes() {
 		long testStartMillis = new Date().getTime();
 		long actualTime = DateUtil.addMinutes(ADD_MINUTES).getTime();
@@ -44,6 +47,7 @@ public final class DateUtilTest extends TestCase {
 	 * Test for {@link DateUtil#midnightUtc(Calendar)} where in UTC it is the
 	 * 21st of July, but our local date is already 22nd of July (GMT+x).
 	 */
+	@Test
 	public void testMidnightUtcPlus() {
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC+2"));
 		// 2014-07-22T01:44:55+02:00 (UTC+2) equals 2014-07-21T23:44:55Z (UTC).
@@ -51,7 +55,7 @@ public final class DateUtilTest extends TestCase {
 		// 2014-07-22T00:00:00Z,
 		long expected = 1405987200000l;
 		long actual = DateUtil.midnightUtc(cal);
-		Assert.assertEquals("Unexpected date returned", expected, actual);
+		assertEquals("Unexpected date returned", expected, actual);
 		// Don't return 2014-07-21T00:00:00Z
 	}
 
@@ -59,6 +63,7 @@ public final class DateUtilTest extends TestCase {
 	 * Test for {@link DateUtil#midnightUtc(Calendar)} where in UTC it is the
 	 * 23rd of July, but our local date still is 22nd of July (GMT-x).
 	 */
+	@Test
 	public void testMidnightUtcMinus() {
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC-2"));
 		// 2014-07-22T23:44:55-02:00 (UTC+2) equals 2014-07-23T01:44:55Z (UTC).
@@ -66,7 +71,7 @@ public final class DateUtilTest extends TestCase {
 		// 2014-07-22T00:00:00Z,
 		long expected = 1405987200000l;
 		long actual = DateUtil.midnightUtc(cal);
-		Assert.assertEquals("Unexpected date returned", expected, actual);
+		assertEquals("Unexpected date returned", expected, actual);
 		// Don't return 2014-07-23T00:00:00Z
 	}
 }

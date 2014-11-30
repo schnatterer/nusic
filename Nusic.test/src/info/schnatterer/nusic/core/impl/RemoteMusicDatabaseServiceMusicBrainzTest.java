@@ -20,7 +20,8 @@
  */
 package info.schnatterer.nusic.core.impl;
 
-import info.schnatterer.nusic.core.impl.RemoteMusicDatabaseServiceMusicBrainz;
+import static org.junit.Assert.assertEquals;
+import info.schnatterer.nusic.android.application.NusicApplication;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -28,15 +29,20 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.musicbrainz.MBWS2Exception;
 import org.musicbrainz.model.entity.ReleaseWs2;
 import org.musicbrainz.model.searchresult.ReleaseResultWs2;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import android.annotation.SuppressLint;
-import android.test.InstrumentationTestCase;
 
-public class RemoteMusicDatabaseServiceMusicBrainzTest extends
-		InstrumentationTestCase {
+@Config(emulateSdk = 18)
+@RunWith(RobolectricTestRunner.class)
+public class RemoteMusicDatabaseServiceMusicBrainzTest {
 
 	@SuppressLint("SimpleDateFormat")
 	private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -59,10 +65,9 @@ public class RemoteMusicDatabaseServiceMusicBrainzTest extends
 	private String EXPECTED_STRING_REGULAR_DATES = EXPECTED_STRING_BASE
 			+ expectedFromDateStr + " TO " + expectedToDateStr + "]";
 
-	protected void setUp() throws Exception {
-		// Workaround for mockito
-		System.setProperty("dexmaker.dexcache", getInstrumentation()
-				.getTargetContext().getCacheDir().toString());
+	@Before
+	public void setUp() throws Exception {
+		new NusicApplication().onCreate();
 
 		remoteMusicDatabaseServiceMusicBrainz = new QueryMusicMetadataServiceMusicUnderTest();
 
@@ -71,16 +76,19 @@ public class RemoteMusicDatabaseServiceMusicBrainzTest extends
 		// expectedReleaseDate = dateFormat.parse(expectedReleaseDateStr);
 	}
 
+	@Test
 	public void testAppendDate() {
 		// Open beginning
 		StringBuffer actual = new StringBuffer();
-		remoteMusicDatabaseServiceMusicBrainz.appendDate(null, expectedToDate, actual);
+		remoteMusicDatabaseServiceMusicBrainz.appendDate(null, expectedToDate,
+				actual);
 		assertEquals("Unexpected result for open start date",
 				EXPECTED_STRING_OPEN_BEGINNING, actual.toString());
 
 		// Open end
 		actual = new StringBuffer();
-		remoteMusicDatabaseServiceMusicBrainz.appendDate(expectedFromDate, null, actual);
+		remoteMusicDatabaseServiceMusicBrainz.appendDate(expectedFromDate,
+				null, actual);
 		assertEquals("Unexpected result for open end date",
 				EXPECTED_STRING_OPEN_END, actual.toString());
 
@@ -92,12 +100,13 @@ public class RemoteMusicDatabaseServiceMusicBrainzTest extends
 
 		// Defined beginning and end dates
 		actual = new StringBuffer();
-		remoteMusicDatabaseServiceMusicBrainz.appendDate(expectedFromDate, expectedToDate,
-				actual);
+		remoteMusicDatabaseServiceMusicBrainz.appendDate(expectedFromDate,
+				expectedToDate, actual);
 		assertEquals("Unexpected result for open end date",
 				EXPECTED_STRING_REGULAR_DATES, actual.toString());
 	}
 
+	// @Test
 	// public void testFindReleasesStringDate() throws ServiceException {
 	// List<ReleaseWs2> mockedReleases = new LinkedList<ReleaseWs2>();
 	// mockedReleases
@@ -125,6 +134,7 @@ public class RemoteMusicDatabaseServiceMusicBrainzTest extends
 	// .getReleases().get(0).getReleaseDate());
 	// }
 
+	// @Test
 	// @SuppressWarnings("serial")
 	// private ReleaseWs2 createRelease(final String artistName,
 	// String releaseName, String date) {
