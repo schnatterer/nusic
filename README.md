@@ -48,7 +48,11 @@ You could pass those via the command line or define them in your ~/.m2/settings.
     </properties>
 </profile>
 ```
-	
+
+#### Release
+Because of the dependency to the source code of musicbrainz (whose version number we don't want transformed by maven release plugin) we need to exclude this submodule. A normal release will just release the current snapshot version, so we don't need interactive mode for this:  
+`mvn release:prepare release:perform -pl info.schnatterer.nusic:nusic-parent,info.schnatterer.nusic:nusic-app --batch-mode`
+
 ### Eclipse
 When using [m2eclipse](http://eclipse.org/m2e/) and [m2e-android](http://rgladwell.github.io/m2e-android/) and have your local maven repo set up (see above), maven and m2e should set you up with all you need to build an run right away.
 

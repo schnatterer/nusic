@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
- http://maven.apache.org/maven-v4_0_0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>info.schnatterer.nusic</groupId>
 	<artifactId>nusic-parent</artifactId>
-	<version>1.0</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>nusic</name>
 
@@ -16,9 +15,48 @@
 		</license>
 	</licenses>
 
+	<scm>
+		<connection>scm:git:ssh://github.com/schnatterer/nusic.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/schnatterer/nusic.git</developerConnection>
+		<url>https://github.com/schnatterer/nusic</url>
+		<tag>HEAD</tag>
+	</scm>
+
 	<modules>
 		<module>nusic</module>
-		<!-- TODO remove as soon as a proper version is published and nusic-app does not reference this any more -->
-        <module>musicbrainzws2-java</module>
+		<!-- TODO remove as soon as a proper version is published and nusic-app 
+			does not reference this any more -->
+		<module>musicbrainzws2-java</module>
 	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<!-- Make our tags look like e.g. "v.1.0.1" -->
+					<tagNameFormat>v.@{project.version}</tagNameFormat>
+					<!-- Same version to all submodules -->
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<!-- Update version name in android manifest and commit all changes, 
+						i.e. not only the changes to POMs made by release plugin -->
+					<preparationGoals>com.jayway.maven.plugins.android.generation2:android-maven-plugin:3.8.2:manifest-update
+						scm:checkin -Dmessage="[maven-release-plugin] prepare release
+						${project.version}" -DworkingDirectory=.</preparationGoals>
+					<!-- Increase version code and update version name in android manifest 
+						and commit all changes, i.e. not only the changes to POMs made by release 
+						plugin -->
+					<completionGoals>com.jayway.maven.plugins.android.generation2:android-maven-plugin:3.8.2:manifest-update
+						scm:checkin -Dmessage="[maven-release-plugin] prepare for next
+						development iteration" -DworkingDirectory=.
+						-Dandroid.manifest.versionCodeAutoIncrement=true</completionGoals>
+					<!-- Don't deploy -->
+					<goals>install</goals>
+				</configuration>
+			</plugin>
+		</plugins>
+
+	</build>
 </project>
