@@ -33,8 +33,8 @@ import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.core.SyncReleasesService;
 import info.schnatterer.nusic.core.event.ArtistProgressListener;
 import info.schnatterer.nusic.data.DatabaseException;
+import info.schnatterer.nusic.data.dao.ArtworkDao;
 import info.schnatterer.nusic.data.dao.ArtworkDao.ArtworkType;
-import info.schnatterer.nusic.data.dao.fs.ArtworkDaoFileSystem;
 import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.data.model.Release;
 
@@ -89,6 +89,8 @@ public class LoadNewReleasesService extends WakefulService {
 	private LoadNewReleasesServiceConnectivityReceiver loadNewReleasesServiceConnectivityReceiver;
 	@Inject
 	private LoadNewReleasesServiceScheduler loadNewReleasesServiceScheduler;
+	@Inject
+	private ArtworkDao artworkDao;
 
 	private List<Artist> errorArtists;
 	// private int totalArtists = 0;
@@ -292,19 +294,18 @@ public class LoadNewReleasesService extends WakefulService {
 	private void notifyNewReleases(Release release) {
 		try {
 			Bitmap scaledBitmap = null;
-			InputStream artworkStream = new ArtworkDaoFileSystem()
-					.findStreamByRelease(release, ArtworkType.SMALL);
+			InputStream artworkStream = artworkDao.findStreamByRelease(release,
+					ArtworkType.SMALL);
 			if (artworkStream != null) {
-				scaledBitmap = ImageUtil.createScaledBitmap(artworkStream,
-						this);
+				scaledBitmap = ImageUtil
+						.createScaledBitmap(artworkStream, this);
 			}
 			NusicApplication.notify(
 					Notification.NEW_RELEASE,
 					getString(R.string.LoadNewReleasesService_newRelease),
 					release.getArtist().getArtistName() + " - "
 							+ release.getReleaseName(), R.drawable.ic_launcher,
-							scaledBitmap, MainActivity.class,
-					createExtraActiveTab());
+					scaledBitmap, MainActivity.class, createExtraActiveTab());
 		} catch (DatabaseException e) {
 			Log.w(Constants.LOG, "Unable to load artwork for notification. "
 					+ release, e);

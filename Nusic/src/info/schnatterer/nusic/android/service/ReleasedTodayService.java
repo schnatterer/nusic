@@ -30,6 +30,7 @@ import info.schnatterer.nusic.core.PreferencesService;
 import info.schnatterer.nusic.core.ReleaseService;
 import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.data.DatabaseException;
+import info.schnatterer.nusic.data.dao.ArtworkDao;
 import info.schnatterer.nusic.data.dao.ArtworkDao.ArtworkType;
 import info.schnatterer.nusic.data.dao.fs.ArtworkDaoFileSystem;
 import info.schnatterer.nusic.data.model.Release;
@@ -65,6 +66,8 @@ public class ReleasedTodayService extends RoboService {
 	private PreferencesService preferencesService;
 	@Inject
 	private ReleaseService releaseService;
+	@Inject
+	private ArtworkDao artworkDao;
 
 	private ReleasedTodayServiceBinder binder = new ReleasedTodayServiceBinder();
 
@@ -106,8 +109,8 @@ public class ReleasedTodayService extends RoboService {
 	private void notifyReleaseToday(Release release) {
 		try {
 			Bitmap createScaledBitmap = ImageUtil.createScaledBitmap(
-					new ArtworkDaoFileSystem().findStreamByRelease(release,
-							ArtworkType.SMALL), this);
+					artworkDao.findStreamByRelease(release, ArtworkType.SMALL),
+					this);
 			NusicApplication.notify(
 					Notification.RELEASED_TODAY,
 					getString(R.string.ReleasedTodayService_ReleasedToday),
