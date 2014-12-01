@@ -1,12 +1,9 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Introduce DI: TODO inject imageloader? use DI in Web and TextView
-- Upgrade to Guice 3.0 and Blender
+- Introduce roboelectric to test project and mavenize it
 
 - Separate Maven Modules with API and impl: ServiceException: How to get rid of android dependency -> getLocalizedMessage only returns a KEY!?
 How to get rid of LocalMusicService in contentResolver? Factory that provides Context so Impl gets it injected and API can be generic?
-
-- Introduce roboelectric to test project and mavenize it
 
 - Copy images to /sdcard instead of /data: 
 http://www.androidsnippets.com/download-an-http-file-to-sdcard-with-progress-notification
