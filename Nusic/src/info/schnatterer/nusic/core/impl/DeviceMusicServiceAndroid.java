@@ -24,7 +24,11 @@ import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.core.DeviceMusicService;
 import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.data.model.Artist;
+
+import javax.inject.Inject;
+
 import android.content.ContentResolver;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -39,14 +43,16 @@ import android.provider.MediaStore.Audio.ArtistColumns;
  */
 public class DeviceMusicServiceAndroid implements DeviceMusicService {
 
+	@Inject
+	private Context context;
 	private static final String ARTIST_SORT_ORDER = Audio.Artists.DEFAULT_SORT_ORDER;
 	private static final String[] ARTIST_PROJECTION = ArtistProjection
 			.getArtistProjection();
 	private static final Uri ARTIST_URI = Audio.Artists.EXTERNAL_CONTENT_URI;
 
 	@Override
-	public Artist[] getArtists(ContentResolver contentResolver)
-			throws ServiceException {
+	public Artist[] getArtists() throws ServiceException {
+		ContentResolver contentResolver = context.getContentResolver();
 		Cursor cursor = null;
 		Artist[] artists = null;
 		try {

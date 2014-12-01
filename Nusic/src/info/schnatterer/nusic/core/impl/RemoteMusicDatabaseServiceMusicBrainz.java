@@ -32,12 +32,15 @@ import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.dao.ArtworkDao;
 import info.schnatterer.nusic.data.dao.ArtworkDao.ArtworkType;
-import info.schnatterer.nusic.data.dao.fs.ArtworkDaoFileSystem;
 import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.data.model.Release;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,6 +49,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
+
+import javax.inject.Inject;
 
 import org.musicbrainz.MBWS2Exception;
 import org.musicbrainz.model.ArtistCreditWs2;
@@ -57,6 +62,7 @@ import android.annotation.SuppressLint;
 import android.util.Log;
 
 import com.google.common.util.concurrent.RateLimiter;
+import com.google.inject.BindingAnnotation;
 
 /**
  * {@link RemoteMusicDatabaseService} that queries information from MusicBrainz.
@@ -86,6 +92,7 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 	private final RateLimiter rateLimiter = RateLimiter
 			.create(PERMITS_PER_SECOND);
 	private CoverArtArchiveClient client = new DefaultCoverArtArchiveClient();
+
 	/** Application name used in user agent string of request. */
 	private String appName;
 	/** Application version used in user agent string of request. */
@@ -94,6 +101,7 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 	 * Contact URL or author email used in user agent string of request.
 	 */
 	private String appContact;
+	@Inject
 	private ArtworkDao artworkDao;
 
 	static {
@@ -117,12 +125,14 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 	 *            contact URL or author email used in user agent string of
 	 *            request
 	 */
-	public RemoteMusicDatabaseServiceMusicBrainz(String appName,
-			String appVersion, String appContact) {
+	@Inject
+	public RemoteMusicDatabaseServiceMusicBrainz(
+			@ApplicationName String appName,
+			@ApplicationVersion String appVersion,
+			@ApplicationContact String appContact) {
 		this.appName = appName;
 		this.appVersion = appVersion;
 		this.appContact = appContact;
-		artworkDao = new ArtworkDaoFileSystem();
 	}
 
 	@SuppressLint("SimpleDateFormat")
@@ -337,5 +347,41 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 			musicBrainzId = nameCredits.get(0).getArtist().getId();
 		}
 		return musicBrainzId;
+	}
+
+	/**
+	 * Application name used in user agent string of request
+	 * 
+	 * @author schnatterer
+	 *
+	 */
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface ApplicationName {
+	}
+
+	/**
+	 * Application version used in user agent string of request
+	 * 
+	 * @author schnatterer
+	 *
+	 */
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface ApplicationVersion {
+	}
+
+	/**
+	 * Contact URL or author email used in user agent string of request
+	 * 
+	 * @author schnatterer
+	 *
+	 */
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface ApplicationContact {
 	}
 }

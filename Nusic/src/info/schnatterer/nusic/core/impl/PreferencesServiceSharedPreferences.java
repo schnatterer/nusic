@@ -21,7 +21,6 @@
 package info.schnatterer.nusic.core.impl;
 
 import info.schnatterer.nusic.R;
-import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.core.PreferencesService;
 import info.schnatterer.nusic.core.event.PreferenceChangedListener;
 import info.schnatterer.nusic.util.DateUtil;
@@ -30,10 +29,14 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
+
+import com.google.inject.Provider;
 
 /**
  * Provides access to the preferences of the application via android's
@@ -42,6 +45,7 @@ import android.preference.PreferenceManager;
  * @author schnatterer
  *
  */
+// TODO DI make singleton, so final fields won't have to be injected every time.
 public class PreferencesServiceSharedPreferences implements PreferencesService,
 		OnSharedPreferenceChangeListener {
 
@@ -65,79 +69,89 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	 * Preferences that are defined in constants_prefernces.xml -> accessible
 	 * for preferences.xml
 	 */
-	public final String KEY_DOWLOAD_ONLY_ON_WIFI = getContext().getString(
-			R.string.preferences_key_download_only_on_wifi);
-	public final Boolean DEFAULT_DOWLOAD_ONLY_ON_WIFI = getContext()
-			.getResources().getBoolean(
-					R.bool.preferences_default_download_only_on_wifi);
+	public final String KEY_DOWLOAD_ONLY_ON_WIFI;
+	public final Boolean DEFAULT_DOWLOAD_ONLY_ON_WIFI;
 
-	public final String KEY_DOWNLOAD_RELEASES_TIME_PERIOD = getContext()
-			.getString(R.string.preferences_key_download_releases_time_period);
-	public final String DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD = getContext()
-			.getResources().getString(
-					R.string.preferences_default_download_releases_time_period);
+	public final String KEY_DOWNLOAD_RELEASES_TIME_PERIOD;
+	public final String DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD;
 
-	public final String KEY_REFRESH_PERIOD = getContext().getString(
-			R.string.preferences_key_refresh_period);
-	public final String DEFAULT_REFRESH_PERIOD = getContext().getResources()
-			.getString(R.string.preferences_default_refresh_period);
+	public final String KEY_REFRESH_PERIOD;
+	public final String DEFAULT_REFRESH_PERIOD;
 
-	private final Integer DEFAULT_JUST_ADDED_TIME_PERIOD = parseIntOrThrow(
-			KEY_REFRESH_PERIOD, DEFAULT_REFRESH_PERIOD);
+	private final Integer DEFAULT_JUST_ADDED_TIME_PERIOD;
 
-	public final String KEY_ENABLED_NOTIFY_RELEASED_TODAY = getContext()
-			.getString(
-					R.string.preferences_key_is_enabled_notify_released_today);
-	public final Boolean DEFAULT_ENABLED_NOTIFY_RELEASED_TODAY = getContext()
-			.getResources()
-			.getBoolean(
-					R.bool.preferences_default_is_enabled_notify_released_today);
+	public final String KEY_ENABLED_NOTIFY_RELEASED_TODAY;
+	public final Boolean DEFAULT_ENABLED_NOTIFY_RELEASED_TODAY;
 
-	public final String KEY_ENABLED_NOTIFY_NEW_RELEASES = getContext()
-			.getString(R.string.preferences_key_is_enabled_notify_new_releases);
-	public final Boolean DEFAULT_ENABLED_NOTIFY_NEW_RELEASES = getContext()
-			.getResources().getBoolean(
-					R.bool.preferences_default_is_enabled_notify_new_releases);
+	public final String KEY_ENABLED_NOTIFY_NEW_RELEASES;
+	public final Boolean DEFAULT_ENABLED_NOTIFY_NEW_RELEASES;
 
-	public final String KEY_RELEASED_TODAY_HOUR_OF_DAY = getContext()
-			.getString(R.string.preferences_key_released_today_hour_of_day);
-	public final Integer DEFAULT_RELEASED_TODAY_HOUR_OF_DAY = parseIntOrThrow(
-			KEY_RELEASED_TODAY_HOUR_OF_DAY,
-			getContext().getString(
-					R.string.preferences_default_released_today_hour_of_day));
+	public final String KEY_RELEASED_TODAY_HOUR_OF_DAY;
+	public final Integer DEFAULT_RELEASED_TODAY_HOUR_OF_DAY;
 
-	public final String KEY_RELEASED_TODAY_MINUTE = getContext().getString(
-			R.string.preferences_key_released_today_minute);
-	public final Integer DEFAULT_RELEASED_TODAY_MINUTE = parseIntOrThrow(
-			KEY_RELEASED_TODAY_MINUTE,
-			getContext().getString(
-					R.string.preferences_default_released_today_minute));
+	public final String KEY_RELEASED_TODAY_MINUTE;
+	public final Integer DEFAULT_RELEASED_TODAY_MINUTE;
 
 	private final SharedPreferences sharedPreferences;
-	// private static Context context = null;
-	private static PreferencesServiceSharedPreferences instance = new PreferencesServiceSharedPreferences();
 
 	private Set<PreferenceChangedListener> preferenceChangedListeners = new HashSet<PreferenceChangedListener>();
 
-	/**
-	 * 
-	 * @return A singleton of this class
-	 */
-	public static final PreferencesServiceSharedPreferences getInstance() {
-		return instance;
-	}
+	@Inject
+	public PreferencesServiceSharedPreferences(Provider<Context> contextProvider) {
+		Context context = contextProvider.get();
 
-	/**
-	 * Creates a {@link PreferencesService} the default shared preferences.
-	 */
-	protected PreferencesServiceSharedPreferences() {
-		// PreferencesServiceSharedPreferences.context = context;
 		this.sharedPreferences = PreferenceManager
-				.getDefaultSharedPreferences(getContext());
+				.getDefaultSharedPreferences(context);
 
 		if (sharedPreferences != null) {
 			sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 		}
+
+		KEY_DOWLOAD_ONLY_ON_WIFI = context
+				.getString(R.string.preferences_key_download_only_on_wifi);
+		DEFAULT_DOWLOAD_ONLY_ON_WIFI = context.getResources().getBoolean(
+				R.bool.preferences_default_download_only_on_wifi);
+
+		KEY_DOWNLOAD_RELEASES_TIME_PERIOD = context
+				.getString(R.string.preferences_key_download_releases_time_period);
+		DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD = context
+				.getResources()
+				.getString(
+						R.string.preferences_default_download_releases_time_period);
+
+		KEY_REFRESH_PERIOD = context
+				.getString(R.string.preferences_key_refresh_period);
+		DEFAULT_REFRESH_PERIOD = context.getResources().getString(
+				R.string.preferences_default_refresh_period);
+
+		DEFAULT_JUST_ADDED_TIME_PERIOD = parseIntOrThrow(KEY_REFRESH_PERIOD,
+				DEFAULT_REFRESH_PERIOD);
+
+		KEY_ENABLED_NOTIFY_RELEASED_TODAY = context
+				.getString(R.string.preferences_key_is_enabled_notify_released_today);
+		DEFAULT_ENABLED_NOTIFY_RELEASED_TODAY = context
+				.getResources()
+				.getBoolean(
+						R.bool.preferences_default_is_enabled_notify_released_today);
+
+		KEY_ENABLED_NOTIFY_NEW_RELEASES = context
+				.getString(R.string.preferences_key_is_enabled_notify_new_releases);
+		DEFAULT_ENABLED_NOTIFY_NEW_RELEASES = context
+				.getResources()
+				.getBoolean(
+						R.bool.preferences_default_is_enabled_notify_new_releases);
+
+		KEY_RELEASED_TODAY_HOUR_OF_DAY = context
+				.getString(R.string.preferences_key_released_today_hour_of_day);
+		DEFAULT_RELEASED_TODAY_HOUR_OF_DAY = parseIntOrThrow(
+				KEY_RELEASED_TODAY_HOUR_OF_DAY,
+				context.getString(R.string.preferences_default_released_today_hour_of_day));
+
+		KEY_RELEASED_TODAY_MINUTE = context
+				.getString(R.string.preferences_key_released_today_minute);
+		DEFAULT_RELEASED_TODAY_MINUTE = parseIntOrThrow(
+				KEY_RELEASED_TODAY_MINUTE,
+				context.getString(R.string.preferences_default_released_today_minute));
 	}
 
 	private Integer parseIntFromPreferenceOrThrow(String key,
@@ -251,10 +265,6 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 		return sharedPreferences.edit()
 				.putBoolean(KEY_ENABLED_CONNECTIVITY_RECEIVER, enabled)
 				.commit();
-	}
-
-	protected static Context getContext() {
-		return NusicApplication.getContext();
 	}
 
 	@Override

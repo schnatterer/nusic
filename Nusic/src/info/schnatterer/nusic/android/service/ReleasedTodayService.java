@@ -30,20 +30,22 @@ import info.schnatterer.nusic.core.PreferencesService;
 import info.schnatterer.nusic.core.ReleaseService;
 import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.data.DatabaseException;
+import info.schnatterer.nusic.data.dao.ArtworkDao;
 import info.schnatterer.nusic.data.dao.ArtworkDao.ArtworkType;
 import info.schnatterer.nusic.data.dao.fs.ArtworkDaoFileSystem;
 import info.schnatterer.nusic.data.model.Release;
-import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences;
-import info.schnatterer.nusic.core.impl.ReleaseServiceImpl;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import roboguice.receiver.RoboBroadcastReceiver;
+import roboguice.service.RoboService;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -58,11 +60,14 @@ import android.util.Log;
  * @author schnatterer
  *
  */
-public class ReleasedTodayService extends Service {
+public class ReleasedTodayService extends RoboService {
 
-	private static PreferencesService preferencesService = PreferencesServiceSharedPreferences
-			.getInstance();
-	private ReleaseService releaseService = new ReleaseServiceImpl(this);
+	@Inject
+	private PreferencesService preferencesService;
+	@Inject
+	private ReleaseService releaseService;
+	@Inject
+	private ArtworkDao artworkDao;
 
 	private ReleasedTodayServiceBinder binder = new ReleasedTodayServiceBinder();
 
@@ -104,8 +109,8 @@ public class ReleasedTodayService extends Service {
 	private void notifyReleaseToday(Release release) {
 		try {
 			Bitmap createScaledBitmap = ImageUtil.createScaledBitmap(
-					new ArtworkDaoFileSystem().findStreamByRelease(release,
-							ArtworkType.SMALL), this);
+					artworkDao.findStreamByRelease(release, ArtworkType.SMALL),
+					this);
 			NusicApplication.notify(
 					Notification.RELEASED_TODAY,
 					getString(R.string.ReleasedTodayService_ReleasedToday),
@@ -165,51 +170,6 @@ public class ReleasedTodayService extends Service {
 	}
 
 	/**
-	 * Schedule this task to run regularly, if enabled in the preferences.
-	 * 
-	 * @param context
-	 */
-	public static void schedule(Context context) {
-		boolean isEnabled = preferencesService.isEnabledNotifyReleasedToday();
-		if (isEnabled) {
-			int hourOfDay = preferencesService
-					.getReleasedTodayScheduleHourOfDay();
-			int minute = preferencesService.getReleasedTodayScheduleMinute();
-
-			Calendar triggerAtCal = Calendar.getInstance();
-			triggerAtCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-			triggerAtCal.set(Calendar.MINUTE, minute);
-			triggerAtCal.set(Calendar.SECOND, 0);
-			if (triggerAtCal.getTimeInMillis() < System.currentTimeMillis()) {
-				/*
-				 * Trigger only for today if time is in the future. If not,
-				 * trigger same time tomorrow.
-				 * 
-				 * If the triggering time is in the past, android will trigger
-				 * it directly.
-				 */
-				Log.d(Constants.LOG,
-						"Triggering notification service for tommorrow");
-				triggerAtCal.add(Calendar.DAY_OF_MONTH, 1);
-			}
-
-			/*
-			 * Set a repeating schedule, so there always is a next alarm even
-			 * when one alarm should fail for some reason
-			 */
-			((AlarmManager) context.getSystemService(Context.ALARM_SERVICE))
-					.setRepeating(AlarmManager.RTC,
-							triggerAtCal.getTimeInMillis(),
-							AlarmManager.INTERVAL_DAY,
-							createPendingIntent(context));
-			Log.d(Constants.LOG,
-					"Scheduled " + ReleasedTodayService.class.getSimpleName()
-							+ " to run again every day, starting at "
-							+ new Date(+triggerAtCal.getTimeInMillis()));
-		}
-	}
-
-	/**
 	 * Creates the pending intent that is passed to the alarm manager for
 	 * scheduling the service.
 	 * 
@@ -247,9 +207,9 @@ public class ReleasedTodayService extends Service {
 	 * 
 	 */
 	public static class ReleasedTodayServiceStarterReceiver extends
-			BroadcastReceiver {
+			RoboBroadcastReceiver {
 		@Override
-		public void onReceive(final Context context, final Intent intent) {
+		public void handleReceive(final Context context, final Intent intent) {
 			context.startService(new Intent(context, ReleasedTodayService.class));
 		}
 	}
@@ -262,10 +222,68 @@ public class ReleasedTodayService extends Service {
 	 * 
 	 */
 	public static class ReleasedTodaySchedulerReceiver extends
-			BroadcastReceiver {
+			RoboBroadcastReceiver {
+		@Inject
+		ReleasedTodayServiceScheduler releasedTodayServiceScheduler;
+
 		@Override
-		public void onReceive(final Context context, final Intent intent) {
-			ReleasedTodayService.schedule(context);
+		public void handleReceive(final Context context, final Intent intent) {
+			releasedTodayServiceScheduler.schedule();
+		}
+	}
+
+	public static class ReleasedTodayServiceScheduler {
+		@Inject
+		private Context context;
+		@Inject
+		private PreferencesService preferencesService;
+
+		/**
+		 * Schedule this task to run regularly, if enabled in the preferences.
+		 * 
+		 * @param context
+		 */
+		public void schedule() {
+			boolean isEnabled = preferencesService
+					.isEnabledNotifyReleasedToday();
+			if (isEnabled) {
+				int hourOfDay = preferencesService
+						.getReleasedTodayScheduleHourOfDay();
+				int minute = preferencesService
+						.getReleasedTodayScheduleMinute();
+
+				Calendar triggerAtCal = Calendar.getInstance();
+				triggerAtCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+				triggerAtCal.set(Calendar.MINUTE, minute);
+				triggerAtCal.set(Calendar.SECOND, 0);
+				if (triggerAtCal.getTimeInMillis() < System.currentTimeMillis()) {
+					/*
+					 * Trigger only for today if time is in the future. If not,
+					 * trigger same time tomorrow.
+					 * 
+					 * If the triggering time is in the past, android will
+					 * trigger it directly.
+					 */
+					Log.d(Constants.LOG,
+							"Triggering notification service for tommorrow");
+					triggerAtCal.add(Calendar.DAY_OF_MONTH, 1);
+				}
+
+				/*
+				 * Set a repeating schedule, so there always is a next alarm
+				 * even when one alarm should fail for some reason
+				 */
+				((AlarmManager) context.getSystemService(Context.ALARM_SERVICE))
+						.setRepeating(AlarmManager.RTC,
+								triggerAtCal.getTimeInMillis(),
+								AlarmManager.INTERVAL_DAY,
+								createPendingIntent(context));
+				Log.d(Constants.LOG,
+						"Scheduled "
+								+ ReleasedTodayService.class.getSimpleName()
+								+ " to run again every day, starting at "
+								+ new Date(+triggerAtCal.getTimeInMillis()));
+			}
 		}
 	}
 

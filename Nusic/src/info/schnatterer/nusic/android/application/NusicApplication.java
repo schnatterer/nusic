@@ -23,8 +23,10 @@ package info.schnatterer.nusic.android.application;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.Constants.Notification;
 import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.android.NusicAndroidModule;
 import info.schnatterer.nusic.android.activities.MainActivity;
-import info.schnatterer.nusic.android.service.ReleasedTodayService;
+import info.schnatterer.nusic.android.service.ReleasedTodayService.ReleasedTodayServiceScheduler;
+import roboguice.RoboGuice;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -39,6 +41,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.inject.util.Modules;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
@@ -55,6 +58,8 @@ public class NusicApplication extends AbstractApplication {
 		int V_0_6 = 10;
 	}
 
+	private ReleasedTodayServiceScheduler releasedTodayServiceScheduler;
+
 	@Override
 	public void onCreate() {
 		/*
@@ -65,6 +70,33 @@ public class NusicApplication extends AbstractApplication {
 				getApplicationContext()).memoryCacheSize(2 * 1024 * 1024)
 				.build();
 		ImageLoader.getInstance().init(config);
+
+		initGlobals();
+
+		/*
+		 * TODO enable annotation database to improve performance. At the
+		 * moment, this results in an ClassNotFoundException (in eclipse).
+		 */
+		RoboGuice.setUseAnnotationDatabases(false);
+
+		/*
+		 * As some injected implementations might rely on getContext() and
+		 * getContext() is initialized in super.onCreate() it's crucial to set
+		 * the custom module AFTER super.onCreate().
+		 */
+		RoboGuice.getOrCreateBaseApplicationInjector(
+				// RoboGuice.getOrCreateBaseApplicationInjector(
+				this,
+				RoboGuice.DEFAULT_STAGE,
+				Modules.override(RoboGuice.newDefaultRoboModule(this)).with(
+						new NusicAndroidModule(this)));
+		/*
+		 * Can't use annotations in this class, because the module is set up in
+		 * this very method. So get instances explicitly here.
+		 */
+		// RoboGuice.getInjector(getContext()).injectMembers(this);
+		releasedTodayServiceScheduler = RoboGuice.getInjector(this)
+				.getInstance(ReleasedTodayServiceScheduler.class);
 
 		// Causes onUpgrade() to be called, etc.
 		super.onCreate();
@@ -105,7 +137,7 @@ public class NusicApplication extends AbstractApplication {
 		 * in preferences). Schedule it only after updates and new installations
 		 * to avoid overhead.
 		 */
-		ReleasedTodayService.schedule(this);
+		releasedTodayServiceScheduler.schedule();
 	}
 
 	@Override
@@ -115,7 +147,7 @@ public class NusicApplication extends AbstractApplication {
 		 * in preferences). Schedule it only after updates and new installations
 		 * to avoid overhead.
 		 */
-		ReleasedTodayService.schedule(this);
+		releasedTodayServiceScheduler.schedule();
 	}
 
 	/**

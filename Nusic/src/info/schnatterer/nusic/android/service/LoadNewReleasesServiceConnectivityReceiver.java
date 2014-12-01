@@ -23,9 +23,10 @@ package info.schnatterer.nusic.android.service;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.core.ConnectivityService;
 import info.schnatterer.nusic.core.PreferencesService;
-import info.schnatterer.nusic.core.impl.ConnectivityServiceAndroid;
-import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences;
-import android.content.BroadcastReceiver;
+
+import javax.inject.Inject;
+
+import roboguice.receiver.RoboBroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -37,46 +38,45 @@ import android.util.Log;
  * @author schnatterer
  * 
  */
+/*
+ * TODO DI make singleton, in order to have proper semantics here, as there
+ * effectively is only one instance of each receiver. E.g. calls to enable and
+ * disableReceiver() affect not only one instance.
+ */
 public class LoadNewReleasesServiceConnectivityReceiver extends
-		BroadcastReceiver {
-	private ConnectivityService connectivityService = ConnectivityServiceAndroid
-			.getInstance();
+		RoboBroadcastReceiver {
+	@Inject
+	private ConnectivityService connectivityService;
 
-	private static PreferencesService preferencesService = PreferencesServiceSharedPreferences
-			.getInstance();
+	@Inject
+	private PreferencesService preferencesService;
 
 	/**
-	 * Enables static ConnectivityReceiver registered in AndroidManifest.
+	 * Enables static ConnectivityReceiver registered in AndroidManifest.<br/>
+	 * <br/>
+	 * <b>Note: This will disable this will not only affect this very instance
+	 * of the receiver. It will be enabled application-wide</b>
 	 * 
 	 * @param context
 	 */
-	public static void enableReceiver(Context context) {
-		// ComponentName component = new ComponentName(context,
-		// LoadNewReleasesServiceConnectivityReceiver.class);
-		//
-		// context.getPackageManager().setComponentEnabledSetting(component,
-		// PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-		// PackageManager.DONT_KILL_APP);
+	public void enableReceiver() {
 		preferencesService.setEnabledConnectivityReceiver(true);
 	}
 
 	/**
-	 * Disables static ConnectivityReceiver registered in AndroidManifest.
+	 * Disables static ConnectivityReceiver registered in AndroidManifest.<br/>
+	 * <br/>
+	 * <b>Note: This will disable this will not only affect this very instance
+	 * of the receiver. It will be disabled application-wide</b>
 	 * 
 	 * @param context
 	 */
-	public static void disableReceiver(Context context) {
-		// ComponentName component = new ComponentName(context,
-		// LoadNewReleasesServiceConnectivityReceiver.class);
-		//
-		// context.getPackageManager().setComponentEnabledSetting(component,
-		// PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-		// PackageManager.DONT_KILL_APP);
+	public void disableReceiver() {
 		preferencesService.setEnabledConnectivityReceiver(false);
 	}
 
 	@Override
-	public void onReceive(final Context context, final Intent intent) {
+	public void handleReceive(final Context context, final Intent intent) {
 		if (connectivityService.isOnline()) {
 			Log.d(Constants.LOG, "Connectivity receiver: Device online");
 			onConnectionEstablished(context);
@@ -96,7 +96,6 @@ public class LoadNewReleasesServiceConnectivityReceiver extends
 			context.startService(LoadNewReleasesService
 					.createIntentRefreshReleases(context));
 		}
-		// refreshReleases(updateOnlyIfNeccesary, null);
 	}
 
 	public void onConnectionLost(Context context) {
