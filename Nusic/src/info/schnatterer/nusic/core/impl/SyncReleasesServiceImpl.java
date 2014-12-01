@@ -22,26 +22,25 @@ package info.schnatterer.nusic.core.impl;
 
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
-import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.core.ArtistService;
 import info.schnatterer.nusic.core.DeviceMusicService;
 import info.schnatterer.nusic.core.PreferencesService;
 import info.schnatterer.nusic.core.RemoteMusicDatabaseService;
 import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.core.SyncReleasesService;
-import info.schnatterer.nusic.data.DatabaseException;
-import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.core.event.ArtistProgressListener;
 import info.schnatterer.nusic.core.event.ProgressListener;
 import info.schnatterer.nusic.core.event.ProgressUpdater;
+import info.schnatterer.nusic.data.DatabaseException;
+import info.schnatterer.nusic.data.model.Artist;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import android.content.ContentResolver;
-import android.content.Context;
+import javax.inject.Inject;
+
 import android.util.Log;
 
 /**
@@ -51,29 +50,19 @@ import android.util.Log;
  *
  */
 public class SyncReleasesServiceImpl implements SyncReleasesService {
-	private Context context;
-	private final RemoteMusicDatabaseService remoteMusicDatabaseService;
-	private DeviceMusicService deviceMusicService = new DeviceMusicServiceAndroid();
-	private PreferencesService preferencesService = PreferencesServiceSharedPreferences
-			.getInstance();
-
-	private ArtistService artistService = null;
+	@Inject
+	private RemoteMusicDatabaseService remoteMusicDatabaseService;
+	@Inject
+	private DeviceMusicService deviceMusicService;
+	@Inject
+	private PreferencesService preferencesService;
+	@Inject
+	private ArtistService artistService;
 
 	private Set<ProgressListener<Artist, Boolean>> listenerList = new HashSet<ProgressListener<Artist, Boolean>>();
 	private ProgressUpdater<Artist, Boolean> progressUpdater = new ProgressUpdater<Artist, Boolean>(
 			listenerList) {
 	};
-
-	public SyncReleasesServiceImpl(Context context) {
-		this.context = context;
-		if (context != null) {
-			this.artistService = new ArtistServiceImpl(context);
-		}
-		remoteMusicDatabaseService = new RemoteMusicDatabaseServiceMusicBrainz(
-				context.getString(R.string.app_name),
-				NusicApplication.getCurrentVersionName(),
-				Constants.APPLICATION_URL);
-	}
 
 	@Override
 	public void syncReleases() {
@@ -102,7 +91,7 @@ public class SyncReleasesServiceImpl implements SyncReleasesService {
 
 		Artist[] artists;
 		try {
-			artists = getArtists();
+			artists = deviceMusicService.getArtists();
 			if (artists == null) {
 				Log.w(Constants.LOG,
 						"No artists were returned. No music files on device?");
@@ -172,10 +161,6 @@ public class SyncReleasesServiceImpl implements SyncReleasesService {
 		}
 	}
 
-	protected ContentResolver getContentResolver() {
-		return context.getContentResolver();
-	}
-
 	@Override
 	public void addArtistProcessedListener(ArtistProgressListener l) {
 		if (l != null) {
@@ -197,9 +182,4 @@ public class SyncReleasesServiceImpl implements SyncReleasesService {
 	public void removeArtistProcessedListeners() {
 		listenerList.clear();
 	}
-
-	public Artist[] getArtists() throws ServiceException {
-		return deviceMusicService.getArtists(getContentResolver());
-	}
-
 }

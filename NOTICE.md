@@ -14,6 +14,14 @@ published under The Apache Software License, Version 2.0
 published under The Apache Software License, Version 2.0  
 [Website](https://github.com/nostra13/Android-Universal-Image-Loader)
 
+**RoboGuice**
+published under The Apache Software License, Version 2.0  
+[Website](https://github.com/roboguice/roboguice)
+
+**roboguice-sherlock**
+published under The Apache Software License, Version 2.0  
+[Website](https://github.com/rtyley/roboguice-sherlock)
+
 **musicbrainzws2-java**  
 published under GNU General Public License (GPL), Version 3.0  
 [Website](https://code.google.com/p/musicbrainzws2-java/)

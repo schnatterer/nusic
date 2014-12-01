@@ -23,11 +23,13 @@ package info.schnatterer.nusic.android.activities;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.util.TextUtil;
+import roboguice.activity.RoboSherlockFragmentActivity;
+import roboguice.inject.ContentView;
+import roboguice.inject.InjectView;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 
 /**
@@ -42,7 +44,11 @@ import com.actionbarsherlock.view.MenuItem;
  * 
  * @author schnatterer
  */
-public class TextAssetActivity extends SherlockFragmentActivity {
+@ContentView(R.layout.simple_textview_layout)
+public class TextAssetActivity extends RoboSherlockFragmentActivity {
+	@InjectView(R.id.renderRawHtmlTextView)
+	TextView textView;
+
 	/**
 	 * Key to the creating intent's extras that contains the path (as
 	 * {@link String}) to the asset that is loaded.
@@ -62,14 +68,11 @@ public class TextAssetActivity extends SherlockFragmentActivity {
 		// Display the back arrow in the header (left of the icon)
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		setContentView(R.layout.simple_textview_layout);
-
 		String title = getIntent().getStringExtra(EXTRA_TITLE);
 		if (title != null) {
 			setTitle(title);
 		}
 
-		TextView textView = (TextView) findViewById(R.id.renderRawHtmlTextView);
 		textView.setMovementMethod(LinkMovementMethod.getInstance());
 
 		/*

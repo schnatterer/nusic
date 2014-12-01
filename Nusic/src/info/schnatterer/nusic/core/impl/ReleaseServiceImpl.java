@@ -29,14 +29,12 @@ import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.dao.ArtistDao;
 import info.schnatterer.nusic.data.dao.ReleaseDao;
-import info.schnatterer.nusic.data.dao.sqlite.ArtistDaoSqlite;
-import info.schnatterer.nusic.data.dao.sqlite.ReleaseDaoSqlite;
 import info.schnatterer.nusic.data.model.Release;
 
 import java.util.Calendar;
 import java.util.List;
 
-import android.content.Context;
+import javax.inject.Inject;
 
 /**
  * Default implementation of {@link ReleaseService}.
@@ -45,15 +43,12 @@ import android.content.Context;
  *
  */
 public class ReleaseServiceImpl implements ReleaseService {
+	@Inject
 	private ReleaseDao releaseDao;
+	@Inject
 	private ArtistDao artistDao;
-	private PreferencesService preferencesService = PreferencesServiceSharedPreferences
-			.getInstance();
-
-	public ReleaseServiceImpl(Context context) {
-		releaseDao = new ReleaseDaoSqlite(context);
-		artistDao = new ArtistDaoSqlite(context);
-	}
+	@Inject
+	private PreferencesService preferencesService;
 
 	@Override
 	public int update(Release release) throws ServiceException {

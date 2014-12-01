@@ -23,6 +23,9 @@ package info.schnatterer.nusic.core.impl;
 import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.core.ConnectivityService;
 import info.schnatterer.nusic.core.PreferencesService;
+
+import javax.inject.Inject;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -35,25 +38,8 @@ import android.net.NetworkInfo;
  *
  */
 public class ConnectivityServiceAndroid implements ConnectivityService {
-	private static ConnectivityServiceAndroid instance = new ConnectivityServiceAndroid();
-	// private Set<ConnectivityChangedListener> connectivityChangedListeners =
-	// new HashSet<ConnectivityChangedListener>();
-	private PreferencesService preferencesService = PreferencesServiceSharedPreferences
-			.getInstance();
-
-	/**
-	 * Creates a {@link ConnectivityServiceAndroid}.
-	 */
-	protected ConnectivityServiceAndroid() {
-	}
-
-	/**
-	 * 
-	 * @return A singleton of this class
-	 */
-	public static final ConnectivityServiceAndroid getInstance() {
-		return instance;
-	}
+	@Inject
+	private PreferencesService preferencesService;
 
 	@Override
 	public boolean isOnline() {

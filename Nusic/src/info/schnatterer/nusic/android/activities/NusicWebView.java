@@ -22,13 +22,15 @@ package info.schnatterer.nusic.android.activities;
 
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.util.TextUtil;
+import roboguice.activity.RoboSherlockFragmentActivity;
+import roboguice.inject.ContentView;
+import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 
 /**
@@ -47,7 +49,10 @@ import com.actionbarsherlock.view.MenuItem;
  * 
  * @author schnatterer
  */
-public class NusicWebView extends SherlockFragmentActivity {
+@ContentView(R.layout.activity_web_view)
+public class NusicWebView extends RoboSherlockFragmentActivity {
+	@InjectView(R.id.webview)
+	WebView webView;
 
 	/** "Protocol" prefix of a link for E-mails. */
 	private static final String MAILTO_LINK = "mailto:";
@@ -58,8 +63,6 @@ public class NusicWebView extends SherlockFragmentActivity {
 		// Display the back arrow in the header (left of the icon)
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		setContentView(R.layout.activity_web_view);
-
 		String url = getIntent().getData().toString();
 		if (url.startsWith(MAILTO_LINK)) {
 			Intent send = new Intent(Intent.ACTION_SENDTO);
@@ -69,7 +72,6 @@ public class NusicWebView extends SherlockFragmentActivity {
 			startActivity(send);
 			finish();
 		} else {
-			WebView webView = (WebView) findViewById(R.id.webview);
 			/* Activate JavaScript */
 			// webView.getSettings().setJavaScriptEnabled(true);
 

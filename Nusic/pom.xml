@@ -26,8 +26,8 @@
 
 	<profiles>
 		<profile>
-			<!-- Use this profike to distinguish between the "implicit" builds of 
-				the eclipse plugin and "explicit" builds triggered by calling mvn install -->
+	<!-- Use Profiles to distinguish between the "implicit" builds of the eclipse 
+		plugin and "explicit" builds triggered by calling mvn install -->
 			<id>default</id>
 			<activation>
 				<property>
@@ -67,6 +67,21 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+			<groupId>org.roboguice</groupId>
+			<artifactId>roboguice</artifactId>
+			<version>3.0</version>
+		</dependency>
+	<!-- TODO enable annotation database to improve performance. At the moment, 
+		this results in an ClassNotFoundException (in eclipse). -->
+<!-- 		<dependency>
+			<groupId>org.roboguice</groupId>
+			<artifactId>roboblender</artifactId>
+			<version>3.0</version>
+			<scope>provided</scope>
+		</dependency>
+ -->
+		<!-- Nusic dependencies -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -183,10 +198,11 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>3.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+					<compilerArgument>-AguiceAnnotationDatabasePackageName=info.schnatterer.nusic.android.application</compilerArgument>
 				</configuration>
 			</plugin>
 			<plugin>

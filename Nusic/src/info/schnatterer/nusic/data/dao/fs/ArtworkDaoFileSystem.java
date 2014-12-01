@@ -1,6 +1,5 @@
 package info.schnatterer.nusic.data.dao.fs;
 
-import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.dao.ArtworkDao;
 import info.schnatterer.nusic.data.model.Release;
@@ -11,19 +10,26 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.inject.Inject;
+
 import org.apache.commons.io.FileUtils;
 
 import android.content.Context;
 
 public class ArtworkDaoFileSystem implements ArtworkDao {
-	// private static final int DEFAULT_ARTWORK = R.drawable.ic_launcher;
+	public static final String FILE_SCHEME = "file://";
 	public static final String BASEDIR_PATH = "artwork";
 
-	// path to /data/data/../app_data/..
-	public static final File BASEDIR = NusicApplication.getContext().getDir(
-			BASEDIR_PATH, Context.MODE_PRIVATE);
+	@Inject
+	private Context context;
 
-	private static final String FILE_SCHEME = "file://";
+	/** path to /data/data/../app_data/.. */
+	private File BASEDIR;
+
+	@Inject
+	private void init() {
+		BASEDIR = context.getDir(BASEDIR_PATH, Context.MODE_PRIVATE);
+	}
 
 	@Override
 	public boolean save(Release release, ArtworkType type, InputStream artwork)

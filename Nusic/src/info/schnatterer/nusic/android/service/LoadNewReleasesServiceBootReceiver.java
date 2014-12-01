@@ -21,13 +21,15 @@
 package info.schnatterer.nusic.android.service;
 
 import info.schnatterer.nusic.Constants;
+import info.schnatterer.nusic.android.service.LoadNewReleasesService.LoadNewReleasesServiceScheduler;
 import info.schnatterer.nusic.core.PreferencesService;
-import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences;
 import info.schnatterer.nusic.util.DateUtil;
 
 import java.util.Date;
 
-import android.content.BroadcastReceiver;
+import javax.inject.Inject;
+
+import roboguice.receiver.RoboBroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -39,13 +41,15 @@ import android.util.Log;
  * @author schnatterer
  * 
  */
-public class LoadNewReleasesServiceBootReceiver extends BroadcastReceiver {
+public class LoadNewReleasesServiceBootReceiver extends RoboBroadcastReceiver {
 	private static final int BOOT_DELAY_MINUTES = 10;
-	private static PreferencesService preferencesService = PreferencesServiceSharedPreferences
-			.getInstance();
+	@Inject
+	private PreferencesService preferencesService;
+	@Inject
+	private LoadNewReleasesServiceScheduler loadNewReleasesServiceScheduler;
 
 	@Override
-	public void onReceive(final Context context, final Intent intent) {
+	public void handleReceive(final Context context, final Intent intent) {
 		Date nextReleaseRefresh = preferencesService.getNextReleaseRefresh();
 		Log.d(Constants.LOG, "Boot Receiver: Boot completed!");
 
@@ -54,13 +58,13 @@ public class LoadNewReleasesServiceBootReceiver extends BroadcastReceiver {
 			Date delayedRefresh = DateUtil.addMinutes(BOOT_DELAY_MINUTES);
 			Log.d(Constants.LOG, "Boot Receiver: Delaying service to start at "
 					+ delayedRefresh);
-			LoadNewReleasesService.schedule(context,
+			loadNewReleasesServiceScheduler.schedule(
 					preferencesService.getRefreshPeriod(), delayedRefresh);
 		} else {
 			// Schedule service
 			Log.d(Constants.LOG, "Boot Receiver: Scheduling service to "
 					+ nextReleaseRefresh);
-			LoadNewReleasesService.schedule(context,
+			loadNewReleasesServiceScheduler.schedule(
 					preferencesService.getRefreshPeriod(), nextReleaseRefresh);
 		}
 	}
