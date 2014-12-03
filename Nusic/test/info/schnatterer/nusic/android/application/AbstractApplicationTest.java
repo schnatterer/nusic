@@ -20,33 +20,28 @@
  */
 package info.schnatterer.nusic.android.application;
 
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import info.schnatterer.nusic.android.application.AbstractApplication.AppStart;
-import info.schnatterer.testUtil.TestUtil;
-import junit.framework.TestCase;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.test.mock.MockContext;
-import android.test.mock.MockPackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 
-public class AbstractApplicationTest extends TestCase {
+import com.google.inject.AbstractModule;
 
-	static {
-		Thread.currentThread().setContextClassLoader(
-				AbstractApplicationTest.class.getClassLoader());
-	}
+@RunWith(RobolectricTestRunner.class)
+public class AbstractApplicationTest {
 
 	private AbstractApplicationUnderTest abstractApplication = new AbstractApplicationUnderTest();
 
+	@Test
 	public void testHandleAppVersionFirstStart() {
 		final int expectedCurrentVersionCode = 1;
 		abstractApplication
@@ -68,12 +63,16 @@ public class AbstractApplicationTest extends TestCase {
 				AbstractApplication.DEFAULT_LAST_APP_VERSION,
 				abstractApplication.getActualNewVersion());
 
-		verify(abstractApplication.sharedPreferencesEditor).putInt(
-				AbstractApplicationUnderTest.KEY_LAST_APP_VERSION,
-				expectedCurrentVersionCode);
-		verify(abstractApplication.sharedPreferencesEditor).commit();
+		assertEquals(
+				"Last app version wasn't updated",
+				expectedCurrentVersionCode,
+				Robolectric.application.getSharedPreferences(
+						AbstractApplication.SHARED_PREFERENCES_NAME,
+						Context.MODE_PRIVATE).getInt(
+						AbstractApplication.KEY_LAST_APP_VERSION, -1));
 	}
 
+	@Test
 	public void testHandleAppVersionUpgrade() {
 		final int expectedLastVersionCode = 0;
 		final int expectedCurrentVersionCode = 2;
@@ -97,12 +96,16 @@ public class AbstractApplicationTest extends TestCase {
 				expectedCurrentVersionCode,
 				abstractApplication.getActualNewVersion());
 
-		verify(abstractApplication.sharedPreferencesEditor).putInt(
-				AbstractApplicationUnderTest.KEY_LAST_APP_VERSION,
-				expectedCurrentVersionCode);
-		verify(abstractApplication.sharedPreferencesEditor).commit();
+		assertEquals(
+				"Last app version wasn't updated",
+				expectedCurrentVersionCode,
+				Robolectric.application.getSharedPreferences(
+						AbstractApplication.SHARED_PREFERENCES_NAME,
+						Context.MODE_PRIVATE).getInt(
+						AbstractApplication.KEY_LAST_APP_VERSION, -1));
 	}
 
+	@Test
 	public void testHandleAppVersionNormal() {
 		final int expectedLastVersionCode = 2;
 		final int expectedCurrentVersionCode = 2;
@@ -125,9 +128,13 @@ public class AbstractApplicationTest extends TestCase {
 				AbstractApplication.DEFAULT_LAST_APP_VERSION,
 				abstractApplication.getActualNewVersion());
 
-		verify(abstractApplication.sharedPreferencesEditor, never()).putInt(
-				anyString(), anyInt());
-		verify(abstractApplication.sharedPreferencesEditor, never()).commit();
+		assertEquals(
+				"Last app version was overwritten unexpectedly",
+				expectedCurrentVersionCode,
+				Robolectric.application.getSharedPreferences(
+						AbstractApplication.SHARED_PREFERENCES_NAME,
+						Context.MODE_PRIVATE).getInt(
+						AbstractApplication.KEY_LAST_APP_VERSION, -1));
 	}
 
 	/**
@@ -139,11 +146,7 @@ public class AbstractApplicationTest extends TestCase {
 	 */
 	private static class AbstractApplicationUnderTest extends
 			AbstractApplication {
-		private PackageInfo packageInfo = new PackageInfo();
-
-		private SharedPreferences sharedPreferences = mock(SharedPreferences.class);
-
-		private Editor sharedPreferencesEditor = mock(SharedPreferences.Editor.class);
+		private PackageInfo packageInfo;
 
 		private int acutalOldVersion = DEFAULT_LAST_APP_VERSION;
 
@@ -152,12 +155,15 @@ public class AbstractApplicationTest extends TestCase {
 		private boolean isOnFirstCreate = false;
 
 		public AbstractApplicationUnderTest() {
-			TestUtil.setPrivateField(this, "sharedPreferences",
-					sharedPreferences, this.getClass().getSuperclass());
 
-			when(sharedPreferences.edit()).thenReturn(sharedPreferencesEditor);
-			when(sharedPreferencesEditor.putInt(anyString(), anyInt()))
-					.thenReturn(sharedPreferencesEditor);
+			try {
+				packageInfo = Robolectric.packageManager.getPackageInfo(
+						Robolectric.application.getPackageName(), -1);
+			} catch (NameNotFoundException e) {
+				// We're in a test, so facilitate exception handling by just
+				// crashing
+				throw new RuntimeException(e);
+			}
 		}
 
 		public void setMockedCurrentVersionCode(int currentVersionCode) {
@@ -165,8 +171,10 @@ public class AbstractApplicationTest extends TestCase {
 		}
 
 		public void setMockedLastVersionCode(int lastVersionCode) {
-			when(sharedPreferences.getInt(eq(KEY_LAST_APP_VERSION), anyInt()))
-					.thenReturn(lastVersionCode);
+			Robolectric.application
+					.getSharedPreferences(SHARED_PREFERENCES_NAME,
+							Context.MODE_PRIVATE).edit()
+					.putInt(KEY_LAST_APP_VERSION, lastVersionCode).commit();
 		}
 
 		@Override
@@ -191,28 +199,17 @@ public class AbstractApplicationTest extends TestCase {
 
 		@Override
 		public Context getApplicationContext() {
-			return new MockContext() {
-				@Override
-				public PackageManager getPackageManager() {
-					return new MockPackageManager() {
-						@Override
-						public PackageInfo getPackageInfo(String packageName,
-								int flags) throws NameNotFoundException {
-							return packageInfo;
-						}
-					};
-				}
-
-				@Override
-				public String getPackageName() {
-					// Avoid UnsupportedOperationException
-					return null;
-				}
-			};
+			return Robolectric.application;
 		}
 
 		protected boolean isOnFirstCreate() {
 			return isOnFirstCreate;
+		}
+	}
+
+	public class MyTestModule extends AbstractModule {
+		@Override
+		protected void configure() {
 		}
 	}
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -25,8 +26,8 @@
 
 	<profiles>
 		<profile>
-	<!-- Use Profiles to distinguish between the "implicit" builds of the eclipse 
-		plugin and "explicit" builds triggered by calling mvn install -->
+			<!-- Use Profiles to distinguish between the "implicit" builds of the 
+				eclipse plugin and "explicit" builds triggered by calling mvn install -->
 			<id>default</id>
 			<activation>
 				<property>
@@ -71,15 +72,10 @@
 			<artifactId>roboguice</artifactId>
 			<version>3.0</version>
 		</dependency>
-	<!-- TODO enable annotation database to improve performance. At the moment, 
-		this results in an ClassNotFoundException (in eclipse). -->
-<!-- 		<dependency>
-			<groupId>org.roboguice</groupId>
-			<artifactId>roboblender</artifactId>
-			<version>3.0</version>
-			<scope>provided</scope>
-		</dependency>
- -->
+		<!-- TODO enable annotation database to improve performance. At the moment, 
+			this results in an ClassNotFoundException (in eclipse). -->
+		<!-- <dependency> <groupId>org.roboguice</groupId> <artifactId>roboblender</artifactId> 
+			<version>3.0</version> <scope>provided</scope> </dependency> -->
 		<!-- Nusic dependencies -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -125,10 +121,44 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+			<groupId>org.robolectric</groupId>
+			<artifactId>robolectric</artifactId>
+			<version>2.4</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- TODO Find out which APIs are really needed and add only those? -->
+		<dependency>
+			<groupId>org.robolectric</groupId>
+			<artifactId>android-all</artifactId>
+			<version>4.4_r1-robolectric-0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>1.10.8</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>${final.name}</finalName>
 		<sourceDirectory>src</sourceDirectory>
+		<testSourceDirectory>test</testSourceDirectory>
+		<testResources>
+			<testResource>
+				<directory>test</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</testResource>
+		</testResources>
 
 		<resources>
 			<!-- Copy input assets to outptut assets dir -->

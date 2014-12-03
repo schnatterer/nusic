@@ -20,39 +20,49 @@
  */
 package info.schnatterer.nusic.data.util;
 
-import info.schnatterer.nusic.data.util.SqliteUtil;
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
-public class SqliteUtilTest extends TestCase {
+import org.junit.Test;
 
+public class SqliteUtilTest {
+
+	@Test
 	public void testToBoolean0() {
 		assertEquals(Boolean.FALSE, SqliteUtil.toBoolean(0));
 	}
 
+	@Test
 	public void testToBoolean1() {
 		assertEquals(Boolean.TRUE, SqliteUtil.toBoolean(1));
 	}
 
+	@Test
 	public void testToBooleanGt1() {
 		assertEquals(Boolean.TRUE, SqliteUtil.toBoolean(10000000));
 	}
 
+	@Test
 	public void testToBooleanLt0() {
 		assertEquals(Boolean.TRUE, SqliteUtil.toBoolean(-1));
 	}
 
+	@Test
 	public void testToBooleanNull() {
 		assertNull(SqliteUtil.toBoolean(null));
 	}
 
+	@Test
 	public void testToIntegerFalse() {
 		assertEquals(Integer.valueOf(0), SqliteUtil.toInteger(Boolean.FALSE));
 	}
 
+	@Test
 	public void testToIntegerTrue() {
 		assertEquals(Integer.valueOf(1), SqliteUtil.toInteger(Boolean.TRUE));
 	}
 
+	@Test
 	public void testToIntegerNull() {
 		assertNull(SqliteUtil.toInteger(null));
 	}

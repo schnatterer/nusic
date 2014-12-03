@@ -20,11 +20,13 @@
  */
 package info.schnatterer.nusic.data;
 
-import info.schnatterer.nusic.data.NusicDatabaseSqlite;
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
-public class NusicDatabaseTest extends TestCase {
+import org.junit.Test;
 
+public class NusicDatabaseTest {
+
+	@Test
 	public void testCreateTable() {
 		String expected = "CREATE TABLE testdb(id INTEGER PRIMARY KEY AUTOINCREMENT, someText TEXT NOT NULL);";
 		String actual = NusicDatabaseSqlite.createTable("testdb", "id",
