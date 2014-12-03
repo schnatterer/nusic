@@ -74,10 +74,9 @@ public class NusicApplication extends AbstractApplication {
 		initGlobals();
 
 		/*
-		 * TODO enable annotation database to improve performance. At the
-		 * moment, this results in an ClassNotFoundException (in eclipse).
+		 * Enable annotation database to improve performance.
 		 */
-		RoboGuice.setUseAnnotationDatabases(false);
+		RoboGuice.setUseAnnotationDatabases(true);
 
 		/*
 		 * As some injected implementations might rely on getContext() and

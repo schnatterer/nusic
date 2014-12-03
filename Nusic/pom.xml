@@ -72,10 +72,13 @@
 			<artifactId>roboguice</artifactId>
 			<version>3.0</version>
 		</dependency>
-		<!-- TODO enable annotation database to improve performance. At the moment, 
-			this results in an ClassNotFoundException (in eclipse). -->
-		<!-- <dependency> <groupId>org.roboguice</groupId> <artifactId>roboblender</artifactId> 
-			<version>3.0</version> <scope>provided</scope> </dependency> -->
+		<!-- Enable annotation database to improve performance. -->
+		<dependency>
+			<groupId>org.roboguice</groupId>
+			<artifactId>roboblender</artifactId>
+			<version>3.0</version>
+			<scope>provided</scope>
+		</dependency>
 		<!-- Nusic dependencies -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
