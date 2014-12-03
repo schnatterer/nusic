@@ -1,7 +1,7 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Introduce roboelectric to test project and mavenize it
-- Introduce roboelectric for tests in APK project
+- Enable using roboguice annotation database in NusicApplication
+
 - Travis CI?
 
 - Separate Maven Modules with API and impl: ServiceException: How to get rid of android dependency -> getLocalizedMessage only returns a KEY!?
@@ -35,12 +35,10 @@ LOGGING
 - Feature: Tablet optimization: Layout + Screens for 7" + 10"
 
 .....Build
+- Change folder hierarchy to default maven (src/main/...)
 - Refactoring: Mavenize test project
 - Insert Built timestamp to version
-- Add SCM info to pom(s)
-- Refactoring: Maven Build: update manifest
 - Refactoring: Maven Use profiles for release (signing...)
-- Refactor testing: Maven? JUnit4, separtion of "normal" and android tests?
 
 ....Stores
 - Stores: Publish on F-Droid

@@ -23,36 +23,21 @@ package info.schnatterer.nusic.android.application;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import info.schnatterer.nusic.android.application.AbstractApplication.AppStart;
-import info.schnatterer.testUtil.TestUtil;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 
-@Config(emulateSdk = 18)
+import com.google.inject.AbstractModule;
+
 @RunWith(RobolectricTestRunner.class)
 public class AbstractApplicationTest {
-
-	static {
-		Thread.currentThread().setContextClassLoader(
-				AbstractApplicationTest.class.getClassLoader());
-	}
 
 	private AbstractApplicationUnderTest abstractApplication = new AbstractApplicationUnderTest();
 
@@ -78,10 +63,13 @@ public class AbstractApplicationTest {
 				AbstractApplication.DEFAULT_LAST_APP_VERSION,
 				abstractApplication.getActualNewVersion());
 
-		verify(abstractApplication.sharedPreferencesEditor).putInt(
-				AbstractApplicationUnderTest.KEY_LAST_APP_VERSION,
-				expectedCurrentVersionCode);
-		verify(abstractApplication.sharedPreferencesEditor).commit();
+		assertEquals(
+				"Last app version wasn't updated",
+				expectedCurrentVersionCode,
+				Robolectric.application.getSharedPreferences(
+						AbstractApplication.SHARED_PREFERENCES_NAME,
+						Context.MODE_PRIVATE).getInt(
+						AbstractApplication.KEY_LAST_APP_VERSION, -1));
 	}
 
 	@Test
@@ -108,10 +96,13 @@ public class AbstractApplicationTest {
 				expectedCurrentVersionCode,
 				abstractApplication.getActualNewVersion());
 
-		verify(abstractApplication.sharedPreferencesEditor).putInt(
-				AbstractApplicationUnderTest.KEY_LAST_APP_VERSION,
-				expectedCurrentVersionCode);
-		verify(abstractApplication.sharedPreferencesEditor).commit();
+		assertEquals(
+				"Last app version wasn't updated",
+				expectedCurrentVersionCode,
+				Robolectric.application.getSharedPreferences(
+						AbstractApplication.SHARED_PREFERENCES_NAME,
+						Context.MODE_PRIVATE).getInt(
+						AbstractApplication.KEY_LAST_APP_VERSION, -1));
 	}
 
 	@Test
@@ -137,9 +128,13 @@ public class AbstractApplicationTest {
 				AbstractApplication.DEFAULT_LAST_APP_VERSION,
 				abstractApplication.getActualNewVersion());
 
-		verify(abstractApplication.sharedPreferencesEditor, never()).putInt(
-				anyString(), anyInt());
-		verify(abstractApplication.sharedPreferencesEditor, never()).commit();
+		assertEquals(
+				"Last app version was overwritten unexpectedly",
+				expectedCurrentVersionCode,
+				Robolectric.application.getSharedPreferences(
+						AbstractApplication.SHARED_PREFERENCES_NAME,
+						Context.MODE_PRIVATE).getInt(
+						AbstractApplication.KEY_LAST_APP_VERSION, -1));
 	}
 
 	/**
@@ -152,10 +147,6 @@ public class AbstractApplicationTest {
 	private static class AbstractApplicationUnderTest extends
 			AbstractApplication {
 		private PackageInfo packageInfo;
-
-		private SharedPreferences sharedPreferences = mock(SharedPreferences.class);
-
-		private Editor sharedPreferencesEditor = mock(SharedPreferences.Editor.class);
 
 		private int acutalOldVersion = DEFAULT_LAST_APP_VERSION;
 
@@ -173,12 +164,6 @@ public class AbstractApplicationTest {
 				// crashing
 				throw new RuntimeException(e);
 			}
-			TestUtil.setPrivateField(this, "sharedPreferences",
-					sharedPreferences, this.getClass().getSuperclass());
-
-			when(sharedPreferences.edit()).thenReturn(sharedPreferencesEditor);
-			when(sharedPreferencesEditor.putInt(anyString(), anyInt()))
-					.thenReturn(sharedPreferencesEditor);
 		}
 
 		public void setMockedCurrentVersionCode(int currentVersionCode) {
@@ -186,8 +171,10 @@ public class AbstractApplicationTest {
 		}
 
 		public void setMockedLastVersionCode(int lastVersionCode) {
-			when(sharedPreferences.getInt(eq(KEY_LAST_APP_VERSION), anyInt()))
-					.thenReturn(lastVersionCode);
+			Robolectric.application
+					.getSharedPreferences(SHARED_PREFERENCES_NAME,
+							Context.MODE_PRIVATE).edit()
+					.putInt(KEY_LAST_APP_VERSION, lastVersionCode).commit();
 		}
 
 		@Override
@@ -217,6 +204,12 @@ public class AbstractApplicationTest {
 
 		protected boolean isOnFirstCreate() {
 			return isOnFirstCreate;
+		}
+	}
+
+	public class MyTestModule extends AbstractModule {
+		@Override
+		protected void configure() {
 		}
 	}
 }

@@ -49,6 +49,8 @@ import android.util.Log;
  *
  */
 public abstract class AbstractApplication extends Application {
+	/** Name of the shared prefernces file used to store the app versions. */
+	static final String SHARED_PREFERENCES_NAME = "AbstractApplicationPreferences";
 	static final String KEY_LAST_APP_VERSION = "last_app_version";
 	/** Last app version on first start ever of the app. */
 	static final int DEFAULT_LAST_APP_VERSION = -1;
@@ -58,7 +60,6 @@ public abstract class AbstractApplication extends Application {
 
 	private static Context context;
 
-	private SharedPreferences sharedPreferences;
 	private static boolean isInitialized = false;
 
 	private static int lastVersionCode;
@@ -85,8 +86,6 @@ public abstract class AbstractApplication extends Application {
 		if (!isInitialized) {
 			context = getApplicationContext();
 
-			sharedPreferences = getApplicationContext().getSharedPreferences(
-					"AbstractApplicationPreferences", Context.MODE_PRIVATE);
 			currentVersionName = createVersionName();
 			isInitialized = true;
 		}
@@ -123,6 +122,10 @@ public abstract class AbstractApplication extends Application {
 		try {
 			pInfo = getApplicationContext().getPackageManager().getPackageInfo(
 					getApplicationContext().getPackageName(), 0);
+			SharedPreferences sharedPreferences = getApplicationContext()
+					.getSharedPreferences(SHARED_PREFERENCES_NAME,
+							Context.MODE_PRIVATE);
+
 			lastVersionCode = sharedPreferences.getInt(KEY_LAST_APP_VERSION,
 					DEFAULT_LAST_APP_VERSION);
 

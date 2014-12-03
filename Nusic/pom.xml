@@ -26,8 +26,8 @@
 
 	<profiles>
 		<profile>
-	<!-- Use Profiles to distinguish between the "implicit" builds of the eclipse 
-		plugin and "explicit" builds triggered by calling mvn install -->
+			<!-- Use Profiles to distinguish between the "implicit" builds of the 
+				eclipse plugin and "explicit" builds triggered by calling mvn install -->
 			<id>default</id>
 			<activation>
 				<property>
@@ -72,15 +72,10 @@
 			<artifactId>roboguice</artifactId>
 			<version>3.0</version>
 		</dependency>
-	<!-- TODO enable annotation database to improve performance. At the moment, 
-		this results in an ClassNotFoundException (in eclipse). -->
-<!-- 		<dependency>
-			<groupId>org.roboguice</groupId>
-			<artifactId>roboblender</artifactId>
-			<version>3.0</version>
-			<scope>provided</scope>
-		</dependency>
- -->
+		<!-- TODO enable annotation database to improve performance. At the moment, 
+			this results in an ClassNotFoundException (in eclipse). -->
+		<!-- <dependency> <groupId>org.roboguice</groupId> <artifactId>roboblender</artifactId> 
+			<version>3.0</version> <scope>provided</scope> </dependency> -->
 		<!-- Nusic dependencies -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -156,6 +151,14 @@
 		<finalName>${final.name}</finalName>
 		<sourceDirectory>src</sourceDirectory>
 		<testSourceDirectory>test</testSourceDirectory>
+		<testResources>
+			<testResource>
+				<directory>test</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</testResource>
+		</testResources>
 
 		<resources>
 			<!-- Copy input assets to outptut assets dir -->

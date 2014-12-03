@@ -21,7 +21,6 @@
 package info.schnatterer.nusic.core.impl;
 
 import static org.junit.Assert.assertEquals;
-import info.schnatterer.nusic.android.application.NusicApplication;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -36,11 +35,9 @@ import org.musicbrainz.MBWS2Exception;
 import org.musicbrainz.model.entity.ReleaseWs2;
 import org.musicbrainz.model.searchresult.ReleaseResultWs2;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
 import android.annotation.SuppressLint;
 
-@Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
 public class RemoteMusicDatabaseServiceMusicBrainzTest {
 
@@ -53,9 +50,6 @@ public class RemoteMusicDatabaseServiceMusicBrainzTest {
 	private Date expectedFromDate = null;
 	private final String expectedToDateStr = "9000-12-30";
 	private Date expectedToDate = null;
-	// private final String expectedReleaseDateStr = "2013-06-01";
-	// private Date expectedReleaseDate = null;
-	// private String expectedArtistName = "a";
 	private String EXPECTED_STRING_BASE = " AND date:[";
 	private String EXPECTED_STRING_OPEN_BEGINNING = EXPECTED_STRING_BASE
 			+ "0 TO " + expectedToDateStr + "]";
@@ -67,13 +61,10 @@ public class RemoteMusicDatabaseServiceMusicBrainzTest {
 
 	@Before
 	public void setUp() throws Exception {
-		new NusicApplication().onCreate();
-
 		remoteMusicDatabaseServiceMusicBrainz = new QueryMusicMetadataServiceMusicUnderTest();
 
 		expectedFromDate = dateFormat.parse(expectedFromDateStr);
 		expectedToDate = dateFormat.parse(expectedToDateStr);
-		// expectedReleaseDate = dateFormat.parse(expectedReleaseDateStr);
 	}
 
 	@Test
@@ -105,50 +96,6 @@ public class RemoteMusicDatabaseServiceMusicBrainzTest {
 		assertEquals("Unexpected result for open end date",
 				EXPECTED_STRING_REGULAR_DATES, actual.toString());
 	}
-
-	// @Test
-	// public void testFindReleasesStringDate() throws ServiceException {
-	// List<ReleaseWs2> mockedReleases = new LinkedList<ReleaseWs2>();
-	// mockedReleases
-	// .add(createRelease(expectedArtistName, "I", "2013-07-14"));
-	// mockedReleases.add(createRelease(expectedArtistName, "I",
-	// expectedReleaseDateStr));
-	// mockedReleases.add(createRelease("b", "X", "2013-07-14"));
-	// queryMusicMetadataService.setMockedReleases(mockedReleases);
-	//
-	// Artist artist = new Artist();
-	// artist.setArtistName(expectedArtistName);
-	// artist = queryMusicMetadataService.findReleases(artist,
-	// expectedFromDate);
-	// assertTrue("Query unexpected",
-	// queryMusicMetadataService.getLastSearchText()
-	// .contains(expectedFromDateStr));
-	// assertTrue("Query unexpected",
-	// queryMusicMetadataService.getLastSearchText()
-	// .contains(expectedArtistName));
-	//
-	// assertEquals("Returned wrong number of releases", 1, artist
-	// .getReleases().size());
-	// assertEquals("Returned the wrong release", expectedReleaseDate,
-	// artist
-	// .getReleases().get(0).getReleaseDate());
-	// }
-
-	// @Test
-	// @SuppressWarnings("serial")
-	// private ReleaseWs2 createRelease(final String artistName,
-	// String releaseName, String date) {
-	// ReleaseWs2 release = new ReleaseWs2();
-	// release.setArtistCredit(new ArtistCreditWs2(
-	// new LinkedList<NameCreditWs2>() {
-	// {
-	// add(new NameCreditWs2("", artistName, new ArtistWs2()));
-	// }
-	// }));
-	// release.setDateStr(date);
-	// release.setTitle(releaseName);
-	// return release;
-	// }
 
 	public class QueryMusicMetadataServiceMusicUnderTest extends
 			RemoteMusicDatabaseServiceMusicBrainz {
@@ -203,18 +150,5 @@ public class RemoteMusicDatabaseServiceMusicBrainzTest {
 				}
 			};
 		}
-
-		// @Override
-		// protected List<ReleaseResultWs2> findReleases(String searchText) {
-		// lastSearchText = searchText;
-		// List<ReleaseResultWs2> ret = new LinkedList<ReleaseResultWs2>();
-		// for (ReleaseWs2 releaseWs2 : mockedReleases) {
-		// ReleaseResultWs2 result = new ReleaseResultWs2();
-		// result.setRelease(releaseWs2);
-		// ret.add(result);
-		// }
-		//
-		// return ret;
-		// }
 	}
 }
