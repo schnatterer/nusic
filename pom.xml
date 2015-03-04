@@ -22,14 +22,41 @@
 		<tag>HEAD</tag>
 	</scm>
 
+	<properties>
+		<slf4j.version>1.7.7</slf4j.version>
+		<junit.version>4.12</junit.version>
+		<mockito.version>1.10.19</mockito.version>
+		<roboguice.version>3.0.1</roboguice.version>
+		<android.sdk.version>5.0_r1</android.sdk.version>
+		<robolectric.android.version>4.4_r1-robolectric-0</robolectric.android.version>
+		<robolectric.version>2.4</robolectric.version>
+	</properties>
 	<modules>
-		<module>nusic</module>
+		<module>nusic-util</module>
+		<module>nusic-domain</module>
+		<module>nusic-persistence-api</module>
+		<module>nusic-persistence-android</module>
+		<module>nusic-apk</module>
 		<!-- TODO remove as soon as a proper version is published and nusic-app 
 			does not reference this any more -->
 		<module>musicbrainzws2-java</module>
 	</modules>
 
 	<build>
+		<!-- To define the plugin version in your parent POM -->
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.2</version>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

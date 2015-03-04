@@ -1,11 +1,9 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Enable using roboguice annotation database in NusicApplication
-
-- Travis CI?
-
+- Modules: apk (-> Roboguice Module), ui-android, service-android, service-api
 - Separate Maven Modules with API and impl: ServiceException: How to get rid of android dependency -> getLocalizedMessage only returns a KEY!?
 How to get rid of LocalMusicService in contentResolver? Factory that provides Context so Impl gets it injected and API can be generic?
+- Restructure: Don't use static contexts, but INJECT
 - Add section about modules to README 
 
 - Copy images to /sdcard instead of /data: 
