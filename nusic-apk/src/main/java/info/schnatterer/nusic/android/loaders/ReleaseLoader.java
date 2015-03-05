@@ -29,6 +29,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import android.content.Context;
 import android.util.Log;
 
 /**
@@ -46,11 +47,10 @@ public class ReleaseLoader extends
 	private ReleaseService releaseService;
 	private int loaderId = Loaders.RELEASE_LOADER_ALL;
 
-	// For some reasons this does not work with roboguice3 and android 5...
-	// @Inject
-	// public ReleaseLoader(Context context) {
-	// super(context);
-	// }
+	@Inject
+	public ReleaseLoader(Context context) {
+		super(context);
+	}
 
 	@Override
 	public List<Release> doLoadInBackground() throws Exception {

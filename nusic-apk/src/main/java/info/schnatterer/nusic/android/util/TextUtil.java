@@ -1,8 +1,27 @@
+/* Copyright (C) 2015 Johannes Schnatterer
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *  
+ * This file is part of nusic.
+ * 
+ * nusic is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * nusic is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package info.schnatterer.nusic.android.util;
 
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
-import info.schnatterer.nusic.android.application.AbstractApplication;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -78,7 +97,7 @@ public class TextUtil {
 				is = context.getResources().getAssets().open(assetPath);
 				String assetText = IOUtils.toString(is);
 				if (assetPath.matches(REGEX_ENDING_HTML)) {
-					return fromHtml(replaceResourceStrings(assetText));
+					return fromHtml(replaceResourceStrings(context, assetText));
 				} else {
 					return assetText;
 				}
@@ -102,17 +121,18 @@ public class TextUtil {
 	 * Also works recursively, that is, when a resource contains another
 	 * resource that contains another resource, etc.
 	 * 
+	 * @param context
 	 * @param source
 	 * @return <code>source</code> with replaced resources (if they exist)
 	 */
-	public static String replaceResourceStrings(String source) {
+	public static String replaceResourceStrings(Context context, String source) {
 		// Recursively resolve strings
 		Pattern p = Pattern.compile(REGEX_RESOURCE_STRING);
 		Matcher m = p.matcher(source);
 		StringBuffer sb = new StringBuffer();
 		while (m.find()) {
-			String stringFromResources = AbstractApplication.getStringByName(m
-					.group(1));
+			String stringFromResources = ResourceUtil.getStringByName(context,
+					m.group(1));
 			if (stringFromResources == null) {
 				Log.w(Constants.LOG,
 						"No String resource found for ID \"" + m.group(1)
@@ -125,7 +145,7 @@ public class TextUtil {
 				stringFromResources = m.group(1);
 			}
 			m.appendReplacement(sb, // Recurse
-					replaceResourceStrings(stringFromResources));
+					replaceResourceStrings(context, stringFromResources));
 		}
 		m.appendTail(sb);
 		return sb.toString();

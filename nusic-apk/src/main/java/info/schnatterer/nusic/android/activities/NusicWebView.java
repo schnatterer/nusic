@@ -66,7 +66,7 @@ public class NusicWebView extends RoboSherlockFragmentActivity {
 		String url = getIntent().getData().toString();
 		if (url.startsWith(MAILTO_LINK)) {
 			Intent send = new Intent(Intent.ACTION_SENDTO);
-			Uri uri = Uri.parse(TextUtil.replaceResourceStrings(url));
+			Uri uri = Uri.parse(TextUtil.replaceResourceStrings(this, url));
 
 			send.setData(uri);
 			startActivity(send);

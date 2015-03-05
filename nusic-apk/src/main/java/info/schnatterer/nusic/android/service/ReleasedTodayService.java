@@ -21,11 +21,11 @@
 package info.schnatterer.nusic.android.service;
 
 import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.Constants.Notification;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.activities.MainActivity;
-import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.util.ImageUtil;
+import info.schnatterer.nusic.android.util.Notification;
+import info.schnatterer.nusic.android.util.Notification.NotificationId;
 import info.schnatterer.nusic.core.PreferencesService;
 import info.schnatterer.nusic.core.ReleaseService;
 import info.schnatterer.nusic.core.ServiceException;
@@ -83,8 +83,9 @@ public class ReleasedTodayService extends RoboService {
 					notifyReleaseToday(releasedToday.size());
 				}
 			} catch (ServiceException e) {
-				NusicApplication
+				Notification
 						.notifyWarning(
+								this,
 								getString(R.string.ReleasedTodayService_ReleasedTodayError),
 								e.getLocalizedMessage());
 			}
@@ -110,8 +111,9 @@ public class ReleasedTodayService extends RoboService {
 			Bitmap createScaledBitmap = ImageUtil.createScaledBitmap(
 					artworkDao.findStreamByRelease(release, ArtworkType.SMALL),
 					this);
-			NusicApplication.notify(
-					Notification.RELEASED_TODAY,
+			Notification.notify(
+					this,
+					NotificationId.RELEASED_TODAY,
 					getString(R.string.ReleasedTodayService_ReleasedToday),
 					release.getArtist().getArtistName() + " - "
 							+ release.getReleaseName(), R.drawable.ic_launcher,
@@ -139,7 +141,7 @@ public class ReleasedTodayService extends RoboService {
 	 * @param text
 	 */
 	private void notifyReleaseToday(int nReleases) {
-		NusicApplication.notify(Notification.RELEASED_TODAY, String.format(
+		Notification.notify(this, NotificationId.RELEASED_TODAY, String.format(
 				getString(R.string.ReleasedTodayService_ReleasedTodayMultiple),
 				nReleases), null, R.drawable.ic_launcher, null,
 				MainActivity.class, createExtraActiveTab());

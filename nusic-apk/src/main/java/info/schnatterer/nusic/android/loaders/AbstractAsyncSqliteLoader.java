@@ -21,7 +21,6 @@
 package info.schnatterer.nusic.android.loaders;
 
 import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.data.model.Entity;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
@@ -38,13 +37,6 @@ public abstract class AbstractAsyncSqliteLoader<RESULT, ENTITY extends Entity>
 	 */
 	public AbstractAsyncSqliteLoader(Context context) {
 		super(context);
-	}
-
-	/**
-	 * Uses the default application context
-	 */
-	public AbstractAsyncSqliteLoader() {
-		super(NusicApplication.getContext());
 	}
 
 	public abstract RESULT doLoadInBackground() throws Exception;

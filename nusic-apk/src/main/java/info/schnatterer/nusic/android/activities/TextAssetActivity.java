@@ -21,7 +21,6 @@
 package info.schnatterer.nusic.android.activities;
 
 import info.schnatterer.nusic.R;
-import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.util.TextUtil;
 import roboguice.activity.RoboSherlockFragmentActivity;
 import roboguice.inject.ContentView;
@@ -49,26 +48,14 @@ public class TextAssetActivity extends RoboSherlockFragmentActivity {
 	@InjectView(R.id.renderRawHtmlTextView)
 	TextView textView;
 
-	/**
-	 * Key to the creating intent's extras that contains the path (as
-	 * {@link String}) to the asset that is loaded.
-	 */
-	public static final String EXTRA_ASSET_NAME = NusicApplication.getContext()
-			.getString(R.string.extra_asset_name);
-	/**
-	 * Key to the creating intent's extras that contains the title, also known
-	 * as label (as {@link String}) of the activity.
-	 */
-	public static final String EXTRA_TITLE = NusicApplication.getContext()
-			.getString(R.string.extra_activity_title);
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// Display the back arrow in the header (left of the icon)
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		String title = getIntent().getStringExtra(EXTRA_TITLE);
+		String title = getIntent().getStringExtra(
+				getString(R.string.extra_activity_title));
 		if (title != null) {
 			setTitle(title);
 		}
@@ -80,8 +67,8 @@ public class TextAssetActivity extends RoboSherlockFragmentActivity {
 		 * non-html URLs are not auto linked. So: use <a href="http://..">xz</a>
 		 * syntax!
 		 */
-		// textView.setAutoLinkMask(Linkify.ALL);
-		String assetPath = getIntent().getStringExtra(EXTRA_ASSET_NAME);
+		String assetPath = getIntent().getStringExtra(
+				getString(R.string.extra_asset_name));
 		CharSequence text = TextUtil.loadTextFromAsset(this, assetPath);
 		if (text != null) {
 			textView.setText(text);

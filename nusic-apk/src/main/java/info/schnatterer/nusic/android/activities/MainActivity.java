@@ -28,6 +28,7 @@ import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.fragments.ReleaseListFragment;
 import info.schnatterer.nusic.android.service.LoadNewReleasesService;
 import info.schnatterer.nusic.android.util.TextUtil;
+import info.schnatterer.nusic.android.util.Toast;
 import roboguice.activity.RoboSherlockFragmentActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -252,8 +253,8 @@ public class MainActivity extends RoboSherlockFragmentActivity {
 				 */
 				// TODO cancel service and restart if necessary after changing
 				// of preferences?
-				NusicApplication
-						.toast(R.string.MainActivity_pleaseWaitUntilRefreshIsFinished);
+				Toast.toast(this,
+						R.string.MainActivity_pleaseWaitUntilRefreshIsFinished);
 				loadNewRelasesServiceBinding.showDialog();
 			}
 		}
@@ -287,8 +288,7 @@ public class MainActivity extends RoboSherlockFragmentActivity {
 
 		if (wasRunning && !updateOnlyIfNeccesary) {
 			// Task is already running, just show dialog
-			NusicApplication
-					.toast(R.string.MainActivity_refreshAlreadyInProgress);
+			Toast.toast(this, R.string.MainActivity_refreshAlreadyInProgress);
 			loadNewRelasesServiceBinding.showDialog();
 		}
 	}

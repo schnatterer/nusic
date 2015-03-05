@@ -41,6 +41,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import android.content.Context;
 import android.util.Log;
 
 /**
@@ -58,7 +59,8 @@ public class SyncReleasesServiceImpl implements SyncReleasesService {
 	private PreferencesService preferencesService;
 	@Inject
 	private ArtistService artistService;
-
+	@Inject
+	private Context context;
 	private Set<ProgressListener<Artist, Boolean>> listenerList = new HashSet<ProgressListener<Artist, Boolean>>();
 	private ProgressUpdater<Artist, Boolean> progressUpdater = new ProgressUpdater<Artist, Boolean>(
 			listenerList) {
@@ -138,6 +140,7 @@ public class SyncReleasesServiceImpl implements SyncReleasesService {
 										artist,
 										i + 1,
 										new ServiceException(
+												context,
 												R.string.ReleasesService_errorPersistingData,
 												e), null);
 						return;

@@ -20,10 +20,9 @@
  */
 package info.schnatterer.nusic.util;
 
-import info.schnatterer.nusic.android.application.NusicApplication;
-
 import java.util.Locale;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -46,11 +45,13 @@ public final class DefaultLocale {
 	 * strings and then changes back. Better use this carefully, e.g. only to
 	 * output localized exception messages in the default language.
 	 * 
+	 * @param context
+	 *            The context to use. Usually your android.app.Application or
+	 *            android.app.Activity object.
 	 * @return
 	 */
-	public static String getStringInDefaultLocale(int resId) {
-		Resources currentResources = NusicApplication.getContext()
-				.getResources();
+	public static String getStringInDefaultLocale(Context context, int resId) {
+		Resources currentResources = context.getResources();
 		AssetManager assets = currentResources.getAssets();
 		DisplayMetrics metrics = currentResources.getDisplayMetrics();
 		Configuration config = new Configuration(

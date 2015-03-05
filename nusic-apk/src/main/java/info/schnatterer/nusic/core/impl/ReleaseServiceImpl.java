@@ -36,6 +36,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import android.content.Context;
+
 /**
  * Default implementation of {@link ReleaseService}.
  * 
@@ -49,13 +51,15 @@ public class ReleaseServiceImpl implements ReleaseService {
 	private ArtistDao artistDao;
 	@Inject
 	private PreferencesService preferencesService;
+	@Inject
+	private Context context;
 
 	@Override
 	public int update(Release release) throws ServiceException {
 		try {
 			return releaseDao.update(release);
 		} catch (DatabaseException e) {
-			throw new ServiceException(
+			throw new ServiceException(context,
 					R.string.ServiceException_errorWritingToDb, e);
 		}
 	}
@@ -89,7 +93,7 @@ public class ReleaseServiceImpl implements ReleaseService {
 
 				saveOrUpdate(release);
 			} catch (Throwable t) {
-				throw new ServiceException(
+				throw new ServiceException(context,
 						R.string.ServiceException_errorWritingToDb, t);
 			}
 		}
@@ -115,7 +119,7 @@ public class ReleaseServiceImpl implements ReleaseService {
 			}
 			return release.getId();
 		} catch (DatabaseException e) {
-			throw new ServiceException(
+			throw new ServiceException(context,
 					R.string.ServiceException_errorWritingToDb, e);
 		}
 	}
@@ -135,7 +139,7 @@ public class ReleaseServiceImpl implements ReleaseService {
 			return releaseDao
 					.findByDateCreatedGreaterThanAndIsHiddenNotTrue(gtDateCreated);
 		} catch (DatabaseException e) {
-			throw new ServiceException(
+			throw new ServiceException(context,
 					R.string.ServiceException_errorReadingFromDb, e);
 		}
 	}
@@ -153,7 +157,7 @@ public class ReleaseServiceImpl implements ReleaseService {
 					.findByReleaseDateGreaterThanEqualsAndReleaseDateLessThanAndIsHiddenNotTrue(
 							todayMidnightUtc(), tomorrowMidnightUtc());
 		} catch (DatabaseException e) {
-			throw new ServiceException(
+			throw new ServiceException(context,
 					R.string.ServiceException_errorReadingFromDb, e);
 		}
 	}
@@ -173,7 +177,7 @@ public class ReleaseServiceImpl implements ReleaseService {
 						.findByReleaseDateGreaterThanEqualsAndIsHiddenNotTrueSortByReleaseDateAsc(tomorrowMidnightUtc());
 			}
 		} catch (DatabaseException e) {
-			throw new ServiceException(
+			throw new ServiceException(context,
 					R.string.ServiceException_errorReadingFromDb, e);
 		}
 	}
@@ -184,7 +188,7 @@ public class ReleaseServiceImpl implements ReleaseService {
 			return releaseDao
 					.findByReleaseDateGreaterThanEqualsAndIsHiddenNotTrueSortByReleaseDateDesc(createReleaseDateLowerLimit());
 		} catch (DatabaseException e) {
-			throw new ServiceException(
+			throw new ServiceException(context,
 					R.string.ServiceException_errorReadingFromDb, e);
 		}
 	}
@@ -195,7 +199,7 @@ public class ReleaseServiceImpl implements ReleaseService {
 			releaseDao.setIsHiddenFalse();
 			artistDao.setIsHiddenFalse();
 		} catch (DatabaseException e) {
-			throw new ServiceException(
+			throw new ServiceException(context,
 					R.string.ServiceException_errorWritingToDb, e);
 		}
 	}

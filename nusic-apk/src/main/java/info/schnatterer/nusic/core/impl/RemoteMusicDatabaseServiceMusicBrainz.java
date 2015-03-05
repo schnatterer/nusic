@@ -59,6 +59,7 @@ import org.musicbrainz.model.entity.ReleaseWs2;
 import org.musicbrainz.model.searchresult.ReleaseResultWs2;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.util.Log;
 
 import com.google.common.util.concurrent.RateLimiter;
@@ -103,7 +104,8 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 	private String appContact;
 	@Inject
 	private ArtworkDao artworkDao;
-
+	@Inject
+	private Context context;
 	static {
 		/*
 		 * Some class are flooding our logs with warnings. Give us some space!
@@ -168,13 +170,13 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 						releaseSearch.getNextSearchResultPage());
 			}
 		} catch (MBWS2Exception mBWS2Exception) {
-			throw new ServiceException(
+			throw new ServiceException(context,
 					R.string.ServiceException_errorQueryingMusicBrainz,
 					mBWS2Exception, artistName);
 		} catch (SecurityException securityException) {
 			throw securityException;
 		} catch (Throwable t) {
-			throw new ServiceException(
+			throw new ServiceException(context,
 					R.string.ServiceException_errorFindingReleasesArtist, t,
 					artistName);
 		}

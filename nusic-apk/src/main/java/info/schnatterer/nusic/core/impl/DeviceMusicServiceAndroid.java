@@ -71,7 +71,7 @@ public class DeviceMusicServiceAndroid implements DeviceMusicService {
 				}
 			}
 		} catch (Throwable t) {
-			throw new ServiceException(
+			throw new ServiceException(context,
 					R.string.ServiceException_errorLoadingArtists, t);
 		} finally {
 			if (cursor != null) {

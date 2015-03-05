@@ -2,7 +2,7 @@ package info.schnatterer.nusic.android.listeners;
 
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
-import info.schnatterer.nusic.android.application.NusicApplication;
+import info.schnatterer.nusic.android.util.Toast;
 import info.schnatterer.nusic.core.ReleaseService;
 import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.data.model.Artist;
@@ -53,8 +53,8 @@ public class PreferenceVisibilityButtonListener implements
 									// Trigger reload in main activity
 									activity.onContentChanged();
 								} catch (ServiceException e) {
-									NusicApplication.toast(e
-											.getLocalizedMessageId());
+									Toast.toast(activity,
+											e.getLocalizedMessageId());
 								}
 							}
 						}).show();

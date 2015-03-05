@@ -20,25 +20,10 @@
  */
 package info.schnatterer.nusic.android.application;
 
-import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.Constants.Notification;
-import info.schnatterer.nusic.R;
-import info.schnatterer.nusic.android.activities.MainActivity;
 import info.schnatterer.nusic.android.service.ReleasedTodayService.ReleasedTodayServiceScheduler;
 import roboguice.RoboGuice;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.os.Build;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -130,158 +115,19 @@ public class NusicApplication extends AbstractApplication {
 		releasedTodayServiceScheduler.schedule();
 	}
 
-	/**
-	 * Puts out a notification containing a warning symbol. Overwrites any
-	 * previous instances of this notification.
-	 * 
-	 * @param text
-	 *            first line of text to put out
-	 * @param subtext
-	 *            second line of text to put out
-	 */
-	public static void notifyWarning(String text, String subtext) {
-		/*
-		 * Don't pass any extras, make Activity open in the default tab.
-		 */
-		notify(Notification.WARNING, text, subtext,
-				android.R.drawable.ic_dialog_alert, null, MainActivity.class,
-				null);
-	}
-
-	/**
-	 * Puts out a notification containing a warning symbol. Overwrites any
-	 * previous instances of this notification.
-	 * 
-	 * @param text
-	 *            text to put out verbatim
-	 */
-	public static void notifyWarning(String text, Object... args) {
-		/*
-		 * Don't pass any extras, make Activity open in the default tab.
-		 */
-		notify(Notification.WARNING, String.format(text, args), null,
-				android.R.drawable.ic_dialog_alert, null, MainActivity.class,
-				null);
-	}
-
-	/**
-	 * Puts out a notification containing a warning symbol. Overwrites any
-	 * previous instances of this notification.
-	 * 
-	 * @param stringId
-	 *            ID of a localized string
-	 */
-	public static void notifyWarning(int stringId, Object... args) {
-		notifyWarning(getContext().getString(stringId), args);
-	}
-
-	/**
-	 * Writes an android notification that has the localized title of the app.
-	 * Overwrites any previous with the same <code>id</code>.
-	 * 
-	 * @param id
-	 *            An identifier for this notification unique within your
-	 *            application, can be used to change the notification later
-	 * @param text
-	 *            first line of text bellow the title
-	 * @param subtext
-	 *            second line of text bellow the title
-	 * @param smallIconId
-	 *            A resource ID in the application's package of the drawable to
-	 *            use.
-	 * @param largeIcon
-	 *            large icon that is shown in the ticker and notification.
-	 * @param cls
-	 *            activity to be launched on click
-	 * @param extras
-	 *            extended data to be passed to the activity
-	 */
-	public static void notify(Notification id, String text, String subtext,
-			int smallIconId, Bitmap largeIcon, Class<? extends Context> cls,
-			Bundle extras) {
-		// Creates an explicit intent for an Activity in your app
-		Intent resultIntent = new Intent(getContext(), cls);
-		/*
-		 * Make sure the intent is also delivered when the application is
-		 * already running in a task.
-		 * 
-		 * Note: On Android 2.x the intent is not delivered when another
-		 * activity of the same application is running. Instead the application
-		 * is only brought to foreground.
-		 */
-		resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		if (extras != null) {
-			resultIntent.putExtras(extras);
-		}
-		/*
-		 * The stack builder object will contain an artificial back stack for
-		 * the started Activity. This ensures that navigating backward from the
-		 * Activity leads out of your application to the home screen.
-		 */
-		TaskStackBuilder stackBuilder = TaskStackBuilder.create(getContext());
-		// Adds the back stack for the Intent (but not the Intent itself)
-		stackBuilder.addParentStack(cls);
-		// Adds the Intent that starts the Activity to the top of the stack
-		stackBuilder.addNextIntent(resultIntent);
-		/*
-		 * Make sure to deliver the intent just created even though there
-		 * already is an intent with the same request ID.
-		 */
-		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
-				id.ordinal(), PendingIntent.FLAG_UPDATE_CURRENT);
-		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(
-				getContext()).setSmallIcon(smallIconId).setLargeIcon(largeIcon)
-				.setContentIntent(resultPendingIntent).setAutoCancel(true);
-		if (subtext != null
-				&& Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-			/*
-			 * Subtext seems to be available starting with 4.1?! So we don't
-			 * show the app name in order to have more room for information. The
-			 * user still has the icon to identify the app.
-			 */
-
-			notificationBuilder.setContentTitle(text).setContentText(subtext);
-		} else {
-			notificationBuilder
-					.setContentTitle(getContext().getString(R.string.app_name))
-					.setContentText(text).setSubText(subtext);
-		}
-		NotificationManager notificationManager = (NotificationManager) getContext()
-				.getSystemService(Context.NOTIFICATION_SERVICE);
-		// id allows you to update the notification later on.
-		notificationManager.notify(id.ordinal(), notificationBuilder.build());
-		Log.i(Constants.LOG, "Notifcation: " + text + subtext);
-	}
-
-	/**
-	 * Error message for {@link Throwable}s that might not contain a localized
-	 * error message.
-	 * 
-	 * Tells the user that something unexpected has happened in his language and
-	 * adds the name of the exception
-	 * 
-	 * @param t
-	 * @return
-	 */
-	public static String createGenericErrorMessage(Throwable t) {
-		return String.format(getContext().getString(R.string.GenericError), t
-				.getClass().getSimpleName());
-	}
-
-	public static void toast(String message) {
-		Log.i(Constants.LOG, "Toast: " + message);
-		Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
-	}
-
-	public static void toast(int stringId) {
-		toast(getContext().getString(stringId));
-	}
-
-	public static void toast(String message, Object... args) {
-		toast(String.format(message, args));
-	}
-
-	public static void toast(int stringId, Object... args) {
-		toast(String.format(getContext().getString(stringId), args));
-	}
+	// /**
+	// * Error message for {@link Throwable}s that might not contain a localized
+	// * error message.
+	// *
+	// * Tells the user that something unexpected has happened in his language
+	// and
+	// * adds the name of the exception
+	// *
+	// * @param t
+	// * @return
+	// */
+	// public static String createGenericErrorMessage(Throwable t) {
+	// return String.format(getContext().getString(R.string.GenericError), t
+	// .getClass().getSimpleName());
+	// }
 }

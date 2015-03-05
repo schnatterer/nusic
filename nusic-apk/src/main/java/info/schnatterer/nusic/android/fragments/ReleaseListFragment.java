@@ -25,9 +25,9 @@ import info.schnatterer.nusic.Constants.Loaders;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.activities.NusicWebView;
 import info.schnatterer.nusic.android.adapters.ReleaseListAdapter;
-import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.loaders.AsyncResult;
 import info.schnatterer.nusic.android.loaders.ReleaseLoader;
+import info.schnatterer.nusic.android.util.Toast;
 import info.schnatterer.nusic.core.ArtistService;
 import info.schnatterer.nusic.core.ReleaseService;
 import info.schnatterer.nusic.core.ServiceException;
@@ -191,7 +191,7 @@ public class ReleaseListFragment extends RoboSherlockFragment {
 				}
 			} catch (ServiceException e) {
 				Log.w(Constants.LOG, "Error hiding release/artist", e);
-				NusicApplication.toast(e.getLocalizedMessageId());
+				Toast.toast(getActivity(), e.getLocalizedMessageId());
 			}
 			return true; // Finish processing fragment instances
 		} else {

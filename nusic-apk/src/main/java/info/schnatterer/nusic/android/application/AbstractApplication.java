@@ -21,6 +21,7 @@
 package info.schnatterer.nusic.android.application;
 
 import info.schnatterer.nusic.Constants;
+import info.schnatterer.nusic.android.util.ResourceUtil;
 
 import java.io.InputStream;
 
@@ -29,7 +30,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -55,11 +55,6 @@ public abstract class AbstractApplication extends Application {
 	/** Last app version on first start ever of the app. */
 	static final int DEFAULT_LAST_APP_VERSION = -1;
 
-	/** Name of the resource type "string" as in <code>@string/...</code> */
-	private static final String DEF_TYPE_STRING = "string";
-
-	private static Context context;
-
 	private static boolean isInitialized = false;
 
 	private static int lastVersionCode;
@@ -84,30 +79,10 @@ public abstract class AbstractApplication extends Application {
 	 */
 	protected void initGlobals() {
 		if (!isInitialized) {
-			context = getApplicationContext();
-
-			currentVersionName = createVersionName();
+			currentVersionName = ResourceUtil
+					.createVersionName(getApplicationContext());
 			isInitialized = true;
 		}
-	}
-
-	/**
-	 * Reads the human readable version name from the package manager.
-	 * 
-	 * @return the version or <code>ErrorReadingVersion</code> if an error
-	 *         Occurs.
-	 */
-	private String createVersionName() {
-		String versionName;
-		try {
-			versionName = getApplicationContext()
-					.getPackageManager()
-					.getPackageInfo(getApplicationContext().getPackageName(), 0).versionName;
-		} catch (PackageManager.NameNotFoundException e) {
-			Log.w(Constants.LOG, "Unable to read version name", e);
-			versionName = "ErrorReadingVersion";
-		}
-		return versionName;
 	}
 
 	/**
@@ -204,41 +179,6 @@ public abstract class AbstractApplication extends Application {
 	}
 
 	/**
-	 * Returns the string value of a string resource (e.g. defined in
-	 * <code>values.xml</code>).
-	 * 
-	 * @param name
-	 * @return the value of the string resource or <code>null</code> if no
-	 *         resource found for id
-	 */
-	public static String getStringByName(String name) {
-		int resourceId = getResourceId(DEF_TYPE_STRING, name);
-		if (resourceId != 0) {
-			return getContext().getString(resourceId);
-		} else {
-			return null;
-		}
-	}
-
-	/**
-	 * Finds the numeric id of a string resource (e.g. defined in
-	 * <code>values.xml</code>).
-	 * 
-	 * @param defType
-	 *            Optional default resource type to find, if "type/" is not
-	 *            included in the name. Can be null to require an explicit type.
-	 * 
-	 * @param name
-	 *            the name of the desired resource
-	 * @return the associated resource identifier. Returns 0 if no such resource
-	 *         was found. (0 is not a valid resource ID.)
-	 */
-	private static int getResourceId(String defType, String name) {
-		return getContext().getResources().getIdentifier(name, defType,
-				getContext().getPackageName());
-	}
-
-	/**
 	 * Distinguishes different kinds of app starts: <li>
 	 * <ul>
 	 * First start ever ({@link #FIRST})
@@ -271,16 +211,6 @@ public abstract class AbstractApplication extends Application {
 
 	protected static void setLastVersionCode(int lastVersionCode) {
 		AbstractApplication.lastVersionCode = lastVersionCode;
-	}
-
-	/**
-	 * Returns a "static" application context. Don't try to create dialogs on
-	 * this, it's not gonna work!
-	 * 
-	 * @return
-	 */
-	public static Context getContext() {
-		return context;
 	}
 
 	public Bitmap createScaledBitmap(InputStream inputStream) {

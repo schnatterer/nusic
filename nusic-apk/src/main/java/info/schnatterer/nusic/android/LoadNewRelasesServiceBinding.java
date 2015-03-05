@@ -22,13 +22,13 @@ package info.schnatterer.nusic.android;
 
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
-import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.service.LoadNewReleasesService;
 import info.schnatterer.nusic.android.service.LoadNewReleasesServiceConnection;
+import info.schnatterer.nusic.android.util.Toast;
 import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.core.SyncReleasesService;
-import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.core.event.ArtistProgressListener;
+import info.schnatterer.nusic.data.model.Artist;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -208,8 +208,8 @@ public class LoadNewRelasesServiceBinding {
 		ProgressDialog dialog = null;
 		if (activity != null) {
 			dialog = new ProgressDialog(activity);
-			dialog.setMessage(NusicApplication.getContext().getString(
-					R.string.LoadNewReleasesBinding_CheckingArtists));
+			dialog.setMessage(activity
+					.getString(R.string.LoadNewReleasesBinding_CheckingArtists));
 			dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			dialog.setMax(max);
 			dialog.setProgress(progress);
@@ -260,9 +260,10 @@ public class LoadNewRelasesServiceBinding {
 				public void run() {
 					hideProgressDialog();
 					if (errorArtists != null && errorArtists.size() > 0) {
-						NusicApplication
-								.toast(R.string.LoadNewReleasesBinding_finishedWithErrors,
-										errorArtists.size(), totalArtists);
+						Toast.toast(
+								activity,
+								R.string.LoadNewReleasesBinding_finishedWithErrors,
+								errorArtists.size(), totalArtists);
 					}
 				}
 			});
@@ -279,19 +280,15 @@ public class LoadNewRelasesServiceBinding {
 					hideProgressDialog();
 					if (potentialException != null) {
 						if (potentialException instanceof ServiceException) {
-							NusicApplication
-									.toast(NusicApplication
-											.getContext()
-											.getString(
-													R.string.LoadNewReleasesBinding_errorFindingReleases)
+							Toast.toast(
+									activity,
+									activity.getString(R.string.LoadNewReleasesBinding_errorFindingReleases)
 											+ potentialException
 													.getLocalizedMessage());
 						} else {
-							NusicApplication
-									.toast(NusicApplication
-											.getContext()
-											.getString(
-													R.string.LoadNewReleasesBinding_errorFindingReleasesGeneric)
+							Toast.toast(
+									activity,
+									activity.getString(R.string.LoadNewReleasesBinding_errorFindingReleasesGeneric)
 											+ potentialException.getClass()
 													.getSimpleName());
 						}

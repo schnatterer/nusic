@@ -30,6 +30,8 @@ import info.schnatterer.nusic.data.model.Artist;
 
 import javax.inject.Inject;
 
+import android.content.Context;
+
 /**
  * Default implementation of {@link ArtistService}.
  * 
@@ -42,6 +44,8 @@ public class ArtistServiceImpl implements ArtistService {
 	private ReleaseService releaseService;
 	@Inject
 	private ArtistDao artistDao;
+	@Inject
+	private Context context;
 
 	@Override
 	public long save(Artist artist) throws ServiceException {
@@ -50,7 +54,7 @@ public class ArtistServiceImpl implements ArtistService {
 			releaseService.saveOrUpdate(artist.getReleases(), false);
 			return ret;
 		} catch (DatabaseException e) {
-			throw new ServiceException(
+			throw new ServiceException(context,
 					R.string.ServiceException_errorWritingToDb, e);
 		}
 	}
@@ -63,7 +67,7 @@ public class ArtistServiceImpl implements ArtistService {
 			releaseService.saveOrUpdate(artist.getReleases());
 			return ret;
 		} catch (DatabaseException e) {
-			throw new ServiceException(
+			throw new ServiceException(context,
 					R.string.ServiceException_errorWritingToDb, e);
 		}
 	}
@@ -87,7 +91,7 @@ public class ArtistServiceImpl implements ArtistService {
 			}
 			return artist.getId();
 		} catch (DatabaseException e) {
-			throw new ServiceException(
+			throw new ServiceException(context,
 					R.string.ServiceException_errorWritingToDb, e);
 		}
 	}

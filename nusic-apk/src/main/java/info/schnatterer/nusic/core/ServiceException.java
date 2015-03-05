@@ -21,11 +21,11 @@
 package info.schnatterer.nusic.core;
 
 import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.util.DefaultLocale;
 
 import java.util.Locale;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -42,12 +42,12 @@ public class ServiceException extends Exception {
 
 	private int localizedMessageId;
 	private Object[] args = null;
+	private Context context;
 
 	@Override
 	public String getLocalizedMessage() {
 		try {
-			String localizedString = NusicApplication.getContext().getString(
-					localizedMessageId);
+			String localizedString = context.getString(localizedMessageId);
 			if (args != null) {
 				localizedString = String.format(Locale.US, localizedString,
 						args);
@@ -68,6 +68,9 @@ public class ServiceException extends Exception {
 	 * is not initialized, and may subsequently be initialized by a call to
 	 * {@link #initCause}.
 	 * 
+	 * @param context
+	 *            The context to use. Usually your android.app.Application or
+	 *            android.app.Activity object.
 	 * @param message
 	 *            the (technical) detail message. The detail message is saved
 	 *            for later retrieval by the {@link #getMessage()} method.
@@ -76,9 +79,11 @@ public class ServiceException extends Exception {
 	 *            user. Passing and invalid id might result in
 	 *            <code>message</code> being displayed to the user.
 	 */
-	public ServiceException(String message, int localizedMessageId) {
+	public ServiceException(Context context, String message,
+			int localizedMessageId) {
 		super(message);
 		this.localizedMessageId = localizedMessageId;
+		this.context = context;
 	}
 
 	/**
@@ -86,11 +91,15 @@ public class ServiceException extends Exception {
 	 * {@link ServiceException#ServiceException(String, int)}, where the
 	 * technical exception message is put out in the default locale.
 	 * 
+	 * @param context
+	 *            The context to use. Usually your android.app.Application or
+	 *            android.app.Activity object.
 	 * @param messageId
 	 * @param t
 	 */
-	public ServiceException(int messageId) {
-		this(DefaultLocale.getStringInDefaultLocale(messageId), messageId);
+	public ServiceException(Context context, int messageId) {
+		this(context, DefaultLocale
+				.getStringInDefaultLocale(context, messageId), messageId);
 	}
 
 	/**
@@ -99,6 +108,9 @@ public class ServiceException extends Exception {
 	 * Note that the detail message associated with <code>cause</code> is
 	 * <i>not</i> automatically incorporated in this exception's detail message.
 	 * 
+	 * @param context
+	 *            The context to use. Usually your android.app.Application or
+	 *            android.app.Activity object.
 	 * @param message
 	 *            the (technical) detail message (which is saved for later
 	 *            retrieval by the {@link #getMessage()} method).
@@ -112,10 +124,11 @@ public class ServiceException extends Exception {
 	 *            permitted, and indicates that the cause is nonexistent or
 	 *            unknown.)
 	 */
-	public ServiceException(String message, int localizedMessageId,
-			Throwable cause) {
+	public ServiceException(Context context, String message,
+			int localizedMessageId, Throwable cause) {
 		super(message, cause);
 		this.localizedMessageId = localizedMessageId;
+		this.context = context;
 	}
 
 	/**
@@ -124,6 +137,9 @@ public class ServiceException extends Exception {
 	 * Note that the detail message associated with <code>cause</code> is
 	 * <i>not</i> automatically incorporated in this exception's detail message.
 	 * 
+	 * @param context
+	 *            The context to use. Usually your android.app.Application or
+	 *            android.app.Activity object.
 	 * @param message
 	 *            the (technical) detail message (which is saved for later
 	 *            retrieval by the {@link #getMessage()} method).
@@ -141,8 +157,8 @@ public class ServiceException extends Exception {
 	 *            If there are more arguments than required by format,
 	 *            additional arguments are ignored.
 	 */
-	public ServiceException(String message, int localizedMessageId,
-			Throwable cause, Object... args) {
+	public ServiceException(Context context, String message,
+			int localizedMessageId, Throwable cause, Object... args) {
 		super(message, cause);
 		this.args = args;
 		this.localizedMessageId = localizedMessageId;
@@ -153,12 +169,15 @@ public class ServiceException extends Exception {
 	 * {@link ServiceException#ServiceException(String, int, Throwable)}, where
 	 * the technical exception message is put out in the default locale.
 	 * 
+	 * @param context
+	 *            The context to use. Usually your android.app.Application or
+	 *            android.app.Activity object.
 	 * @param messageId
 	 * @param t
 	 */
-	public ServiceException(int messageId, Throwable cause) {
-		this(DefaultLocale.getStringInDefaultLocale(messageId), messageId,
-				cause);
+	public ServiceException(Context context, int messageId, Throwable cause) {
+		this(context, DefaultLocale
+				.getStringInDefaultLocale(context, messageId), messageId, cause);
 	}
 
 	/**
@@ -166,13 +185,17 @@ public class ServiceException extends Exception {
 	 * {@link ServiceException#ServiceException(String, int, Throwable, Object...)}
 	 * , where the technical exception message is put out in the default locale.
 	 * 
+	 * @param context
+	 *            The context to use. Usually your android.app.Application or
+	 *            android.app.Activity object.
 	 * @param messageId
 	 * @param t
 	 */
-	public ServiceException(int messageId, Throwable cause, Object... args) {
-		this(String.format(Locale.US,
-				DefaultLocale.getStringInDefaultLocale(messageId), args),
-				messageId, cause, args);
+	public ServiceException(Context context, int messageId, Throwable cause,
+			Object... args) {
+		this(context, String.format(Locale.US,
+				DefaultLocale.getStringInDefaultLocale(context, messageId),
+				args), messageId, cause, args);
 	}
 
 	public int getLocalizedMessageId() {

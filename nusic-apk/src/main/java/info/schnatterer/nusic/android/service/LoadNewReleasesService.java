@@ -21,11 +21,11 @@
 package info.schnatterer.nusic.android.service;
 
 import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.Constants.Notification;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.activities.MainActivity;
-import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.util.ImageUtil;
+import info.schnatterer.nusic.android.util.Notification;
+import info.schnatterer.nusic.android.util.Notification.NotificationId;
 import info.schnatterer.nusic.core.ConnectivityService;
 import info.schnatterer.nusic.core.PreferencesService;
 import info.schnatterer.nusic.core.ReleaseService;
@@ -58,18 +58,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
-/**
- * Wraps the android implementation of the business logic service
- * {@link SyncReleasesService} in an android {@link Service} in order to allow
- * running outside of the application. In addition, it takes care of the
- * scheduling.
- * 
- * The service requires the {@link #EXTRA_REFRESH_ON_START} to contain
- * <code>true</code> in order to actually start refreshing releases.
- * 
- * @author schnatterer
- * 
- */
 public class LoadNewReleasesService extends WakefulService {
 	/**
 	 * Key to the creating intent's extras that contains a boolean that triggers
@@ -214,7 +202,9 @@ public class LoadNewReleasesService extends WakefulService {
 					// Send status "not online" back to listener?
 					if (artistProgressListener != null) {
 						artistProgressListener.onProgressFailed(null, 0, 0,
-								null, new ServiceException(R.string.NotOnline));
+								null, new ServiceException(
+										LoadNewReleasesService.this,
+										R.string.NotOnline));
 					}
 				} else {
 					// Make sure any changes to the online state are ignored
@@ -300,8 +290,9 @@ public class LoadNewReleasesService extends WakefulService {
 				scaledBitmap = ImageUtil
 						.createScaledBitmap(artworkStream, this);
 			}
-			NusicApplication.notify(
-					Notification.NEW_RELEASE,
+			Notification.notify(
+					this,
+					NotificationId.NEW_RELEASE,
 					getString(R.string.LoadNewReleasesService_newRelease),
 					release.getArtist().getArtistName() + " - "
 							+ release.getReleaseName(), R.drawable.ic_launcher,
@@ -328,7 +319,7 @@ public class LoadNewReleasesService extends WakefulService {
 	 * @param text
 	 */
 	private void notifyNewReleases(int nReleases) {
-		NusicApplication.notify(Notification.NEW_RELEASE, String.format(
+		Notification.notify(this, NotificationId.NEW_RELEASE, String.format(
 				getString(R.string.LoadNewReleasesService_newReleaseMultiple),
 				nReleases), null, R.drawable.ic_launcher, null,
 				MainActivity.class, createExtraActiveTab());
@@ -462,20 +453,21 @@ public class LoadNewReleasesService extends WakefulService {
 				Log.e(Constants.LOG, potentialException.getMessage(),
 						potentialException);
 				if (potentialException instanceof ServiceException) {
-					NusicApplication
-							.notifyWarning(NusicApplication
-									.getContext()
-									.getString(
-											R.string.LoadNewReleasesBinding_errorFindingReleases)
-									+ potentialException.getLocalizedMessage());
+					Notification
+							.notifyWarning(
+									LoadNewReleasesService.this,
+									LoadNewReleasesService.this
+											.getString(R.string.LoadNewReleasesBinding_errorFindingReleases)
+											+ potentialException
+													.getLocalizedMessage());
 				} else {
-					NusicApplication
-							.notifyWarning(NusicApplication
-									.getContext()
-									.getString(
-											R.string.LoadNewReleasesBinding_errorFindingReleasesGeneric)
-									+ potentialException.getClass()
-											.getSimpleName());
+					Notification
+							.notifyWarning(
+									LoadNewReleasesService.this,
+									LoadNewReleasesService.this
+											.getString(R.string.LoadNewReleasesBinding_errorFindingReleasesGeneric)
+											+ potentialException.getClass()
+													.getSimpleName());
 
 				}
 			}
