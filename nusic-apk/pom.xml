@@ -43,6 +43,13 @@
 					<version>${android.sdk.version}</version>
 					<scope>provided</scope>
 				</dependency>
+				<!-- Enable annotation database to improve performance. -->
+				<dependency>
+					<groupId>org.roboguice</groupId>
+					<artifactId>roboblender</artifactId>
+					<version>${roboguice.version}</version>
+					<scope>provided</scope>
+				</dependency>
 				<!-- This dependency makes it impossible to deploy with eclipse... On 
 					the other hand we can't run unit test without it from eclipse. -->
 				<!-- TODO Find out which APIs are really needed and add only those? -->
@@ -88,13 +95,6 @@
 			<groupId>org.roboguice</groupId>
 			<artifactId>roboguice</artifactId>
 			<version>${roboguice.version}</version>
-		</dependency>
-		<!-- Enable annotation database to improve performance. -->
-		<dependency>
-			<groupId>org.roboguice</groupId>
-			<artifactId>roboblender</artifactId>
-			<version>${roboguice.version}</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<!-- Nusic dependencies -->
@@ -145,14 +145,14 @@
 
 		<!-- nusic sub modules -->
 		<dependency>
-			<groupId>info.schnatterer.nusic</groupId>
-			<artifactId>nusic-persistence-api</artifactId>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>nusic-data-api</artifactId>
 			<version>${project.parent.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>info.schnatterer.nusic</groupId>
-			<artifactId>nusic-persistence-android</artifactId>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>nusic-data-android</artifactId>
 			<version>${project.parent.version}</version>
 			<scope>compile</scope>
 		</dependency>
@@ -210,7 +210,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<compilerArgument>-AguiceAnnotationDatabasePackageName=info.schnatterer.nusic.android.application</compilerArgument>
+					<compilerArgument>-AguiceAnnotationDatabasePackageName=${project.groupId}.annotation.apk</compilerArgument>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -336,7 +336,7 @@
 						<debug>false</debug>
 					</sign>
 					<proguard>
-						<skip>false</skip>
+						<skip>true</skip>
 					</proguard>
 					<zipalign>
 						<skip>false</skip>

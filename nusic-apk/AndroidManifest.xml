@@ -65,7 +65,7 @@
        
         <meta-data android:name="roboguice.modules"
           android:value="info.schnatterer.nusic.android.NusicAndroidModule" />  
-        <meta-data android:name="roboguice.annotations.packages" android:value="info.schnatterer.nusic.android.application,info.schnatterer.nusic.android.db"/>
+        <meta-data android:name="roboguice.annotations.packages" android:value="info.schnatterer.nusic.annotation.apk,info.schnatterer.nusic.annotation.data"/>
     </application>
 
 </manifest>

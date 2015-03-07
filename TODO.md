@@ -1,9 +1,11 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Modules: apk (-> Roboguice Module), ui-android, service-android, service-api
+- Modules: apk (-> Roboguice Module), ui-android, logic-android, logic-api
 - Separate Maven Modules with API and impl: ServiceException: How to get rid of android dependency -> getLocalizedMessage only returns a KEY!?
 How to get rid of LocalMusicService in contentResolver? Factory that provides Context so Impl gets it injected and API can be generic?
 - Add section about modules to README 
+
+TODO Enable annotation database to improve performance.
 
 - Copy images to /sdcard instead of /data: 
 http://www.androidsnippets.com/download-an-http-file-to-sdcard-with-progress-notification
@@ -32,8 +34,6 @@ LOGGING
 - Feature: Tablet optimization: Layout + Screens for 7" + 10"
 
 .....Build
-- Change folder hierarchy to default maven (src/main/...)
-- Refactoring: Mavenize test project
 - Insert Built timestamp to version
 - Refactoring: Maven Use profiles for release (signing...)
 
