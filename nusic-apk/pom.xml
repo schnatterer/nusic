@@ -99,48 +99,9 @@
 
 		<!-- Nusic dependencies -->
 		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>14.0.1</version>
-		</dependency>
-		<dependency>
 			<groupId>com.nostra13.universalimageloader</groupId>
 			<artifactId>universal-image-loader</artifactId>
 			<version>1.9.2</version>
-		</dependency>
-		<dependency>
-			<groupId>fm.last</groupId>
-			<artifactId>coverartarchive-api</artifactId>
-			<version>2.1.0</version>
-			<exclusions>
-				<exclusion>
-					<!-- Android ships its own implementation of httpclient anyway -->
-					<artifactId>httpclient</artifactId>
-					<groupId>org.apache.httpcomponents</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<!-- coverartarchive uses slf4j, propagate its logs to android.util.Log -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-android</artifactId>
-			<version>${slf4j.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>musicbrainzws2-java</groupId>
-			<artifactId>musicbrainzws2-java</artifactId>
-			<!-- TODO replace this with the proper version, once it is published. 
-				Then remove "sibling" project "coverartarchive-api" from parent pom and from 
-				repo -->
-			<version>2.01beta-nusicEdition</version>
-			<exclusions>
-				<exclusion>
-					<!-- Android ships its own implementation of httpclient anyway -->
-					<artifactId>httpclient</artifactId>
-					<groupId>org.apache.httpcomponents</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<!-- nusic sub modules -->
@@ -156,7 +117,16 @@
 			<version>${project.parent.version}</version>
 			<scope>compile</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>info.schnatterer.nusic</groupId>
+			<artifactId>nusic-core-api</artifactId>
+			<version>1.0.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>info.schnatterer.nusic</groupId>
+			<artifactId>nusic-core-android</artifactId>
+			<version>1.0.2-SNAPSHOT</version>
+		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -336,7 +306,7 @@
 						<debug>false</debug>
 					</sign>
 					<proguard>
-						<skip>true</skip>
+						<skip>false</skip>
 					</proguard>
 					<zipalign>
 						<skip>false</skip>

@@ -1,4 +1,4 @@
-/* Copyright (C) 2013 Johannes Schnatterer
+/* Copyright (C) 2015 Johannes Schnatterer
  * 
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
@@ -18,16 +18,16 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.core;
+package info.schnatterer.nusic.core.impl;
 
-import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.util.DefaultLocale;
+import info.schnatterer.nusic.core.ServiceException;
+import info.schnatterer.nusic.core.i18n.CoreMessageKey;
 
 import java.util.Locale;
+import java.util.MissingResourceException;
 
-import android.content.Context;
-import android.text.TextUtils;
-import android.util.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Wrapper class for all exceptions thrown by services. Adds
@@ -37,69 +37,44 @@ import android.util.Log;
  * @author schnatterer
  * 
  */
-public class ServiceException extends Exception {
+public class AndroidServiceException extends ServiceException {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(AndroidServiceException.class);
 	static final long serialVersionUID = 1L;
 
-	private int localizedMessageId;
-	private Object[] args = null;
-	private Context context;
+	public static final Locale DEFAULT_LOCALE = Locale.ROOT;
 
-	@Override
-	public String getLocalizedMessage() {
-		try {
-			String localizedString = context.getString(localizedMessageId);
-			if (args != null) {
-				localizedString = String.format(Locale.US, localizedString,
-						args);
-			}
-			if (!TextUtils.isEmpty(localizedString)) {
-				return localizedString;
-			} else {
-				return super.getLocalizedMessage();
-			}
-		} catch (Throwable t) {
-			Log.e(Constants.LOG, "Failure to localize Message", t);
-			return super.getLocalizedMessage();
-		}
-	}
+	private CoreMessageKey messageKey;
+	private Object[] args = null;
 
 	/**
 	 * Constructs a new exception with the specified detail message. The cause
 	 * is not initialized, and may subsequently be initialized by a call to
 	 * {@link #initCause}.
-	 * 
-	 * @param context
-	 *            The context to use. Usually your android.app.Application or
-	 *            android.app.Activity object.
+	 *
 	 * @param message
 	 *            the (technical) detail message. The detail message is saved
 	 *            for later retrieval by the {@link #getMessage()} method.
-	 * @param localizedMessageId
+	 * @param messageKey
 	 *            the id to a localized message intended to be displayed to the
 	 *            user. Passing and invalid id might result in
 	 *            <code>message</code> being displayed to the user.
 	 */
-	public ServiceException(Context context, String message,
-			int localizedMessageId) {
+	public AndroidServiceException(String message, CoreMessageKey messageKey) {
 		super(message);
-		this.localizedMessageId = localizedMessageId;
-		this.context = context;
+		this.messageKey = messageKey;
 	}
 
 	/**
 	 * Convenience method for
-	 * {@link ServiceException#ServiceException(String, int)}, where the
-	 * technical exception message is put out in the default locale.
+	 * {@link AndroidServiceException#AndroidServiceException(String, CoreMessageKey)}
+	 * , where the technical exception message is put out in the default locale.
 	 * 
-	 * @param context
-	 *            The context to use. Usually your android.app.Application or
-	 *            android.app.Activity object.
-	 * @param messageId
+	 * @param messageKey
 	 * @param t
 	 */
-	public ServiceException(Context context, int messageId) {
-		this(context, DefaultLocale
-				.getStringInDefaultLocale(context, messageId), messageId);
+	public AndroidServiceException(CoreMessageKey messageKey) {
+		this(getStringInDefaultLocale(messageKey), messageKey);
 	}
 
 	/**
@@ -108,13 +83,10 @@ public class ServiceException extends Exception {
 	 * Note that the detail message associated with <code>cause</code> is
 	 * <i>not</i> automatically incorporated in this exception's detail message.
 	 * 
-	 * @param context
-	 *            The context to use. Usually your android.app.Application or
-	 *            android.app.Activity object.
 	 * @param message
 	 *            the (technical) detail message (which is saved for later
 	 *            retrieval by the {@link #getMessage()} method).
-	 * @param localizedMessageId
+	 * @param CoreMessageKey
 	 *            the id to a localized message intended to be displayed to the
 	 *            user. Passing and invalid id might result in
 	 *            <code>message</code> being displayed to the user.
@@ -124,11 +96,10 @@ public class ServiceException extends Exception {
 	 *            permitted, and indicates that the cause is nonexistent or
 	 *            unknown.)
 	 */
-	public ServiceException(Context context, String message,
-			int localizedMessageId, Throwable cause) {
+	public AndroidServiceException(String message, CoreMessageKey messageKey,
+			Throwable cause) {
 		super(message, cause);
-		this.localizedMessageId = localizedMessageId;
-		this.context = context;
+		this.messageKey = messageKey;
 	}
 
 	/**
@@ -137,13 +108,10 @@ public class ServiceException extends Exception {
 	 * Note that the detail message associated with <code>cause</code> is
 	 * <i>not</i> automatically incorporated in this exception's detail message.
 	 * 
-	 * @param context
-	 *            The context to use. Usually your android.app.Application or
-	 *            android.app.Activity object.
 	 * @param message
 	 *            the (technical) detail message (which is saved for later
 	 *            retrieval by the {@link #getMessage()} method).
-	 * @param localizedMessageId
+	 * @param messageKey
 	 *            the id to a localized message intended to be displayed to the
 	 *            user. Passing and invalid id might result in
 	 *            <code>message</code> being displayed to the user.
@@ -157,48 +125,75 @@ public class ServiceException extends Exception {
 	 *            If there are more arguments than required by format,
 	 *            additional arguments are ignored.
 	 */
-	public ServiceException(Context context, String message,
-			int localizedMessageId, Throwable cause, Object... args) {
+	public AndroidServiceException(String message, CoreMessageKey messageKey,
+			Throwable cause, Object... args) {
 		super(message, cause);
 		this.args = args;
-		this.localizedMessageId = localizedMessageId;
+		this.messageKey = messageKey;
 	}
 
 	/**
 	 * Convenience method for
-	 * {@link ServiceException#ServiceException(String, int, Throwable)}, where
-	 * the technical exception message is put out in the default locale.
-	 * 
-	 * @param context
-	 *            The context to use. Usually your android.app.Application or
-	 *            android.app.Activity object.
-	 * @param messageId
-	 * @param t
-	 */
-	public ServiceException(Context context, int messageId, Throwable cause) {
-		this(context, DefaultLocale
-				.getStringInDefaultLocale(context, messageId), messageId, cause);
-	}
-
-	/**
-	 * Convenience method for
-	 * {@link ServiceException#ServiceException(String, int, Throwable, Object...)}
+	 * {@link AndroidServiceException#AndroidServiceException(String, CoreMessageKey, Throwable)}
 	 * , where the technical exception message is put out in the default locale.
 	 * 
-	 * @param context
-	 *            The context to use. Usually your android.app.Application or
-	 *            android.app.Activity object.
 	 * @param messageId
 	 * @param t
 	 */
-	public ServiceException(Context context, int messageId, Throwable cause,
-			Object... args) {
-		this(context, String.format(Locale.US,
-				DefaultLocale.getStringInDefaultLocale(context, messageId),
-				args), messageId, cause, args);
+	public AndroidServiceException(CoreMessageKey messageKey, Throwable cause) {
+		this(getStringInDefaultLocale(messageKey), messageKey, cause);
 	}
 
-	public int getLocalizedMessageId() {
-		return localizedMessageId;
+	/**
+	 * Convenience method for
+	 * {@link AndroidServiceException#AndroidServiceException(String, CoreMessageKey, Throwable, Object...)}
+	 * , where the technical exception message is put out in the default locale.
+	 * 
+	 * @param messageId
+	 * @param t
+	 */
+	public AndroidServiceException(CoreMessageKey messageKey, Throwable cause,
+			Object... args) {
+		this(String.format(Locale.US, getStringInDefaultLocale(messageKey),
+				args), messageKey, cause, args);
+	}
+
+	/**
+	 * Returns string in default locale
+	 * 
+	 * @param messageKey
+	 * @return
+	 */
+	private static String getStringInDefaultLocale(CoreMessageKey messageKey) {
+		return CoreMessageKey.getBundle(DEFAULT_LOCALE).getString(
+				messageKey.get());
+	}
+
+	@Override
+	public String getLocalizedMessage() {
+		if (messageKey == null) {
+			return super.getLocalizedMessage();
+		}
+		String localizedString = null;
+		try {
+			localizedString = CoreMessageKey.getBundle().getString(
+					messageKey.get());
+
+		} catch (MissingResourceException e) {
+			LOG.warn("No translation for key: " + messageKey, e);
+		}
+		if (args != null) {
+			localizedString = String.format(Locale.US, localizedString, args);
+		}
+		if (localizedString != null && !localizedString.isEmpty()) {
+			return localizedString;
+		} else {
+			return super.getLocalizedMessage();
+		}
+
+	}
+
+	public CoreMessageKey getMessageKey() {
+		return messageKey;
 	}
 }

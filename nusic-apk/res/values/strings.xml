@@ -86,16 +86,9 @@
     
     <string name="TextAssetActivity_errorLoadingFile">Error load text file</string>
     
-    <string name="ReleasesService_errorPersistingData">Error saving data on the device</string>
     <string name="LoadNewReleasesBinding_errorFindingReleases">Refreshing releases failed: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">Unbelievable error while trying to refresh releases: </string>
     <string name="LoadNewReleasesBinding_finishedWithErrors">Updating releases failed for %1$d of %2$d artists</string>
-    
-    <string name="ServiceException_errorLoadingArtists">Error loading artists from the device</string>
-    <string name="ServiceException_errorFindingReleasesArtist">Error finding releases for artist %1$s</string>
-    <string name="ServiceException_errorQueryingMusicBrainz">Error querying releases for artist %1$s from the internet. No connection to the internet?</string>
-    <string name="ServiceException_errorReadingFromDb">Error reading from application database</string>
-    <string name="ServiceException_errorWritingToDb">Error writing to application datbase</string>
     
      <string name="ReleasedTodayService_ReleasedTodayError">Error finding today\'s releases</string>
 </resources>

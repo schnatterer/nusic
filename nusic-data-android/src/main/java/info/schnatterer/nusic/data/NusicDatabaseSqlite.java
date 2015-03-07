@@ -48,7 +48,7 @@ import android.provider.BaseColumns;
 
 @ContextSingleton
 public class NusicDatabaseSqlite extends SQLiteOpenHelper {
-	private static final Logger logger = LoggerFactory
+	private static final Logger LOG = LoggerFactory
 			.getLogger(NusicDatabaseSqlite.class);
 
 	private static final String DATABASE_NAME = "nusic";
@@ -65,11 +65,8 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 	@Inject
 	private static Provider<Context> contextProvider;
 
-	// private Context context;
-
 	public NusicDatabaseSqlite() {
 		super(contextProvider.get(), DATABASE_NAME, null, DATABASE_VERSION);
-		// super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
 	@Override
@@ -80,7 +77,7 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
 
 	@Override
 	public synchronized void close() {
-		logger.debug("Closing database");
+		LOG.debug("Closing database");
 		super.close();
 	}
 

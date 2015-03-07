@@ -14,6 +14,20 @@ import info.schnatterer.nusic.core.impl.ArtistServiceImpl;
 import info.schnatterer.nusic.core.impl.ConnectivityServiceAndroid;
 import info.schnatterer.nusic.core.impl.DeviceMusicServiceAndroid;
 import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesDefaultDownloadOnlyOnWifi;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesDefaultDownloadReleasesTimePeriod;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesDefaultIsEnabledNotifyNewReleases;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesDefaultIsEnabledNotifyReleasedToday;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesDefaultRefreshPeriod;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesDefaultReleasedTodayHourOfDay;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesDefaultReleasedTodayMinute;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesKeyDownloadOnlyOnWifi;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesKeyDownloadReleasesTimePeriod;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesKeyIsEnabledNotifyNewReleases;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesKeyIsEnabledNotifyReleasedToday;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesKeyRefreshPeriod;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesKeyReleasedTodayHourOfDay;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesKeyReleasedTodayMinute;
 import info.schnatterer.nusic.core.impl.ReleaseServiceImpl;
 import info.schnatterer.nusic.core.impl.RemoteMusicDatabaseServiceMusicBrainz;
 import info.schnatterer.nusic.core.impl.RemoteMusicDatabaseServiceMusicBrainz.ApplicationContact;
@@ -48,7 +62,15 @@ public class NusicAndroidModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		/*
+		 * Database requires static injection, because the context must be
+		 * injected at construction time
+		 */
 		requestStaticInjection(NusicDatabaseSqlite.class);
+		/*
+		 * A lot of constants are injected here
+		 */
+		requestStaticInjection(PreferencesServiceSharedPreferences.class);
 
 		// Services
 		bind(ArtistService.class).to(ArtistServiceImpl.class);
@@ -73,5 +95,98 @@ public class NusicAndroidModule extends AbstractModule {
 				NusicApplication.getCurrentVersionName());
 		bind(String.class).annotatedWith(ApplicationContact.class).toInstance(
 				Constants.APPLICATION_URL);
+
+		bind(String.class)
+				.annotatedWith(PreferencesKeyDownloadOnlyOnWifi.class)
+				.toInstance(
+						application
+								.getString(R.string.preferences_key_download_only_on_wifi));
+		bind(Boolean.class).annotatedWith(
+				PreferencesDefaultDownloadOnlyOnWifi.class).toInstance(
+				application.getResources().getBoolean(
+						R.bool.preferences_default_download_only_on_wifi));
+		bind(String.class)
+				.annotatedWith(PreferencesKeyDownloadReleasesTimePeriod.class)
+				.toInstance(
+						application
+								.getString(R.string.preferences_key_download_releases_time_period));
+		bind(String.class)
+				.annotatedWith(
+						PreferencesDefaultDownloadReleasesTimePeriod.class)
+				.toInstance(
+						application
+								.getString(R.string.preferences_default_download_releases_time_period));
+		bind(String.class)
+				.annotatedWith(PreferencesKeyRefreshPeriod.class)
+				.toInstance(
+						application
+								.getString(R.string.preferences_key_refresh_period));
+		bind(String.class)
+				.annotatedWith(PreferencesDefaultRefreshPeriod.class)
+				.toInstance(
+						application
+								.getString(R.string.preferences_default_refresh_period));
+		bind(String.class)
+				.annotatedWith(PreferencesKeyIsEnabledNotifyReleasedToday.class)
+				.toInstance(
+						application
+								.getString(R.string.preferences_key_is_enabled_notify_released_today));
+		bind(Boolean.class)
+				.annotatedWith(
+						PreferencesDefaultIsEnabledNotifyReleasedToday.class)
+				.toInstance(
+						application
+								.getResources()
+								.getBoolean(
+										R.bool.preferences_default_is_enabled_notify_released_today));
+		bind(String.class)
+				.annotatedWith(PreferencesKeyIsEnabledNotifyNewReleases.class)
+				.toInstance(
+						application
+								.getString(R.string.preferences_key_is_enabled_notify_new_releases));
+		bind(Boolean.class)
+				.annotatedWith(
+						PreferencesDefaultIsEnabledNotifyNewReleases.class)
+				.toInstance(
+						application
+								.getResources()
+								.getBoolean(
+										R.bool.preferences_default_is_enabled_notify_new_releases));
+		bind(String.class)
+				.annotatedWith(PreferencesKeyReleasedTodayHourOfDay.class)
+				.toInstance(
+						application
+								.getString(R.string.preferences_key_released_today_hour_of_day));
+		bind(Integer.class)
+				.annotatedWith(PreferencesDefaultReleasedTodayHourOfDay.class)
+				.toInstance(
+						parseIntOrThrow(
+								PreferencesDefaultReleasedTodayHourOfDay.class,
+								application
+										.getString(R.string.preferences_default_released_today_hour_of_day)));
+		bind(String.class)
+				.annotatedWith(PreferencesKeyReleasedTodayMinute.class)
+				.toInstance(
+						application
+								.getString(R.string.preferences_key_released_today_minute));
+		bind(Integer.class)
+				.annotatedWith(PreferencesDefaultReleasedTodayMinute.class)
+				.toInstance(
+						parseIntOrThrow(
+								PreferencesDefaultReleasedTodayMinute.class,
+								application
+										.getString(R.string.preferences_default_released_today_minute)));
 	}
+
+	private Integer parseIntOrThrow(Class<?> annotation, String prefValue) {
+		try {
+			return Integer.parseInt(prefValue);
+		} catch (NumberFormatException e) {
+			throw new RuntimeException(
+					"Unable to parse integer from property \""
+							+ annotation.getName() + "\", value:" + prefValue,
+					e);
+		}
+	}
+
 }

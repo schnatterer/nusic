@@ -191,7 +191,7 @@ public class ReleaseListFragment extends RoboSherlockFragment {
 				}
 			} catch (ServiceException e) {
 				Log.w(Constants.LOG, "Error hiding release/artist", e);
-				Toast.toast(getActivity(), e.getLocalizedMessageId());
+				Toast.toast(getActivity(), e.getLocalizedMessage());
 			}
 			return true; // Finish processing fragment instances
 		} else {

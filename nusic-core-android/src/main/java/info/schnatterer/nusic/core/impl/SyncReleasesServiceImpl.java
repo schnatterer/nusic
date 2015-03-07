@@ -20,8 +20,6 @@
  */
 package info.schnatterer.nusic.core.impl;
 
-import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.core.ArtistService;
 import info.schnatterer.nusic.core.DeviceMusicService;
 import info.schnatterer.nusic.core.PreferencesService;
@@ -31,6 +29,7 @@ import info.schnatterer.nusic.core.SyncReleasesService;
 import info.schnatterer.nusic.core.event.ArtistProgressListener;
 import info.schnatterer.nusic.core.event.ProgressListener;
 import info.schnatterer.nusic.core.event.ProgressUpdater;
+import info.schnatterer.nusic.core.i18n.CoreMessageKey;
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.model.Artist;
 
@@ -41,8 +40,8 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import android.content.Context;
-import android.util.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation of {@link SyncReleasesService}.
@@ -51,6 +50,9 @@ import android.util.Log;
  *
  */
 public class SyncReleasesServiceImpl implements SyncReleasesService {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(SyncReleasesServiceImpl.class);
+
 	@Inject
 	private RemoteMusicDatabaseService remoteMusicDatabaseService;
 	@Inject
@@ -59,8 +61,6 @@ public class SyncReleasesServiceImpl implements SyncReleasesService {
 	private PreferencesService preferencesService;
 	@Inject
 	private ArtistService artistService;
-	@Inject
-	private Context context;
 	private Set<ProgressListener<Artist, Boolean>> listenerList = new HashSet<ProgressListener<Artist, Boolean>>();
 	private ProgressUpdater<Artist, Boolean> progressUpdater = new ProgressUpdater<Artist, Boolean>(
 			listenerList) {
@@ -95,8 +95,7 @@ public class SyncReleasesServiceImpl implements SyncReleasesService {
 		try {
 			artists = deviceMusicService.getArtists();
 			if (artists == null) {
-				Log.w(Constants.LOG,
-						"No artists were returned. No music files on device?");
+				LOG.warn("No artists were returned. No music files on device?");
 				return;
 			}
 
@@ -113,8 +112,8 @@ public class SyncReleasesServiceImpl implements SyncReleasesService {
 					artist = remoteMusicDatabaseService.findReleases(artist,
 							startDate, endDate);
 					if (artist == null) {
-						Log.w(Constants.LOG, "Artist " + i + " of "
-								+ artists.length + " is null.");
+						LOG.warn("Artist " + i + " of " + artists.length
+								+ " is null.");
 						continue;
 					}
 
@@ -132,22 +131,18 @@ public class SyncReleasesServiceImpl implements SyncReleasesService {
 					artists[i] = null;
 
 				} catch (ServiceException e) {
-					Log.w(Constants.LOG, e.getMessage(), e.getCause());
+					LOG.warn(e.getMessage(), e.getCause());
 					// Allow for displaying errors to the user.
 					if (e.getCause() instanceof DatabaseException) {
-						progressUpdater
-								.progressFailed(
-										artist,
-										i + 1,
-										new ServiceException(
-												context,
-												R.string.ReleasesService_errorPersistingData,
-												e), null);
+						progressUpdater.progressFailed(artist, i + 1,
+								new AndroidServiceException(
+										CoreMessageKey.ERROR_WRITING_TO_DB, e),
+								null);
 						return;
 					}
 					potentialException = e;
 				} catch (Throwable t) {
-					Log.w(Constants.LOG, t);
+					LOG.warn("", t);
 					progressUpdater.progressFailed(artist, i + 1, t, null);
 					return;
 				}
@@ -158,7 +153,7 @@ public class SyncReleasesServiceImpl implements SyncReleasesService {
 			return;
 			// } catch (ServiceException e) {
 		} catch (Throwable t) {
-			Log.w(Constants.LOG, t);
+			LOG.warn("", t);
 			progressUpdater.progressFailed(null, 0, t, null);
 			return;
 		}

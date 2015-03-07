@@ -54,7 +54,7 @@ public class PreferenceVisibilityButtonListener implements
 									activity.onContentChanged();
 								} catch (ServiceException e) {
 									Toast.toast(activity,
-											e.getLocalizedMessageId());
+											e.getLocalizedMessage());
 								}
 							}
 						}).show();

@@ -20,9 +20,9 @@
  */
 package info.schnatterer.nusic.core.impl;
 
-import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.core.DeviceMusicService;
 import info.schnatterer.nusic.core.ServiceException;
+import info.schnatterer.nusic.core.i18n.CoreMessageKey;
 import info.schnatterer.nusic.data.model.Artist;
 
 import javax.inject.Inject;
@@ -71,8 +71,8 @@ public class DeviceMusicServiceAndroid implements DeviceMusicService {
 				}
 			}
 		} catch (Throwable t) {
-			throw new ServiceException(context,
-					R.string.ServiceException_errorLoadingArtists, t);
+			throw new AndroidServiceException(
+					CoreMessageKey.ERROR_LOADING_ARTISTS, t);
 		} finally {
 			if (cursor != null) {
 				cursor.close();

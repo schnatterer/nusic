@@ -85,16 +85,9 @@
 
 	<string name="TextAssetActivity_errorLoadingFile">Fehler beim Laden der Textdatei</string>
 	
-    <string name="ReleasesService_errorPersistingData">Fehler beim Speichern der Daten auf dem Gerät</string>
     <string name="LoadNewReleasesBinding_errorFindingReleases">Aktualisieren der Alben fehlgeschlagen: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">Unfassbarer Fehler beim Aktualiseren der Alben: </string>
     <string name="LoadNewReleasesBinding_finishedWithErrors">Update der Alben für %1$d Interpreten von %2$d fehlgeschlagen</string>
-    
-    <string name="ServiceException_errorLoadingArtists">Fehler beim Laden der Interpreten vom Gerät</string>
-    <string name="ServiceException_errorFindingReleasesArtist">Fehler beim Finden von Alben für Interpret %1$s</string>
-    <string name="ServiceException_errorQueryingMusicBrainz">Fehler beim Abfrage der Alben des Interpreten %1$s im Internet. Keine Verbindung zum Internet?</string>
-    <string name="ServiceException_errorReadingFromDb">Fehler beim Lesen von der Anwendungsdatenbank</string>
-    <string name="ServiceException_errorWritingToDb">Fehler beim Schreiben in die Anwendungsdatenbank</string>
     
     <string name="ReleasedTodayService_ReleasedTodayError">Fehler beim Finden heutiger Veröffentlichungen</string>
 </resources>

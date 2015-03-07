@@ -20,22 +20,27 @@
  */
 package info.schnatterer.nusic.core.impl;
 
-import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.core.PreferencesService;
 import info.schnatterer.nusic.core.event.PreferenceChangedListener;
 import info.schnatterer.nusic.util.DateUtil;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.inject.Inject;
 
+import roboguice.inject.ContextSingleton;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
 
+import com.google.inject.BindingAnnotation;
 import com.google.inject.Provider;
 
 /**
@@ -45,7 +50,7 @@ import com.google.inject.Provider;
  * @author schnatterer
  *
  */
-// TODO DI make singleton, so final fields won't have to be injected every time.
+@ContextSingleton
 public class PreferencesServiceSharedPreferences implements PreferencesService,
 		OnSharedPreferenceChangeListener {
 
@@ -60,6 +65,7 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	public final Date DEFAULT_NEXT_RELEASES_REFRESH = null;
 
 	private final String KEY_JUST_ADDED_TIME_PERIOD = "just_added_time_period";
+	private final Integer DEFAULT_JUST_ADDED_TIME_PERIOD;
 	// Define in constructor!
 
 	public final String KEY_ENABLED_CONNECTIVITY_RECEIVER = "connectivityReceiver";
@@ -69,35 +75,71 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	 * Preferences that are defined in constants_prefernces.xml -> accessible
 	 * for preferences.xml
 	 */
-	public final String KEY_DOWLOAD_ONLY_ON_WIFI;
-	public final Boolean DEFAULT_DOWLOAD_ONLY_ON_WIFI;
 
-	public final String KEY_DOWNLOAD_RELEASES_TIME_PERIOD;
-	public final String DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD;
+	/*
+	 * TODO find less verbose solution for passing XML values from APK to core
+	 * See also Moduel, where annotations are defined
+	 */
+	@Inject
+	@PreferencesKeyDownloadOnlyOnWifi
+	private String KEY_DOWLOAD_ONLY_ON_WIFI;
+	@Inject
+	@PreferencesDefaultDownloadOnlyOnWifi
+	private Boolean DEFAULT_DOWLOAD_ONLY_ON_WIFI;
 
-	public final String KEY_REFRESH_PERIOD;
-	public final String DEFAULT_REFRESH_PERIOD;
+	@Inject
+	@PreferencesKeyDownloadReleasesTimePeriod
+	private String KEY_DOWNLOAD_RELEASES_TIME_PERIOD;
+	@Inject
+	@PreferencesDefaultDownloadReleasesTimePeriod
+	private String DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD;
 
-	private final Integer DEFAULT_JUST_ADDED_TIME_PERIOD;
+	@Inject
+	@PreferencesKeyRefreshPeriod
+	private String KEY_REFRESH_PERIOD;
+	@Inject
+	@PreferencesDefaultRefreshPeriod
+	private String DEFAULT_REFRESH_PERIOD;
 
-	public final String KEY_ENABLED_NOTIFY_RELEASED_TODAY;
-	public final Boolean DEFAULT_ENABLED_NOTIFY_RELEASED_TODAY;
+	@Inject
+	@PreferencesKeyIsEnabledNotifyReleasedToday
+	private String KEY_ENABLED_NOTIFY_RELEASED_TODAY;
+	@Inject
+	@PreferencesDefaultIsEnabledNotifyReleasedToday
+	private Boolean DEFAULT_ENABLED_NOTIFY_RELEASED_TODAY;
 
-	public final String KEY_ENABLED_NOTIFY_NEW_RELEASES;
-	public final Boolean DEFAULT_ENABLED_NOTIFY_NEW_RELEASES;
+	@Inject
+	@PreferencesKeyIsEnabledNotifyNewReleases
+	private String KEY_ENABLED_NOTIFY_NEW_RELEASES;
+	@Inject
+	@PreferencesDefaultIsEnabledNotifyNewReleases
+	private Boolean DEFAULT_ENABLED_NOTIFY_NEW_RELEASES;
 
-	public final String KEY_RELEASED_TODAY_HOUR_OF_DAY;
-	public final Integer DEFAULT_RELEASED_TODAY_HOUR_OF_DAY;
+	@Inject
+	@PreferencesKeyReleasedTodayHourOfDay
+	private String KEY_RELEASED_TODAY_HOUR_OF_DAY;
+	@Inject
+	@PreferencesDefaultReleasedTodayHourOfDay
+	private Integer DEFAULT_RELEASED_TODAY_HOUR_OF_DAY;
 
-	public final String KEY_RELEASED_TODAY_MINUTE;
-	public final Integer DEFAULT_RELEASED_TODAY_MINUTE;
+	@Inject
+	@PreferencesKeyReleasedTodayMinute
+	private String KEY_RELEASED_TODAY_MINUTE;
+	@Inject
+	@PreferencesDefaultReleasedTodayMinute
+	private Integer DEFAULT_RELEASED_TODAY_MINUTE;
 
 	private final SharedPreferences sharedPreferences;
 
 	private Set<PreferenceChangedListener> preferenceChangedListeners = new HashSet<PreferenceChangedListener>();
 
 	@Inject
-	public PreferencesServiceSharedPreferences(Provider<Context> contextProvider) {
+	private static Provider<Context> contextProvider;
+
+	@Inject
+	public PreferencesServiceSharedPreferences(
+			@PreferencesKeyRefreshPeriod String keyRefreshPeriod,
+			@PreferencesDefaultRefreshPeriod String defaultRefreshPerioid) {
 		Context context = contextProvider.get();
 
 		this.sharedPreferences = PreferenceManager
@@ -107,51 +149,8 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 			sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 		}
 
-		KEY_DOWLOAD_ONLY_ON_WIFI = context
-				.getString(R.string.preferences_key_download_only_on_wifi);
-		DEFAULT_DOWLOAD_ONLY_ON_WIFI = context.getResources().getBoolean(
-				R.bool.preferences_default_download_only_on_wifi);
-
-		KEY_DOWNLOAD_RELEASES_TIME_PERIOD = context
-				.getString(R.string.preferences_key_download_releases_time_period);
-		DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD = context
-				.getResources()
-				.getString(
-						R.string.preferences_default_download_releases_time_period);
-
-		KEY_REFRESH_PERIOD = context
-				.getString(R.string.preferences_key_refresh_period);
-		DEFAULT_REFRESH_PERIOD = context.getResources().getString(
-				R.string.preferences_default_refresh_period);
-
-		DEFAULT_JUST_ADDED_TIME_PERIOD = parseIntOrThrow(KEY_REFRESH_PERIOD,
-				DEFAULT_REFRESH_PERIOD);
-
-		KEY_ENABLED_NOTIFY_RELEASED_TODAY = context
-				.getString(R.string.preferences_key_is_enabled_notify_released_today);
-		DEFAULT_ENABLED_NOTIFY_RELEASED_TODAY = context
-				.getResources()
-				.getBoolean(
-						R.bool.preferences_default_is_enabled_notify_released_today);
-
-		KEY_ENABLED_NOTIFY_NEW_RELEASES = context
-				.getString(R.string.preferences_key_is_enabled_notify_new_releases);
-		DEFAULT_ENABLED_NOTIFY_NEW_RELEASES = context
-				.getResources()
-				.getBoolean(
-						R.bool.preferences_default_is_enabled_notify_new_releases);
-
-		KEY_RELEASED_TODAY_HOUR_OF_DAY = context
-				.getString(R.string.preferences_key_released_today_hour_of_day);
-		DEFAULT_RELEASED_TODAY_HOUR_OF_DAY = parseIntOrThrow(
-				KEY_RELEASED_TODAY_HOUR_OF_DAY,
-				context.getString(R.string.preferences_default_released_today_hour_of_day));
-
-		KEY_RELEASED_TODAY_MINUTE = context
-				.getString(R.string.preferences_key_released_today_minute);
-		DEFAULT_RELEASED_TODAY_MINUTE = parseIntOrThrow(
-				KEY_RELEASED_TODAY_MINUTE,
-				context.getString(R.string.preferences_default_released_today_minute));
+		DEFAULT_JUST_ADDED_TIME_PERIOD = parseIntOrThrow(keyRefreshPeriod,
+				defaultRefreshPerioid);
 	}
 
 	private Integer parseIntFromPreferenceOrThrow(String key,
@@ -298,4 +297,87 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 				DEFAULT_RELEASED_TODAY_MINUTE);
 	}
 
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface PreferencesKeyDownloadOnlyOnWifi {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface PreferencesDefaultDownloadOnlyOnWifi {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface PreferencesKeyDownloadReleasesTimePeriod {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface PreferencesDefaultDownloadReleasesTimePeriod {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface PreferencesKeyRefreshPeriod {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface PreferencesDefaultRefreshPeriod {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface PreferencesKeyIsEnabledNotifyReleasedToday {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface PreferencesDefaultIsEnabledNotifyReleasedToday {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface PreferencesKeyIsEnabledNotifyNewReleases {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface PreferencesDefaultIsEnabledNotifyNewReleases {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface PreferencesKeyReleasedTodayHourOfDay {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface PreferencesDefaultReleasedTodayHourOfDay {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface PreferencesKeyReleasedTodayMinute {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface PreferencesDefaultReleasedTodayMinute {
+	}
 }

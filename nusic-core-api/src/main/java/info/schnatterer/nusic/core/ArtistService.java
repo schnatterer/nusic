@@ -1,4 +1,4 @@
-/* Copyright (C) 2013 Johannes Schnatterer
+/* Copyright (C) 2015 Johannes Schnatterer
  * 
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
@@ -18,20 +18,30 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
-package info.schnatterer.nusic.core.event;
+package info.schnatterer.nusic.core;
 
 import info.schnatterer.nusic.data.model.Artist;
 
-import org.apache.commons.lang3.ObjectUtils.Null;
-
 /**
- * Returns <code>true</code>, if anything changed, otherwise <code>false</code>
- * or {@link Null}.
+ * Provides access to the {@link Artist}s stored locally. This would be the
+ * place to implement transaction handling.
  * 
  * @author schnatterer
- * 
  */
-public interface ArtistProgressListener extends
-		ProgressListener<Artist, Boolean> {
+public interface ArtistService {
+
+	long save(Artist artist) throws ServiceException;
+
+	int update(Artist artist) throws ServiceException;
+
+	/**
+	 * Creates a new {@link Artist} or updates an existing one (matching by
+	 * {@link Artist#getAndroidAudioArtistId()}).
+	 * 
+	 * @param artist
+	 * @return
+	 * @throws DatabaseException
+	 */
+	long saveOrUpdate(Artist artist) throws ServiceException;
 
 }

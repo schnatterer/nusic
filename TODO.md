@@ -1,12 +1,14 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Modules: apk (-> Roboguice Module), ui-android, logic-android, logic-api
+- Modules: apk (-> Roboguice Module), ui-android
+- Test if core-android's i18n mechanism also works as designed in android!
+- Config SLF4J in order to get log statements from modules
+
 - Separate Maven Modules with API and impl: ServiceException: How to get rid of android dependency -> getLocalizedMessage only returns a KEY!?
 How to get rid of LocalMusicService in contentResolver? Factory that provides Context so Impl gets it injected and API can be generic?
 - Add section about modules to README 
 
-TODO Enable annotation database to improve performance.
-
+- Introduce release profile, triggered by release plugin that executes proguard
 - Copy images to /sdcard instead of /data: 
 http://www.androidsnippets.com/download-an-http-file-to-sdcard-with-progress-notification
 http://developer.android.com/guide/topics/data/data-storage.html#filesExternal

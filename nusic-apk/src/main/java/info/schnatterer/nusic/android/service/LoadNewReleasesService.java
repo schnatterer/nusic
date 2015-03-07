@@ -201,10 +201,18 @@ public class LoadNewReleasesService extends WakefulService {
 
 					// Send status "not online" back to listener?
 					if (artistProgressListener != null) {
+						// TODO find a solution without ServiceException here!
 						artistProgressListener.onProgressFailed(null, 0, 0,
-								null, new ServiceException(
-										LoadNewReleasesService.this,
-										R.string.NotOnline));
+								null,
+								new ServiceException("R.string.NotOnline") {
+									private static final long serialVersionUID = 1L;
+
+									@Override
+									public String getLocalizedMessage() {
+										return LoadNewReleasesService.this
+												.getString(R.string.NotOnline);
+									}
+								});
 					}
 				} else {
 					// Make sure any changes to the online state are ignored

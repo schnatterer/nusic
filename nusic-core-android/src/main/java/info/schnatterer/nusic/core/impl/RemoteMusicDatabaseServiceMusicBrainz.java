@@ -1,5 +1,3 @@
-package info.schnatterer.nusic.core.impl;
-
 /* Copyright (C) 2013 Johannes Schnatterer
  * 
  * See the NOTICE file distributed with this work for additional
@@ -21,14 +19,15 @@ package info.schnatterer.nusic.core.impl;
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+package info.schnatterer.nusic.core.impl;
+
 import fm.last.musicbrainz.coverart.CoverArt;
 import fm.last.musicbrainz.coverart.CoverArtArchiveClient;
 import fm.last.musicbrainz.coverart.CoverArtImage;
 import fm.last.musicbrainz.coverart.impl.DefaultCoverArtArchiveClient;
-import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.core.RemoteMusicDatabaseService;
 import info.schnatterer.nusic.core.ServiceException;
+import info.schnatterer.nusic.core.i18n.CoreMessageKey;
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.dao.ArtworkDao;
 import info.schnatterer.nusic.data.dao.ArtworkDao.ArtworkType;
@@ -48,7 +47,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
@@ -57,10 +55,10 @@ import org.musicbrainz.model.ArtistCreditWs2;
 import org.musicbrainz.model.NameCreditWs2;
 import org.musicbrainz.model.entity.ReleaseWs2;
 import org.musicbrainz.model.searchresult.ReleaseResultWs2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.util.Log;
 
 import com.google.common.util.concurrent.RateLimiter;
 import com.google.inject.BindingAnnotation;
@@ -73,6 +71,9 @@ import com.google.inject.BindingAnnotation;
  */
 public class RemoteMusicDatabaseServiceMusicBrainz implements
 		RemoteMusicDatabaseService {
+
+	private static final Logger LOG = LoggerFactory
+			.getLogger(RemoteMusicDatabaseServiceMusicBrainz.class);
 	/**
 	 * See http://musicbrainz.org/doc/Development/XML_Web_Service/Version_2#
 	 * Release_Type_and_Status
@@ -104,13 +105,12 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 	private String appContact;
 	@Inject
 	private ArtworkDao artworkDao;
-	@Inject
-	private Context context;
 	static {
 		/*
 		 * Some class are flooding our logs with warnings. Give us some space!
 		 */
-		Logger.getLogger("org.musicbrainz.wsxml.impl.JDOMParserWs2").setLevel(
+		java.util.logging.Logger.getLogger(
+				"org.musicbrainz.wsxml.impl.JDOMParserWs2").setLevel(
 				java.util.logging.Level.SEVERE);
 	}
 
@@ -170,15 +170,14 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 						releaseSearch.getNextSearchResultPage());
 			}
 		} catch (MBWS2Exception mBWS2Exception) {
-			throw new ServiceException(context,
-					R.string.ServiceException_errorQueryingMusicBrainz,
-					mBWS2Exception, artistName);
+			throw new AndroidServiceException(
+					CoreMessageKey.ERROR_QUERYING_MUSIC_BRAINZ, mBWS2Exception,
+					artistName);
 		} catch (SecurityException securityException) {
 			throw securityException;
 		} catch (Throwable t) {
-			throw new ServiceException(context,
-					R.string.ServiceException_errorFindingReleasesArtist, t,
-					artistName);
+			throw new AndroidServiceException(
+					CoreMessageKey.ERROR_FINDING_RELEASE_ARTIST, t, artistName);
 		}
 		return artist;
 	}
@@ -267,9 +266,9 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 					try {
 						downloadFrontCover(release);
 					} catch (IOException e) {
-						Log.w(Constants.LOG, "Unable to download cover", e);
+						LOG.warn("Unable to download cover", e);
 					} catch (DatabaseException e) {
-						Log.w(Constants.LOG, "Unable to store cover", e);
+						LOG.warn("Unable to store cover", e);
 					}
 
 					// TODO store all release dates and their countries?

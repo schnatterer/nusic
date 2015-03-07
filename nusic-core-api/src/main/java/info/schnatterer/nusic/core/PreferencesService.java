@@ -20,8 +20,8 @@
  */
 package info.schnatterer.nusic.core;
 
-import info.schnatterer.nusic.data.model.Release;
 import info.schnatterer.nusic.core.event.PreferenceChangedListener;
+import info.schnatterer.nusic.data.model.Release;
 
 import java.util.Date;
 

@@ -35,7 +35,7 @@ import android.database.Cursor;
 import android.os.Parcel;
 
 public final class SqliteUtil {
-	private static final Logger logger = LoggerFactory
+	private static final Logger LOG = LoggerFactory
 			.getLogger(NusicDatabaseSqlite.class);
 
 	public static final Integer FALSE = Integer.valueOf(0);
@@ -82,7 +82,7 @@ public final class SqliteUtil {
 			values.put(column, (String) value);
 		} else {
 			// Hope for the best and convert it to a string
-			logger.warn("Column: " + column
+			LOG.warn("Column: " + column
 					+ "Trying to put non primitive value to ContentValues: "
 					+ value + ". Converting to string.");
 			values.put(column, value.toString());

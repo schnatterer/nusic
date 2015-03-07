@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>info.schnatterer.nusic</groupId>
+		<artifactId>nusic-parent</artifactId>
+		<version>1.0.2-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>nusic-core-android</artifactId>
+	<packaging>jar</packaging>
+	<name>nusic-core-android</name>
+
+	<properties>
+	</properties>
+
+	<profiles>
+		<profile>
+			<!-- Use Profiles to distinguish between the "implicit" builds of the 
+				eclipse plugin and "explicit" builds triggered by calling mvn install -->
+			<id>default</id>
+			<activation>
+				<property>
+					<name>!m2e.version</name>
+				</property>
+			</activation>
+			<dependencies>
+				<!-- Before building make sure to copy the android JARs to your local 
+					repo using the mave-android-sdk-deployer: https://github.com/mosabua/maven-android-sdk-deployer -->
+				<dependency>
+					<groupId>android</groupId>
+					<artifactId>android</artifactId>
+					<version>${android.sdk.version}</version>
+					<scope>provided</scope>
+				</dependency>
+				<!-- This dependency makes it impossible to deploy with eclipse... Because 
+					of its many transitive dependencies this will exceed the 65K limit: http://developer.android.com/tools/building/multidex.html 
+					So include the robolectric-x.x.x-jar-with-dependencies to eclipse! http://robolectric.org/eclipse-quick-start/. -->
+				<!-- TODO Find out which APIs are really needed and add only those? -->
+				<dependency>
+					<groupId>org.robolectric</groupId>
+					<artifactId>android-all</artifactId>
+					<version>${robolectric.android.version}</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.robolectric</groupId>
+					<artifactId>robolectric</artifactId>
+					<version>${robolectric.version}</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+
+	<dependencies>
+		<!-- coverartarchive uses slf4j, propagate its logs to android.util.Log -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-android</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>musicbrainzws2-java</groupId>
+			<artifactId>musicbrainzws2-java</artifactId>
+			<!-- TODO replace this with the proper version, once it is published. 
+				Then remove "sibling" project "coverartarchive-api" from parent pom and from 
+				repo -->
+			<version>2.01beta-nusicEdition</version>
+			<exclusions>
+				<exclusion>
+					<!-- Android ships its own implementation of httpclient anyway -->
+					<artifactId>httpclient</artifactId>
+					<groupId>org.apache.httpcomponents</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>14.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>fm.last</groupId>
+			<artifactId>coverartarchive-api</artifactId>
+			<version>2.1.0</version>
+			<exclusions>
+				<exclusion>
+					<!-- Android ships its own implementation of httpclient anyway -->
+					<artifactId>httpclient</artifactId>
+					<groupId>org.apache.httpcomponents</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.roboguice</groupId>
+			<artifactId>roboguice</artifactId>
+			<version>${roboguice.version}</version>
+		</dependency>
+		<!-- Enable annotation corebase to improve performance. -->
+		<dependency>
+			<groupId>org.roboguice</groupId>
+			<artifactId>roboblender</artifactId>
+			<version>${roboguice.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<!-- nusic sub modules -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>nusic-data-api</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>nusic-core-api</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>nusic-util</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<resources>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<compilerArgument>-AguiceAnnotationcorebasePackageName=${project.groupId}.annotation.core</compilerArgument>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project> 

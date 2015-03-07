@@ -27,7 +27,6 @@ import info.schnatterer.nusic.android.listeners.PreferenceReleasedTodayTimePicke
 import info.schnatterer.nusic.android.listeners.PreferenceVisibilityButtonListener;
 import info.schnatterer.nusic.core.PreferencesService;
 import info.schnatterer.nusic.core.event.PreferenceChangedListener;
-import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences;
 
 import javax.inject.Inject;
 
