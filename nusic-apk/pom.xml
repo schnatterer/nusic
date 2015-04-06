@@ -284,14 +284,27 @@
 				<extensions>true</extensions>
 				<executions>
 					<execution>
+						<!-- Skip proguard in the default phase (process-classes)... -->
+						<id>override-default</id>
+						<configuration>
+							<proguard>
+								<skip>true</skip>
+							</proguard>
+						</configuration>
+					</execution>
+					<execution>
+						<!-- But execute proguard after running the tests (prepare package) -->
 						<id>progurad-after-test</id>
 						<phase>prepare-package</phase>
 						<goals>
 							<goal>proguard</goal>
 						</goals>
+						<configuration>
+							<proguard>
+								<skip>false</skip>
+							</proguard>
+						</configuration>
 					</execution>
-					<!--<execution> <id>alignApk</id> <phase>package</phase> <goals> <goal>zipalign</goal> 
-						</goals> </execution> -->
 				</executions>
 				<configuration>
 					<sdk>
@@ -305,9 +318,6 @@
 					<sign>
 						<debug>false</debug>
 					</sign>
-					<proguard>
-						<skip>false</skip>
-					</proguard>
 					<zipalign>
 						<skip>false</skip>
 						<verbose>true</verbose>

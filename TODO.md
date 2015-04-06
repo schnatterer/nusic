@@ -1,11 +1,16 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Modules: apk (-> Roboguice Module), ui-android
-- Test if core-android's i18n mechanism also works as designed in android!
-- Config SLF4J in order to get log statements from modules
+TODO Enable annotation database to improve performance.
 
-- Separate Maven Modules with API and impl: ServiceException: How to get rid of android dependency -> getLocalizedMessage only returns a KEY!?
-How to get rid of LocalMusicService in contentResolver? Factory that provides Context so Impl gets it injected and API can be generic?
+- Modules: apk (-> Roboguice Module), ui-android
+
+LOGGING 
+- Config SLF4J in order to get log statements from modules
+- Switch off logging for artwork. Using logback-android via slf4j and config in assets/logback.xml?
+- https://github.com/tony19/logback-android#configuration-in-code
+- Switch app to use slf4j?
+- Provide means to send log via email?
+
 - Add section about modules to README 
 
 - Introduce release profile, triggered by release plugin that executes proguard
@@ -13,14 +18,6 @@ How to get rid of LocalMusicService in contentResolver? Factory that provides Co
 http://www.androidsnippets.com/download-an-http-file-to-sdcard-with-progress-notification
 http://developer.android.com/guide/topics/data/data-storage.html#filesExternal
 
-
-
-LOGGING 
-- Switch off logging for artwork. Using logback-android via slf4j and config in assets/logback.xml?
-- https://github.com/tony19/logback-android#configuration-in-code
-- Switch app to use slf4j?
-- Provide means to send log via email?
-- Construction of objects. Use DI? Or more singletons to save a bit of memory?
 
 - Show artwork in context menu (on long tab)
 - Resources XXXHDPI?
