@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>info.schnatterer.nusic</groupId>
 		<artifactId>nusic-parent</artifactId>
-		<version>1.0.2</version>
+		<version>1.0.3-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>nusic-app</artifactId>
@@ -101,7 +101,7 @@
 			<!-- TODO replace this with the proper version, once it is published. 
 				Then remove "sibling" project "coverartarchive-api" from parent pom and from 
 				repo -->
-			<version>1.0.2</version>
+			<version>2.01beta-nusicEdition</version>
 			<exclusions>
 				<exclusion>
 					<!-- Android ships its own implementation of httpclient anyway -->
