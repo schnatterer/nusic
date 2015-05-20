@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>info.schnatterer.nusic</groupId>
 	<artifactId>nusic-parent</artifactId>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>nusic</name>
 
@@ -51,7 +51,8 @@
 					<completionGoals>com.jayway.maven.plugins.android.generation2:android-maven-plugin:3.8.2:manifest-update
 						scm:checkin -Dmessage="[maven-release-plugin] prepare for next
 						development iteration" -DworkingDirectory=.
-						-Dandroid.manifest.versionCodeAutoIncrement=true</completionGoals>
+						-Dandroid.manifest.versionCodeAutoIncrement=true
+						-Dandroid.manifest.versionName="@string/versionName"</completionGoals>
 					<!-- Don't deploy -->
 					<goals>install</goals>
 				</configuration>
