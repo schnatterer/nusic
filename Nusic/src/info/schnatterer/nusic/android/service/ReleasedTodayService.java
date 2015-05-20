@@ -29,12 +29,12 @@ import info.schnatterer.nusic.android.util.ImageUtil;
 import info.schnatterer.nusic.core.PreferencesService;
 import info.schnatterer.nusic.core.ReleaseService;
 import info.schnatterer.nusic.core.ServiceException;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences;
+import info.schnatterer.nusic.core.impl.ReleaseServiceImpl;
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.dao.ArtworkDao.ArtworkType;
 import info.schnatterer.nusic.data.dao.fs.ArtworkDaoFileSystem;
 import info.schnatterer.nusic.data.model.Release;
-import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences;
-import info.schnatterer.nusic.core.impl.ReleaseServiceImpl;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -88,7 +88,9 @@ public class ReleasedTodayService extends Service {
 			// Stop schedule
 			stopSchedule(this);
 		}
-		return Service.START_STICKY;
+		// Avoid this service from being started all over again
+		stopSelf();
+		return Service.START_NOT_STICKY;
 	}
 
 	/**
