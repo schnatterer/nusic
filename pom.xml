@@ -39,7 +39,7 @@
 		<module>nusic-data-android</module>
         <module>nusic-core-api</module>
         <module>nusic-core-android</module>
-		<module>nusic-apk</module>
+		<module>nusic-ui-android</module>
 		<!-- TODO remove as soon as a proper version is published and nusic-app 
 			does not reference this any more -->
 		<module>musicbrainzws2-java</module>
