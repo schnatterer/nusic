@@ -234,7 +234,7 @@
 				</configuration>
 			</plugin>
 
-			<!-- Starting with Android SDK Tools 23? you might have to copy zipaling  -->
+			<!-- Starting with Android SDK Tools 23? you might have to copy zipaling -->
 			<plugin>
 				<groupId>com.simpligility.maven.plugins</groupId>
 				<artifactId>android-maven-plugin</artifactId>
@@ -248,6 +248,10 @@
 					<androidManifestFile>AndroidManifest.xml</androidManifestFile>
 					<resourceDirectory>${res.dir.output}</resourceDirectory>
 					<assetsDirectory>${assets.dir.output}</assetsDirectory>
+					<!-- We need to maintain assets and res folder in the root (for eclipse) 
+						AND want android-maven-plugin to use the directories in target configured 
+						above. Force android maven plugin to accept that! -->
+					<failOnNonStandardStructure>false</failOnNonStandardStructure>
 				</configuration>
 			</plugin>
 		</plugins>
