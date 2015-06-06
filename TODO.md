@@ -1,7 +1,5 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Add section about modules to README 
-
 LOGGING 
 - Config SLF4J in order to get log statements from modules
 - Switch off logging for artwork. Using logback-android via slf4j and config in assets/logback.xml?
