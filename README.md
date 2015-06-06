@@ -25,6 +25,19 @@ See the [License](https://github.com/schnatterer/nusic/blob/master/Nusic/LICENSE
 See [Releases] (https://github.com/schnatterer/nusic/releases).
 
 ## Build
+### Modules
+| Module             | Packaging      | Description   |
+| -------------      | ------------- | ------------- |
+| parent             | pom | Global build properties for all modules |
+| nusic-apk          | apk | Assembly maven module containing the guice module, wires up all dependencies and builds the APK |
+| nusic-ui-android   | aar | Contains all android specific frontend-code |
+| nusic-core-api     | jar | Interfaces of the central logic module |
+| nusic-core-android | jar | Android-specific implementation of the central logic module |
+| nusic-data-api     | jar | Interfaces of the persistence module |
+| nusic-data-android | jar | Android-specific implementation of the persistence module |
+| nusic-domain       | jar | Domain objects for persistence and migration between the layers |
+| nusic-util         | jar | Utility module, containing logic common to all modules |
+
 ### Maven
 In order to build the APK use the [SDK manager](https://developer.android.com/tools/help/sdk-manager.html) to download the SDK Version specified in the [POM](https://github.com/schnatterer/nusic/blob/master/Nusic/pom.xml) and deploy android and the the support API to your local maven repo using [maven-android-sdk-deployer](https://github.com/mosabua/maven-android-sdk-deployerjust).
 Then just run

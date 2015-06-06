@@ -1,30 +1,35 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Enable using roboguice annotation database in NusicApplication
+LOGGING 
+- Config SLF4J in order to get log statements from modules
+- Switch off logging for artwork. Using logback-android via slf4j and config in assets/logback.xml?
+- https://github.com/tony19/logback-android#configuration-in-code
+- Switch app to use slf4j?
+- Provide means to send log via email?
 
-- Travis CI?
+- Introduce license maven plugin
+- Remove musicbrainz code in favor of linking a github maven repo
+- Switch to newest android SDK version?
+- Java7?
+- change digestalg?
+- Create a proper icon for status bar, that shows a CD not a white circle in android 5
 
-- Separate Maven Modules with API and impl: ServiceException: How to get rid of android dependency -> getLocalizedMessage only returns a KEY!?
-How to get rid of LocalMusicService in contentResolver? Factory that provides Context so Impl gets it injected and API can be generic?
-- Add section about modules to README 
+- Introduce material design, remove actionbarsherlock
+http://www.grokkingandroid.com/migrating-actionbarsherlock-actionbarcompat/
+http://android-developers.blogspot.de/2014/10/appcompat-v21-material-design-for-pre.html
 
 - Copy images to /sdcard instead of /data: 
 http://www.androidsnippets.com/download-an-http-file-to-sdcard-with-progress-notification
 http://developer.android.com/guide/topics/data/data-storage.html#filesExternal
 
-
-
-LOGGING 
-- Switch off logging for artwork. Using logback-android via slf4j and config in assets/logback.xml?
-- https://github.com/tony19/logback-android#configuration-in-code
-- Switch app to use slf4j?
-- Provide means to send log via email?
-- Construction of objects. Use DI? Or more singletons to save a bit of memory?
-
 - Show artwork in context menu (on long tab)
 - Resources XXXHDPI?
 
-- Introduce material design, remove actionbarsherlock
+- Create internal structure diagram, displaying module dependencies with an appropriate open source tool
+.....Build
+- Restructure APK project to use maven default structure
+- Insert Built timestamp to version
+- Refactoring: Maven Use profiles for release (signing...)
 
 - Covers: Download using HTTPS. Problem with certificate chain at coverartarchive.org ONLY on android. In addition, links to images are HTTP. Force using HTTPS?
 
@@ -33,12 +38,6 @@ LOGGING
 - Use WeakReferences in ReleaseRefreshService in order to allow longer time ranges
 
 - Feature: Tablet optimization: Layout + Screens for 7" + 10"
-
-.....Build
-- Change folder hierarchy to default maven (src/main/...)
-- Refactoring: Mavenize test project
-- Insert Built timestamp to version
-- Refactoring: Maven Use profiles for release (signing...)
 
 ....Stores
 - Stores: Publish on F-Droid
@@ -49,7 +48,7 @@ LOGGING
 - Feature: Kind of releases: Album, Release, Live ...
 - Feature: Check connectivity while refreshing and cancel with error when lost: http://developer.android.com/training/monitoring-device-state/connectivity-monitoring.html
 - Feature: Error reporter; Or a simpler workaround: Log errors to SD (microlog4android? http://stackoverflow.com/a/13479675/1845976)
-- Feature: Show number of artists and releases, show date of last refresh (in status/statistik dialog?)
+- Feature: Show number of artists and releases, show date of last refresh (in status/statistic dialog?)
 - Feature: Clean up DB, remove older entries
 - Refactoring: Delete LoadNewServiceBinding and split its functionality to MainActivity and  ServiceConnection?
 - Feature: Schedule frequence configurable via preferences (at the moment always once per day). When changed: Adapt interval.
