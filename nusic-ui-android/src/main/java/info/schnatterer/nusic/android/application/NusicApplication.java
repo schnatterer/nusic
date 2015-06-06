@@ -57,6 +57,11 @@ public class NusicApplication extends AbstractApplication {
 		initGlobals();
 
 		/*
+		 * Enable annotation database to improve performance.
+		 */
+		RoboGuice.setUseAnnotationDatabases(true);
+
+		/*
 		 * Can't use annotations in this class, because the module is set up in
 		 * this very method. So get instances explicitly here.
 		 */

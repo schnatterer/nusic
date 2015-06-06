@@ -21,7 +21,7 @@
 package info.schnatterer.nusic.android.adapters;
 
 import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.ui.R;
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.dao.ArtworkDao;
 import info.schnatterer.nusic.data.dao.ArtworkDao.ArtworkType;

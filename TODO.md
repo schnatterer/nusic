@@ -1,11 +1,6 @@
 TODOs - Features, enhancements, refactoring, ...
 
-TODO Enable annotation database to improve performance.
-
-- Modules: apk (-> Roboguice Module), ui-android
-
-- Introduce license maven plugin
-- Remove musicbrainz code in favor of linking a github maven repo
+- Add section about modules to README 
 
 LOGGING 
 - Config SLF4J in order to get log statements from modules
@@ -14,10 +9,16 @@ LOGGING
 - Switch app to use slf4j?
 - Provide means to send log via email?
 
-- Add section about modules to README 
+- Introduce license maven plugin
+- Remove musicbrainz code in favor of linking a github maven repo
+- Switch to newest android SDK version?
+- Java7?
+- change digestalg?
 - Create a proper icon for status bar, that shows a CD not a white circle in android 5
 
 - Introduce material design, remove actionbarsherlock
+http://www.grokkingandroid.com/migrating-actionbarsherlock-actionbarcompat/
+http://android-developers.blogspot.de/2014/10/appcompat-v21-material-design-for-pre.html
 
 - Copy images to /sdcard instead of /data: 
 http://www.androidsnippets.com/download-an-http-file-to-sdcard-with-progress-notification
@@ -26,6 +27,7 @@ http://developer.android.com/guide/topics/data/data-storage.html#filesExternal
 - Show artwork in context menu (on long tab)
 - Resources XXXHDPI?
 
+- Create internal structure diagram, displaying module dependencies with an appropriate open source tool
 .....Build
 - Restructure APK project to use maven default structure
 - Insert Built timestamp to version

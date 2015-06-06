@@ -31,7 +31,10 @@
 		<android.sdk.version>5.0_r1</android.sdk.version>
 		<robolectric.android.version>4.4_r1-robolectric-0</robolectric.android.version>
 		<robolectric.version>2.4</robolectric.version>
+        <android-maven-plugin.version>4.1.0</android-maven-plugin.version>
+        <commons-io.version>2.4</commons-io.version>
 	</properties>
+    
 	<modules>
 		<module>nusic-util</module>
 		<module>nusic-domain</module>
@@ -40,6 +43,7 @@
         <module>nusic-core-api</module>
         <module>nusic-core-android</module>
 		<module>nusic-ui-android</module>
+        <module>nusic-apk</module>
 		<!-- TODO remove as soon as a proper version is published and nusic-app 
 			does not reference this any more -->
 		<module>musicbrainzws2-java</module>

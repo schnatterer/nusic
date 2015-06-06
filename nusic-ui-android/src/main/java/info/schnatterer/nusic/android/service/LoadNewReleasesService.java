@@ -21,7 +21,7 @@
 package info.schnatterer.nusic.android.service;
 
 import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.ui.R;
 import info.schnatterer.nusic.android.activities.MainActivity;
 import info.schnatterer.nusic.android.util.ImageUtil;
 import info.schnatterer.nusic.android.util.Notification;

@@ -21,7 +21,7 @@
 package info.schnatterer.nusic.android.util;
 
 import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.ui.R;
 
 import java.io.IOException;
 import java.io.InputStream;

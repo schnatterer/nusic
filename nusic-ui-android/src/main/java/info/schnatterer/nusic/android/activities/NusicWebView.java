@@ -20,11 +20,9 @@
  */
 package info.schnatterer.nusic.android.activities;
 
-import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.util.TextUtil;
+import info.schnatterer.nusic.ui.R;
 import roboguice.activity.RoboSherlockFragmentActivity;
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,10 +47,7 @@ import com.actionbarsherlock.view.MenuItem;
  * 
  * @author schnatterer
  */
-@ContentView(R.layout.activity_web_view)
 public class NusicWebView extends RoboSherlockFragmentActivity {
-	@InjectView(R.id.webview)
-	WebView webView;
 
 	/** "Protocol" prefix of a link for E-mails. */
 	private static final String MAILTO_LINK = "mailto:";
@@ -60,6 +55,9 @@ public class NusicWebView extends RoboSherlockFragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_web_view);
+		WebView webView = (WebView) findViewById(R.id.webview);
+
 		// Display the back arrow in the header (left of the icon)
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

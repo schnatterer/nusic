@@ -20,7 +20,7 @@
  */
 package info.schnatterer.nusic.android.fragments;
 
-import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.ui.R;
 import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.listeners.PreferenceReleasedTodayTimePickerListener;
 import info.schnatterer.nusic.android.listeners.PreferenceVisibilityButtonListener;

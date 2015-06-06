@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>info.schnatterer.nusic</groupId>
+		<artifactId>nusic-parent</artifactId>
+		<version>1.0.2-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>nusic-apk</artifactId>
+	<packaging>apk</packaging>
+	<name>nusic-apk</name>
+
+	<properties>
+		<final.name>nusic-${project.version}</final.name>
+		<sdk.version>21</sdk.version>
+	</properties>
+
+	<profiles>
+		<profile>
+			<!-- Use Profiles to distinguish between the "implicit" builds of the 
+				eclipse plugin and "explicit" builds triggered by calling mvn install -->
+			<id>default</id>
+			<activation>
+				<property>
+					<name>!m2e.version</name>
+				</property>
+			</activation>
+			<dependencies>
+				<!-- Before building make sure to copy the android JARs to your local 
+					repo using the mave-android-sdk-deployer: https://github.com/mosabua/maven-android-sdk-deployer -->
+				<dependency>
+					<groupId>android</groupId>
+					<artifactId>android</artifactId>
+					<version>${android.sdk.version}</version>
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.roboguice</groupId>
+			<artifactId>roboguice</artifactId>
+			<version>${roboguice.version}</version>
+		</dependency>
+
+		<!-- nusic sub modules -->
+		<dependency>
+			<groupId>info.schnatterer.nusic</groupId>
+			<artifactId>nusic-ui-android</artifactId>
+			<version>${project.parent.version}</version>
+			<type>aar</type>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>nusic-data-api</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>nusic-data-android</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>info.schnatterer.nusic</groupId>
+			<artifactId>nusic-core-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>info.schnatterer.nusic</groupId>
+			<artifactId>nusic-core-android</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>httpclient</artifactId>
+					<groupId>org.apache.httpcomponents</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>${final.name}</finalName>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jarsigner-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<id>signing</id>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+						<phase>package</phase>
+						<inherited>true</inherited>
+						<configuration>
+							<includes>
+								<include>${project.build.directory}/${project.artifactId}.apk</include>
+							</includes>
+							<keystore>${sign.keystore}</keystore>
+							<alias>${sign.alias}</alias>
+							<storepass>${sign.storepass}</storepass>
+							<keypass>${sign.keypass}</keypass>
+							<verbose>true</verbose>
+							<arguments>
+								<!-- Fix for JDK 1.7 -->
+								<argument>-sigalg</argument>
+								<argument>MD5withRSA</argument>
+								<argument>-digestalg</argument>
+								<argument>SHA1</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Starting with Android SDK Tools 23? you might have to copy zipaling 
+				from sdk/build-tools/<version> to sdk/tools -->
+			<plugin>
+				<groupId>com.simpligility.maven.plugins</groupId>
+				<artifactId>android-maven-plugin</artifactId>
+				<version>${android-maven-plugin.version}</version>
+				<inherited>true</inherited>
+				<extensions>true</extensions>
+				<executions>
+					<execution>
+						<!-- Skip proguard in the default phase (process-classes)... -->
+						<id>override-default</id>
+						<configuration>
+							<proguard>
+								<skip>true</skip>
+							</proguard>
+						</configuration>
+					</execution>
+					<execution>
+						<!-- But execute proguard after running the tests (prepare package) -->
+						<id>progurad-after-test</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>proguard</goal>
+						</goals>
+						<configuration>
+							<proguard>
+								<skip>false</skip>
+							</proguard>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<sdk>
+						<!-- targetSdkVersion -->
+						<platform>${sdk.version}</platform>
+					</sdk>
+					<manifest>
+						<debuggable>false</debuggable>
+					</manifest>
+					<release>true</release>
+					<sign>
+						<debug>false</debug>
+					</sign>
+					<zipalign>
+						<skip>false</skip>
+						<verbose>true</verbose>
+						<inputApk>${project.build.directory}/${final.name}.apk</inputApk>
+						<outputApk>${project.build.directory}/${final.name}.apk</outputApk>
+					</zipalign>
+					<resourceDirectory>${res.dir.output}</resourceDirectory>
+					<assetsDirectory>${assets.dir.output}</assetsDirectory>
+					<!-- Non standard. Move to standard locaction? -->
+					<androidManifestFile>AndroidManifest.xml</androidManifestFile>
+					<assetsDirectory>assets</assetsDirectory>
+					<resourceDirectory>res</resourceDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project> 

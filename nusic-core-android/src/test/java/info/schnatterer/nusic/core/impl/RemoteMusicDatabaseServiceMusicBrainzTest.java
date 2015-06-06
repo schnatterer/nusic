@@ -30,17 +30,12 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.musicbrainz.MBWS2Exception;
 import org.musicbrainz.model.entity.ReleaseWs2;
 import org.musicbrainz.model.searchresult.ReleaseResultWs2;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
 import android.annotation.SuppressLint;
 
-@RunWith(RobolectricTestRunner.class)
-@Config(manifest = Config.NONE)
 // Test is faster without dependency Injection!
 public class RemoteMusicDatabaseServiceMusicBrainzTest {
 	@SuppressLint("SimpleDateFormat")

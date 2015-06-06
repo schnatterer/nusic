@@ -35,22 +35,6 @@
 					<version>${android.sdk.version}</version>
 					<scope>provided</scope>
 				</dependency>
-				<!-- This dependency makes it impossible to deploy with eclipse... Because 
-					of its many transitive dependencies this will exceed the 65K limit: http://developer.android.com/tools/building/multidex.html 
-					So include the robolectric-x.x.x-jar-with-dependencies to eclipse! http://robolectric.org/eclipse-quick-start/. -->
-				<!-- TODO Find out which APIs are really needed and add only those? -->
-				<dependency>
-					<groupId>org.robolectric</groupId>
-					<artifactId>android-all</artifactId>
-					<version>${robolectric.android.version}</version>
-					<scope>test</scope>
-				</dependency>
-				<dependency>
-					<groupId>org.robolectric</groupId>
-					<artifactId>robolectric</artifactId>
-					<version>${robolectric.version}</version>
-					<scope>test</scope>
-				</dependency>
 			</dependencies>
 		</profile>
 	</profiles>
@@ -70,13 +54,6 @@
 				Then remove "sibling" project "coverartarchive-api" from parent pom and from 
 				repo -->
 			<version>2.01beta-nusicEdition</version>
-			<exclusions>
-				<exclusion>
-					<!-- Android ships its own implementation of httpclient anyway -->
-					<artifactId>httpclient</artifactId>
-					<groupId>org.apache.httpcomponents</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -87,13 +64,6 @@
 			<groupId>fm.last</groupId>
 			<artifactId>coverartarchive-api</artifactId>
 			<version>2.1.0</version>
-			<exclusions>
-				<exclusion>
-					<!-- Android ships its own implementation of httpclient anyway -->
-					<artifactId>httpclient</artifactId>
-					<groupId>org.apache.httpcomponents</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.roboguice</groupId>

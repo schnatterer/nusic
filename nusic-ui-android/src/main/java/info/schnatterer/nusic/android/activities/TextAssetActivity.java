@@ -20,11 +20,9 @@
  */
 package info.schnatterer.nusic.android.activities;
 
-import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.util.TextUtil;
+import info.schnatterer.nusic.ui.R;
 import roboguice.activity.RoboSherlockFragmentActivity;
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
@@ -43,14 +41,13 @@ import com.actionbarsherlock.view.MenuItem;
  * 
  * @author schnatterer
  */
-@ContentView(R.layout.simple_textview_layout)
 public class TextAssetActivity extends RoboSherlockFragmentActivity {
-	@InjectView(R.id.renderRawHtmlTextView)
-	TextView textView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.simple_textview_layout);
+		TextView textView = (TextView) findViewById(R.id.renderRawHtmlTextView);
 		// Display the back arrow in the header (left of the icon)
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

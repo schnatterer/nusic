@@ -22,16 +22,14 @@ package info.schnatterer.nusic.android.activities;
 
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.Constants.Loaders;
-import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.LoadNewRelasesServiceBinding;
 import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.fragments.ReleaseListFragment;
 import info.schnatterer.nusic.android.service.LoadNewReleasesService;
 import info.schnatterer.nusic.android.util.TextUtil;
 import info.schnatterer.nusic.android.util.Toast;
+import info.schnatterer.nusic.ui.R;
 import roboguice.activity.RoboSherlockFragmentActivity;
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -67,7 +65,6 @@ import com.actionbarsherlock.view.MenuItem;
  * @author schnatterer
  *
  */
-@ContentView(R.layout.activity_main)
 public class MainActivity extends RoboSherlockFragmentActivity {
 	/** The request code used when starting {@link PreferenceActivity}. */
 	private static final int REQUEST_CODE_PREFERENCE_ACTIVITY = 0;
@@ -103,12 +100,13 @@ public class MainActivity extends RoboSherlockFragmentActivity {
 	// private Provider<LoadNewRelasesServiceBinding>
 	// loadNewRelasesServiceBindingProvider;
 
-	@InjectView(R.id.mainPager)
-	ViewPager pager;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		ViewPager pager = (ViewPager) findViewById(R.id.mainPager);
+
 		/* Init tab fragments */
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);

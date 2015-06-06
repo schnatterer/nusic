@@ -1,7 +1,7 @@
 package info.schnatterer.nusic.android.listeners;
 
 import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.R;
+import info.schnatterer.nusic.ui.R;
 import info.schnatterer.nusic.android.util.Toast;
 import info.schnatterer.nusic.core.ReleaseService;
 import info.schnatterer.nusic.core.ServiceException;

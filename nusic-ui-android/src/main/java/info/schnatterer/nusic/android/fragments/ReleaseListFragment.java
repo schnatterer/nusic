@@ -22,7 +22,6 @@ package info.schnatterer.nusic.android.fragments;
 
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.Constants.Loaders;
-import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.activities.NusicWebView;
 import info.schnatterer.nusic.android.adapters.ReleaseListAdapter;
 import info.schnatterer.nusic.android.loaders.AsyncResult;
@@ -33,6 +32,7 @@ import info.schnatterer.nusic.core.ReleaseService;
 import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.data.model.Release;
+import info.schnatterer.nusic.ui.R;
 
 import java.util.List;
 
@@ -40,7 +40,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import roboguice.fragment.RoboSherlockFragment;
-import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -89,12 +88,9 @@ public class ReleaseListFragment extends RoboSherlockFragment {
 
 	@Inject
 	private ReleaseListAdapter releasesListViewAdapter;
-	@InjectView(R.id.releasesListView)
-	private ListView releasesListView;
-	@InjectView(R.id.releasesTextViewNoneFound)
+	ListView releasesListView;
 	private TextView releasesTextViewNoneFound;
 	/** Progress animation when loading releases from db */
-	@InjectView(R.id.releasesProgressBar)
 	private ProgressBar progressBar;
 	@Inject
 	private ReleaseService releaseService;
@@ -109,6 +105,7 @@ public class ReleaseListFragment extends RoboSherlockFragment {
 		return inflater.inflate(R.layout.release_list_layout, container, false);
 	}
 
+	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		try {
@@ -120,6 +117,13 @@ public class ReleaseListFragment extends RoboSherlockFragment {
 					"Error reading arguments from bundle passed by parent activity",
 					e);
 		}
+
+		releasesListView = (ListView) getView().findViewById(
+				R.id.releasesListView);
+		releasesTextViewNoneFound = (TextView) getView().findViewById(
+				R.id.releasesTextViewNoneFound);
+		progressBar = (ProgressBar) getView().findViewById(
+				R.id.releasesProgressBar);
 
 		progressBar.setVisibility(View.GONE);
 
@@ -173,20 +177,17 @@ public class ReleaseListFragment extends RoboSherlockFragment {
 			Release release = (Release) releasesListView
 					.getItemAtPosition(info.position);
 			try {
-				switch (item.getItemId()) {
-				case R.id.releaseListMenuHideRelease:
+				if (item.getItemId() == R.id.releaseListMenuHideRelease) {
 					displayLoading();
 					release.setHidden(true);
 					releaseService.update(release);
 					getActivity().onContentChanged();
-					break;
-				case R.id.releaseListMenuHideAllByArtist:
+				} else if (item.getItemId() == R.id.releaseListMenuHideAllByArtist) {
 					Artist artist = release.getArtist();
 					artist.setHidden(true);
 					artistService.update(artist);
 					getActivity().onContentChanged();
-					break;
-				default:
+				} else {
 					return super.onContextItemSelected(item);
 				}
 			} catch (ServiceException e) {
