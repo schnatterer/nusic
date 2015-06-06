@@ -60,7 +60,6 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>nusic-data-api</artifactId>
 			<version>${project.parent.version}</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -190,8 +189,6 @@
 						<inputApk>${project.build.directory}/${final.name}.apk</inputApk>
 						<outputApk>${project.build.directory}/${final.name}.apk</outputApk>
 					</zipalign>
-					<resourceDirectory>${res.dir.output}</resourceDirectory>
-					<assetsDirectory>${assets.dir.output}</assetsDirectory>
 					<!-- Non standard. Move to standard locaction? -->
 					<androidManifestFile>AndroidManifest.xml</androidManifestFile>
 					<assetsDirectory>assets</assetsDirectory>

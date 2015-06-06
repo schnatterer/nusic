@@ -49,10 +49,10 @@
 					<version>${roboguice.version}</version>
 					<scope>provided</scope>
 				</dependency>
-				<!-- This dependency makes it impossible to deploy with eclipse... On 
-					the other hand we can't run unit test without it from eclipse. -->
-				<!-- TODO Find out which APIs are really needed and add only those? -->
 				<dependency>
+					<!-- This dependency makes it impossible to deploy with eclipse... On 
+						the other hand we can't run unit test without it from eclipse. -->
+					<!-- TODO Find out which APIs are really needed and add only those? -->
 					<groupId>org.robolectric</groupId>
 					<artifactId>android-all</artifactId>
 					<version>${robolectric.android.version}</version>
@@ -64,8 +64,6 @@
 					<version>${robolectric.version}</version>
 					<scope>test</scope>
 				</dependency>
-				<!--<dependency> <groupId>org.mockito</groupId> <artifactId>mockito-core</artifactId> 
-					<version>${mockito.version}</version> <scope>test</scope> </dependency> -->
 			</dependencies>
 		</profile>
 	</profiles>
@@ -102,8 +100,6 @@
 			<artifactId>universal-image-loader</artifactId>
 			<version>1.9.2</version>
 		</dependency>
-					<!-- Android ships its own implementation of httpclient anyway -->
-		<!-- coverartarchive uses slf4j, propagate its logs to android.util.Log -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>nusic-data-api</artifactId>
@@ -120,7 +116,6 @@
 			<artifactId>nusic-util</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-		<!-- TODO Find out which APIs are really needed and add only those? -->
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
@@ -182,8 +177,6 @@
 					<compilerArgument>-AguiceAnnotationDatabasePackageName=${project.groupId}.annotation.apk</compilerArgument>
 				</configuration>
 			</plugin>
-								<!-- Fix for JDK 1.7 -->
-
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>wagon-maven-plugin</artifactId>
@@ -253,8 +246,8 @@
 					</sign>
 					<!-- Non standard. Move to standard locaction? -->
 					<androidManifestFile>AndroidManifest.xml</androidManifestFile>
-					<assetsDirectory>assets</assetsDirectory>
-					<resourceDirectory>res</resourceDirectory>
+					<resourceDirectory>${res.dir.output}</resourceDirectory>
+					<assetsDirectory>${assets.dir.output}</assetsDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
