@@ -48,14 +48,6 @@
 				Then remove "sibling" project "coverartarchive-api" from parent pom and from 
 				repo -->
 			<version>2.01beta-nusicEdition</version>
-			<exclusions>
-				<!-- This dependency is not used in source code, so spare the APK the 
-					bloat -->
-				<exclusion>
-					<artifactId>commons-logging</artifactId>
-					<groupId>commons-logging</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>

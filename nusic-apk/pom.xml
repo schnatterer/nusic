@@ -82,6 +82,12 @@
 					<artifactId>httpclient</artifactId>
 					<groupId>org.apache.httpcomponents</groupId>
 				</exclusion>
+				<!-- This dependency is only used by httpclient, so spare the APK the 
+					bloat -->
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 
