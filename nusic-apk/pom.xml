@@ -79,10 +79,28 @@
 			<version>${project.version}</version>
 			<exclusions>
 				<exclusion>
+					<!-- Android ships its own implementation of httpclient anyway -->
 					<artifactId>httpclient</artifactId>
 					<groupId>org.apache.httpcomponents</groupId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<!-- Logging -->
+		<dependency>
+			<!-- musicbrainzws2-java uses java util logging, propagate its logs to slf4j -->
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- Propagate log statements produced by dependencies via slf4j to android.util.Log 
+			(Logcat) -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-android</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 	<build>

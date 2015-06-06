@@ -41,21 +41,6 @@
 	</profiles>
 
 	<dependencies>
-		<!-- musicbrainzws2-java uses slf4j, propagate its logs to android.util.Log (Logcat) -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>${slf4j.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		<!-- Propagate log statements produced by dependencies via slf4j to android.util.Log (Logcat) -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-android</artifactId>
-			<version>${slf4j.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-
 		<dependency>
 			<groupId>musicbrainzws2-java</groupId>
 			<artifactId>musicbrainzws2-java</artifactId>
