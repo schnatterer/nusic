@@ -3,9 +3,10 @@ TODOs - Features, enhancements, refactoring, ...
 LOGGING 
 - Config SLF4J in order to get log statements from modules
 - Switch off logging for artwork. Using logback-android via slf4j and config in assets/logback.xml?
-- https://github.com/tony19/logback-android#configuration-in-code
 - Switch app to use slf4j?
 - Provide means to send log via email?
+- Manage to propagate JUL output from MBWS2J to SLF4J
+- Manage to grab Logcat output from android to to SLF4J
 
 - Introduce license maven plugin
 - Remove musicbrainz code in favor of linking a github maven repo
