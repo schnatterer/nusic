@@ -1,6 +1,5 @@
 package info.schnatterer.nusic.android;
 
-import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.core.ArtistService;
@@ -94,7 +93,7 @@ public class NusicAndroidModule extends AbstractModule {
 		bind(String.class).annotatedWith(ApplicationVersion.class).toInstance(
 				NusicApplication.getCurrentVersionName());
 		bind(String.class).annotatedWith(ApplicationContact.class).toInstance(
-				Constants.APPLICATION_URL);
+				application.getString(R.string.app_url));
 
 		bind(String.class)
 				.annotatedWith(PreferencesKeyDownloadOnlyOnWifi.class)
