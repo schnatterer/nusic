@@ -10,7 +10,7 @@
      <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
        <level>INFO</level>
      </filter>
-     <filter class="com.myapp.ThresholdLoggerFilter">
+     <filter class="ch.qos.logback.classic.filter.ThresholdLoggerFilter">
          <!-- Don't log MB IDs to Logcat -->
         <logger>fm.last.musicbrainz.coverart</logger>
         <level>WARN</level>
@@ -40,4 +40,5 @@
      <appender-ref ref="LOGCAT" />
      <appender-ref ref="FILE" />
    </root>
+   
 </configuration>
