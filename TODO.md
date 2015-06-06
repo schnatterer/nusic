@@ -4,7 +4,6 @@ LOGGING
 - Switch app to use slf4j?
 - Provide means to send log via email?
 
-- Manage to propagate JUL output from MBWS2J to SLF4J
 - Manage to grab Logcat output from android to to SLF4J
 
 - Introduce license maven plugin

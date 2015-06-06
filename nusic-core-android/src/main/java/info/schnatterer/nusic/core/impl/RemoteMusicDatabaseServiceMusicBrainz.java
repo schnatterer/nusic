@@ -105,14 +105,6 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 	private String appContact;
 	@Inject
 	private ArtworkDao artworkDao;
-	static {
-		/*
-		 * Some class are flooding our logs with warnings. Give us some space!
-		 */
-		java.util.logging.Logger.getLogger(
-				"org.musicbrainz.wsxml.impl.JDOMParserWs2").setLevel(
-				java.util.logging.Level.SEVERE);
-	}
 
 	/**
 	 * Creates a service instance for finding releases.
