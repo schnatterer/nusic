@@ -2,7 +2,7 @@
 <!-- Application-wide technical constants (e.g. for preferences). Don't translate! -->
 <resources>
     <string name="app_name">nusic</string>
-    <string name="app_url">${project.url}</string>
+    <string name="app_url">${project.website.url}</string>
     <string name="versionName">${project.version}</string>
     
     <string name="extra_asset_name">nusic.intent.extra.assetName</string>
@@ -13,7 +13,7 @@
     <string name="link_sd_scanner">https://play.google.com/store/apps/details?id=com.gmail.jerickson314.sdscanner</string>
     <!-- Links as HTML (embedded in a <a href"link"></a>) -->
     <string name="html_link_nusic_google_play">&lt;a href="@string/link_nusic_google_play"&gt;@string/GooglePlay&lt;a&gt;</string>
-    <string name="html_link_nusic_git_hub">&lt;a href="@string/link_nusic_git_hub"&gt;@string/GitHub&lt;a&gt;</string>
+    <string name="html_link_nusic_git_hub">&lt;a href="@string/app_url"&gt;@string/GitHub&lt;a&gt;</string>
     <string name="html_link_sd_scanner">&lt;a href="@string/link_sd_scanner"&gt;@string/SDScanner&lt;a&gt;</string>
     
     <!-- Preferences -->
