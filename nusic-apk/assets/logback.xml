@@ -2,7 +2,7 @@
 	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator" />
 
 	<property name="ANDROID_PACKAGE" value="info.schnatterer.nusic" />
-	<property name="LOG_DIR" value="logs" />
+	<property name="LOG_DIR" value="app_logs" />
 	<property name="APP_NAME" value="nusic" />
 	<property name="LOG_PATH"
 		value="/data/data/${ANDROID_PACKAGE}/${LOG_DIR}/${APP_NAME}.log" />
