@@ -21,7 +21,6 @@
 package info.schnatterer.nusic.android.service;
 
 import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.ui.R;
 import info.schnatterer.nusic.android.activities.MainActivity;
 import info.schnatterer.nusic.android.util.ImageUtil;
 import info.schnatterer.nusic.android.util.Notification;
@@ -37,6 +36,7 @@ import info.schnatterer.nusic.data.dao.ArtworkDao;
 import info.schnatterer.nusic.data.dao.ArtworkDao.ArtworkType;
 import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.data.model.Release;
+import info.schnatterer.nusic.ui.R;
 
 import java.io.InputStream;
 import java.util.Calendar;
@@ -45,6 +45,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import roboguice.receiver.RoboBroadcastReceiver;
 import android.app.AlarmManager;
@@ -59,6 +62,9 @@ import android.os.IBinder;
 import android.util.Log;
 
 public class LoadNewReleasesService extends WakefulService {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(LoadNewReleasesService.class);
+
 	/**
 	 * Key to the creating intent's extras that contains a boolean that triggers
 	 * loading the release if <code>true</code>.
@@ -91,25 +97,22 @@ public class LoadNewReleasesService extends WakefulService {
 
 	@Override
 	public int onStartCommandWakeful(Intent intent, int flags, int startId) {
-		Log.d(Constants.LOG,
-				"Flags = "
-						+ flags
-						+ "; startId = "
-						+ startId
-						+ ". Intent = "
-						+ intent
-						+ (intent != null ? (", extra "
-								+ EXTRA_REFRESH_ON_START + " = " + intent
-								.getBooleanExtra(EXTRA_REFRESH_ON_START, false))
-								: ""));
+		LOG.debug("Flags = "
+				+ flags
+				+ "; startId = "
+				+ startId
+				+ ". Intent = "
+				+ intent
+				+ (intent != null ? (", extra " + EXTRA_REFRESH_ON_START
+						+ " = " + intent.getBooleanExtra(
+						EXTRA_REFRESH_ON_START, false)) : ""));
 		boolean refreshing = true;
 
 		if (intent == null) {
 			// When START_STICKY the intent will be null on "restart" after
 			// getting killed
 			// TODO RESUME download instead of starting new?
-			Log.d(Constants.LOG,
-					"Services restarted after being destroyed while workerThread was running.");
+			LOG.debug("Services restarted after being destroyed while workerThread was running.");
 			refreshReleases(false, null);
 		} else if (intent.getBooleanExtra(EXTRA_REFRESH_ON_START, false)) {
 			refreshReleases(false, null);
@@ -148,8 +151,7 @@ public class LoadNewReleasesService extends WakefulService {
 		if (tryCreateThread(updateOnlyIfNeccesary, artistProcessedListener)) {
 			return true;
 		} else {
-			Log.d(Constants.LOG,
-					"Service thread already working, only adding process listener");
+			LOG.debug("Service thread already working, only adding process listener");
 			syncReleasesService
 					.addArtistProcessedListener(artistProcessedListener);
 			return false;
@@ -168,7 +170,7 @@ public class LoadNewReleasesService extends WakefulService {
 			ArtistProgressListener artistProcessedListener) {
 		// if (workerThread == null || !workerThread.isAlive()) {
 		if (workerThread == null) {
-			Log.d(Constants.LOG, "Service thread not working yet, starting.");
+			LOG.debug("Service thread not working yet, starting.");
 			errorArtists = new LinkedList<Artist>();
 			// totalArtists = 0;
 			workerThread = new Thread(new WorkerThread(updateOnlyIfNeccesary,
@@ -190,13 +192,12 @@ public class LoadNewReleasesService extends WakefulService {
 		}
 
 		public void run() {
-			Log.d(Constants.LOG, "Service thread starting work");
+			LOG.debug("Service thread starting work");
 			if (!connectivityService.isOnline()) {
-				Log.d(Constants.LOG, "Service thread: Not online!");
+				LOG.debug("Service thread: Not online!");
 				// If not online and update necessary, postpone run
 				if (!updateOnlyIfNeccesary) {
-					Log.d(Constants.LOG,
-							"Postponing service until online or next schedule");
+					LOG.debug("Postponing service until online or next schedule");
 					loadNewReleasesServiceConnectivityReceiver.enableReceiver();
 
 					// Send status "not online" back to listener?
@@ -232,8 +233,7 @@ public class LoadNewReleasesService extends WakefulService {
 
 					long beforeRefresh = System.currentTimeMillis();
 
-					Log.d(Constants.LOG,
-							"Service thread: Calling refreshReleases()");
+					LOG.debug("Service thread: Calling refreshReleases()");
 					syncReleasesService.syncReleases();
 
 					// Schedule next run
@@ -244,7 +244,7 @@ public class LoadNewReleasesService extends WakefulService {
 						notifyNewReleases(beforeRefresh);
 					} catch (ServiceException e) {
 						// Refresh succeeded, so don't tell user
-						Log.w(Constants.LOG,
+						LOG.warn(
 								"Refresh succeeded, but databse error when trying to find out about new releases",
 								e);
 					}
@@ -255,7 +255,7 @@ public class LoadNewReleasesService extends WakefulService {
 			}
 
 			// stop service
-			Log.d(Constants.LOG, "Service: Explicit stop self");
+			LOG.debug("Service: Explicit stop self");
 			stopSelf();
 		}
 	}
@@ -306,11 +306,9 @@ public class LoadNewReleasesService extends WakefulService {
 							+ release.getReleaseName(), R.drawable.ic_launcher,
 					scaledBitmap, MainActivity.class, createExtraActiveTab());
 		} catch (DatabaseException e) {
-			Log.w(Constants.LOG, "Unable to load artwork for notification. "
-					+ release, e);
+			LOG.warn("Unable to load artwork for notification. " + release, e);
 		} catch (IllegalArgumentException e) {
-			Log.w(Constants.LOG, "Unable scale artwork for notification. "
-					+ release, e);
+			LOG.warn("Unable scale artwork for notification. " + release, e);
 		}
 	}
 
@@ -365,11 +363,10 @@ public class LoadNewReleasesService extends WakefulService {
 
 	@Override
 	public void onDestroy() {
-		Log.d(Constants.LOG, "Nusic service: onDestroy()");
+		LOG.debug("Nusic service: onDestroy()");
 
 		if (workerThread != null && workerThread.isAlive()) {
-			Log.d(Constants.LOG,
-					"Services destroyed while workerThread is running.");
+			LOG.debug("Services destroyed while workerThread is running.");
 		}
 		workerThread = null;
 		if (syncReleasesService != null) {
@@ -404,7 +401,7 @@ public class LoadNewReleasesService extends WakefulService {
 			RoboBroadcastReceiver {
 		@Override
 		public void handleReceive(final Context context, final Intent intent) {
-			Log.d(Constants.LOG, "Alarm Receiver: Alarm received!");
+			LOG.debug("Alarm Receiver: Alarm received!");
 			// Acquire lock, making sure device is not going to sleep again
 			acquireLock(context);
 			context.startService(LoadNewReleasesService
@@ -458,7 +455,7 @@ public class LoadNewReleasesService extends WakefulService {
 		public void onProgressFailed(Artist entity, int progress, int max,
 				Boolean result, Throwable potentialException) {
 			if (potentialException != null) {
-				Log.e(Constants.LOG, potentialException.getMessage(),
+				LOG.error( potentialException.getMessage(),
 						potentialException);
 				if (potentialException instanceof ServiceException) {
 					Notification
@@ -535,8 +532,8 @@ public class LoadNewReleasesService extends WakefulService {
 					triggerAtDate.getTime(), AlarmManager.INTERVAL_DAY
 							* intervalDays, pintent);
 			preferencesService.setNextReleaseRefresh(triggerAtDate);
-			Log.d(Constants.LOG, "Scheduled task to run again every "
-					+ intervalDays + " days, starting at " + triggerAtDate);
+			LOG.debug("Scheduled task to run again every " + intervalDays
+					+ " days, starting at " + triggerAtDate);
 		}
 	}
 }

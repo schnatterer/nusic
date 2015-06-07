@@ -20,10 +20,12 @@
  */
 package info.schnatterer.nusic.android.application;
 
-import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.android.util.ResourceUtil;
 
 import java.io.InputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import android.annotation.TargetApi;
 import android.app.Application;
@@ -34,7 +36,6 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.util.Log;
 
 /**
  * Extended version of {@link Application} that contains a version number
@@ -49,6 +50,9 @@ import android.util.Log;
  *
  */
 public abstract class AbstractApplication extends Application {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(AbstractApplication.class);
+
 	/** Name of the shared prefernces file used to store the app versions. */
 	static final String SHARED_PREFERENCES_NAME = "AbstractApplicationPreferences";
 	static final String KEY_LAST_APP_VERSION = "last_app_version";
@@ -108,7 +112,7 @@ public abstract class AbstractApplication extends Application {
 			currentVersionCode = pInfo.versionCode;
 
 			// Update version in preferences
-			Log.d(Constants.LOG, "handleAppVersion(): currentVersionCode="
+			LOG.debug("handleAppVersion(): currentVersionCode="
 					+ currentVersionCode + "; lastVersionCode="
 					+ lastVersionCode);
 			if (currentVersionCode != lastVersionCode) {
@@ -126,8 +130,7 @@ public abstract class AbstractApplication extends Application {
 				}
 			}
 		} catch (NameNotFoundException e) {
-			Log.w(Constants.LOG,
-					"Unable to determine current app version from pacakge manager. Defenisvely assuming normal app start.");
+			LOG.warn("Unable to determine current app version from pacakge manager. Defenisvely assuming normal app start.");
 		}
 		appStart = AppStart.NORMAL;
 		return;

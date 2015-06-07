@@ -49,6 +49,4 @@ public interface Constants {
 		public static final int RELEASE_LOADER_ANNOUNCED = 2;
 		public static final int RELEASE_LOADER_AVAILABLE = 3;
 	}
-
-	String LOG = "info.schnatterer.nusic";
 }

@@ -1,20 +1,21 @@
 package info.schnatterer.nusic.android.listeners;
 
-import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.ui.R;
 import info.schnatterer.nusic.android.util.Toast;
 import info.schnatterer.nusic.core.ReleaseService;
 import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.data.model.Artist;
+import info.schnatterer.nusic.ui.R;
 
 import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.preference.Preference;
-import android.util.Log;
 
 /**
  * Creates a preference listener that opens an {@link AlertDialog}. If it is
@@ -25,6 +26,9 @@ import android.util.Log;
  */
 public class PreferenceVisibilityButtonListener implements
 		Preference.OnPreferenceClickListener {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(PreferenceVisibilityButtonListener.class);
+
 	private Activity activity;
 
 	@Inject
@@ -33,8 +37,7 @@ public class PreferenceVisibilityButtonListener implements
 	@Override
 	public boolean onPreferenceClick(Preference preference) {
 		if (activity == null) {
-			Log.w(Constants.LOG, "No activity set in "
-					+ this.getClass().getName());
+			LOG.warn("No activity set in " + this.getClass().getName());
 			return false;
 		}
 		new AlertDialog.Builder(activity)

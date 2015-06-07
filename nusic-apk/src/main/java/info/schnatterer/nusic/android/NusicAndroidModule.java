@@ -1,6 +1,5 @@
 package info.schnatterer.nusic.android;
 
-import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.core.ArtistService;
@@ -45,7 +44,6 @@ import info.schnatterer.nusic.data.dao.sqlite.ReleaseDaoSqlite;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.google.inject.AbstractModule;
 
@@ -66,9 +64,7 @@ public class NusicAndroidModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		Log.i(Constants.LOG, "BEGIN SET JUL HANDLER");
 		installSlf4jJulHandler();
-		Log.i(Constants.LOG, "FINISHED SET JUL HANDLER");
 
 		/*
 		 * Database requires static injection, because the context must be

@@ -252,7 +252,7 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 					release.setReleaseName(releaseResult.getTitle());
 					release.setReleaseDate(newDate);
 					release.setMusicBrainzId(releaseGroupId);
-					// Log.d(Constants.LOG, "Release: " + artist.getArtistName()
+					// LOG.debug("Release: " + artist.getArtistName()
 					// + "-" + releaseResult.getTitle() + "-"
 					// + releaseGroupId);
 					try {
@@ -315,7 +315,7 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 								smallThumbnail);
 
 						release.setCoverartArchiveId(coverArtImage.getId());
-						// Log.d(Constants.LOG,
+						// LOG.debug(
 						// "Cover:   " + artist.getArtistName() + "-"
 						// + release.getReleaseName() + "_"
 						// + release.getMusicBrainzId() + "_"

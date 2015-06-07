@@ -20,7 +20,6 @@
  */
 package info.schnatterer.nusic.android.util;
 
-import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.ui.R;
 
 import java.io.IOException;
@@ -32,6 +31,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.XMLReader;
 
 import android.content.Context;
@@ -43,6 +44,7 @@ import android.text.style.LeadingMarginSpan;
 import android.util.Log;
 
 public class TextUtil {
+	private static final Logger LOG = LoggerFactory.getLogger(TextUtil.class);
 
 	/**
 	 * Regex that matches a resource string such as <code>@string/a-b_c1</code>.
@@ -102,8 +104,9 @@ public class TextUtil {
 					return assetText;
 				}
 			} catch (IOException e) {
-				Log.w(Constants.LOG, "Unable to load asset from path \""
-						+ assetPath + "\"", e);
+				LOG.warn(
+						"Unable to load asset from path \"" + assetPath + "\"",
+						e);
 				return context
 						.getString(R.string.TextAssetActivity_errorLoadingFile);
 			} finally {
@@ -134,9 +137,8 @@ public class TextUtil {
 			String stringFromResources = ResourceUtil.getStringByName(context,
 					m.group(1));
 			if (stringFromResources == null) {
-				Log.w(Constants.LOG,
-						"No String resource found for ID \"" + m.group(1)
-								+ "\" while inserting resources");
+				LOG.warn("No String resource found for ID \"" + m.group(1)
+						+ "\" while inserting resources");
 				/*
 				 * No need to try to load from defaults, android is trying that
 				 * for us. If we're here, the resource does not exist. Just

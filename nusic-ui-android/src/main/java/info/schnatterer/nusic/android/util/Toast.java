@@ -20,9 +20,10 @@
  */
 package info.schnatterer.nusic.android.util;
 
-import info.schnatterer.nusic.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.Context;
-import android.util.Log;
 
 /**
  * Convenience Wrapper for {@link android.widget.Toast}.
@@ -31,6 +32,8 @@ import android.util.Log;
  *
  */
 public class Toast {
+	private static final Logger LOG = LoggerFactory.getLogger(Toast.class);
+
 	private Toast() {
 	}
 
@@ -44,7 +47,7 @@ public class Toast {
 	 *            The text to show. Can be formatted text.
 	 */
 	public static void toast(Context context, String text) {
-		Log.i(Constants.LOG, "Toast: " + text);
+		LOG.info("Toast: " + text);
 		android.widget.Toast.makeText(context, text,
 				android.widget.Toast.LENGTH_LONG).show();
 	}

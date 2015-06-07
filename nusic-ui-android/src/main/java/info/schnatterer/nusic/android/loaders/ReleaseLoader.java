@@ -20,7 +20,6 @@
  */
 package info.schnatterer.nusic.android.loaders;
 
-import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.Constants.Loaders;
 import info.schnatterer.nusic.core.ReleaseService;
 import info.schnatterer.nusic.data.model.Release;
@@ -29,8 +28,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.Context;
-import android.util.Log;
 
 /**
  * Creates an {@link android.content.AsyncTaskLoader} for {@link Release}s. The
@@ -42,6 +43,8 @@ import android.util.Log;
  */
 public class ReleaseLoader extends
 		AbstractAsyncSqliteLoader<List<Release>, Release> {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(ReleaseLoader.class);
 
 	@Inject
 	private ReleaseService releaseService;
@@ -66,10 +69,8 @@ public class ReleaseLoader extends
 			return releaseService.findAvailableToday(true);
 		}
 		default:
-			Log.w(Constants.LOG,
-					"Requested loader ID is not a defined release loader: "
-							+ loaderId
-							+ ". Returning loader that loads all releases");
+			LOG.warn("Requested loader ID is not a defined release loader: "
+					+ loaderId + ". Returning loader that loads all releases");
 			return releaseService.findAllNotHidden();
 		}
 	}

@@ -20,9 +20,12 @@
  */
 package info.schnatterer.nusic.android.util;
 
-import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.ui.R;
 import info.schnatterer.nusic.android.activities.MainActivity;
+import info.schnatterer.nusic.ui.R;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -32,7 +35,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 
 /**
  * Convenience wrapper around android's notification mechanism.
@@ -41,6 +43,8 @@ import android.util.Log;
  *
  */
 public class Notification {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(Notification.class);
 
 	/**
 	 * Enums that keeps track of the notification types used in this
@@ -192,6 +196,6 @@ public class Notification {
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		// id allows you to update the notification later on.
 		notificationManager.notify(id.ordinal(), notificationBuilder.build());
-		Log.i(Constants.LOG, "Notifcation: " + text + subtext);
+		LOG.info("Notifcation: " + text + subtext);
 	}
 }

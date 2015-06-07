@@ -20,7 +20,6 @@
  */
 package info.schnatterer.nusic.android.activities;
 
-import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.Constants.Loaders;
 import info.schnatterer.nusic.android.LoadNewRelasesServiceBinding;
 import info.schnatterer.nusic.android.application.NusicApplication;
@@ -29,6 +28,10 @@ import info.schnatterer.nusic.android.service.LoadNewReleasesService;
 import info.schnatterer.nusic.android.util.TextUtil;
 import info.schnatterer.nusic.android.util.Toast;
 import info.schnatterer.nusic.ui.R;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import roboguice.activity.RoboSherlockFragmentActivity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -45,7 +48,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -66,6 +68,9 @@ import com.actionbarsherlock.view.MenuItem;
  *
  */
 public class MainActivity extends RoboSherlockFragmentActivity {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(MainActivity.class);
+
 	/** The request code used when starting {@link PreferenceActivity}. */
 	private static final int REQUEST_CODE_PREFERENCE_ACTIVITY = 0;
 	/**
@@ -281,7 +286,7 @@ public class MainActivity extends RoboSherlockFragmentActivity {
 	private void startLoadingReleasesFromInternet(boolean updateOnlyIfNeccesary) {
 		boolean wasRunning = !loadNewRelasesServiceBinding.refreshReleases(
 				this, updateOnlyIfNeccesary);
-		Log.d(Constants.LOG, "Explicit refresh triggered. Service was "
+		LOG.debug("Explicit refresh triggered. Service was "
 				+ (wasRunning ? "" : " not ") + "running before");
 
 		if (wasRunning && !updateOnlyIfNeccesary) {

@@ -20,12 +20,15 @@
  */
 package info.schnatterer.nusic.android.util;
 
-import info.schnatterer.nusic.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.util.Log;
 
 public class ResourceUtil {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(ResourceUtil.class);
 
 	/** Name of the resource type "string" as in <code>@string/...</code> */
 	public static final String DEF_TYPE_STRING = "string";
@@ -87,7 +90,7 @@ public class ResourceUtil {
 			versionName = context.getPackageManager().getPackageInfo(
 					context.getPackageName(), 0).versionName;
 		} catch (PackageManager.NameNotFoundException e) {
-			Log.w(Constants.LOG, "Unable to read version name", e);
+			LOG.warn("Unable to read version name", e);
 			versionName = "ErrorReadingVersion";
 		}
 		return versionName;

@@ -1,16 +1,17 @@
 package info.schnatterer.nusic.android.listeners;
 
-import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.android.service.ReleasedTodayService;
 import info.schnatterer.nusic.android.service.ReleasedTodayService.ReleasedTodayServiceScheduler;
 import info.schnatterer.nusic.core.PreferencesService;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.preference.Preference;
-import android.util.Log;
 import android.widget.TimePicker;
 
 /**
@@ -22,6 +23,9 @@ import android.widget.TimePicker;
  */
 public class PreferenceReleasedTodayTimePickerListener implements
 		Preference.OnPreferenceClickListener {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(PreferenceReleasedTodayTimePickerListener.class);
+
 	@Inject
 	private PreferencesService preferencesService;
 
@@ -33,8 +37,7 @@ public class PreferenceReleasedTodayTimePickerListener implements
 	@Override
 	public boolean onPreferenceClick(Preference preference) {
 		if (context == null) {
-			Log.w(Constants.LOG, "No context set in "
-					+ this.getClass().getName());
+			LOG.warn("No context set in " + this.getClass().getName());
 			return false;
 		}
 		new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
