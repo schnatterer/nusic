@@ -16,6 +16,13 @@
 
 	<properties>
 	</properties>
+	
+	<repositories>
+	<repository>
+		<id>musicbrainzws2-java-mvn-repo</id>
+		<url>https://raw.github.com/schnatterer/musicbrainzws2-java/mvn-repo/</url>
+	</repository>
+</repositories>
 
 	<profiles>
 		<profile>
@@ -42,12 +49,9 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>musicbrainzws2-java</groupId>
+			<groupId>info.schnatterer.musicbrainzws2-java</groupId>
 			<artifactId>musicbrainzws2-java</artifactId>
-			<!-- TODO replace this with the proper version, once it is published. 
-				Then remove "sibling" project "coverartarchive-api" from parent pom and from 
-				repo -->
-			<version>2.01beta-nusicEdition</version>
+			<version>3.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>

@@ -1,5 +1,0 @@
-Installation Instructions
--------------------------
-
-Use the ant targets in build/build.xml to run the unit tests,
-build the project or generate the javadoc.
