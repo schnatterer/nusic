@@ -51,7 +51,7 @@
 
 		<!-- nusic sub modules -->
 		<dependency>
-			<groupId>info.schnatterer.nusic</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>nusic-ui-android</artifactId>
 			<version>${project.parent.version}</version>
 			<type>aar</type>
@@ -68,12 +68,12 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>info.schnatterer.nusic</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>nusic-core-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>info.schnatterer.nusic</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>nusic-core-android</artifactId>
 			<version>${project.version}</version>
 			<exclusions>

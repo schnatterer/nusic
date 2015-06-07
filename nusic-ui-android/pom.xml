@@ -93,7 +93,6 @@
 			<artifactId>roboguice</artifactId>
 			<version>${roboguice.version}</version>
 		</dependency>
-		<!-- Enable annotation database to improve performance. -->
 		<!-- Nusic dependencies -->
 		<dependency>
 			<groupId>com.nostra13.universalimageloader</groupId>
@@ -107,7 +106,7 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>info.schnatterer.nusic</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>nusic-core-api</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
