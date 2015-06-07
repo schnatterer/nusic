@@ -47,23 +47,6 @@
           <Preference
             android:key="@string/preferences_key_version"
             android:title="@string/preferences_title_version" />
-<!-- 		<Preference android:title="@string/preferences_title_privacy_policy">
-            <intent android:targetPackage="info.schnatterer.nusic"
-                android:targetClass="info.schnatterer.nusic.android.activities.NusicWebView"
-                android:data="https://schnatterer.github.io/nusic/privacyPolicy.html"/> -->
-<!-- 		<Preference android:title="@string/preferences_title_privacy_policy">
-            <intent android:label="@string/preferences_title_privacy_policy" android:targetPackage="info.schnatterer.nusic" 
-                android:targetClass="info.schnatterer.nusic.android.activities.TextAssetActivity">
-                <extra android:name="nusic.intent.extra.rawResourceId" android:value="privacyPolicy.html" />
-            </intent>
-		</Preference> --> 
-<!-- 		<Preference android:title="@string/WelcomeScreenTitle">
-            <intent android:targetPackage="info.schnatterer.nusic" 
-                android:targetClass="info.schnatterer.nusic.android.activities.TextAssetActivity">
-                <extra android:name="@string/extra_activity_title" android:value="@string/WelcomeScreenTitle" />
-                <extra android:name="@string/extra_asset_name" android:value="welcomeDialog.html" />
-            </intent>
-		</Preference>  -->
 		<Preference android:title="@string/preferences_title_changelog" 
 		    android:summary="@string/preferences_summary_changelog">
             <intent android:targetPackage="info.schnatterer.nusic" 
@@ -89,12 +72,6 @@
 		</Preference> 
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/preferences_category_web" >
-<!--         <Preference android:title="GitHub" >
-            <intent
-                android:data="https://github.com/schnatterer/nusic"
-                android:targetClass="info.schnatterer.nusic.android.activities.NusicWebView"
-                android:targetPackage="info.schnatterer.nusic" />
-        </Preference> -->
         <Preference android:title="@string/GooglePlay" 
             android:summary="@string/preferences_summary_google_play">
                <intent
@@ -107,7 +84,7 @@
             android:summary="@string/preferences_summary_git_hub">
                <intent
                    android:action="android.intent.action.VIEW"
-                   android:data="@string/link_nusic_git_hub" >
+                   android:data="@string/app_url" >
                </intent>
        </Preference> 
         <Preference android:title="@string/preferences_title_email"
@@ -115,11 +92,6 @@
              <intent android:targetPackage="info.schnatterer.nusic"
                 android:targetClass="info.schnatterer.nusic.android.activities.NusicWebView"
                 android:data="mailto:android@schnatterer.info?subject=[nusic @string/versionName]&amp;body="/> 
-				<!-- <intent
-				  android:action="android.intent.action.VIEW"
-				  android:data="mailto:android@schnatterer.info?subject=nusic&amp;body=Your message here">
-				  <!- <extra android:name="android.intent.extra.TEXT" android:value="Your message here" /> ->
-				</intent> -->
        </Preference>
     </PreferenceCategory>
 </PreferenceScreen>

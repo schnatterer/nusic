@@ -24,14 +24,16 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<slf4j.version>1.7.7</slf4j.version>
+        <project.website.url>https://github.com/schnatterer/nusic</project.website.url>
+		<slf4j.version>1.7.6</slf4j.version>
+        <logback.version>1.1.1-3</logback.version>
 		<junit.version>4.12</junit.version>
 		<mockito.version>1.10.19</mockito.version>
 		<roboguice.version>3.0.1</roboguice.version>
 		<android.sdk.version>5.0_r1</android.sdk.version>
 		<robolectric.android.version>4.4_r1-robolectric-0</robolectric.android.version>
 		<robolectric.version>2.4</robolectric.version>
-        <android-maven-plugin.version>4.1.0</android-maven-plugin.version>
+        <android-maven-plugin.version>4.2.1</android-maven-plugin.version>
         <commons-io.version>2.4</commons-io.version>
 	</properties>
     

@@ -51,7 +51,7 @@
 
 		<!-- nusic sub modules -->
 		<dependency>
-			<groupId>info.schnatterer.nusic</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>nusic-ui-android</artifactId>
 			<version>${project.parent.version}</version>
 			<type>aar</type>
@@ -60,7 +60,6 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>nusic-data-api</artifactId>
 			<version>${project.parent.version}</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -69,18 +68,44 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>info.schnatterer.nusic</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>nusic-core-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>info.schnatterer.nusic</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>nusic-core-android</artifactId>
 			<version>${project.version}</version>
 			<exclusions>
 				<exclusion>
+					<!-- Android ships its own implementation of httpclient anyway -->
 					<artifactId>httpclient</artifactId>
 					<groupId>org.apache.httpcomponents</groupId>
+				</exclusion>
+				<!-- This dependency is only used by httpclient, so spare the APK the 
+					bloat -->
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<!-- Process log statements produced by dependencies via slf4j with logback -->
+			<groupId>com.github.tony19</groupId>
+			<artifactId>logback-android-classic</artifactId>
+			<version>${logback.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>android</artifactId>
+					<groupId>com.google.android</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -172,8 +197,6 @@
 						<inputApk>${project.build.directory}/${final.name}.apk</inputApk>
 						<outputApk>${project.build.directory}/${final.name}.apk</outputApk>
 					</zipalign>
-					<resourceDirectory>${res.dir.output}</resourceDirectory>
-					<assetsDirectory>${assets.dir.output}</assetsDirectory>
 					<!-- Non standard. Move to standard locaction? -->
 					<androidManifestFile>AndroidManifest.xml</androidManifestFile>
 					<assetsDirectory>assets</assetsDirectory>

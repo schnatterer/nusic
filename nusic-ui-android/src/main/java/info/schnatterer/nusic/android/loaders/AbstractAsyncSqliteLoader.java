@@ -20,14 +20,19 @@
  */
 package info.schnatterer.nusic.android.loaders;
 
-import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.data.model.Entity;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
-import android.util.Log;
 
 public abstract class AbstractAsyncSqliteLoader<RESULT, ENTITY extends Entity>
 		extends AsyncTaskLoader<AsyncResult<RESULT>> {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(AbstractAsyncSqliteLoader.class);
+
 	private AsyncResult<RESULT> data;
 
 	/**
@@ -63,7 +68,7 @@ public abstract class AbstractAsyncSqliteLoader<RESULT, ENTITY extends Entity>
 			dataList = doLoadInBackground();
 
 		} catch (Exception e) {
-			Log.e(Constants.LOG, e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 			result.setException(e);
 		}
 

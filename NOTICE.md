@@ -33,6 +33,14 @@ published under The Apache Software License, Version 2.0
 **Google guava**  
 published under The Apache Software License, Version 2.0  
 [Website](https://code.google.com/p/guava-libraries/)
+
+**SLF4J**
+published under MIT License, Version 2.0
+[Website](http://www.slf4j.org/)
+
+*logback-android**
+published under  GNU Lesser General Public License version 2.1
+[Website](http://tony19.github.io/logback-android/)
   
 The nusic logo bases on Wikitracks Vinyl by Fleshgrinder (released under the Public domain)  
 [Website](https://en.wikipedia.org/wiki/File:Wikitracks_Vinyl.svg)

@@ -20,13 +20,14 @@
  */
 package info.schnatterer.nusic.android.service;
 
-import info.schnatterer.nusic.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import roboguice.service.RoboService;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
-import android.util.Log;
 
 /**
  * {@link Service} that locks the CPU before running the service.
@@ -42,6 +43,9 @@ import android.util.Log;
  * 
  */
 public abstract class WakefulService extends RoboService {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(WakefulService.class);
+
 	private static final String LOCK_NAME = "info.schnatterer.nusic.android.service.WakefulService";
 
 	private static volatile PowerManager.WakeLock lockStatic = null;
@@ -80,7 +84,7 @@ public abstract class WakefulService extends RoboService {
 		acquireLock(this.getApplicationContext());
 
 		try {
-			Log.d(Constants.LOG, "Calling service method");
+			LOG.debug("Calling service method");
 			return onStartCommandWakeful(intent, flags, startId);
 		} finally {
 			if (!keepLock) {
@@ -97,7 +101,7 @@ public abstract class WakefulService extends RoboService {
 
 		if (!lock.isHeld()) {
 			lock.acquire();
-			Log.d(Constants.LOG, "Lock acquired");
+			LOG.debug("Lock acquired");
 		}
 	}
 
@@ -108,7 +112,7 @@ public abstract class WakefulService extends RoboService {
 		PowerManager.WakeLock lock = getLock(context);
 		if (lock.isHeld()) {
 			lock.release();
-			Log.d(Constants.LOG, "Lock released");
+			LOG.debug("Lock released");
 		}
 	}
 

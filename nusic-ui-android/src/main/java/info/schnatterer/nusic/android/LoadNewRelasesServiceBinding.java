@@ -21,7 +21,6 @@
 package info.schnatterer.nusic.android;
 
 import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.ui.R;
 import info.schnatterer.nusic.android.service.LoadNewReleasesService;
 import info.schnatterer.nusic.android.service.LoadNewReleasesServiceConnection;
 import info.schnatterer.nusic.android.util.Toast;
@@ -29,9 +28,13 @@ import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.core.SyncReleasesService;
 import info.schnatterer.nusic.core.event.ArtistProgressListener;
 import info.schnatterer.nusic.data.model.Artist;
+import info.schnatterer.nusic.ui.R;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -48,6 +51,9 @@ import android.util.Log;
  * 
  */
 public class LoadNewRelasesServiceBinding {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(LoadNewRelasesServiceBinding.class);
+
 	/**
 	 * Context in which the {@link #progressDialog} is displayed
 	 */
@@ -84,14 +90,14 @@ public class LoadNewRelasesServiceBinding {
 			 * Execute the service method, if not running already. Pass/update
 			 * listener.
 			 */
-			Log.d(Constants.LOG,
+			LOG.debug(
 					"Service already bound. Calling refreshReleases()");
 			return loadNewReleasesServiceConnection.getLoadNewReleasesService()
 					.refreshReleases(updateOnlyIfNeccesary,
 							artistProcessedListener);
 		} else {
 			// Start service and bind to it
-			Log.d(Constants.LOG, "Service not bound. Binding");
+			LOG.debug("Service not bound. Binding");
 			loadNewReleasesServiceConnection = startAndBindService(activity,
 					updateOnlyIfNeccesary);
 			return true;
@@ -104,8 +110,7 @@ public class LoadNewRelasesServiceBinding {
 			return loadNewReleasesServiceConnection.getLoadNewReleasesService()
 					.isRunning();
 		} else {
-			Log.w(Constants.LOG,
-					"Service unexpectedly not bound, assuming it's not running");
+			LOG.warn("Service unexpectedly not bound, assuming it's not running");
 			return false;
 		}
 	}
@@ -144,7 +149,7 @@ public class LoadNewRelasesServiceBinding {
 	 */
 	public void unbindService() {
 		if (loadNewReleasesServiceConnection != null) {
-			Log.d(Constants.LOG, "Unbinding service");
+			LOG.debug("Unbinding service");
 			loadNewReleasesServiceConnection.unbind();
 			loadNewReleasesServiceConnection = null;
 		}
@@ -327,7 +332,7 @@ public class LoadNewRelasesServiceBinding {
 
 	protected void notifyListeners(Boolean resultChanged) {
 		boolean primitiveResult = true;
-		Log.d(Constants.LOG,
+		LOG.debug(
 				"Service: Notifying activity if result changed. ResultChanged="
 						+ resultChanged + ". Activity=" + activity);
 		// Be defensive: Only if explicitly nothing changed

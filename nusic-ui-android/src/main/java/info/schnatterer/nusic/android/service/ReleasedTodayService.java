@@ -40,6 +40,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import roboguice.receiver.RoboBroadcastReceiver;
 import roboguice.service.RoboService;
 import android.app.AlarmManager;
@@ -60,6 +63,8 @@ import android.util.Log;
  *
  */
 public class ReleasedTodayService extends RoboService {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(ReleasedTodayService.class);
 
 	@Inject
 	private PreferencesService preferencesService;
@@ -122,11 +127,9 @@ public class ReleasedTodayService extends RoboService {
 					createScaledBitmap, MainActivity.class,
 					createExtraActiveTab());
 		} catch (DatabaseException e) {
-			Log.w(Constants.LOG, "Unable to load artwork for notification. "
-					+ release, e);
+			LOG.warn("Unable to load artwork for notification. " + release, e);
 		} catch (IllegalArgumentException e) {
-			Log.w(Constants.LOG, "Unable scale artwork for notification. "
-					+ release, e);
+			LOG.warn("Unable scale artwork for notification. " + release, e);
 		}
 	}
 
@@ -267,7 +270,7 @@ public class ReleasedTodayService extends RoboService {
 					 * If the triggering time is in the past, android will
 					 * trigger it directly.
 					 */
-					Log.d(Constants.LOG,
+					LOG.debug(
 							"Triggering notification service for tommorrow");
 					triggerAtCal.add(Calendar.DAY_OF_MONTH, 1);
 				}
@@ -281,7 +284,7 @@ public class ReleasedTodayService extends RoboService {
 								triggerAtCal.getTimeInMillis(),
 								AlarmManager.INTERVAL_DAY,
 								createPendingIntent(context));
-				Log.d(Constants.LOG,
+				LOG.debug(
 						"Scheduled "
 								+ ReleasedTodayService.class.getSimpleName()
 								+ " to run again every day, starting at "

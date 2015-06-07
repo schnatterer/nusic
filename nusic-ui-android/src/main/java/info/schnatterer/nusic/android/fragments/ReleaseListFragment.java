@@ -20,7 +20,6 @@
  */
 package info.schnatterer.nusic.android.fragments;
 
-import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.Constants.Loaders;
 import info.schnatterer.nusic.android.activities.NusicWebView;
 import info.schnatterer.nusic.android.adapters.ReleaseListAdapter;
@@ -39,13 +38,15 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import roboguice.fragment.RoboSherlockFragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -77,6 +78,8 @@ import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
  *
  */
 public class ReleaseListFragment extends RoboSherlockFragment {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(ReleaseListFragment.class);
 	/**
 	 * Key to the creating intent's extras that contains the {@link Loaders}<br/>
 	 * See {@link #loaderId}.
@@ -113,7 +116,7 @@ public class ReleaseListFragment extends RoboSherlockFragment {
 			loaderId = getArguments().getInt(EXTRA_LOADER_ID);
 
 		} catch (Exception e) {
-			Log.w(Constants.LOG,
+			LOG.warn(
 					"Error reading arguments from bundle passed by parent activity",
 					e);
 		}
@@ -191,7 +194,7 @@ public class ReleaseListFragment extends RoboSherlockFragment {
 					return super.onContextItemSelected(item);
 				}
 			} catch (ServiceException e) {
-				Log.w(Constants.LOG, "Error hiding release/artist", e);
+				LOG.warn("Error hiding release/artist", e);
 				Toast.toast(getActivity(), e.getLocalizedMessage());
 			}
 			return true; // Finish processing fragment instances

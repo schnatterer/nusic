@@ -105,14 +105,6 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 	private String appContact;
 	@Inject
 	private ArtworkDao artworkDao;
-	static {
-		/*
-		 * Some class are flooding our logs with warnings. Give us some space!
-		 */
-		java.util.logging.Logger.getLogger(
-				"org.musicbrainz.wsxml.impl.JDOMParserWs2").setLevel(
-				java.util.logging.Level.SEVERE);
-	}
 
 	/**
 	 * Creates a service instance for finding releases.
@@ -260,7 +252,7 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 					release.setReleaseName(releaseResult.getTitle());
 					release.setReleaseDate(newDate);
 					release.setMusicBrainzId(releaseGroupId);
-					// Log.d(Constants.LOG, "Release: " + artist.getArtistName()
+					// LOG.debug("Release: " + artist.getArtistName()
 					// + "-" + releaseResult.getTitle() + "-"
 					// + releaseGroupId);
 					try {
@@ -323,7 +315,7 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 								smallThumbnail);
 
 						release.setCoverartArchiveId(coverArtImage.getId());
-						// Log.d(Constants.LOG,
+						// LOG.debug(
 						// "Cover:   " + artist.getArtistName() + "-"
 						// + release.getReleaseName() + "_"
 						// + release.getMusicBrainzId() + "_"

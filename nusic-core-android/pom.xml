@@ -41,13 +41,6 @@
 	</profiles>
 
 	<dependencies>
-		<!-- coverartarchive uses slf4j, propagate its logs to android.util.Log -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-android</artifactId>
-			<version>${slf4j.version}</version>
-			<scope>runtime</scope>
-		</dependency>
 		<dependency>
 			<groupId>musicbrainzws2-java</groupId>
 			<artifactId>musicbrainzws2-java</artifactId>

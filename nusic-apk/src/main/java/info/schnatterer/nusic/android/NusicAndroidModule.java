@@ -1,6 +1,5 @@
 package info.schnatterer.nusic.android;
 
-import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.R;
 import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.core.ArtistService;
@@ -41,6 +40,9 @@ import info.schnatterer.nusic.data.dao.ReleaseDao;
 import info.schnatterer.nusic.data.dao.fs.ArtworkDaoFileSystem;
 import info.schnatterer.nusic.data.dao.sqlite.ArtistDaoSqlite;
 import info.schnatterer.nusic.data.dao.sqlite.ReleaseDaoSqlite;
+
+import org.slf4j.bridge.SLF4JBridgeHandler;
+
 import android.app.Application;
 
 import com.google.inject.AbstractModule;
@@ -62,6 +64,8 @@ public class NusicAndroidModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		installSlf4jJulHandler();
+
 		/*
 		 * Database requires static injection, because the context must be
 		 * injected at construction time
@@ -94,7 +98,7 @@ public class NusicAndroidModule extends AbstractModule {
 		bind(String.class).annotatedWith(ApplicationVersion.class).toInstance(
 				NusicApplication.getCurrentVersionName());
 		bind(String.class).annotatedWith(ApplicationContact.class).toInstance(
-				Constants.APPLICATION_URL);
+				application.getString(R.string.app_url));
 
 		bind(String.class)
 				.annotatedWith(PreferencesKeyDownloadOnlyOnWifi.class)
@@ -176,6 +180,19 @@ public class NusicAndroidModule extends AbstractModule {
 								PreferencesDefaultReleasedTodayMinute.class,
 								application
 										.getString(R.string.preferences_default_released_today_minute)));
+	}
+
+	/**
+	 * Installs the java.util.logging (jul-to-slf4j) {@link SLF4JBridgeHandler}.
+	 * As a result, all (yes, also {@link java.util.logging.Level#FINE}, etc.)
+	 * Level JUL log statements are routed to SLF4J.
+	 */
+	private void installSlf4jJulHandler() {
+		/*
+		 * add SLF4JBridgeHandler to j.u.l's root logger, should be done once
+		 * during the initialization phase of your application
+		 */
+		SLF4JBridgeHandler.install();
 	}
 
 	private Integer parseIntOrThrow(Class<?> annotation, String prefValue) {

@@ -1,0 +1,67 @@
+<configuration>
+	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator" />
+
+	<property name="ANDROID_PACKAGE" value="info.schnatterer.nusic" />
+	<property name="LOG_DIR" value="app_logs" />
+	<property name="APP_NAME" value="nusic" />
+	<property name="LOG_PATH"
+		value="/data/data/${ANDROID_PACKAGE}/${LOG_DIR}/${APP_NAME}.log" />
+
+	<!-- Create a logcat appender, that logs only specific statements -->
+	<appender name="LOGCAT" class="ch.qos.logback.classic.android.LogcatAppender">
+		<!-- Don't show trace and debug on logcat -->
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<filter class="ch.qos.logback.classic.filter.ThresholdLoggerFilter">
+			<!-- Don't log MB IDs to Logcat -->
+			<logger>fm.last.musicbrainz.coverart</logger>
+			<level>WARN</level>
+		</filter>
+		<encoder>
+			<pattern>%msg</pattern>
+		</encoder>
+	</appender>
+
+	<!-- Create a file appender that logs all statements -->
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH}</file>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>${APP_NAME}.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+			<!-- keep 2 days' worth of history -->
+			<maxHistory>2</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{ISO8601} [%thread] %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<!-- Write all info to the appenders to allow for individual filtering. -->
+	<root level="TRACE">
+		<appender-ref ref="LOGCAT" />
+		<appender-ref ref="FILE" />
+	</root>
+
+	<!-- JDOMParserWs2 floods the log with warnings. Put him down. -->
+	<logger name="org.musicbrainz.wsxml.impl.JDOMParserWs2" level="ERROR"
+		additivity="false">
+		<!-- Don't appent to logcat, because gets logs directly via java.util.logging -->
+		<appender-ref ref="FILE" />
+	</logger>
+	<!-- HttpClientWebServiceWs2 logs a debug message for every request. Too much information. -->
+	<logger name="org.musicbrainz.webservice.impl.HttpClientWebServiceWs2" level="INFO"
+		additivity="false">
+		<!-- Don't appent to logcat, because gets logs directly via java.util.logging -->
+		<appender-ref ref="FILE" />
+	</logger>
+	<!-- DefaultCoverArtArchiveClient logs an info message for every request. Too much information. -->
+	<logger name="fm.last.musicbrainz.coverart.impl.DefaultCoverArtArchiveClient" level="WARN"
+		additivity="false">
+		<!-- Don't appent to logcat, because gets logs directly via java.util.logging -->
+		<appender-ref ref="FILE" />
+	</logger>
+</configuration>

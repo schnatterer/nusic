@@ -20,16 +20,17 @@
  */
 package info.schnatterer.nusic.android.service;
 
-import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.core.ConnectivityService;
 import info.schnatterer.nusic.core.PreferencesService;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import roboguice.receiver.RoboBroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 /**
  * Broadcast receiver that starts the {@link LoadNewReleasesService} when the
@@ -45,6 +46,9 @@ import android.util.Log;
  */
 public class LoadNewReleasesServiceConnectivityReceiver extends
 		RoboBroadcastReceiver {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(LoadNewReleasesServiceConnectivityReceiver.class);
+
 	@Inject
 	private ConnectivityService connectivityService;
 
@@ -78,10 +82,10 @@ public class LoadNewReleasesServiceConnectivityReceiver extends
 	@Override
 	public void handleReceive(final Context context, final Intent intent) {
 		if (connectivityService.isOnline()) {
-			Log.d(Constants.LOG, "Connectivity receiver: Device online");
+			LOG.debug("Connectivity receiver: Device online");
 			onConnectionEstablished(context);
 		} else {
-			Log.d(Constants.LOG, "Connectivity receiver: Device offline");
+			LOG.debug("Connectivity receiver: Device offline");
 			onConnectionLost(context);
 		}
 	}

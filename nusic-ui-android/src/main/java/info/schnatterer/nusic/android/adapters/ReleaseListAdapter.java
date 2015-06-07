@@ -20,12 +20,11 @@
  */
 package info.schnatterer.nusic.android.adapters;
 
-import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.ui.R;
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.dao.ArtworkDao;
 import info.schnatterer.nusic.data.dao.ArtworkDao.ArtworkType;
 import info.schnatterer.nusic.data.model.Release;
+import info.schnatterer.nusic.ui.R;
 
 import java.lang.ref.WeakReference;
 import java.text.DateFormat;
@@ -35,7 +34,9 @@ import java.util.TimeZone;
 
 import javax.inject.Inject;
 
-import android.util.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,9 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ReleaseListAdapter extends BaseAdapter {
+	private static final Logger LOG = LoggerFactory
+			.getLogger(ReleaseListAdapter.class);
+
 	private static final int DEFAULT_ARTWORK = R.drawable.ic_launcher;
 
 	/**
@@ -128,8 +132,7 @@ public class ReleaseListAdapter extends BaseAdapter {
 					artworkDao.findUriByRelease(release, ArtworkType.SMALL),
 					holder.thumbnailView.get(), IMAGE_LOADER_OPTIONS);
 		} catch (DatabaseException e) {
-			Log.w(Constants.LOG, "Unable to load artwork for release "
-					+ release, e);
+			LOG.warn("Unable to load artwork for release " + release, e);
 			holder.thumbnailView.get().setImageResource(DEFAULT_ARTWORK);
 		}
 		return convertView;

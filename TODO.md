@@ -1,18 +1,17 @@
 TODOs - Features, enhancements, refactoring, ...
 
-LOGGING 
-- Config SLF4J in order to get log statements from modules
-- Switch off logging for artwork. Using logback-android via slf4j and config in assets/logback.xml?
-- https://github.com/tony19/logback-android#configuration-in-code
-- Switch app to use slf4j?
-- Provide means to send log via email?
-
-- Introduce license maven plugin
+MODERNIZATION 
 - Remove musicbrainz code in favor of linking a github maven repo
+- Introduce license maven plugin
 - Switch to newest android SDK version?
 - Java7?
 - change digestalg?
 - Create a proper icon for status bar, that shows a CD not a white circle in android 5
+- Output statistic after finishing daily update
+
+LOGGING 
+- Provide means to send log via email?
+- Manage to grab Logcat output from android to to SLF4J
 
 - Introduce material design, remove actionbarsherlock
 http://www.grokkingandroid.com/migrating-actionbarsherlock-actionbarcompat/
@@ -27,7 +26,7 @@ http://developer.android.com/guide/topics/data/data-storage.html#filesExternal
 
 - Create internal structure diagram, displaying module dependencies with an appropriate open source tool
 .....Build
-- Restructure APK project to use maven default structure
+- Restructure APK project to use maven default structure. Does this even work with eclipse?
 - Insert Built timestamp to version
 - Refactoring: Maven Use profiles for release (signing...)
 

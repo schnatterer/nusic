@@ -49,10 +49,10 @@
 					<version>${roboguice.version}</version>
 					<scope>provided</scope>
 				</dependency>
-				<!-- This dependency makes it impossible to deploy with eclipse... On 
-					the other hand we can't run unit test without it from eclipse. -->
-				<!-- TODO Find out which APIs are really needed and add only those? -->
 				<dependency>
+					<!-- This dependency makes it impossible to deploy with eclipse... On 
+						the other hand we can't run unit test without it from eclipse. -->
+					<!-- TODO Find out which APIs are really needed and add only those? -->
 					<groupId>org.robolectric</groupId>
 					<artifactId>android-all</artifactId>
 					<version>${robolectric.android.version}</version>
@@ -64,8 +64,6 @@
 					<version>${robolectric.version}</version>
 					<scope>test</scope>
 				</dependency>
-				<!--<dependency> <groupId>org.mockito</groupId> <artifactId>mockito-core</artifactId> 
-					<version>${mockito.version}</version> <scope>test</scope> </dependency> -->
 			</dependencies>
 		</profile>
 	</profiles>
@@ -95,15 +93,12 @@
 			<artifactId>roboguice</artifactId>
 			<version>${roboguice.version}</version>
 		</dependency>
-		<!-- Enable annotation database to improve performance. -->
 		<!-- Nusic dependencies -->
 		<dependency>
 			<groupId>com.nostra13.universalimageloader</groupId>
 			<artifactId>universal-image-loader</artifactId>
 			<version>1.9.2</version>
 		</dependency>
-					<!-- Android ships its own implementation of httpclient anyway -->
-		<!-- coverartarchive uses slf4j, propagate its logs to android.util.Log -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>nusic-data-api</artifactId>
@@ -111,7 +106,7 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>info.schnatterer.nusic</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>nusic-core-api</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
@@ -120,11 +115,16 @@
 			<artifactId>nusic-util</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-		<!-- TODO Find out which APIs are really needed and add only those? -->
+		<!-- Generic dependencies -->
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>${commons-io.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
 		</dependency>
 
 		<!-- Test dependencies -->
@@ -182,8 +182,6 @@
 					<compilerArgument>-AguiceAnnotationDatabasePackageName=${project.groupId}.annotation.apk</compilerArgument>
 				</configuration>
 			</plugin>
-								<!-- Fix for JDK 1.7 -->
-
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>wagon-maven-plugin</artifactId>
@@ -241,7 +239,7 @@
 				</configuration>
 			</plugin>
 
-			<!-- Starting with Android SDK Tools 23? you might have to copy zipaling  -->
+			<!-- Starting with Android SDK Tools 23? you might have to copy zipaling -->
 			<plugin>
 				<groupId>com.simpligility.maven.plugins</groupId>
 				<artifactId>android-maven-plugin</artifactId>
@@ -253,8 +251,12 @@
 					</sign>
 					<!-- Non standard. Move to standard locaction? -->
 					<androidManifestFile>AndroidManifest.xml</androidManifestFile>
-					<assetsDirectory>assets</assetsDirectory>
-					<resourceDirectory>res</resourceDirectory>
+					<resourceDirectory>${res.dir.output}</resourceDirectory>
+					<assetsDirectory>${assets.dir.output}</assetsDirectory>
+					<!-- We need to maintain assets and res folder in the root (for eclipse) 
+						AND want android-maven-plugin to use the directories in target configured 
+						above. Force android maven plugin to accept that! -->
+					<failOnNonStandardStructure>false</failOnNonStandardStructure>
 				</configuration>
 			</plugin>
 		</plugins>
