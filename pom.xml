@@ -105,9 +105,12 @@
 						<owner>Johannes Schnatterer</owner>
 					</properties>
 					<excludes>
-						<exclude>LICENSE</exclude>
+						<exclude>TODO.md</exclude>
 						<exclude>LICENSE.txt</exclude>
 						<exclude>**/bin/**</exclude>
+						<exclude>**/gen/**</exclude>
+						<exclude>**/*.svg</exclude>
+                        <exclude>**/proguard.cfg</exclude>
 					</excludes>
 				</configuration>
 				<dependencies>
