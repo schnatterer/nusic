@@ -36,6 +36,7 @@
 		<android-maven-plugin.version>4.2.1</android-maven-plugin.version>
 		<commons-io.version>2.4</commons-io.version>
 		<license-maven-plugin.version>2.11</license-maven-plugin.version>
+        <main.basedir>${project.basedir}</main.basedir>
 	</properties>
 
 	<modules>
@@ -98,7 +99,7 @@
 				<artifactId>license-maven-plugin</artifactId>
 				<version>${license-maven-plugin.version}</version>
 				<configuration>
-					<header>resources/GPL-3.txt</header>
+					<header>${main.basedir}/resources/GPL-3.txt</header>
 					<properties>
 						<project.inceptionYear>2013</project.inceptionYear>
 						<owner>Johannes Schnatterer</owner>

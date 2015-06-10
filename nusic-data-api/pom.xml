@@ -15,6 +15,7 @@
 	<name>nusic-data-api</name>
 
 	<properties>
+		<main.basedir>${project.parent.basedir}</main.basedir>
 	</properties>
 
 	<dependencies>

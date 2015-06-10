@@ -21,6 +21,7 @@
 		<res.dir.input>${project.basedir}/res</res.dir.input>
 		<res.dir.output>${project.build.directory}/filtered-res</res.dir.output>
 		<raw.mardkown.dir>${project.build.directory}/md-assets</raw.mardkown.dir>
+		<main.basedir>${project.parent.basedir}</main.basedir>
 	</properties>
 
 	<profiles>

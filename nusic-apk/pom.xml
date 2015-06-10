@@ -17,6 +17,7 @@
 	<properties>
 		<final.name>nusic-${project.version}</final.name>
 		<sdk.version>21</sdk.version>
+		<main.basedir>${project.parent.basedir}</main.basedir>
 	</properties>
 
 	<profiles>
@@ -82,9 +83,9 @@
 					<artifactId>httpclient</artifactId>
 					<groupId>org.apache.httpcomponents</groupId>
 				</exclusion>
-				<!-- This dependency is only used by httpclient, so spare the APK the 
-					bloat -->
 				<exclusion>
+					<!-- This dependency is only used by httpclient, so spare the APK the 
+						bloat -->
 					<artifactId>commons-logging</artifactId>
 					<groupId>commons-logging</groupId>
 				</exclusion>

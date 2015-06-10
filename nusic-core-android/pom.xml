@@ -15,14 +15,15 @@
 	<name>nusic-core-android</name>
 
 	<properties>
+		<main.basedir>${project.parent.basedir}</main.basedir>
 	</properties>
-	
+
 	<repositories>
-	<repository>
-		<id>musicbrainzws2-java-mvn-repo</id>
-		<url>https://raw.github.com/schnatterer/musicbrainzws2-java/mvn-repo/</url>
-	</repository>
-</repositories>
+		<repository>
+			<id>musicbrainzws2-java-mvn-repo</id>
+			<url>https://raw.github.com/schnatterer/musicbrainzws2-java/mvn-repo/</url>
+		</repository>
+	</repositories>
 
 	<profiles>
 		<profile>
