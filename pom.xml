@@ -1,4 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ﻿Copyright (C) 2013 Johannes Schnatterer
+
+    See the NOTICE file distributed with this work for additional
+    information regarding copyright ownership.
+
+    This file is part of nusic.
+
+    nusic is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    nusic is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with nusic.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -24,28 +47,30 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.website.url>https://github.com/schnatterer/nusic</project.website.url>
+		<project.website.url>https://github.com/schnatterer/nusic</project.website.url>
 		<slf4j.version>1.7.6</slf4j.version>
-        <logback.version>1.1.1-3</logback.version>
+		<logback.version>1.1.1-3</logback.version>
 		<junit.version>4.12</junit.version>
 		<mockito.version>1.10.19</mockito.version>
 		<roboguice.version>3.0.1</roboguice.version>
 		<android.sdk.version>5.0_r1</android.sdk.version>
 		<robolectric.android.version>4.4_r1-robolectric-0</robolectric.android.version>
 		<robolectric.version>2.4</robolectric.version>
-        <android-maven-plugin.version>4.2.1</android-maven-plugin.version>
-        <commons-io.version>2.4</commons-io.version>
+		<android-maven-plugin.version>4.2.1</android-maven-plugin.version>
+		<commons-io.version>2.4</commons-io.version>
+		<license-maven-plugin.version>2.11</license-maven-plugin.version>
+        <main.basedir>${project.basedir}</main.basedir>
 	</properties>
-    
+
 	<modules>
 		<module>nusic-util</module>
 		<module>nusic-domain</module>
 		<module>nusic-data-api</module>
 		<module>nusic-data-android</module>
-        <module>nusic-core-api</module>
-        <module>nusic-core-android</module>
+		<module>nusic-core-api</module>
+		<module>nusic-core-android</module>
 		<module>nusic-ui-android</module>
-        <module>nusic-apk</module>
+		<module>nusic-apk</module>
 	</modules>
 
 	<build>
@@ -90,7 +115,46 @@
 					<goals>install</goals>
 				</configuration>
 			</plugin>
+			<plugin>
+				<!-- Check for missing license headers in files. Licenses can be added 
+					by calling "mvn license:format" -->
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>${license-maven-plugin.version}</version>
+				<configuration>
+					<header>${main.basedir}/resources/GPL-3.txt</header>
+					<properties>
+						<project.inceptionYear>2013</project.inceptionYear>
+						<owner>Johannes Schnatterer</owner>
+					</properties>
+					<excludes>
+						<exclude>TODO.md</exclude>
+						<exclude>LICENSE.txt</exclude>
+						<exclude>**/bin/**</exclude>
+						<exclude>**/gen/**</exclude>
+						<exclude>**/*.svg</exclude>
+                        <exclude>**/proguard.cfg</exclude>
+					</excludes>
+				</configuration>
+				<dependencies>
+					<!-- Use information from git for old files -->
+					<dependency>
+						<groupId>com.mycila</groupId>
+						<artifactId>license-maven-plugin-git</artifactId>
+						<!-- make sure to use the same version as license-maven-plugin -->
+						<version>${license-maven-plugin.version}</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<!-- Check for missing licenses in validate phase. Fail if none. -->
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
-
 	</build>
 </project>

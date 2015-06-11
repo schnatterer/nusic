@@ -1,21 +1,22 @@
 TODOs - Features, enhancements, refactoring, ...
 
 MODERNIZATION 
-- Remove musicbrainz code in favor of linking a github maven repo
 - Introduce license maven plugin
 - Switch to newest android SDK version?
 - Java7?
 - change digestalg?
-- Create a proper icon for status bar, that shows a CD not a white circle in android 5
-- Output statistic after finishing daily update
+- delete commits of former git subtrees (MusicbrainzWS & coverartarchive)
 
 LOGGING 
 - Provide means to send log via email?
+- Output statistic after finishing daily update
 - Manage to grab Logcat output from android to to SLF4J
 
 - Introduce material design, remove actionbarsherlock
 http://www.grokkingandroid.com/migrating-actionbarsherlock-actionbarcompat/
 http://android-developers.blogspot.de/2014/10/appcompat-v21-material-design-for-pre.html
+
+- Create a proper icon for status bar, that shows a CD not a white circle in android 5
 
 - Copy images to /sdcard instead of /data: 
 http://www.androidsnippets.com/download-an-http-file-to-sdcard-with-progress-notification
