@@ -39,7 +39,6 @@
 
 	<properties>
 		<final.name>nusic-${project.version}</final.name>
-		<sdk.version>21</sdk.version>
 		<main.basedir>${project.parent.basedir}</main.basedir>
 	</properties>
 
@@ -205,8 +204,7 @@
 				</executions>
 				<configuration>
 					<sdk>
-						<!-- targetSdkVersion -->
-						<platform>${sdk.version}</platform>
+						<platform>${android.api.level}</platform>
 					</sdk>
 					<manifest>
 						<debuggable>false</debuggable>

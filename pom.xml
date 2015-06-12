@@ -46,20 +46,32 @@
 	</scm>
 
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- Application constants -->
 		<project.website.url>https://github.com/schnatterer/nusic</project.website.url>
+
+		<!-- Build properties -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<main.basedir>${project.basedir}</main.basedir>
+
+		<!-- Maven Plugins -->
+		<android-maven-plugin.version>4.2.1</android-maven-plugin.version>
+		<license-maven-plugin.version>2.11</license-maven-plugin.version>
+
+		<!-- "Plain java" dependencies -->
 		<slf4j.version>1.7.6</slf4j.version>
 		<logback.version>1.1.1-3</logback.version>
 		<junit.version>4.12</junit.version>
 		<mockito.version>1.10.19</mockito.version>
-		<roboguice.version>3.0.1</roboguice.version>
+		<commons-io.version>2.4</commons-io.version>
+
+		<!-- Android-specific dependencies -->
+		<android.api.level>22</android.api.level>
 		<android.sdk.version>5.1.1_r2</android.sdk.version>
+		<!-- Compatibility library for android API lvl4 (Android 2.x) -->
+		<android.compatibility-v4.version>22.2.0</android.compatibility-v4.version>
+		<roboguice.version>3.0.1</roboguice.version>
 		<robolectric.android.version>5.0.0_r2-robolectric-1</robolectric.android.version>
 		<robolectric.version>2.4</robolectric.version>
-		<android-maven-plugin.version>4.2.1</android-maven-plugin.version>
-		<commons-io.version>2.4</commons-io.version>
-		<license-maven-plugin.version>2.11</license-maven-plugin.version>
-        <main.basedir>${project.basedir}</main.basedir>
 	</properties>
 
 	<modules>
@@ -133,9 +145,9 @@
 						<exclude>**/bin/**</exclude>
 						<exclude>**/gen/**</exclude>
 						<exclude>**/*.svg</exclude>
-                        <exclude>**/proguard.cfg</exclude>
-                        <exclude>**/privacyPolicy.html</exclude>
-                        <exclude>**/project.properties</exclude>
+						<exclude>**/proguard.cfg</exclude>
+						<exclude>**/privacyPolicy.html</exclude>
+						<exclude>**/project.properties</exclude>
 					</excludes>
 				</configuration>
 				<dependencies>
