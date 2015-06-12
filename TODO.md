@@ -1,10 +1,5 @@
 TODOs - Features, enhancements, refactoring, ...
 
-MODERNIZATION 
-- Introduce license maven plugin
-- Switch to newest android SDK version?
-- Java7?
-- change digestalg?
 - delete commits of former git subtrees (MusicbrainzWS & coverartarchive)
 
 LOGGING 
@@ -27,6 +22,7 @@ http://developer.android.com/guide/topics/data/data-storage.html#filesExternal
 
 - Create internal structure diagram, displaying module dependencies with an appropriate open source tool
 .....Build
+- change digestalg?
 - Restructure APK project to use maven default structure. Does this even work with eclipse?
 - Insert Built timestamp to version
 - Refactoring: Maven Use profiles for release (signing...)
@@ -34,7 +30,7 @@ http://developer.android.com/guide/topics/data/data-storage.html#filesExternal
 - Covers: Download using HTTPS. Problem with certificate chain at coverartarchive.org ONLY on android. In addition, links to images are HTTP. Force using HTTPS?
 
 - Implement an Artwork Entity using a "proxy" that takes care of the writing from/to FS?
-- Replace today's date with "today"? How to refresh at midnight?
+- Replace today's date with "today"? How to refresh at midnight (http://stackoverflow.com/questions/4928570/need-to-know-when-its-a-new-day-i-e-when-the-time-is-000000)?
 - Use WeakReferences in ReleaseRefreshService in order to allow longer time ranges
 
 - Feature: Tablet optimization: Layout + Screens for 7" + 10"

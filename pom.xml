@@ -53,8 +53,8 @@
 		<junit.version>4.12</junit.version>
 		<mockito.version>1.10.19</mockito.version>
 		<roboguice.version>3.0.1</roboguice.version>
-		<android.sdk.version>5.0_r1</android.sdk.version>
-		<robolectric.android.version>4.4_r1-robolectric-0</robolectric.android.version>
+		<android.sdk.version>5.1.1_r2</android.sdk.version>
+		<robolectric.android.version>5.0.0_r2-robolectric-1</robolectric.android.version>
 		<robolectric.version>2.4</robolectric.version>
 		<android-maven-plugin.version>4.2.1</android-maven-plugin.version>
 		<commons-io.version>2.4</commons-io.version>
@@ -82,8 +82,8 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.2</version>
 					<configuration>
-						<source>1.6</source>
-						<target>1.6</target>
+						<source>1.7</source>
+						<target>1.7</target>
 					</configuration>
 				</plugin>
 			</plugins>
@@ -134,6 +134,8 @@
 						<exclude>**/gen/**</exclude>
 						<exclude>**/*.svg</exclude>
                         <exclude>**/proguard.cfg</exclude>
+                        <exclude>**/privacyPolicy.html</exclude>
+                        <exclude>**/project.properties</exclude>
 					</excludes>
 				</configuration>
 				<dependencies>
