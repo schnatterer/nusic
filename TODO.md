@@ -1,7 +1,5 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- delete commits of former git subtrees (MusicbrainzWS & coverartarchive)
-
 LOGGING 
 - Provide means to send log via email?
 - Output statistic after finishing daily update
