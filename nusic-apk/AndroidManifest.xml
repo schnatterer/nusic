@@ -88,7 +88,7 @@
        
         <meta-data android:name="roboguice.modules"
           android:value="info.schnatterer.nusic.android.NusicAndroidModule" />  
-        <meta-data android:name="roboguice.annotations.packages" android:value="info.schnatterer.nusic.annotation.apk,info.schnatterer.nusic.annotation.data"/>
+        <meta-data android:name="roboguice.annotations.packages" android:value="info.schnatterer.nusic.annotation.apk,info.schnatterer.nusic.annotation.data,info.schnatterer.nusic.annotation.core"/>
     </application>
 
 </manifest>

@@ -142,7 +142,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<compilerArgument>-AguiceAnnotationcorebasePackageName=${project.groupId}.annotation.core</compilerArgument>
+					<compilerArgument>-AguiceAnnotationDatabasePackageName=${project.groupId}.annotation.core</compilerArgument>
 				</configuration>
 			</plugin>
 		</plugins>
