@@ -42,7 +42,7 @@ import javax.inject.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import roboguice.fragment.RoboSherlockFragment;
+import roboguice.fragment.RoboFragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -78,7 +78,7 @@ import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
  * @author schnatterer
  *
  */
-public class ReleaseListFragment extends RoboSherlockFragment {
+public class ReleaseListFragment extends RoboFragment {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(ReleaseListFragment.class);
 	/**
@@ -162,7 +162,7 @@ public class ReleaseListFragment extends RoboSherlockFragment {
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		// if (v.getId() == R.id.releasesListView) {
-		MenuInflater inflater = getSherlockActivity().getMenuInflater();
+		MenuInflater inflater = getActivity().getMenuInflater();
 		AdapterView.AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
 		Release release = (Release) releasesListView
 				.getItemAtPosition(info.position);

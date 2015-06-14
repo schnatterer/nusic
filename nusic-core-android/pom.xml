@@ -67,6 +67,13 @@
 					<version>${android.sdk.version}</version>
 					<scope>provided</scope>
 				</dependency>
+			<!-- Enable annotation corebase to improve performance. -->
+			<dependency>
+				<groupId>org.roboguice</groupId>
+				<artifactId>roboblender</artifactId>
+				<version>${roboguice.version}</version>
+				<scope>provided</scope>
+			</dependency>
 			</dependencies>
 		</profile>
 	</profiles>
@@ -91,13 +98,6 @@
 			<groupId>org.roboguice</groupId>
 			<artifactId>roboguice</artifactId>
 			<version>${roboguice.version}</version>
-		</dependency>
-		<!-- Enable annotation corebase to improve performance. -->
-		<dependency>
-			<groupId>org.roboguice</groupId>
-			<artifactId>roboblender</artifactId>
-			<version>${roboguice.version}</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

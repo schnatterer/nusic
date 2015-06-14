@@ -33,7 +33,7 @@ import info.schnatterer.nusic.ui.R;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import roboguice.activity.RoboSherlockFragmentActivity;
+import roboguice.activity.RoboActionBarActivity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -48,16 +48,15 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
 import android.text.method.LinkMovementMethod;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.Tab;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 
 /**
  * The activity that is started when the app starts.
@@ -68,7 +67,7 @@ import com.actionbarsherlock.view.MenuItem;
  * @author schnatterer
  *
  */
-public class MainActivity extends RoboSherlockFragmentActivity {
+public class MainActivity extends RoboActionBarActivity {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(MainActivity.class);
 
@@ -236,7 +235,7 @@ public class MainActivity extends RoboSherlockFragmentActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getSupportMenuInflater();
+		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
 		return true;
 	}

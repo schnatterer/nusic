@@ -61,6 +61,13 @@
 					<version>${android.sdk.version}</version>
 					<scope>provided</scope>
 				</dependency>
+				<!-- "Re-include" the transitive dependency of nusic-ui-android that was excluded for eclipse build -->
+				<dependency>
+					<artifactId>support-v4</artifactId>
+					<groupId>com.android.support</groupId>
+					<version>${android.compatibility.version}</version>
+					<type>aar</type>
+				</dependency>
 			</dependencies>
 		</profile>
 	</profiles>
@@ -78,6 +85,14 @@
 			<artifactId>nusic-ui-android</artifactId>
 			<version>${project.parent.version}</version>
 			<type>aar</type>
+			<exclusions>
+				<exclusion>
+					<!-- Exclude this in eclipse build in order to avoid nable to execute 
+						dex: Multiple dex files define Landroid/support/annotation/AnimRes; -->
+					<artifactId>support-v4</artifactId>
+					<groupId>com.android.support</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>

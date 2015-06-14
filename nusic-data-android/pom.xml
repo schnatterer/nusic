@@ -60,6 +60,13 @@
 					<version>${android.sdk.version}</version>
 					<scope>provided</scope>
 				</dependency>
+				<!-- Enable annotation database to improve performance. -->
+				<dependency>
+					<groupId>org.roboguice</groupId>
+					<artifactId>roboblender</artifactId>
+					<version>${roboguice.version}</version>
+					<scope>provided</scope>
+				</dependency>
 				<!-- This dependency makes it impossible to deploy with eclipse... Because 
 					of its many transitive dependencies this will exceed the 65K limit: http://developer.android.com/tools/building/multidex.html 
 					So include the robolectric-x.x.x-jar-with-dependencies to eclipse! http://robolectric.org/eclipse-quick-start/. -->
@@ -90,13 +97,6 @@
 			<groupId>org.roboguice</groupId>
 			<artifactId>roboguice</artifactId>
 			<version>${roboguice.version}</version>
-		</dependency>
-		<!-- Enable annotation database to improve performance. -->
-		<dependency>
-			<groupId>org.roboguice</groupId>
-			<artifactId>roboblender</artifactId>
-			<version>${roboguice.version}</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
