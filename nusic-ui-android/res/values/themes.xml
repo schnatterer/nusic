@@ -1,0 +1,23 @@
+<resources>
+
+    <!-- inherit from the material theme -->
+    <style name="Theme.Nusic" parent="Theme.AppCompat">
+
+        <!-- Main theme colors -->
+<!--         your app branding color for the app bar
+        <item name="colorPrimary">@color/nusic.primary</item>
+        darker variant for the status bar and contextual app bars
+        <item name="colorPrimaryDark">@color/nusic.primary_dark</item> -->
+        <!-- TODO color only actionBar text. Don't use black, use gray that is used for window background -->
+        <!-- <item name="android:textColorPrimary">@color/background_material_dark</item> -->
+        <!-- TODO color highlight of current tab in ?gray? -->
+        
+        <!-- theme UI controls like checkboxes and text fields -->
+        <!-- <item name="colorAccent">@color/accent</item> -->
+        <!--
+         You can also set colorControlNormal, colorControlActivated
+         colorControlHighlight, and colorSwitchThumbNormal.
+        -->
+    </style>
+
+</resources>

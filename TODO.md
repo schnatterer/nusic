@@ -1,13 +1,12 @@
 TODOs - Features, enhancements, refactoring, ...
 
+- Remove Warnings
+- Release?
+
 LOGGING 
 - Provide means to send log via email?
 - Output statistic after finishing daily update
 - Manage to grab Logcat output from android to to SLF4J
-
-- Introduce material design, remove actionbarsherlock
-http://www.grokkingandroid.com/migrating-actionbarsherlock-actionbarcompat/
-http://android-developers.blogspot.de/2014/10/appcompat-v21-material-design-for-pre.html
 
 - Create a proper icon for status bar, that shows a CD not a white circle in android 5
 
