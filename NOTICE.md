@@ -6,10 +6,6 @@ Published under GNU General Public License (GPL), Version 3.0
 
 This product depends on the following libraries.
 
-**ActionBarSherlock**  
-published under The Apache Software License, Version 2.0  
-[Website](http://actionbarsherlock.com/)
-
 **Universal Image Loader**  
 published under The Apache Software License, Version 2.0  
 [Website](https://github.com/nostra13/Android-Universal-Image-Loader)
@@ -38,9 +34,13 @@ published under The Apache Software License, Version 2.0
 published under MIT License, Version 2.0
 [Website](http://www.slf4j.org/)
 
-*logback-android**
+**logback-android**
 published under  GNU Lesser General Public License version 2.1
 [Website](http://tony19.github.io/logback-android/)
+
+**Apache Commons IO**
+published under The Apache Software License, Version 2.0  
+[Website](https://commons.apache.org/proper/commons-io/)
   
 The nusic logo bases on Wikitracks Vinyl by Fleshgrinder (released under the Public domain)  
 [Website](https://en.wikipedia.org/wiki/File:Wikitracks_Vinyl.svg)
