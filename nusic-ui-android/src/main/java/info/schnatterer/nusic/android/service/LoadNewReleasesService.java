@@ -60,7 +60,6 @@ import android.graphics.Bitmap;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 
 public class LoadNewReleasesService extends WakefulService {
 	private static final Logger LOG = LoggerFactory
@@ -456,8 +455,7 @@ public class LoadNewReleasesService extends WakefulService {
 		public void onProgressFailed(Artist entity, int progress, int max,
 				Boolean result, Throwable potentialException) {
 			if (potentialException != null) {
-				LOG.error( potentialException.getMessage(),
-						potentialException);
+				LOG.error(potentialException.getMessage(), potentialException);
 				if (potentialException instanceof ServiceException) {
 					Notification
 							.notifyWarning(

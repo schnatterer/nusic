@@ -55,7 +55,6 @@ import android.graphics.Bitmap;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 
 /**
  * Service that checks if an album is released today.
@@ -271,8 +270,7 @@ public class ReleasedTodayService extends RoboService {
 					 * If the triggering time is in the past, android will
 					 * trigger it directly.
 					 */
-					LOG.debug(
-							"Triggering notification service for tommorrow");
+					LOG.debug("Triggering notification service for tommorrow");
 					triggerAtCal.add(Calendar.DAY_OF_MONTH, 1);
 				}
 
@@ -285,11 +283,10 @@ public class ReleasedTodayService extends RoboService {
 								triggerAtCal.getTimeInMillis(),
 								AlarmManager.INTERVAL_DAY,
 								createPendingIntent(context));
-				LOG.debug(
-						"Scheduled "
-								+ ReleasedTodayService.class.getSimpleName()
-								+ " to run again every day, starting at "
-								+ new Date(+triggerAtCal.getTimeInMillis()));
+				LOG.debug("Scheduled "
+						+ ReleasedTodayService.class.getSimpleName()
+						+ " to run again every day, starting at "
+						+ new Date(+triggerAtCal.getTimeInMillis()));
 			}
 		}
 	}

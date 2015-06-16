@@ -21,8 +21,6 @@
  */
 package info.schnatterer.nusic.android.util;
 
-import info.schnatterer.nusic.Constants;
-
 import java.io.InputStream;
 
 import org.slf4j.Logger;
@@ -33,7 +31,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.util.Log;
 
 public class ImageUtil {
 	private static final Logger LOG = LoggerFactory.getLogger(ImageUtil.class);
@@ -63,8 +60,7 @@ public class ImageUtil {
 							android.R.dimen.notification_large_icon_height),
 					false);
 		} else {
-			LOG.debug(
-					"Unable to read bitmap from stream. Stream null?");
+			LOG.debug("Unable to read bitmap from stream. Stream null?");
 		}
 		return artwork;
 	}
