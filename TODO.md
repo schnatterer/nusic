@@ -1,6 +1,6 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Remove Warnings
+- constants.xml -  translatable="false"
 - Release?
 
 LOGGING 

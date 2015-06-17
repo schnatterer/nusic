@@ -30,6 +30,9 @@ import info.schnatterer.nusic.android.util.TextUtil;
 import info.schnatterer.nusic.android.util.Toast;
 import info.schnatterer.nusic.ui.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,20 +45,18 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 /**
@@ -63,6 +64,9 @@ import android.widget.TextView;
  * 
  * The tab that is shown can parameterized using the {@link #EXTRA_ACTIVE_TAB},
  * that contains a {@link TabDefinition}.
+ * 
+ * This activity uses the toolbar as action bar, so better don't use it in
+ * conjuntion with a theme that uses an action bar.
  * 
  * @author schnatterer
  *
@@ -97,51 +101,40 @@ public class MainActivity extends RoboActionBarActivity {
 	 */
 	private static TabDefinition currentTab = TabDefinition.JUST_ADDED;
 
-	// /**
-	// * Provider that is used to get instances to assign to static
-	// * #loadNewRelasesServiceBinding on demand.
-	// */
-	// @Inject
-	// private Provider<LoadNewRelasesServiceBinding>
-	// loadNewRelasesServiceBindingProvider;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		ViewPager pager = (ViewPager) findViewById(R.id.mainPager);
-
-		/* Init tab fragments */
-		final ActionBar actionBar = getSupportActionBar();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-		// Capture page swipes
-		ViewPager.SimpleOnPageChangeListener ViewPagerListener = new ViewPager.SimpleOnPageChangeListener() {
-			@Override
-			public void onPageSelected(int position) {
-				super.onPageSelected(position);
-				// Find the ViewPager Position
-				actionBar.setSelectedNavigationItem(position);
-			}
-		};
-		pager.setOnPageChangeListener(ViewPagerListener);
-		// Set adapter that handles fragment (i.e. tab creation)
-		TabFragmentPagerAdapter tabAdapter = new TabFragmentPagerAdapter(
-				getSupportFragmentManager());
-		pager.setAdapter(tabAdapter);
-
+		// Set currentTab
 		if (getIntent().hasExtra(EXTRA_ACTIVE_TAB)) {
 			currentTab = ((TabDefinition) getIntent().getExtras().get(
 					EXTRA_ACTIVE_TAB));
 		}
-		// Create all tabs as defined in adapter
-		TabListener tabListener = new TabListener(pager);
-		for (TabDefinition tab : TabDefinition.values()) {
-			actionBar.addTab(actionBar.newTab().setText(tab.titleId)
-					.setTabListener(tabListener), tab.position,
-					isTabSelected(tab));
+
+		// Use toolbar as actionBar, if no actionBar yet
+		if (getSupportActionBar() == null) {
+			Toolbar toolbar = (Toolbar) findViewById(R.id.mainToolbar);
+			setSupportActionBar(toolbar);
 		}
+
+		ViewPager pager = (ViewPager) findViewById(R.id.mainPager);
+
+		/* Init tab fragments */
+		TabLayout tabLayout = (TabLayout) findViewById(R.id.mainTabs);
+
+		// Set adapter that handles fragment (i.e. tab creation)
+		TabFragmentPagerAdapter tabAdapter = new TabFragmentPagerAdapter(
+				getSupportFragmentManager());
+		// Create all tabs as defined
+		for (TabDefinition tab : TabDefinition.values()) {
+			tabAdapter.addFragment(createTabFragment(tab),
+					getString(tab.titleId));
+		}
+		pager.setAdapter(tabAdapter);
+		// Set current tab
+		pager.setCurrentItem(currentTab.position);
+		tabLayout.setupWithViewPager(pager);
 
 		// Handle first app start, if necessary
 		if (!onCreateCalled) {
@@ -177,15 +170,12 @@ public class MainActivity extends RoboActionBarActivity {
 	 */
 	private void registerListenersAndStartLoading(boolean forceUpdate) {
 		if (loadNewRelasesServiceBinding == null) {
-			// loadNewRelasesServiceBinding =
-			// loadNewRelasesServiceBindingProvider
-			// .get();
 			loadNewRelasesServiceBinding = new LoadNewRelasesServiceBinding();
 			registerListeners();
 			if (forceUpdate) {
 				startLoadingReleasesFromInternet(false);
 			} else {
-				// Update ony if necessary
+				// Update only if necessary
 				startLoadingReleasesFromInternet(true);
 			}
 
@@ -194,9 +184,18 @@ public class MainActivity extends RoboActionBarActivity {
 		}
 	}
 
+	private ReleaseListFragment createTabFragment(TabDefinition tab) {
+		// Create fragment
+		Bundle bundle = new Bundle();
+		bundle.putInt(ReleaseListFragment.EXTRA_LOADER_ID, tab.loaderId);
+		return (ReleaseListFragment) Fragment.instantiate(this,
+				ReleaseListFragment.class.getName(), bundle);
+	}
+
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
+		// TODO still necessary for appcompat and design?
 		/*
 		 * This is needed for Android 2.x when clicking a notification an the
 		 * task is already running, the notification is not delivered, but
@@ -208,23 +207,12 @@ public class MainActivity extends RoboActionBarActivity {
 		 * intent that was delivered.
 		 */
 		if (intent.hasExtra(EXTRA_ACTIVE_TAB)) {
-			getSupportActionBar()
-					.setSelectedNavigationItem(
-							((TabDefinition) intent.getExtras().get(
-									EXTRA_ACTIVE_TAB)).position);
+			/* Init tab fragments */
+			currentTab = ((TabDefinition) getIntent().getExtras().get(
+					EXTRA_ACTIVE_TAB));
+			ViewPager pager = (ViewPager) findViewById(R.id.mainPager);
+			pager.setCurrentItem(currentTab.position);
 		}
-	}
-
-	/**
-	 * @param tab
-	 * @return <code>true</code> if <code>tab</code> is selected, otherwise
-	 *         <code>false</code>
-	 */
-	private boolean isTabSelected(TabDefinition tab) {
-		if (currentTab.equals(tab)) {
-			return true;
-		}
-		return false;
 	}
 
 	private void registerListeners() {
@@ -423,77 +411,32 @@ public class MainActivity extends RoboActionBarActivity {
 	 * @author schnatterer
 	 * 
 	 */
-	public class TabFragmentPagerAdapter extends FragmentPagerAdapter {
-		ReleaseListFragment[] fragments = new ReleaseListFragment[TabDefinition
-				.values().length];
+	static class TabFragmentPagerAdapter extends FragmentPagerAdapter {
+		private final List<Fragment> mFragments = new ArrayList<>();
+		private final List<String> mFragmentTitles = new ArrayList<>();
 
 		public TabFragmentPagerAdapter(FragmentManager fm) {
 			super(fm);
 		}
 
+		public void addFragment(Fragment fragment, String title) {
+			mFragments.add(fragment);
+			mFragmentTitles.add(title);
+		}
+
 		@Override
 		public Fragment getItem(int position) {
-			int actualPos = position;
-			if (fragments.length <= position) {
-				// Default tab
-				actualPos = 0;
-			}
-			ReleaseListFragment fragment = createTabFragment(TabDefinition
-					.values()[actualPos]);
-			if (position < fragments.length) {
-				fragments[position] = fragment;
-			}
-			return fragment;
-		}
-
-		@Override
-		public void destroyItem(ViewGroup container, int position, Object object) {
-			super.destroyItem(container, position, object);
-			if (position < fragments.length) {
-				fragments[position] = null;
-			}
-		}
-
-		private ReleaseListFragment createTabFragment(TabDefinition tab) {
-			// Create fragment
-			Bundle bundle = new Bundle();
-			bundle.putInt(ReleaseListFragment.EXTRA_LOADER_ID, tab.loaderId);
-			return (ReleaseListFragment) Fragment.instantiate(
-					MainActivity.this, ReleaseListFragment.class.getName(),
-					bundle);
+			return mFragments.get(position);
 		}
 
 		@Override
 		public int getCount() {
-			return fragments.length;
+			return mFragments.size();
+		}
+
+		@Override
+		public CharSequence getPageTitle(int position) {
+			return mFragmentTitles.get(position);
 		}
 	}
-
-	/**
-	 * Tab listener that reports the current position to a view pager.
-	 * 
-	 * @author schnatterer
-	 */
-	public class TabListener implements ActionBar.TabListener {
-		private ViewPager pager;
-
-		public TabListener(ViewPager pager) {
-			this.pager = pager;
-		}
-
-		@Override
-		public void onTabSelected(Tab tab, FragmentTransaction ft) {
-			// Pass the position on tab click to ViewPager
-			pager.setCurrentItem(tab.getPosition());
-			currentTab = TabDefinition.values()[tab.getPosition()];
-		}
-
-		@Override
-		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-		}
-
-		@Override
-		public void onTabReselected(Tab tab, FragmentTransaction ft) {
-		}
-	};
 }

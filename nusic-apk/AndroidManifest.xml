@@ -34,9 +34,8 @@
 
     <application android:allowBackup="true"  android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:name=".android.application.NusicApplication" android:theme="@style/AppTheme">
 
-        <meta-data android:name="roboguice.annotations.packages" android:value="info.schnatterer.nusic.android.application"/>
-
-        <activity android:label="@string/app_name" android:name=".android.activities.MainActivity">
+        <!-- Use theme without actionbar here because we're going to use the toolbar here -->
+        <activity android:label="@string/app_name" android:name=".android.activities.MainActivity" android:theme="@style/Theme.Nusic.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -93,9 +93,10 @@
 
 	<dependencies>
 		<!-- Android dependecies -->
+		<!-- Include appcompat for API lvl 4 and 7, as well as backport of material design -->
 		<dependency>
 			<groupId>com.android.support</groupId>
-			<artifactId>appcompat-v7</artifactId>
+			<artifactId>design</artifactId>
 			<version>${android.compatibility.version}</version>
 			<type>aar</type>
 		</dependency>
@@ -157,7 +158,7 @@
 			</resource>
 			<!-- Include markdown sources to target in assets -->
 			<resource>
-				<directory>${project.basedir}/..</directory>
+				<directory>${project.parent.basedir}</directory>
 				<includes>
 					<include>NOTICE.md</include>
 					<include>CHANGELOG.md</include>
