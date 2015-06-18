@@ -22,8 +22,7 @@
     along with nusic-ui-android.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-
-<!-- NOTE that there is another version of this document for APIs >= 14! -->
+<!-- NOTE that there is another version of this document for APIs < 14! -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceCategory android:title="@string/preferences_category_releases" >
@@ -43,16 +42,20 @@
 
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/preferences_category_notifications" >
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="@bool/preferences_default_is_enabled_notify_new_releases"
             android:key="@string/preferences_key_is_enabled_notify_new_releases"
-            android:summary="@string/preferences_summary_is_enabled_notify_new_releases_on"
-            android:title="@string/preferences_title_is_enabled_notify_new_releases" />
-        <CheckBoxPreference
+            android:title="@string/preferences_title_is_enabled_notify_new_releases"
+            android:summaryOn="@string/preferences_summary_is_enabled_notify_new_releases_on"
+            android:summaryOff="@string/preferences_summary_is_enabled_notify_new_releases_off" />
+        <SwitchPreference
             android:defaultValue="@bool/preferences_default_is_enabled_notify_released_today"
             android:key="@string/preferences_key_is_enabled_notify_released_today"
-            android:summary="@string/preferences_summary_is_enabled_notify_released_today_on"
-            android:title="@string/preferences_title_is_enabled_notify_released_today" />
+            android:title="@string/preferences_title_is_enabled_notify_released_today"
+            android:summaryOn="@string/preferences_summary_is_enabled_notify_released_today_on"
+            android:summaryOff="@string/preferences_summary_is_enabled_notify_released_today_off" />
+            
+             />
         <!-- Implemented in activity: Time Picker dialog and scheduling of the service -->
         <Preference
             android:key="@string/preferences_key_released_today_hour_of_day"
@@ -61,12 +64,14 @@
             android:dependency="@string/preferences_key_is_enabled_notify_released_today"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/preferences_category_bandwitdth" >
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="@bool/preferences_default_download_only_on_wifi"
             android:key="@string/preferences_key_download_only_on_wifi"
-            android:summary="@string/preferences_summary_download_only_on_wifi_on"
-            android:title="@string/preferences_title_download_only_on_wifi" />
+            android:title="@string/preferences_title_download_only_on_wifi"
+            android:summaryOff="@string/preferences_summary_download_only_on_wifi_off"
+            android:summaryOn="@string/preferences_summary_download_only_on_wifi_on" />
     </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/preferences_category_about" android:key="@string/preferences_key_about" >
           <!-- Version summary is set in preference activity-->
           <Preference
