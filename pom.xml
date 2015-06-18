@@ -67,13 +67,21 @@
 		<!-- Android-specific dependencies -->
 		<android.api.level>22</android.api.level>
 		<android.sdk.version>5.1.1_r2</android.sdk.version>
-		<!-- Compatibility library for android API lvl4 (Android 2.x) -->
-		<android.compatibility-v4.version>22.2.0</android.compatibility-v4.version>
+		<!-- Compatibility library for android API levels 4 and 7(Android 2.x) -->
+		<android.compatibility.version>22.2.0</android.compatibility.version>
 		<roboguice.version>3.0.1</roboguice.version>
 		<robolectric.android.version>5.0.0_r2-robolectric-1</robolectric.android.version>
 		<robolectric.version>2.4</robolectric.version>
 	</properties>
-
+    
+	<repositories>
+		<repository>
+			<id>android</id>
+			<url>file://${env.ANDROID_HOME}/extras/android/m2repository</url>
+		</repository>
+	</repositories>
+	
+    
 	<modules>
 		<module>nusic-util</module>
 		<module>nusic-domain</module>
@@ -148,6 +156,8 @@
 						<exclude>**/proguard.cfg</exclude>
 						<exclude>**/privacyPolicy.html</exclude>
 						<exclude>**/project.properties</exclude>
+						<exclude>**/lint.xml</exclude>
+                        <exclude>src/main/java/roboguice/activity/RoboAppCompatPreferenceActivity.java</exclude>
 					</excludes>
 				</configuration>
 				<dependencies>

@@ -1,22 +1,21 @@
 TODOs - Features, enhancements, refactoring, ...
 
+- Disable log compression?
+- Release?
+
+- A new view that shows icon of the release and a link to MB on tap ? --> Remove webview
+
 LOGGING 
 - Provide means to send log via email?
 - Output statistic after finishing daily update
 - Manage to grab Logcat output from android to to SLF4J
 
-- Introduce material design, remove actionbarsherlock
-http://www.grokkingandroid.com/migrating-actionbarsherlock-actionbarcompat/
-http://android-developers.blogspot.de/2014/10/appcompat-v21-material-design-for-pre.html
-
-- Create a proper icon for status bar, that shows a CD not a white circle in android 5
-
 - Copy images to /sdcard instead of /data: 
 http://www.androidsnippets.com/download-an-http-file-to-sdcard-with-progress-notification
 http://developer.android.com/guide/topics/data/data-storage.html#filesExternal
 
+- Show progress in a snack bar instead of the dialog?
 - Show artwork in context menu (on long tab)
-- Resources XXXHDPI?
 
 - Create internal structure diagram, displaying module dependencies with an appropriate open source tool
 .....Build

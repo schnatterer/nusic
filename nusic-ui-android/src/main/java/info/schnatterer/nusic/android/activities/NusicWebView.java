@@ -23,14 +23,13 @@ package info.schnatterer.nusic.android.activities;
 
 import info.schnatterer.nusic.android.util.TextUtil;
 import info.schnatterer.nusic.ui.R;
-import roboguice.activity.RoboSherlockFragmentActivity;
+import roboguice.activity.RoboActionBarActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
-import com.actionbarsherlock.view.MenuItem;
 
 /**
  * Activity that loads a website from an URL and displays it in a text view.
@@ -48,7 +47,7 @@ import com.actionbarsherlock.view.MenuItem;
  * 
  * @author schnatterer
  */
-public class NusicWebView extends RoboSherlockFragmentActivity {
+public class NusicWebView extends RoboActionBarActivity {
 
 	/** "Protocol" prefix of a link for E-mails. */
 	private static final String MAILTO_LINK = "mailto:";

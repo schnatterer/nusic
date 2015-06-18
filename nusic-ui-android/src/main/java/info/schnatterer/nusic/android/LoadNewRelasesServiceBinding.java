@@ -21,7 +21,6 @@
  */
 package info.schnatterer.nusic.android;
 
-import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.android.service.LoadNewReleasesService;
 import info.schnatterer.nusic.android.service.LoadNewReleasesServiceConnection;
 import info.schnatterer.nusic.android.util.Toast;
@@ -40,7 +39,6 @@ import org.slf4j.LoggerFactory;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.util.Log;
 
 /**
  * Holds the binding to the {@link LoadNewReleasesService} via
@@ -91,8 +89,7 @@ public class LoadNewRelasesServiceBinding {
 			 * Execute the service method, if not running already. Pass/update
 			 * listener.
 			 */
-			LOG.debug(
-					"Service already bound. Calling refreshReleases()");
+			LOG.debug("Service already bound. Calling refreshReleases()");
 			return loadNewReleasesServiceConnection.getLoadNewReleasesService()
 					.refreshReleases(updateOnlyIfNeccesary,
 							artistProcessedListener);
@@ -333,9 +330,8 @@ public class LoadNewRelasesServiceBinding {
 
 	protected void notifyListeners(Boolean resultChanged) {
 		boolean primitiveResult = true;
-		LOG.debug(
-				"Service: Notifying activity if result changed. ResultChanged="
-						+ resultChanged + ". Activity=" + activity);
+		LOG.debug("Service: Notifying activity if result changed. ResultChanged="
+				+ resultChanged + ". Activity=" + activity);
 		// Be defensive: Only if explicitly nothing changed
 		if (resultChanged != null && resultChanged.equals(false)) {
 			primitiveResult = false;

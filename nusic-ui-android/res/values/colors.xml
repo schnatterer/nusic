@@ -46,5 +46,16 @@
 
     <!-- White -->
     <color name="white">#ffffffff</color>
+    
+    <color name="nusic.primary_dark">#33691e</color>
+    <color name="nusic.primary">#558b2f</color>
+    
+<!--     <color name="nusic.primary_dark">#1b5e20</color>
+    <color name="nusic.primary">#2e7d32</color> -->
+    <!--
+             <color name="nusic.primary_dark">#ff537f2d</color>
+    <color name="nusic.primary">#ff54a663</color>
+    -->
+
 
 </resources>

@@ -55,7 +55,6 @@ import android.graphics.Bitmap;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 
 /**
  * Service that checks if an album is released today.
@@ -64,6 +63,9 @@ import android.util.Log;
  *
  */
 public class ReleasedTodayService extends RoboService {
+	/** Small icon shown in the status bar when a notification is shwown. */
+	private static final int NOTIFICATION_SMALL_ICON = R.drawable.ic_album_white_24dp;
+
 	private static final Logger LOG = LoggerFactory
 			.getLogger(ReleasedTodayService.class);
 
@@ -124,9 +126,9 @@ public class ReleasedTodayService extends RoboService {
 					NotificationId.RELEASED_TODAY,
 					getString(R.string.ReleasedTodayService_ReleasedToday),
 					release.getArtist().getArtistName() + " - "
-							+ release.getReleaseName(), R.drawable.ic_launcher,
-					createScaledBitmap, MainActivity.class,
-					createExtraActiveTab());
+							+ release.getReleaseName(),
+					NOTIFICATION_SMALL_ICON, createScaledBitmap,
+					MainActivity.class, createExtraActiveTab());
 		} catch (DatabaseException e) {
 			LOG.warn("Unable to load artwork for notification. " + release, e);
 		} catch (IllegalArgumentException e) {
@@ -149,7 +151,7 @@ public class ReleasedTodayService extends RoboService {
 	private void notifyReleaseToday(int nReleases) {
 		Notification.notify(this, NotificationId.RELEASED_TODAY, String.format(
 				getString(R.string.ReleasedTodayService_ReleasedTodayMultiple),
-				nReleases), null, R.drawable.ic_launcher, null,
+				nReleases), null, NOTIFICATION_SMALL_ICON, null,
 				MainActivity.class, createExtraActiveTab());
 	}
 
@@ -271,8 +273,7 @@ public class ReleasedTodayService extends RoboService {
 					 * If the triggering time is in the past, android will
 					 * trigger it directly.
 					 */
-					LOG.debug(
-							"Triggering notification service for tommorrow");
+					LOG.debug("Triggering notification service for tommorrow");
 					triggerAtCal.add(Calendar.DAY_OF_MONTH, 1);
 				}
 
@@ -285,11 +286,10 @@ public class ReleasedTodayService extends RoboService {
 								triggerAtCal.getTimeInMillis(),
 								AlarmManager.INTERVAL_DAY,
 								createPendingIntent(context));
-				LOG.debug(
-						"Scheduled "
-								+ ReleasedTodayService.class.getSimpleName()
-								+ " to run again every day, starting at "
-								+ new Date(+triggerAtCal.getTimeInMillis()));
+				LOG.debug("Scheduled "
+						+ ReleasedTodayService.class.getSimpleName()
+						+ " to run again every day, starting at "
+						+ new Date(+triggerAtCal.getTimeInMillis()));
 			}
 		}
 	}

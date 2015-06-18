@@ -59,7 +59,7 @@
     <!-- Prefrences -->
     <string name="preferences_category_releases">Alben</string>
     <string name="preferences_title_download_releases_time_period">Zeitspanne</string>
-    <string name="preferences_summary_download_releases_time_period">Zurückliegende Zeitspanne vom heutigen Datum aus, für die Alben heruntergeladen und angezeigt werden sollen</string>
+    <string name="preferences_summary_download_releases_time_period">Zurückliegende Zeitspanne vom heutigen Datum aus, für die Alben heruntergeladen und angezeigt werden sollen.</string>
     <string-array name="preferences_entries_download_releases_time_period">
         <item>Ein Monat</item>
         <item>Drei Monate</item>
@@ -71,14 +71,17 @@
     <string name="preferences_message_display_all_releases">Wirklich alle ausgeblendeten Alben und Interpreten wieder anzeigen?</string>
     
     <string name="preferences_category_bandwitdth">Datennutzung</string>
-    <string name="preferences_title_download_only_on_wifi">Nur über WLAN herunterladen</string>
-    <string name="preferences_summary_download_only_on_wifi">Keine Internetverbindung über Mobilfunknetzwerke verwenden</string>
+    <string name="preferences_title_download_only_on_wifi">Nur WLAN</string>
+    <string name="preferences_summary_download_only_on_wifi_on">Keine Internetverbindung über Mobilfunknetzwerke verwenden.</string>
+    <string name="preferences_summary_download_only_on_wifi_off">Auch Internetverbindung über Mobilfunknetzwerke verwenden.</string>
     
     <string name="preferences_category_notifications">Benachrichtigungen</string>
     <string name="preferences_title_is_enabled_notify_new_releases">Neue Alben</string>
-    <string name="preferences_summary_is_enabled_notify_new_releases">Wenn neue Alben gefunden werden benachrichtigen</string>
+    <string name="preferences_summary_is_enabled_notify_new_releases_on">Benachrichtigen wenn neue Alben gefunden werden.</string>
+    <string name="preferences_summary_is_enabled_notify_new_releases_off">Keine Benachrichtigung wenn neue Alben gefunden werden.</string>
     <string name="preferences_title_is_enabled_notify_released_today">Erscheinungstermine</string>
-    <string name="preferences_summary_is_enabled_notify_released_today">Am Tag der Veröffentlichung von Alben benachrichtigen</string>
+    <string name="preferences_summary_is_enabled_notify_released_today_on">Am Tag der Veröffentlichung von Alben benachrichtigen.</string>
+    <string name="preferences_summary_is_enabled_notify_released_today_off">Keine Benachrichtigung am Tag der Veröffentlichung von Alben.</string>
     <string name="preferences_title_released_today_hour_of_day">Zeit der Benachrichtigung</string>
     
     <string name="preferences_category_about">Über %1$s</string>

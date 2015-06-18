@@ -21,25 +21,24 @@
  */
 package info.schnatterer.nusic.android.activities;
 
-import info.schnatterer.nusic.ui.R;
 import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.fragments.NusicPreferencesFragment;
 import info.schnatterer.nusic.android.listeners.PreferenceReleasedTodayTimePickerListener;
 import info.schnatterer.nusic.android.listeners.PreferenceVisibilityButtonListener;
 import info.schnatterer.nusic.core.PreferencesService;
 import info.schnatterer.nusic.core.event.PreferenceChangedListener;
+import info.schnatterer.nusic.ui.R;
 
 import javax.inject.Inject;
 
 import roboguice.RoboGuice;
-import roboguice.activity.RoboSherlockPreferenceActivity;
+import roboguice.activity.RoboAppCompatPreferenceActivity;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
-
-import com.actionbarsherlock.view.MenuItem;
+import android.view.MenuItem;
 
 /**
  * Activity that realizes the preferences of the app.
@@ -54,7 +53,7 @@ import com.actionbarsherlock.view.MenuItem;
  * @author schnatterer
  *
  */
-public class NusicPreferencesActivity extends RoboSherlockPreferenceActivity {
+public class NusicPreferencesActivity extends RoboAppCompatPreferenceActivity {
 	/**
 	 * Key to the resulting intent's extras that contains the boolean value that
 	 * informs if a check for new releases must be performed.<br/>

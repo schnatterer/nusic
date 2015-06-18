@@ -23,12 +23,11 @@ package info.schnatterer.nusic.android.activities;
 
 import info.schnatterer.nusic.android.util.TextUtil;
 import info.schnatterer.nusic.ui.R;
-import roboguice.activity.RoboSherlockFragmentActivity;
+import roboguice.activity.RoboActionBarActivity;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
+import android.view.MenuItem;
 import android.widget.TextView;
-
-import com.actionbarsherlock.view.MenuItem;
 
 /**
  * Activity that loads a text from an asset file and displays it in a text view.
@@ -42,10 +41,10 @@ import com.actionbarsherlock.view.MenuItem;
  * 
  * @author schnatterer
  */
-public class TextAssetActivity extends RoboSherlockFragmentActivity {
+public class TextAssetActivity extends RoboActionBarActivity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.simple_textview_layout);
 		TextView textView = (TextView) findViewById(R.id.renderRawHtmlTextView);
