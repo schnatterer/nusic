@@ -24,57 +24,57 @@
 -->
 <!-- Application-wide technical constants (e.g. for preferences). Don't translate! -->
 <resources>
-    <string name="app_name">nusic</string>
-    <string name="app_url">${project.website.url}</string>
-    <string name="versionName">${project.version}</string>
+    <string name="app_name" translatable="false">nusic</string>
+    <string name="app_url" translatable="false">${project.website.url}</string>
+    <string name="versionName" translatable="false">${project.version}</string>
     
-    <string name="extra_asset_name">nusic.intent.extra.assetName</string>
-    <string name="extra_activity_title">nusic.intent.extra.activity.title</string>
+    <string name="extra_asset_name" translatable="false">nusic.intent.extra.assetName</string>
+    <string name="extra_activity_title" translatable="false">nusic.intent.extra.activity.title</string>
      
     <!-- Plain links -->
-    <string name="link_nusic_google_play">https://play.google.com/store/apps/details?id=info.schnatterer.nusic</string>
-    <string name="link_sd_scanner">https://play.google.com/store/apps/details?id=com.gmail.jerickson314.sdscanner</string>
-    <!-- Links as HTML (embedded in a <a href"link"></a>) -->
-    <string name="html_link_nusic_google_play">&lt;a href="@string/link_nusic_google_play"&gt;@string/GooglePlay&lt;a&gt;</string>
-    <string name="html_link_nusic_git_hub">&lt;a href="@string/app_url"&gt;@string/GitHub&lt;a&gt;</string>
-    <string name="html_link_sd_scanner">&lt;a href="@string/link_sd_scanner"&gt;@string/SDScanner&lt;a&gt;</string>
+    <string name="link_nusic_google_play" translatable="false">https://play.google.com/store/apps/details?id=info.schnatterer.nusic</string>
+    <string name="link_sd_scanner" translatable="false">https://play.google.com/store/apps/details?id=com.gmail.jerickson314.sdscanner</string>
+    <!-- Links as HTML (embedded in a <a href"link" translatable="false"></a>) -->
+    <string name="html_link_nusic_google_play" translatable="false">&lt;a href="@string/link_nusic_google_play"&gt;@string/GooglePlay&lt;a&gt;</string>
+    <string name="html_link_nusic_git_hub" translatable="false">&lt;a href="@string/app_url"&gt;@string/GitHub&lt;a&gt;</string>
+    <string name="html_link_sd_scanner" translatable="false">&lt;a href="@string/link_sd_scanner"&gt;@string/SDScanner&lt;a&gt;</string>
     
     <!-- Preferences -->
-    <string name="preferences_key_download_releases_time_period">downloadReleasesNumberOfMonths</string>
-    <string name="preferences_default_download_releases_time_period">6</string>
-    <string-array name="preferences_entry_values_download_releases_time_period">
+    <string name="preferences_key_download_releases_time_period" translatable="false">downloadReleasesNumberOfMonths</string>
+    <string name="preferences_default_download_releases_time_period" translatable="false">6</string>
+    <string-array name="preferences_entry_values_download_releases_time_period" translatable="false">
         <item>1</item>
         <item>3</item>
         <item>6</item>
         <item>12</item>
     </string-array>
 
-    <string name="preferences_key_display_all_releases">displayAllReleases</string>
+    <string name="preferences_key_display_all_releases" translatable="false">displayAllReleases</string>
 
-    <string name="preferences_key_download_only_on_wifi">onWifiOnly</string>
-    <bool name="preferences_default_download_only_on_wifi">false</bool>
+    <string name="preferences_key_download_only_on_wifi" translatable="false">onWifiOnly</string>
+    <bool name="preferences_default_download_only_on_wifi" translatable="false">false</bool>
 
-    <string name="preferences_key_refresh_period">refreshPeriod</string>
-    <string name="preferences_default_refresh_period">1</string>
-    <string-array name="preferences_entry_values_refresh_period">
+    <string name="preferences_key_refresh_period" translatable="false">refreshPeriod</string>
+    <string name="preferences_default_refresh_period" translatable="false">1</string>
+    <string-array name="preferences_entry_values_refresh_period" translatable="false">
         <item>1</item>
         <item>3</item>
         <item>7</item>
     </string-array>
     
-    <string name="preferences_key_is_enabled_notify_new_releases">isEnabledNotifyNewReleases</string>
-    <bool name="preferences_default_is_enabled_notify_new_releases">true</bool>
+    <string name="preferences_key_is_enabled_notify_new_releases" translatable="false">isEnabledNotifyNewReleases</string>
+    <bool name="preferences_default_is_enabled_notify_new_releases" translatable="false">true</bool>
     
-    <string name="preferences_key_is_enabled_notify_released_today">isEnabledNotifyReleasedToday</string>
-    <bool name="preferences_default_is_enabled_notify_released_today">true</bool>
+    <string name="preferences_key_is_enabled_notify_released_today" translatable="false">isEnabledNotifyReleasedToday</string>
+    <bool name="preferences_default_is_enabled_notify_released_today" translatable="false">true</bool>
     
-    <string name="preferences_key_released_today_hour_of_day">releaseTodayHourOfDay</string>
-    <string name="preferences_default_released_today_hour_of_day">12</string>
+    <string name="preferences_key_released_today_hour_of_day" translatable="false">releaseTodayHourOfDay</string>
+    <string name="preferences_default_released_today_hour_of_day" translatable="false">12</string>
     
-    <string name="preferences_key_released_today_minute">releaseTodayMinute</string>
-    <string name="preferences_default_released_today_minute">00</string>
+    <string name="preferences_key_released_today_minute" translatable="false">releaseTodayMinute</string>
+    <string name="preferences_default_released_today_minute" translatable="false">00</string>
     
-    <string name="preferences_key_version">version</string>
-    <string name="preferences_key_about">about</string>
+    <string name="preferences_key_version" translatable="false">version</string>
+    <string name="preferences_key_about" translatable="false">about</string>
     
 </resources>

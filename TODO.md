@@ -1,6 +1,6 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- constants.xml -  translatable="false"
+- Disable log compression?
 - Release?
 
 - A new view that shows icon of the release and a link to MB on tap ? --> Remove webview
