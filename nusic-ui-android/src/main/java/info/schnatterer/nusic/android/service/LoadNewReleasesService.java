@@ -62,6 +62,9 @@ import android.os.Bundle;
 import android.os.IBinder;
 
 public class LoadNewReleasesService extends WakefulService {
+	/** Small icon shown in the status bar when a notification is shwown. */
+	private static final int NOTIFICATION_SMALL_ICON = R.drawable.ic_album_white_24dp;
+
 	private static final Logger LOG = LoggerFactory
 			.getLogger(LoadNewReleasesService.class);
 
@@ -303,8 +306,9 @@ public class LoadNewReleasesService extends WakefulService {
 					NotificationId.NEW_RELEASE,
 					getString(R.string.LoadNewReleasesService_newRelease),
 					release.getArtist().getArtistName() + " - "
-							+ release.getReleaseName(), R.drawable.ic_launcher,
-					scaledBitmap, MainActivity.class, createExtraActiveTab());
+							+ release.getReleaseName(),
+					NOTIFICATION_SMALL_ICON, scaledBitmap, MainActivity.class,
+					createExtraActiveTab());
 		} catch (DatabaseException e) {
 			LOG.warn("Unable to load artwork for notification. " + release, e);
 		} catch (IllegalArgumentException e) {
@@ -327,7 +331,7 @@ public class LoadNewReleasesService extends WakefulService {
 	private void notifyNewReleases(int nReleases) {
 		Notification.notify(this, NotificationId.NEW_RELEASE, String.format(
 				getString(R.string.LoadNewReleasesService_newReleaseMultiple),
-				nReleases), null, R.drawable.ic_launcher, null,
+				nReleases), null, NOTIFICATION_SMALL_ICON, null,
 				MainActivity.class, createExtraActiveTab());
 	}
 

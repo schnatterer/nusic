@@ -1,6 +1,5 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Create a proper icon for status bar, that shows a CD not a white circle in android 5
 - constants.xml -  translatable="false"
 - Release?
 

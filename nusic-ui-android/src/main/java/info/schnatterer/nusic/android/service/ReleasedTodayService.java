@@ -63,6 +63,9 @@ import android.os.IBinder;
  *
  */
 public class ReleasedTodayService extends RoboService {
+	/** Small icon shown in the status bar when a notification is shwown. */
+	private static final int NOTIFICATION_SMALL_ICON = R.drawable.ic_album_white_24dp;
+
 	private static final Logger LOG = LoggerFactory
 			.getLogger(ReleasedTodayService.class);
 
@@ -123,9 +126,9 @@ public class ReleasedTodayService extends RoboService {
 					NotificationId.RELEASED_TODAY,
 					getString(R.string.ReleasedTodayService_ReleasedToday),
 					release.getArtist().getArtistName() + " - "
-							+ release.getReleaseName(), R.drawable.ic_launcher,
-					createScaledBitmap, MainActivity.class,
-					createExtraActiveTab());
+							+ release.getReleaseName(),
+					NOTIFICATION_SMALL_ICON, createScaledBitmap,
+					MainActivity.class, createExtraActiveTab());
 		} catch (DatabaseException e) {
 			LOG.warn("Unable to load artwork for notification. " + release, e);
 		} catch (IllegalArgumentException e) {
@@ -148,7 +151,7 @@ public class ReleasedTodayService extends RoboService {
 	private void notifyReleaseToday(int nReleases) {
 		Notification.notify(this, NotificationId.RELEASED_TODAY, String.format(
 				getString(R.string.ReleasedTodayService_ReleasedTodayMultiple),
-				nReleases), null, R.drawable.ic_launcher, null,
+				nReleases), null, NOTIFICATION_SMALL_ICON, null,
 				MainActivity.class, createExtraActiveTab());
 	}
 
