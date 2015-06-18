@@ -17,7 +17,6 @@ http://developer.android.com/guide/topics/data/data-storage.html#filesExternal
 
 - Show progress in a snack bar instead of the dialog?
 - Show artwork in context menu (on long tab)
-- Resources XXXHDPI?
 
 - Create internal structure diagram, displaying module dependencies with an appropriate open source tool
 .....Build
