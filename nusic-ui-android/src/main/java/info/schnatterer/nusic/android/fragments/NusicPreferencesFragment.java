@@ -21,19 +21,19 @@
  */
 package info.schnatterer.nusic.android.fragments;
 
-import info.schnatterer.nusic.ui.R;
 import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.listeners.PreferenceReleasedTodayTimePickerListener;
 import info.schnatterer.nusic.android.listeners.PreferenceVisibilityButtonListener;
+import info.schnatterer.nusic.ui.R;
 
 import javax.inject.Inject;
 
+import roboguice.fragment.provided.RoboPreferenceFragment;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 
 @SuppressLint("NewApi")
-public class NusicPreferencesFragment extends PreferenceFragment {
+public class NusicPreferencesFragment extends RoboPreferenceFragment {
 
 	@Inject
 	private PreferenceReleasedTodayTimePickerListener releaseTodayTimePickerListener;

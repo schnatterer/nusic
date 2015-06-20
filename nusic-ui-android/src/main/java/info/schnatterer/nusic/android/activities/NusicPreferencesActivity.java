@@ -31,9 +31,9 @@ import info.schnatterer.nusic.ui.R;
 
 import javax.inject.Inject;
 
-import roboguice.RoboGuice;
 import roboguice.activity.RoboAppCompatPreferenceActivity;
 import android.annotation.TargetApi;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -66,6 +66,9 @@ public class NusicPreferencesActivity extends RoboAppCompatPreferenceActivity {
 	 * See {@link #isContentChanged}.
 	 */
 	public static final String EXTRA_RESULT_IS_CONTENT_CHANGED = "nusic.intent.extra.preferences.result.isContentChanged";
+	/** Identifier for fragment instance. */
+	public static final String TAG_PREFERENCES_FRAGMENT = NusicPreferencesFragment.class
+			.getCanonicalName();
 
 	private TimePeriodPreferenceChangedListener timePeriodPreferenceChangedListener = new TimePeriodPreferenceChangedListener();
 
@@ -151,16 +154,13 @@ public class NusicPreferencesActivity extends RoboAppCompatPreferenceActivity {
 	 */
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void onCreatePreferenceFragment() {
-		/*
-		 * A Provider<NusicPreferencesFragment> won't do here because lower API
-		 * levels won't know the type NusicPreferencesFragment
-		 */
 		getFragmentManager()
 				.beginTransaction()
 				.replace(
 						android.R.id.content,
-						RoboGuice.getInjector(this).getInstance(
-								NusicPreferencesFragment.class)).commit();
+						Fragment.instantiate(this,
+								NusicPreferencesFragment.class.getName()))
+				.commit();
 	}
 
 	@Override
