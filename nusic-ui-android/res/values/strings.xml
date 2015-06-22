@@ -99,6 +99,8 @@
     <string name="preferences_summary_git_hub">Report issues, parse source code, add translation or support development.</string>
     <string name="preferences_title_email">E-mail</string>
     <string name="preferences_summary_email">Contact us via E-mail.</string>
+    <string name="preferences_title_report">Report issue</string>
+    <string name="preferences_summary_report">Report issue via E-mail, attaching your log files</string>
     
     <!-- (Error) messages -->
     <string name="GenericError">Something almost impossible has happened: %1s!</string>

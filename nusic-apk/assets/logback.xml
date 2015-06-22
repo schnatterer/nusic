@@ -24,11 +24,13 @@
 <configuration>
 	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator" />
 
-	<property name="ANDROID_PACKAGE" value="info.schnatterer.nusic" />
-	<property name="LOG_DIR" value="app_logs" />
+	<property name="ANDROID_PACKAGE" value="${PACKAGE_NAME}" />
+	<property name="LOG_DIR" value="files/logs" />
 	<property name="APP_NAME" value="nusic" />
-	<property name="LOG_PATH"
-		value="/data/data/${ANDROID_PACKAGE}/${LOG_DIR}" />
+	<property name="LOG_PATH" value="/data/data/${ANDROID_PACKAGE}/${LOG_DIR}" />
+	<!-- ExternalFilesDir. Won't work on API lvl < 19! -->
+	<!-- <property name="LOG_PATH"
+		value="${EXT_DIR:-/sdcard}/Android/data/${PACKAGE_NAME}/files/logs" /> -->
 
 	<!-- Create a logcat appender, that logs only specific statements -->
 	<appender name="LOGCAT" class="ch.qos.logback.classic.android.LogcatAppender">
@@ -52,7 +54,8 @@
 
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- daily rollover -->
-			<fileNamePattern>${LOG_PATH}/${APP_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<fileNamePattern>${LOG_PATH}/${APP_NAME}.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
 			<!-- keep 2 days' worth of history -->
 			<maxHistory>2</maxHistory>
 		</rollingPolicy>
@@ -71,24 +74,28 @@
 	<!-- JDOMParserWs2 floods the log with warnings. Put him down. -->
 	<logger name="org.musicbrainz.wsxml.impl.JDOMParserWs2" level="ERROR"
 		additivity="false">
-		<!-- Don't appent to logcat, because java.util.logging writes to logcat too -->
+		<!-- Don't appent to logcat, because java.util.logging writes to logcat 
+			too -->
 		<appender-ref ref="FILE" />
 	</logger>
-	<!-- HttpClientWebServiceWs2 logs a debug message for every request. Too much information. -->
-	<logger name="org.musicbrainz.webservice.impl.HttpClientWebServiceWs2" level="INFO"
-		additivity="false">
-		<!-- Don't appent to logcat, because java.util.logging writes to logcat too -->
+	<!-- HttpClientWebServiceWs2 logs a debug message for every request. Too 
+		much information. -->
+	<logger name="org.musicbrainz.webservice.impl.HttpClientWebServiceWs2"
+		level="INFO" additivity="false">
+		<!-- Don't appent to logcat, because java.util.logging writes to logcat 
+			too -->
 		<appender-ref ref="FILE" />
 	</logger>
-	<!-- DefaultCoverArtArchiveClient logs an info message for every request. Too much information. -->
-	<logger name="fm.last.musicbrainz.coverart.impl.DefaultCoverArtArchiveClient" level="WARN"
-		additivity="false">
+	<!-- DefaultCoverArtArchiveClient logs an info message for every request. 
+		Too much information. -->
+	<logger
+		name="fm.last.musicbrainz.coverart.impl.DefaultCoverArtArchiveClient"
+		level="WARN" additivity="false">
 		<appender-ref ref="LOGCAT" />
 		<appender-ref ref="FILE" />
 	</logger>
 	<!-- Stopwatch logs a bit too much -->
-	<logger name="com.google.inject" level="INFO"
-		additivity="false">
+	<logger name="com.google.inject" level="INFO" additivity="false">
 		<appender-ref ref="LOGCAT" />
 		<appender-ref ref="FILE" />
 	</logger>

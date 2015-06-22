@@ -121,7 +121,12 @@
 		       android:summary="@string/preferences_summary_email">
              <intent android:targetPackage="info.schnatterer.nusic"
                 android:targetClass="info.schnatterer.nusic.android.activities.NusicWebView"
-                android:data="mailto:android@schnatterer.info?subject=[nusic @string/versionName]&amp;body="/> 
+                android:data="mailto:@string/app_contact?subject=[nusic @string/versionName]&amp;body="/> 
+       </Preference>
+        <Preference android:title="@string/preferences_title_report"
+               android:summary="@string/preferences_summary_report">
+             <intent android:targetPackage="info.schnatterer.nusic"
+                android:targetClass="info.schnatterer.nusic.android.activities.SendLogActivity"/> 
        </Preference>
     </PreferenceCategory>
 </PreferenceScreen>

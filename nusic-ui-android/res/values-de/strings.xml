@@ -95,9 +95,11 @@
     <string name="preferences_summary_changelog">Schau dir an was es Neues gibt</string>
     <string name="preferences_category_web">nusic im Netz</string>
     <string name="preferences_summary_google_play">Wenn dir nusic gefällt, bitte bewerte es. Wenn es dir nicht gefällt, bitte hilf uns es zu verbessern und erstelle einen issue bei GitHub.</string>
-    <string name="preferences_summary_git_hub">Melde issues, schaue dir denn Quellcode an, füge Übersetzungen hinzu oder unterstütze die Entwicklung.</string>
+    <string name="preferences_summary_git_hub">Melde Fehler, schaue dir denn Quellcode an, füge Übersetzungen hinzu oder unterstütze die Entwicklung.</string>
     <string name="preferences_title_email">E-Mail</string>
     <string name="preferences_summary_email">Schreib uns eine E-Mail.</string>
+    <string name="preferences_title_report">Fehlerbericht</string>
+    <string name="preferences_summary_report">Fehlerbericht als E-mail schreiben und Log-Dateien anhängen</string>
     
     <!-- (Error) messages -->
     <string name="GenericError">Etwas beinahe unmögliches ist geschehen: %1s!</string>
