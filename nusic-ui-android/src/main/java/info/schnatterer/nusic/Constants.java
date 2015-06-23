@@ -50,4 +50,11 @@ public interface Constants {
 		public static final int RELEASE_LOADER_ANNOUNCED = 2;
 		public static final int RELEASE_LOADER_AVAILABLE = 3;
 	}
+
+	/**
+	 * Name of the directory where log files are stored under
+	 * <code>/data/data/appname/files/</code> Create a reference to this
+	 * directory via {@link android.content.ContextWrapper#getFilesDir()}.
+	 */
+	public static final String LOG_FOLDER = "logs";
 }

@@ -38,22 +38,19 @@
         <activity android:label="@string/app_name" android:name=".android.activities.MainActivity" android:theme="@style/Theme.Nusic.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:label="@string/action_settings" android:name=".android.activities.NusicPreferencesActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         
-        <activity android:name=".android.activities.NusicWebView">
-        </activity>
-        <activity android:name=".android.activities.TextAssetActivity">
-        </activity>
+        <activity android:name=".android.activities.NusicWebView"/>
+        <activity android:name=".android.activities.TextAssetActivity"/>
+        <activity android:name=".android.activities.SendLogActivity"/>
 
         <receiver android:name=".android.service.LoadNewReleasesServiceConnectivityReceiver" >
             <intent-filter>
@@ -84,7 +81,18 @@
         <receiver android:name=".android.service.ReleasedTodayService$ReleasedTodayServiceStarterReceiver" />
 
        <service android:name=".android.service.ReleasedTodayService" />
-       
+
+        <!-- Expose log files for email clients -->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="@string/authority_log_file_provider"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/logpath" />
+        </provider>
+        
         <meta-data android:name="roboguice.modules"
           android:value="info.schnatterer.nusic.android.NusicAndroidModule" />  
         <meta-data android:name="roboguice.annotations.packages" android:value="info.schnatterer.nusic.annotation.apk,info.schnatterer.nusic.annotation.data,info.schnatterer.nusic.annotation.core"/>
