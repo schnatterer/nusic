@@ -79,7 +79,7 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 
 	/*
 	 * TODO find less verbose solution for passing XML values from APK to core
-	 * See also Moduel, where annotations are defined
+	 * See also Module, where annotations are defined
 	 */
 	@Inject
 	@PreferencesKeyDownloadOnlyOnWifi
@@ -129,6 +129,13 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	@Inject
 	@PreferencesDefaultReleasedTodayMinute
 	private Integer DEFAULT_RELEASED_TODAY_MINUTE;
+
+	@Inject
+	@PreferencesKeyLogLevel
+	private String KEY_LOG_LEVEL;
+	@Inject
+	@PreferencesDefaultLogLevel
+	private String DEFAULT_LOG_LEVEL;
 
 	private final SharedPreferences sharedPreferences;
 
@@ -298,6 +305,17 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 				DEFAULT_RELEASED_TODAY_MINUTE);
 	}
 
+	@Override
+	public String getLogLevel() {
+		return sharedPreferences.getString(KEY_LOG_LEVEL, DEFAULT_LOG_LEVEL);
+	}
+
+	@Override
+	public boolean setLogLevel(String logLevel) {
+		return sharedPreferences.edit().putString(KEY_LOG_LEVEL, logLevel)
+				.commit();
+	}
+
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target({ ElementType.FIELD, ElementType.PARAMETER })
 	@BindingAnnotation
@@ -380,5 +398,17 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	@Target({ ElementType.FIELD, ElementType.PARAMETER })
 	@BindingAnnotation
 	public @interface PreferencesDefaultReleasedTodayMinute {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface PreferencesKeyLogLevel {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface PreferencesDefaultLogLevel {
 	}
 }

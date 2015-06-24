@@ -124,4 +124,14 @@
                 android:targetClass="info.schnatterer.nusic.android.activities.SendLogActivity"/> 
        </Preference>
     </PreferenceCategory>
+    <PreferenceCategory android:title="preferences_category_misc" >
+            <!--  TODO move this to a separate preference activity -->
+            <ListPreference
+            android:entries="@array/preferences_entry_values_log_levels" 
+            android:defaultValue="@string/preferences_default_log_level"
+            android:entryValues="@array/preferences_entry_values_log_levels"
+            android:key="@string/preferences_key_log_level"
+            android:summary="@string/preferences_summary_loglevel"
+            android:title="@string/preferences_title_loglevel" />
+    </PreferenceCategory>
 </PreferenceScreen>

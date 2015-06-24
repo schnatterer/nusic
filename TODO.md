@@ -1,5 +1,9 @@
 TODOs - Features, enhancements, refactoring, ...
 
+- Developer Preferences: 
+  Change LogLevel, 
+  Change log level for statements appended to logcat
+  "show log" (in external editor), simlar to current email intent
 - Release: Tests, new screens, changelog, ...
 
 - A new view that shows icon of the release and a link to MB on tap ? --> Remove webview

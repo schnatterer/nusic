@@ -50,7 +50,7 @@ public class LoadNewReleasesServiceBootReceiver extends RoboBroadcastReceiver {
 
 	private static final int BOOT_DELAY_MINUTES = 10;
 	@Inject
-	private static PreferencesService preferenceService;
+	private PreferencesService preferenceService;
 	@Inject
 	private LoadNewReleasesServiceScheduler loadNewReleasesServiceScheduler;
 
