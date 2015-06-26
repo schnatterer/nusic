@@ -66,9 +66,6 @@ public class NusicPreferencesActivity extends RoboAppCompatPreferenceActivity {
 	 * See {@link #isContentChanged}.
 	 */
 	public static final String EXTRA_RESULT_IS_CONTENT_CHANGED = "nusic.intent.extra.preferences.result.isContentChanged";
-	/** Identifier for fragment instance. */
-	public static final String TAG_PREFERENCES_FRAGMENT = NusicPreferencesFragment.class
-			.getCanonicalName();
 
 	private TimePeriodPreferenceChangedListener timePeriodPreferenceChangedListener = new TimePeriodPreferenceChangedListener();
 

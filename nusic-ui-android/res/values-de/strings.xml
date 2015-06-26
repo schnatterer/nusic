@@ -25,6 +25,7 @@
 <resources>
     <string name="action_refresh">Alben aktualisieren</string>
     <string name="action_settings">Einstellungen</string>
+        <string name="action_settings_developer">Einstellungen für Entwickler</string>
     
     <string name="releaseListMenu_HideRelease">Album ausblenden</string>
     <string name="releaseListMenu_HideAllByArtist">Alle des Interpreten ausblenden</string>

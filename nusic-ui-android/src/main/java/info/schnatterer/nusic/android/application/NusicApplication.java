@@ -22,15 +22,11 @@
 package info.schnatterer.nusic.android.application;
 
 import info.schnatterer.nusic.android.service.ReleasedTodayService.ReleasedTodayServiceScheduler;
+import info.schnatterer.nusic.android.util.Log;
 import info.schnatterer.nusic.core.PreferencesService;
-
-import org.slf4j.LoggerFactory;
-
 import roboguice.RoboGuice;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -75,7 +71,9 @@ public class NusicApplication extends AbstractApplication {
 		releasedTodayServiceScheduler = RoboGuice.getInjector(this)
 				.getInstance(ReleasedTodayServiceScheduler.class);
 
-		setLogLevel();
+		PreferencesService preferenceService = RoboGuice.getInjector(this)
+				.getInstance(PreferencesService.class);
+		Log.setRootLogLevel(preferenceService.getLogLevel());
 
 		// Causes onUpgrade() to be called, etc.
 		super.onCreate();
@@ -127,20 +125,6 @@ public class NusicApplication extends AbstractApplication {
 		 * to avoid overhead.
 		 */
 		releasedTodayServiceScheduler.schedule();
-	}
-
-	/**
-	 * Set the log level from preferences.
-	 */
-	private void setLogLevel() {
-		PreferencesService preferenceService = RoboGuice.getInjector(this)
-				.getInstance(PreferencesService.class);
-		Logger root = (Logger) LoggerFactory
-				.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-		String targetLevel = preferenceService.getLogLevel();
-		root.info("root.getLevel(): {}", root.getLevel().toString());
-		root.info("Setting level to {}", targetLevel);
-		root.setLevel(Level.toLevel(targetLevel));
 	}
 
 }

@@ -25,6 +25,7 @@
 <resources>
     <string name="action_refresh">Refresh releases</string>
     <string name="action_settings">Settings</string>
+    <string name="action_settings_developer">Developer Settings</string>
     
     <string name="releaseListMenu_HideRelease">Hide release</string>
     <string name="releaseListMenu_HideAllByArtist">Hide all by artist</string>
