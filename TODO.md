@@ -1,8 +1,8 @@
 TODOs - Features, enhancements, refactoring, ...
 
 - Developer Preferences: 
-  "show log" (in external editor), simlar to current email intent
   Change log level for statements appended to logcat
+- Create "about" preferences
 
 - Release: Tests, new screens, changelog, ...
 

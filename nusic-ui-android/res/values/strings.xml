@@ -105,6 +105,7 @@
         <string name="preferences_category_misc">Misc.</string>
     <string name="preferences_title_loglevel">Log Level</string>
     <string name="preferences_summary_loglevel">Determine which log levels are stored</string>
+    <string name="preferences_title_current_log">Open current log file</string>
     
     <!-- (Error) messages -->
     <string name="GenericError">Something almost impossible has happened: %1s!</string>

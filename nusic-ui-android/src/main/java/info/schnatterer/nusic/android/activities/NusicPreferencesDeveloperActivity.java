@@ -22,7 +22,7 @@
 package info.schnatterer.nusic.android.activities;
 
 import info.schnatterer.nusic.android.fragments.NusicPreferencesDeveloperFragment;
-import info.schnatterer.nusic.android.util.Log;
+import info.schnatterer.nusic.android.util.Logs;
 import info.schnatterer.nusic.core.PreferencesService;
 import info.schnatterer.nusic.core.event.PreferenceChangedListener;
 import info.schnatterer.nusic.ui.R;
@@ -131,7 +131,7 @@ public class NusicPreferencesDeveloperActivity extends
 		public void onPreferenceChanged(String key, Object newValue) {
 			if (key.equals(NusicPreferencesDeveloperActivity.this
 					.getString(R.string.preferences_key_log_level))) {
-				Log.setRootLogLevel(newValue.toString());
+				Logs.setRootLogLevel(newValue.toString());
 			}
 		}
 	}

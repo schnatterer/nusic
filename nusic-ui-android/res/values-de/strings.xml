@@ -104,6 +104,7 @@
     <string name="preferences_category_misc">Verschiedenes</string>
     <string name="preferences_title_loglevel">Log Level</string>
     <string name="preferences_summary_loglevel">Festlegen welche Log Meldungen gespeichert werden</string>
+    <string name="preferences_title_current_log">Aktuelle Log Datei öffnen</string>
     
     <!-- (Error) messages -->
     <string name="GenericError">Etwas beinahe unmögliches ist geschehen: %1s!</string>

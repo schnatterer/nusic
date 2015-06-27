@@ -22,7 +22,7 @@
 package info.schnatterer.nusic.android.application;
 
 import info.schnatterer.nusic.android.service.ReleasedTodayService.ReleasedTodayServiceScheduler;
-import info.schnatterer.nusic.android.util.Log;
+import info.schnatterer.nusic.android.util.Logs;
 import info.schnatterer.nusic.core.PreferencesService;
 import roboguice.RoboGuice;
 import android.content.SharedPreferences;
@@ -73,7 +73,7 @@ public class NusicApplication extends AbstractApplication {
 
 		PreferencesService preferenceService = RoboGuice.getInjector(this)
 				.getInstance(PreferencesService.class);
-		Log.setRootLogLevel(preferenceService.getLogLevel());
+		Logs.setRootLogLevel(preferenceService.getLogLevel());
 
 		// Causes onUpgrade() to be called, etc.
 		super.onCreate();

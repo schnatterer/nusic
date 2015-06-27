@@ -51,6 +51,7 @@
         <activity android:name=".android.activities.NusicWebView"/>
         <activity android:name=".android.activities.TextAssetActivity"/>
         <activity android:name=".android.activities.SendLogActivity"/>
+        <activity android:name=".android.activities.OpenLogActivity"/>
 
         <receiver android:name=".android.service.LoadNewReleasesServiceConnectivityReceiver" >
             <intent-filter>

@@ -32,4 +32,8 @@
             android:key="@string/preferences_key_log_level"
             android:summary="@string/preferences_summary_loglevel"
             android:title="@string/preferences_title_loglevel" />
+        <Preference android:title="@string/preferences_title_current_log">
+             <intent android:targetPackage="info.schnatterer.nusic"
+                android:targetClass="info.schnatterer.nusic.android.activities.OpenLogActivity"/> 
+       </Preference>
 </PreferenceScreen>

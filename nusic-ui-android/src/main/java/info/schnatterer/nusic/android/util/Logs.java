@@ -21,14 +21,27 @@
  */
 package info.schnatterer.nusic.android.util;
 
+import info.schnatterer.nusic.Constants;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
+
 import org.slf4j.LoggerFactory;
 
+import android.content.Context;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 
-public final class Log {
+/**
+ * Basic abstraction of the log mechanism (SLF4J + logback-android) used here.
+ * 
+ * @author schnatterer
+ *
+ */
+public final class Logs {
 
-	private Log() {
+	private Logs() {
 	}
 
 	/**
@@ -44,5 +57,46 @@ public final class Log {
 		root.info("root.getLevel(): {}", root.getLevel().toString());
 		root.info("Setting level to {}", level);
 		root.setLevel(Level.toLevel(level));
+	}
+
+	/**
+	 * Returns the current log file.
+	 * 
+	 * @param context
+	 *            context to get the app-private files from
+	 * 
+	 * @return the current log file
+	 */
+	public static File findNewestLogFile(Context context) {
+		return findNewestLogFile(getLogFiles(context));
+	}
+
+	/**
+	 * Sort array of files descending by name and returns the first one. For
+	 * file names like <code>2015-06-25.log</code> and
+	 * <code>2015-06-26.log</code> this returns the newest log file, for example
+	 * <code>2015-06-26.log</code>.
+	 * 
+	 * @param logFiles
+	 *            the array of log files
+	 * @return the
+	 */
+	static File findNewestLogFile(File[] logFiles) {
+		// Sort descendingly
+		Arrays.sort(logFiles, Collections.reverseOrder());
+		return logFiles[0];
+	}
+
+	/**
+	 * Returns all log files.
+	 * 
+	 * @param context
+	 *            context to get the app-private files from
+	 * @return all log files
+	 */
+	public static File[] getLogFiles(Context context) {
+		// TODO NPE check?
+		return new File(context.getFilesDir(), Constants.LOG_FOLDER)
+				.listFiles();
 	}
 }
