@@ -26,12 +26,17 @@ import info.schnatterer.nusic.Constants;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.slf4j.LoggerFactory;
 
 import android.content.Context;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.android.LogcatAppender;
+import ch.qos.logback.classic.filter.ThresholdFilter;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.filter.Filter;
 
 /**
  * Basic abstraction of the log mechanism (SLF4J + logback-android) used here.
@@ -40,6 +45,8 @@ import ch.qos.logback.classic.Logger;
  *
  */
 public final class Logs {
+	/** Name of the logcat logger as configured in logback.xml */
+	private static final String LOGCAT_LOGGER_NAME = "LOGCAT";
 
 	private Logs() {
 	}
@@ -98,5 +105,69 @@ public final class Logs {
 		// TODO NPE check?
 		return new File(context.getFilesDir(), Constants.LOG_FOLDER)
 				.listFiles();
+	}
+
+	/**
+	 * Sets the threshold log level for the logCat appender. Note: Must be >=
+	 * Root Log Level. If not, a warning is toasted.
+	 * 
+	 * @param logLevelLogCat
+	 *            the threshold level to set for logCat appender
+	 * @param context
+	 *            (optional) context needed for toasting warnings. If
+	 *            <code>null</code> no toast is displayed
+	 */
+	public static void setLogCatLevel(String logLevelLogCat, Context context) {
+		/* Find appender */
+		Logger root = (Logger) LoggerFactory
+				.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+		LogcatAppender logcatAppender = (LogcatAppender) root
+				.getAppender(LOGCAT_LOGGER_NAME);
+		if (logcatAppender == null) {
+			String message = "No appender \"" + LOGCAT_LOGGER_NAME
+					+ "\" configured. Can't change threshold";
+			root.warn(message);
+			if (context != null) {
+				Toast.toast(context, message);
+			}
+			return;
+		}
+
+		/* Find and change filter */
+		List<Filter<ILoggingEvent>> filters = logcatAppender
+				.getCopyOfAttachedFiltersList();
+		ThresholdFilter threshold = null;
+		for (Filter<ILoggingEvent> filter : filters) {
+			if (filter instanceof ThresholdFilter) {
+				threshold = (ThresholdFilter) filter;
+				break;
+			}
+		}
+		if (threshold == null) {
+			root.info("No threshold filter in \"LOGCAT\" configured. Creating new one");
+			threshold = new ThresholdFilter();
+			threshold.setContext(root.getLoggerContext());
+			filters.add(threshold);
+		}
+		threshold.setLevel(logLevelLogCat);
+		threshold.start();
+
+		/* Apply changed filter to appender */
+		logcatAppender.clearAllFilters();
+		for (Filter<ILoggingEvent> filter : filters) {
+			logcatAppender.addFilter(filter);
+		}
+
+		/* Result */
+		root.info("Setting logcat level to {}. root.getLevel(): {}",
+				logLevelLogCat, root.getLevel().toString());
+		if (root.getLevel().toInt() > Level.toLevel(logLevelLogCat).toInt()) {
+			String message = "Root level(" + root.getLevel().toString()
+					+ ") > logcat level (" + logLevelLogCat + ")";
+			root.warn(message);
+			if (context != null) {
+				Toast.toast(context, message);
+			}
+		}
 	}
 }

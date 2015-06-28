@@ -71,9 +71,12 @@ public class NusicApplication extends AbstractApplication {
 		releasedTodayServiceScheduler = RoboGuice.getInjector(this)
 				.getInstance(ReleasedTodayServiceScheduler.class);
 
+		// Set log levels (this overrides settings in logback.xml)
 		PreferencesService preferenceService = RoboGuice.getInjector(this)
 				.getInstance(PreferencesService.class);
 		Logs.setRootLogLevel(preferenceService.getLogLevel());
+		// Set log cat level but don't toast warnings
+		Logs.setLogCatLevel(preferenceService.getLogLevelLogCat(), null);
 
 		// Causes onUpgrade() to be called, etc.
 		super.onCreate();

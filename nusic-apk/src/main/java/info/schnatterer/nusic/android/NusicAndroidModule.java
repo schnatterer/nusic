@@ -39,6 +39,7 @@ import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.Pref
 import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesDefaultIsEnabledNotifyNewReleases;
 import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesDefaultIsEnabledNotifyReleasedToday;
 import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesDefaultLogLevel;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesDefaultLogLevelLogCat;
 import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesDefaultRefreshPeriod;
 import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesDefaultReleasedTodayHourOfDay;
 import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesDefaultReleasedTodayMinute;
@@ -47,6 +48,7 @@ import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.Pref
 import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesKeyIsEnabledNotifyNewReleases;
 import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesKeyIsEnabledNotifyReleasedToday;
 import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesKeyLogLevel;
+import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesKeyLogLevelLogCat;
 import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesKeyRefreshPeriod;
 import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesKeyReleasedTodayHourOfDay;
 import info.schnatterer.nusic.core.impl.PreferencesServiceSharedPreferences.PreferencesKeyReleasedTodayMinute;
@@ -212,6 +214,16 @@ public class NusicAndroidModule extends AbstractModule {
 				.toInstance(
 						application
 								.getString(R.string.preferences_default_log_level));
+		bind(String.class)
+				.annotatedWith(PreferencesKeyLogLevelLogCat.class)
+				.toInstance(
+						application
+								.getString(R.string.preferences_key_log_level_logcat));
+		bind(String.class)
+				.annotatedWith(PreferencesDefaultLogLevelLogCat.class)
+				.toInstance(
+						application
+								.getString(R.string.preferences_default_log_level_logcat));
 
 	}
 

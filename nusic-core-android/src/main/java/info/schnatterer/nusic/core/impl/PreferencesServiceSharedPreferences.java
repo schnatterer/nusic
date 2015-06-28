@@ -137,6 +137,13 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	@PreferencesDefaultLogLevel
 	private String DEFAULT_LOG_LEVEL;
 
+	@Inject
+	@PreferencesKeyLogLevelLogCat
+	private String KEY_LOG_LEVEL_LOGCAT;
+	@Inject
+	@PreferencesDefaultLogLevelLogCat
+	private String DEFAULT_LOG_LEVEL_LOGCAT;
+
 	private final SharedPreferences sharedPreferences;
 
 	private Set<PreferenceChangedListener> preferenceChangedListeners = new HashSet<PreferenceChangedListener>();
@@ -316,6 +323,18 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 				.commit();
 	}
 
+	@Override
+	public String getLogLevelLogCat() {
+		return sharedPreferences.getString(KEY_LOG_LEVEL_LOGCAT,
+				DEFAULT_LOG_LEVEL_LOGCAT);
+	}
+
+	@Override
+	public boolean setLogLevelLogCat(String logLevel) {
+		return sharedPreferences.edit()
+				.putString(KEY_LOG_LEVEL_LOGCAT, logLevel).commit();
+	}
+
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target({ ElementType.FIELD, ElementType.PARAMETER })
 	@BindingAnnotation
@@ -410,5 +429,17 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 	@Target({ ElementType.FIELD, ElementType.PARAMETER })
 	@BindingAnnotation
 	public @interface PreferencesDefaultLogLevel {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface PreferencesKeyLogLevelLogCat {
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ ElementType.FIELD, ElementType.PARAMETER })
+	@BindingAnnotation
+	public @interface PreferencesDefaultLogLevelLogCat {
 	}
 }

@@ -196,8 +196,8 @@ public class NusicPreferencesActivity extends RoboAppCompatPreferenceActivity {
 
 	/**
 	 * Listens for a change in the
-	 * {@link PreferencesServiceSharedPreferences#KEY_DOWNLOAD_RELEASES_TIME_PERIOD}
-	 * preference and triggers an update of the releases.
+	 * {@link PreferencesService#getDownloadReleasesTimePeriod()} preference and
+	 * triggers an update of the releases.
 	 * 
 	 * @author schnatterer
 	 * 

@@ -102,9 +102,11 @@
     <string name="preferences_title_report">Fehlerbericht</string>
     <string name="preferences_summary_report">Fehlerbericht als E-mail schreiben und Log-Dateien anhängen</string>
     <string name="preferences_category_misc">Verschiedenes</string>
-    <string name="preferences_title_loglevel">Log Level</string>
+    <string name="preferences_title_loglevel">Root Log Level</string>
     <string name="preferences_summary_loglevel">Festlegen welche Log Meldungen gespeichert werden</string>
     <string name="preferences_title_current_log">Aktuelle Log Datei öffnen</string>
+    <string name="preferences_title_loglevel_logcat">LogCat Log Level</string>
+    <string name="preferences_summary_loglevel_logcat">Festlegen welche Log Meldungen an LogCat weiter gereicht werden. Hinweis: Muss >= Root Log level sein</string>
     
     <!-- (Error) messages -->
     <string name="GenericError">Etwas beinahe unmögliches ist geschehen: %1s!</string>

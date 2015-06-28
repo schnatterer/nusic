@@ -1,7 +1,5 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Developer Preferences: 
-  Change log level for statements appended to logcat
 - Create "about" preferences
 
 - Release: Tests, new screens, changelog, ...

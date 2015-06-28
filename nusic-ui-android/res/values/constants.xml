@@ -77,6 +77,8 @@
     
     <string name="preferences_key_log_level" translatable="false">logLevel</string>
     <string name="preferences_default_log_level" translatable="false">INFO</string>
+    <string name="preferences_key_log_level_logcat" translatable="false">logLevelLogCat</string>
+    <string name="preferences_default_log_level_logcat" translatable="false">INFO</string>
     <string-array name="preferences_entry_values_log_levels" translatable="false">
         <item>ALL</item>
         <item>TRACE</item>

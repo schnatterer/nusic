@@ -146,14 +146,34 @@ public interface PreferencesService {
 
 	/**
 	 * @param logLevel
-	 *            the logLevel that is initialized when starting the the app.
+	 *            the logLevel that is initialized on the root logger when
+	 *            starting the the app.
 	 * @return <code>true</code> if the new values were successfully written to
 	 *         persistent storage
 	 */
 	boolean setLogLevel(String logLevel);
 
 	/**
-	 * @return the logLevel that was initialized when starting the the app.
+	 * @return the logLevel that was initialized on the root logger when
+	 *         starting the the app.
 	 */
 	String getLogLevel();
+
+	/**
+	 * Sets the log level for the logCat appender. Note that this depends on the
+	 * root logger ({@link #setLogLevel(String)}).
+	 * 
+	 * @param logLevel
+	 *            the logLevel that is initialized on the logcat appender when
+	 *            starting the the app.
+	 * @return <code>true</code> if the new values were successfully written to
+	 *         persistent storage
+	 */
+	boolean setLogLevelLogCat(String logLevel);
+
+	/**
+	 * @return the logLevel that was initialized on the logCat appender when
+	 *         starting the the app.
+	 */
+	String getLogLevelLogCat();
 }

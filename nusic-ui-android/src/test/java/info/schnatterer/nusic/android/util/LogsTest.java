@@ -38,7 +38,11 @@ public class LogsTest {
 	@Test
 	public void testSetRootLogLevel() {
 		// TODO test with mockito
+	}
 
+	@Test
+	public void testSetLogCatLevel() {
+		// TODO test with mockito (and robolectric?)
 	}
 
 	/**
