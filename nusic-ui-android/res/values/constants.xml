@@ -59,11 +59,6 @@
 
     <string name="preferences_key_refresh_period" translatable="false">refreshPeriod</string>
     <string name="preferences_default_refresh_period" translatable="false">1</string>
-    <string-array name="preferences_entry_values_refresh_period" translatable="false">
-        <item>1</item>
-        <item>3</item>
-        <item>7</item>
-    </string-array>
     
     <string name="preferences_key_is_enabled_notify_new_releases" translatable="false">isEnabledNotifyNewReleases</string>
     <bool name="preferences_default_is_enabled_notify_new_releases" translatable="false">true</bool>
@@ -80,4 +75,17 @@
     <string name="preferences_key_version" translatable="false">version</string>
     <string name="preferences_key_about" translatable="false">about</string>
     
+    <string name="preferences_key_log_level" translatable="false">logLevel</string>
+    <string name="preferences_default_log_level" translatable="false">INFO</string>
+    <string name="preferences_key_log_level_logcat" translatable="false">logLevelLogCat</string>
+    <string name="preferences_default_log_level_logcat" translatable="false">INFO</string>
+    <string-array name="preferences_entry_values_log_levels" translatable="false">
+        <item>ALL</item>
+        <item>TRACE</item>
+        <item>DEBUG</item>
+        <item>INFO</item>
+        <item>WARN</item>
+        <item>ERROR</item>
+        <item>OFF</item>
+    </string-array>
 </resources>

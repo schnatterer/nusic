@@ -93,8 +93,9 @@
 
 	<dependencies>
 		<!-- Android dependecies -->
-		<!-- Include appcompat for API lvl 4 and 7, as well as backport of material design -->
 		<dependency>
+			<!-- Include appcompat for API lvl 4 and 7, as well as backport of material 
+				design -->
 			<groupId>com.android.support</groupId>
 			<artifactId>design</artifactId>
 			<version>${android.compatibility.version}</version>
@@ -104,6 +105,18 @@
 			<groupId>org.roboguice</groupId>
 			<artifactId>roboguice</artifactId>
 			<version>${roboguice.version}</version>
+		</dependency>
+		<dependency>
+			<!-- Process log statements produced by dependencies via slf4j with logback -->
+			<groupId>com.github.tony19</groupId>
+			<artifactId>logback-android-classic</artifactId>
+			<version>${logback.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>android</artifactId>
+					<groupId>com.google.android</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<!-- Nusic dependencies -->
 		<dependency>

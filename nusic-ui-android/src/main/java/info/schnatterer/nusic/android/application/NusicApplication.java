@@ -22,6 +22,8 @@
 package info.schnatterer.nusic.android.application;
 
 import info.schnatterer.nusic.android.service.ReleasedTodayService.ReleasedTodayServiceScheduler;
+import info.schnatterer.nusic.android.util.Logs;
+import info.schnatterer.nusic.core.PreferencesService;
 import roboguice.RoboGuice;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -68,6 +70,13 @@ public class NusicApplication extends AbstractApplication {
 		 */
 		releasedTodayServiceScheduler = RoboGuice.getInjector(this)
 				.getInstance(ReleasedTodayServiceScheduler.class);
+
+		// Set log levels (this overrides settings in logback.xml)
+		PreferencesService preferenceService = RoboGuice.getInjector(this)
+				.getInstance(PreferencesService.class);
+		Logs.setRootLogLevel(preferenceService.getLogLevel());
+		// Set log cat level but don't toast warnings
+		Logs.setLogCatLevel(preferenceService.getLogLevelLogCat(), null);
 
 		// Causes onUpgrade() to be called, etc.
 		super.onCreate();
@@ -121,19 +130,4 @@ public class NusicApplication extends AbstractApplication {
 		releasedTodayServiceScheduler.schedule();
 	}
 
-	// /**
-	// * Error message for {@link Throwable}s that might not contain a localized
-	// * error message.
-	// *
-	// * Tells the user that something unexpected has happened in his language
-	// and
-	// * adds the name of the exception
-	// *
-	// * @param t
-	// * @return
-	// */
-	// public static String createGenericErrorMessage(Throwable t) {
-	// return String.format(getContext().getString(R.string.GenericError), t
-	// .getClass().getSimpleName());
-	// }
 }

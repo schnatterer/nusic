@@ -21,7 +21,6 @@
  */
 package info.schnatterer.nusic.android.activities;
 
-import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.fragments.NusicPreferencesFragment;
 import info.schnatterer.nusic.android.listeners.PreferenceReleasedTodayTimePickerListener;
 import info.schnatterer.nusic.android.listeners.PreferenceVisibilityButtonListener;
@@ -66,9 +65,6 @@ public class NusicPreferencesActivity extends RoboAppCompatPreferenceActivity {
 	 * See {@link #isContentChanged}.
 	 */
 	public static final String EXTRA_RESULT_IS_CONTENT_CHANGED = "nusic.intent.extra.preferences.result.isContentChanged";
-	/** Identifier for fragment instance. */
-	public static final String TAG_PREFERENCES_FRAGMENT = NusicPreferencesFragment.class
-			.getCanonicalName();
 
 	private TimePeriodPreferenceChangedListener timePeriodPreferenceChangedListener = new TimePeriodPreferenceChangedListener();
 
@@ -113,12 +109,11 @@ public class NusicPreferencesActivity extends RoboAppCompatPreferenceActivity {
 					getString(R.string.preferences_key_released_today_hour_of_day))
 					.setOnPreferenceClickListener(
 							releaseTodayTimePickerListener);
+			// Set app name in "About" preference
 			findPreferenceActivity(getString(R.string.preferences_key_about))
 					.setTitle(
 							getString(R.string.preferences_category_about,
 									getString(R.string.app_name)));
-			findPreferenceActivity(getString(R.string.preferences_key_version))
-					.setSummary(NusicApplication.getCurrentVersionName());
 		} else {
 			onCreatePreferenceFragment();
 		}
@@ -199,8 +194,8 @@ public class NusicPreferencesActivity extends RoboAppCompatPreferenceActivity {
 
 	/**
 	 * Listens for a change in the
-	 * {@link PreferencesServiceSharedPreferences#KEY_DOWNLOAD_RELEASES_TIME_PERIOD}
-	 * preference and triggers an update of the releases.
+	 * {@link PreferencesService#getDownloadReleasesTimePeriod()} preference and
+	 * triggers an update of the releases.
 	 * 
 	 * @author schnatterer
 	 * 

@@ -51,8 +51,8 @@ public interface PreferencesService {
 	 * 
 	 * This is useful to determine the start date for the next refresh.
 	 * 
-	 * @return <code>true</code> if successfully written, otherwise
-	 *         <code>false</code>
+	 * @return <code>true</code> if the new values were successfully written to
+	 *         persistent storage
 	 */
 	boolean setLastReleaseRefresh(Date date);
 
@@ -63,10 +63,8 @@ public interface PreferencesService {
 	boolean isUseOnlyWifi();
 
 	/**
-	 * Returns time period in months (from today back in time) for which
-	 * releases are downloaded and displayed.
-	 * 
-	 * @return
+	 * @return time period in months (from today back in time) for which
+	 *         releases are downloaded and displayed.
 	 */
 	int getDownloadReleasesTimePeriod();
 
@@ -77,18 +75,14 @@ public interface PreferencesService {
 			PreferenceChangedListener preferenceChangedListener);
 
 	/**
-	 * Amount of days between two scheduled (as opposed to manual) refreshs of
-	 * the releases.
-	 * 
-	 * @return
+	 * @return amount of days between two scheduled (as opposed to manual)
+	 *         refreshs of the releases.
 	 */
 	int getRefreshPeriod();
 
 	/**
-	 * Time period in days beginning now, which defines the "just" in
-	 * "just added".
-	 * 
-	 * @return
+	 * @return time period in days beginning now, which defines the "just" in
+	 *         "just added".
 	 */
 	int getJustAddedTimePeriod();
 
@@ -110,7 +104,8 @@ public interface PreferencesService {
 	 * syncronization on connection change.
 	 * 
 	 * @param enabled
-	 * @return
+	 * @return <code>true</code> if the new values were successfully written to
+	 *         persistent storage
 	 */
 	boolean setEnabledConnectivityReceiver(boolean enabled);
 
@@ -138,7 +133,8 @@ public interface PreferencesService {
 	 * 
 	 * @param hourOfDay
 	 * @param minute
-	 * @return
+	 * @return <code>true</code> if the new values were successfully written to
+	 *         persistent storage
 	 */
 	boolean setReleasedTodaySchedule(int hourOfDay, int minute);
 
@@ -147,4 +143,37 @@ public interface PreferencesService {
 	 *         {@link #isEnabledNotifyReleasedToday()} is <code>true</code>.
 	 */
 	int getReleasedTodayScheduleMinute();
+
+	/**
+	 * @param logLevel
+	 *            the logLevel that is initialized on the root logger when
+	 *            starting the the app.
+	 * @return <code>true</code> if the new values were successfully written to
+	 *         persistent storage
+	 */
+	boolean setLogLevel(String logLevel);
+
+	/**
+	 * @return the logLevel that was initialized on the root logger when
+	 *         starting the the app.
+	 */
+	String getLogLevel();
+
+	/**
+	 * Sets the log level for the logCat appender. Note that this depends on the
+	 * root logger ({@link #setLogLevel(String)}).
+	 * 
+	 * @param logLevel
+	 *            the logLevel that is initialized on the logcat appender when
+	 *            starting the the app.
+	 * @return <code>true</code> if the new values were successfully written to
+	 *         persistent storage
+	 */
+	boolean setLogLevelLogCat(String logLevel);
+
+	/**
+	 * @return the logLevel that was initialized on the logCat appender when
+	 *         starting the the app.
+	 */
+	String getLogLevelLogCat();
 }

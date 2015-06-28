@@ -25,6 +25,7 @@
 <resources>
     <string name="action_refresh">Refresh releases</string>
     <string name="action_settings">Settings</string>
+    <string name="action_settings_developer">Developer Settings</string>
     
     <string name="releaseListMenu_HideRelease">Hide release</string>
     <string name="releaseListMenu_HideAllByArtist">Hide all by artist</string>
@@ -68,7 +69,7 @@
         <item>One year</item>
     </string-array>
     <string name="preferences_title_display_all_releases">Make hidden albums reappear</string>
-    <string name="preferences_summary_display_all_releases">Albums can be hidden by long tapping them. This option resets all hidden albums and artists.</string>
+    <string name="preferences_summary_display_all_releases">Albums can be hidden by long tapping them. This option resets all hidden albums and artists</string>
     <string name="preferences_message_display_all_releases">Do you really want to reset all hidden albums and artists?</string>
     
     <string name="preferences_category_bandwitdth">Bandwidth usage</string>
@@ -78,30 +79,37 @@
     
     <string name="preferences_category_notifications">Notifications</string>
     <string name="preferences_title_is_enabled_notify_new_releases">New releases</string>
-    <string name="preferences_summary_is_enabled_notify_new_releases_on">Notify when new releases are found.</string>
-    <string name="preferences_summary_is_enabled_notify_new_releases_off">No notification when new releases are found.</string>
+    <string name="preferences_summary_is_enabled_notify_new_releases_on">Notify when new releases are found</string>
+    <string name="preferences_summary_is_enabled_notify_new_releases_off">No notification when new releases are found</string>
     <string name="preferences_title_is_enabled_notify_released_today">Release dates</string>
     <string name="preferences_summary_is_enabled_notify_released_today_on">Notify on the day releases are published</string>
     <string name="preferences_summary_is_enabled_notify_released_today_off">No Notification on the day releases are published</string>
     <string name="preferences_title_released_today_hour_of_day">Time of notification</string>
-    <string name="preferences_summary_released_hour_of_day">Approximate time of notification that informas of releases dates. Android might delay execution in order to save energy.</string>
+    <string name="preferences_summary_released_hour_of_day">Approximate time of notification that informas of releases dates. Android might delay execution in order to save energy</string>
     
     <string name="preferences_category_about">About %1$s</string>
     <string name="preferences_title_version">Version</string>
     <string name="preferences_title_privacy_policy">Privacy Policy</string>
-    <string name="preferences_summary_privacy_policy">Find out what data is accessed by nusic and what it does with it.</string>
+    <string name="preferences_summary_privacy_policy">Find out what data is accessed by nusic and what it does with it</string>
     <string name="preferences_title_licences">Licenses</string>
     <string name="preferences_summary_licences">Licenses that apply to nusic and its dependencies</string>
     <string name="preferences_title_changelog">Changelog</string>
     <string name="preferences_summary_changelog">See what\'s new</string>
     <string name="preferences_category_web">nusic on the web</string>
-    <string name="preferences_summary_google_play">If you like nusic, please rate it. If you don\'t like it, please help us improve by creating an issue at GitHub.</string>
-    <string name="preferences_summary_git_hub">Report issues, parse source code, add translation or support development.</string>
+    <string name="preferences_category_contact">Contact</string>
+    <string name="preferences_summary_google_play">If you like nusic, please rate it. If you don\'t like it, please help us improve by creating an issue at GitHub</string>
+    <string name="preferences_summary_git_hub">Report issues, parse source code, add translation or support development</string>
     <string name="preferences_title_email">E-mail</string>
     <string name="preferences_summary_email">Contact us via E-mail.</string>
     <string name="preferences_title_report">Report issue</string>
     <string name="preferences_summary_report">Report issue via E-mail, attaching your log files</string>
-    
+        <string name="preferences_category_misc">Misc.</string>
+    <string name="preferences_title_loglevel">Root Log Level</string>
+    <string name="preferences_summary_loglevel">Determine which log statements are recorded</string>
+    <string name="preferences_title_current_log">Open current log file</string>
+    <string name="preferences_title_loglevel_logcat">LogCat Log Level</string>
+    <string name="preferences_summary_loglevel_logcat">Determine which log statements are forwarded to LogCat. Note: Must be >= Root Log Level</string>
+        
     <!-- (Error) messages -->
     <string name="GenericError">Something almost impossible has happened: %1s!</string>
     <string name="NotOnline">No connection to the internet (Check settings to allow usage of mobile connection)</string>
