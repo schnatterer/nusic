@@ -96,6 +96,7 @@
     <string name="preferences_title_changelog">Changelog</string>
     <string name="preferences_summary_changelog">See what\'s new</string>
     <string name="preferences_category_web">nusic on the web</string>
+    <string name="preferences_category_contact">Contact</string>
     <string name="preferences_summary_google_play">If you like nusic, please rate it. If you don\'t like it, please help us improve by creating an issue at GitHub</string>
     <string name="preferences_summary_git_hub">Report issues, parse source code, add translation or support development</string>
     <string name="preferences_title_email">E-mail</string>

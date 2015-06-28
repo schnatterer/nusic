@@ -37,10 +37,6 @@ public class NusicPreferencesAboutFragment extends RoboPreferenceFragment {
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.preferences_about);
 
-		// Set app name in "About" preference
-		findPreference(getString(R.string.preferences_key_about)).setTitle(
-				getString(R.string.preferences_category_about,
-						getString(R.string.app_name)));
 		// Set version
 		findPreference(getString(R.string.preferences_key_version)).setSummary(
 				NusicApplication.getCurrentVersionName());

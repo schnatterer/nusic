@@ -52,11 +52,6 @@ public class NusicPreferencesAboutActivity extends
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
 			onCreatePreferenceActivity();
 
-			// Set app name in "About" preference
-			findPreferenceActivity(getString(R.string.preferences_key_about))
-					.setTitle(
-							getString(R.string.preferences_category_about,
-									getString(R.string.app_name)));
 			// Set version
 			findPreferenceActivity(getString(R.string.preferences_key_version))
 					.setSummary(NusicApplication.getCurrentVersionName());
