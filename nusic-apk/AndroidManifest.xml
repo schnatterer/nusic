@@ -48,6 +48,7 @@
             </intent-filter>
         </activity>
        <activity android:label="@string/action_settings_developer" android:name=".android.activities.NusicPreferencesDeveloperActivity"/>
+       <activity android:name=".android.activities.NusicPreferencesAboutActivity"/>
         <activity android:name=".android.activities.NusicWebView"/>
         <activity android:name=".android.activities.TextAssetActivity"/>
         <activity android:name=".android.activities.SendLogActivity"/>

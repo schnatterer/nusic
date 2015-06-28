@@ -1,7 +1,5 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Create "about" preferences
-
 - Release: Tests, new screens, changelog, ...
 
 - A new view that shows icon of the release and a link to MB on tap ? --> Remove webview

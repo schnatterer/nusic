@@ -37,14 +37,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 /**
- * Activity that realizes the preferences of the app.
- * 
- * When the activity is finished it returns an intent that contains the
- * following extras:
- * <ul>
- * <li>{@link #EXTRA_RESULT_IS_CONTENT_CHANGED}</li>
- * <li>{@link #EXTRA_RESULT_IS_REFRESH_NECESSARY}</li>
- * </ul>
+ * Activity that realizes the developer settings.
  * 
  * @author schnatterer
  *

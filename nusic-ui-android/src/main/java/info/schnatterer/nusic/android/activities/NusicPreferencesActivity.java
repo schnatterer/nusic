@@ -21,7 +21,6 @@
  */
 package info.schnatterer.nusic.android.activities;
 
-import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.fragments.NusicPreferencesFragment;
 import info.schnatterer.nusic.android.listeners.PreferenceReleasedTodayTimePickerListener;
 import info.schnatterer.nusic.android.listeners.PreferenceVisibilityButtonListener;
@@ -110,12 +109,11 @@ public class NusicPreferencesActivity extends RoboAppCompatPreferenceActivity {
 					getString(R.string.preferences_key_released_today_hour_of_day))
 					.setOnPreferenceClickListener(
 							releaseTodayTimePickerListener);
+			// Set app name in "About" preference
 			findPreferenceActivity(getString(R.string.preferences_key_about))
 					.setTitle(
 							getString(R.string.preferences_category_about,
 									getString(R.string.app_name)));
-			findPreferenceActivity(getString(R.string.preferences_key_version))
-					.setSummary(NusicApplication.getCurrentVersionName());
 		} else {
 			onCreatePreferenceFragment();
 		}
