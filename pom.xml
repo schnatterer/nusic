@@ -19,15 +19,14 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with nusic.  If not, see <http://www.gnu.org/licenses/>.
+    along with nusic.  If not, see <http://www.gnu.org/licenses />.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>info.schnatterer.nusic</groupId>
 	<artifactId>nusic-parent</artifactId>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>2.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>nusic</name>
 
@@ -54,34 +53,26 @@
 		<main.basedir>${project.basedir}</main.basedir>
 
 		<!-- Maven Plugins -->
-		<android-maven-plugin.version>4.2.1</android-maven-plugin.version>
 		<license-maven-plugin.version>2.11</license-maven-plugin.version>
 
 		<!-- "Plain java" dependencies -->
 		<slf4j.version>1.7.6</slf4j.version>
-		<logback.version>1.1.1-3</logback.version>
-		<junit.version>4.12</junit.version>
-		<mockito.version>1.10.19</mockito.version>
-		<commons-io.version>2.4</commons-io.version>
 
 		<!-- Android-specific dependencies -->
 		<android.api.level>22</android.api.level>
-		<android.sdk.version>5.1.1_r2</android.sdk.version>
 		<!-- Compatibility library for android API levels 4 and 7(Android 2.x) -->
 		<android.compatibility.version>22.2.0</android.compatibility.version>
 		<roboguice.version>3.0.1</roboguice.version>
-		<robolectric.android.version>5.0.0_r2-robolectric-1</robolectric.android.version>
-		<robolectric.version>2.4</robolectric.version>
 	</properties>
-    
+
 	<repositories>
 		<repository>
 			<id>android</id>
 			<url>file://${env.ANDROID_HOME}/extras/android/m2repository</url>
 		</repository>
 	</repositories>
-	
-    
+
+
 	<modules>
 		<module>nusic-util</module>
 		<module>nusic-domain</module>
@@ -93,8 +84,97 @@
 		<module>nusic-apk</module>
 	</modules>
 
+	<dependencyManagement>
+		<dependencies>
+			<!-- Android-specific dependencies -->
+			<dependency>
+				<!-- Before building make sure to copy the android JARs to your local 
+					repo using the mave-android-sdk-deployer: https://github.com/mosabua/maven-android-sdk-deployer -->
+				<groupId>android</groupId>
+				<artifactId>android</artifactId>
+				<version>5.1.1_r2</version>
+				<scope>provided</scope>
+			</dependency>
+			<!-- Android Support libs -->
+			<dependency>
+				<artifactId>support-v4</artifactId>
+				<groupId>com.android.support</groupId>
+				<version>${android.compatibility.version}</version>
+				<type>aar</type>
+			</dependency>
+			<dependency>
+				<!-- Include appcompat for API lvl 4 and 7, as well as backport of material 
+					design -->
+				<groupId>com.android.support</groupId>
+				<artifactId>design</artifactId>
+				<version>${android.compatibility.version}</version>
+				<type>aar</type>
+			</dependency>
+			<!-- Roboguice -->
+			<dependency>
+				<groupId>org.roboguice</groupId>
+				<artifactId>roboguice</artifactId>
+				<version>${roboguice.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.roboguice</groupId>
+				<artifactId>roboblender</artifactId>
+				<version>${roboguice.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<!-- Robolectric -->
+			<dependency>
+				<!-- TODO Find out which APIs are really needed and add only those? -->
+				<groupId>org.robolectric</groupId>
+				<artifactId>android-all</artifactId>
+				<version>5.0.0_r2-robolectric-1</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.robolectric</groupId>
+				<artifactId>robolectric</artifactId>
+				<version>2.4</version>
+				<scope>test</scope>
+			</dependency>
+			<!-- logback-android -->
+			<dependency>
+				<!-- Process log statements produced by dependencies via slf4j with logback -->
+				<groupId>com.github.tony19</groupId>
+				<artifactId>logback-android-classic</artifactId>
+				<version>1.1.1-3</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>android</artifactId>
+						<groupId>com.google.android</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<!-- "Plain java" dependencies -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jul-to-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.4</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.12</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<build>
-		<!-- To define the plugin version in your parent POM -->
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -106,26 +186,54 @@
 						<target>1.7</target>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>2.4</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>2.10.3</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.18.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.6</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.5.2</version>
+				</plugin>
+				<plugin>
+					<groupId>com.simpligility.maven.plugins</groupId>
+					<artifactId>android-maven-plugin</artifactId>
+					<version>4.2.1</version>
+				</plugin>
+
 			</plugins>
 		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5.1</version>
 				<configuration>
 					<!-- Make our tags look like e.g. "v.1.0.1" -->
 					<tagNameFormat>v.@{project.version}</tagNameFormat>
 					<!-- Same version to all submodules -->
 					<autoVersionSubmodules>true</autoVersionSubmodules>
-					<!-- Update version name in android manifest and commit all changes, 
-						i.e. not only the changes to POMs made by release plugin -->
-					<preparationGoals>com.jayway.maven.plugins.android.generation2:android-maven-plugin:3.8.2:manifest-update
-						scm:checkin -Dmessage="[maven-release-plugin] prepare release
-						${project.version}" -DworkingDirectory=.</preparationGoals>
+					<!-- Update version name in android manifest. A explicit commit is not necessary, because the android manifests should not change! -->
+					<preparationGoals>com.jayway.maven.plugins.android.generation2:android-maven-plugin:3.8.2:manifest-update -DworkingDirectory=.
+						-Dandroid.manifest.versionName="@string/versionName"</preparationGoals>
 					<!-- Increase version code and update version name in android manifest 
 						and commit all changes, i.e. not only the changes to POMs made by release 
-						plugin -->
+						plugin but also the androidManifest.xml -->
 					<completionGoals>com.jayway.maven.plugins.android.generation2:android-maven-plugin:3.8.2:manifest-update
 						scm:checkin -Dmessage="[maven-release-plugin] prepare for next
 						development iteration" -DworkingDirectory=.
@@ -148,6 +256,11 @@
 						<owner>Johannes Schnatterer</owner>
 					</properties>
 					<excludes>
+						<!-- relase plugin changes this files, so exclude them from license 
+							checks. -->
+						<exclude>**/pom.xml</exclude>
+						<exclude>**/AndroidManifest.xml</exclude>
+						<!-- Other files -->
 						<exclude>TODO.md</exclude>
 						<exclude>LICENSE.txt</exclude>
 						<exclude>**/bin/**</exclude>
@@ -157,7 +270,7 @@
 						<exclude>**/privacyPolicy.html</exclude>
 						<exclude>**/project.properties</exclude>
 						<exclude>**/lint.xml</exclude>
-                        <exclude>src/main/java/roboguice/activity/RoboAppCompatPreferenceActivity.java</exclude>
+						<exclude>src/main/java/roboguice/activity/RoboAppCompatPreferenceActivity.java</exclude>
 					</excludes>
 				</configuration>
 				<dependencies>

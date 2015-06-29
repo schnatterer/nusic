@@ -47,11 +47,12 @@
     <string name="WelcomeScreenPleaseBePatient">&#8230;bitte habe etwas Geduld ;)</string>
     <string name="WelcomeScreenFirstStartMayTakeAWhile">Abhängig von der Anzahl der Interpreten auf dem Gerät kann der erste Start etwas dauern.</string>
     <string name="WelcomeScreenSyncronisationWillBeDoneBackground">Danach laufen alle weiteren Abfragen im Hintgrund. Nusic informiert dich über Systemnachrichten (notifications), sobald es neue Alben findet.</string>
-    <string name="WelcomeScreenIfYouLikeNusicPleaseRate">Wenn dir nusic gefällt, bitte bewerte es bei @string/html_link_nusic_google_play oder unterstütze uns durch Übersetzungen oder durch Weiterentwicklung über @string/html_link_nusic_git_hub.</string>
-    <string name="WelcomeScreenAndroid444">Anmerkung: Ab 4.4.4 unterstützt Android keine Musik mehr auf externen SD Karten. Daher wird nusic auch die Interpreten nicht auslesen können.</string>
+    <string name="WelcomeScreenIfYouLikeNusicPleaseRate">Wenn dir nusic gefällt, bitte bewerte es bei @string/html_link_nusic_google_play oder unterstütze uns durch Übersetzungen oder durch Weiterentwicklung über @string/html_link_nusic_git_hub. Im Fehlerfall schreib uns bitte eine @string/html_link_email.</string>
+    <string name="WelcomeScreenAndroid444">Anmerkung: Ab 4.4.4 unterstützt Android keine Musik mehr auf externen SD Karten. Daher kann nusic die Interpreten möglicherweise nicht auslesen.</string>
     <string name="WelcomeScreenAndroid444SDScanner">Möglicherweise hilft in diesem Fall @string/html_link_sd_scanner</string>
     <string name="SDScanner">SD Scanner</string>
-    
+    <string name="Email">E-Mail</string>
+        
     <string name="LoadNewReleasesService_newRelease">Neues Album gefunden:</string>
     <string name="LoadNewReleasesService_newReleaseMultiple">%1$d neue Alben gefunden</string>
     <string name="ReleasedTodayService_ReleasedToday">Heute erscheint:</string>

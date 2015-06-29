@@ -19,17 +19,16 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with nusic-apk.  If not, see <http://www.gnu.org/licenses/>.
+    along with nusic-apk.  If not, see <http://www.gnu.org/licenses />.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>info.schnatterer.nusic</groupId>
 		<artifactId>nusic-parent</artifactId>
-		<version>1.0.3-SNAPSHOT</version>
+		<version>2.0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -39,7 +38,7 @@
 
 	<properties>
 		<final.name>nusic-${project.version}</final.name>
-		<main.basedir>${project.parent.basedir}</main.basedir>
+		<main.basedir>${project.basedir}/..</main.basedir>
 	</properties>
 
 	<profiles>
@@ -58,14 +57,12 @@
 				<dependency>
 					<groupId>android</groupId>
 					<artifactId>android</artifactId>
-					<version>${android.sdk.version}</version>
 					<scope>provided</scope>
 				</dependency>
 				<!-- "Re-include" the transitive dependency of nusic-ui-android that was excluded for eclipse build -->
 				<dependency>
 					<artifactId>support-v4</artifactId>
 					<groupId>com.android.support</groupId>
-					<version>${android.compatibility.version}</version>
 					<type>aar</type>
 				</dependency>
 			</dependencies>
@@ -76,7 +73,6 @@
 		<dependency>
 			<groupId>org.roboguice</groupId>
 			<artifactId>roboguice</artifactId>
-			<version>${roboguice.version}</version>
 		</dependency>
 
 		<!-- nusic sub modules -->
@@ -87,8 +83,8 @@
 			<type>aar</type>
 			<exclusions>
 				<exclusion>
-					<!-- Exclude this in eclipse build in order to avoid nable to execute 
-						dex: Multiple dex files define Landroid/support/annotation/AnimRes; -->
+					<!-- Exclude this in eclipse build in order to avoid "unable to execute 
+						dex: Multiple dex files define Landroid/support/annotation/AnimRes;" -->
 					<artifactId>support-v4</artifactId>
 					<groupId>com.android.support</groupId>
 				</exclusion>
@@ -133,19 +129,11 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jul-to-slf4j</artifactId>
-			<version>${slf4j.version}</version>
 		</dependency>
 		<dependency>
 			<!-- Process log statements produced by dependencies via slf4j with logback -->
 			<groupId>com.github.tony19</groupId>
 			<artifactId>logback-android-classic</artifactId>
-			<version>${logback.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>android</artifactId>
-					<groupId>com.google.android</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 	</dependencies>
 	<build>
@@ -190,7 +178,6 @@
 			<plugin>
 				<groupId>com.simpligility.maven.plugins</groupId>
 				<artifactId>android-maven-plugin</artifactId>
-				<version>${android-maven-plugin.version}</version>
 				<inherited>true</inherited>
 				<extensions>true</extensions>
 				<executions>

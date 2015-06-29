@@ -1,8 +1,16 @@
 nusic Changelog
 =========
 
-Please note: from 4.4.4 android no longer supports music on external SD cards. So nusic will not be able to parse these artists.
-You might want to have a look at [SD Scanner](https://play.google.com/store/apps/details?id=com.gmail.jerickson314.sdscanner).
+Please note: from 4.4.4 android no longer supports music on external SD cards. So nusic might not be able to parse these artists.
+If so, please have a look at [SD Scanner](https://play.google.com/store/apps/details?id=com.gmail.jerickson314.sdscanner).
+
+**v.2.0.0**
+
+* Introduced material design
+* Restructured preferences, added developer preferences
+* Implemented possibility to send log files via email
+* Completely restructured app under the hood, in order to allow for better maintainability in the future
+
 
 **v.1.0.2**
 

@@ -1,6 +1,6 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Release: Tests, new screens, changelog, ...
+- Describe eclipse setup
 
 - A new view that shows icon of the release and a link to MB on tap ? --> Remove webview
 
