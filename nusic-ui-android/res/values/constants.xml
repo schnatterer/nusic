@@ -37,10 +37,12 @@
     <!-- Plain links -->
     <string name="link_nusic_google_play" translatable="false">https://play.google.com/store/apps/details?id=info.schnatterer.nusic</string>
     <string name="link_sd_scanner" translatable="false">https://play.google.com/store/apps/details?id=com.gmail.jerickson314.sdscanner</string>
+    <string name="link_email" translatable="false">mailto:@string/app_contact?subject=[nusic @string/versionName]&amp;body=</string>
     <!-- Links as HTML (embedded in a <a href"link" translatable="false"></a>) -->
     <string name="html_link_nusic_google_play" translatable="false">&lt;a href="@string/link_nusic_google_play"&gt;@string/GooglePlay&lt;a&gt;</string>
     <string name="html_link_nusic_git_hub" translatable="false">&lt;a href="@string/app_url"&gt;@string/GitHub&lt;a&gt;</string>
     <string name="html_link_sd_scanner" translatable="false">&lt;a href="@string/link_sd_scanner"&gt;@string/SDScanner&lt;a&gt;</string>
+    <string name="html_link_email" translatable="false">&lt;a href="@string/link_email"&gt;@string/Email&lt;a&gt;</string>
     
     <!-- Preferences -->
     <string name="preferences_key_download_releases_time_period" translatable="false">downloadReleasesNumberOfMonths</string>
