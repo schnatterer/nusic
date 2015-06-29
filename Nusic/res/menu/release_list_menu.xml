@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item 
-         android:id="@+id/releaseListMenuHideRelease"
-         android:title="@string/releaseListMenu_HideRelease"/>
-    <item 
-         android:id="@+id/releaseListMenuHideAllByArtist"
-         android:title="@string/releaseListMenu_HideAllByArtist"/>
-</menu>

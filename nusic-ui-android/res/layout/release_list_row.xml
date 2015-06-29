@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    ﻿Copyright (C) 2013 Johannes Schnatterer
+
+    See the NOTICE file distributed with this work for additional
+    information regarding copyright ownership.
+
+    This file is part of nusic-ui-android.
+
+    nusic-ui-android is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    nusic-ui-android is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with nusic-ui-android.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:padding="5dip" >
+
+    <!-- Left-sided thumbnail image -->
+
+    <LinearLayout
+        android:id="@+id/releaseListRowThumbnailLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dip"
+        android:padding="3dip" >
+
+        <ImageView
+            android:id="@+id/releaseListRowThumbnail"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:contentDescription="@string/releaseListRow_Thumbnail"
+            android:src="@drawable/ic_launcher" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/relaseListArtistDateLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/releaseListRowThumbnailLayout"
+        android:layout_toRightOf="@+id/releaseListRowThumbnailLayout"
+        android:orientation="horizontal" >
+
+        <!-- Artist name -->
+
+        <TextView
+            android:id="@+id/releaseListRowArtistName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:textStyle="bold" />
+        <!-- android:text="Artisttttttttttttttttttttttttttttttttttt" /> -->
+        <!-- android:lines="1"
+            android:singleLine="true" -->
+
+
+        <!-- Release date -->
+
+        <TextView
+            android:id="@+id/releaseListRowReleaseDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:gravity="right" />
+            <!-- android:text="35.5.9999" /> -->
+    </LinearLayout>
+
+    <!-- Title Of Album -->
+
+    <TextView
+        android:id="@+id/releaseListRowReleaseName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/relaseListArtistDateLayout"
+        android:layout_toRightOf="@+id/releaseListRowThumbnailLayout" />
+    <!-- android:text="Album" /> -->
+
+    <!-- Rightend Arrow -->
+    <!--
+          <ImageView android:layout_width="wrap_content"
+         android:contentDescription="@string/releaseListRowRightArrow"
+        android:layout_height="wrap_content"
+        android:src="@drawable/arrow"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true" />
+        -->
+
+</RelativeLayout>

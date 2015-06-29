@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    ﻿Copyright (C) 2013 Johannes Schnatterer
+
+    See the NOTICE file distributed with this work for additional
+    information regarding copyright ownership.
+
+    This file is part of nusic-ui-android.
+
+    nusic-ui-android is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    nusic-ui-android is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with nusic-ui-android.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<!-- NOTE that there is another version of this document for APIs < 14! -->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/preferences_category_releases" >
+        <ListPreference
+            android:defaultValue="@string/preferences_default_download_releases_time_period"
+            android:entries="@array/preferences_entries_download_releases_time_period"
+            android:entryValues="@array/preferences_entry_values_download_releases_time_period"
+            android:key="@string/preferences_key_download_releases_time_period"
+            android:summary="@string/preferences_summary_download_releases_time_period"
+            android:title="@string/preferences_title_download_releases_time_period" />
+
+        <!-- Implemented in activity: Alert Dialog and resetting all hidden releases and artists -->
+        <Preference
+            android:key="@string/preferences_key_display_all_releases"
+            android:summary="@string/preferences_summary_display_all_releases"
+            android:title="@string/preferences_title_display_all_releases" />
+
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/preferences_category_notifications" >
+        <SwitchPreference
+            android:defaultValue="@bool/preferences_default_is_enabled_notify_new_releases"
+            android:key="@string/preferences_key_is_enabled_notify_new_releases"
+            android:title="@string/preferences_title_is_enabled_notify_new_releases"
+            android:summaryOn="@string/preferences_summary_is_enabled_notify_new_releases_on"
+            android:summaryOff="@string/preferences_summary_is_enabled_notify_new_releases_off" />
+        <SwitchPreference
+            android:defaultValue="@bool/preferences_default_is_enabled_notify_released_today"
+            android:key="@string/preferences_key_is_enabled_notify_released_today"
+            android:title="@string/preferences_title_is_enabled_notify_released_today"
+            android:summaryOn="@string/preferences_summary_is_enabled_notify_released_today_on"
+            android:summaryOff="@string/preferences_summary_is_enabled_notify_released_today_off" />
+            
+             />
+        <!-- Implemented in activity: Time Picker dialog and scheduling of the service -->
+        <Preference
+            android:key="@string/preferences_key_released_today_hour_of_day"
+            android:summary="@string/preferences_summary_released_hour_of_day"
+            android:title="@string/preferences_title_released_today_hour_of_day" 
+            android:dependency="@string/preferences_key_is_enabled_notify_released_today"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/preferences_category_bandwitdth" >
+        <SwitchPreference
+            android:defaultValue="@bool/preferences_default_download_only_on_wifi"
+            android:key="@string/preferences_key_download_only_on_wifi"
+            android:title="@string/preferences_title_download_only_on_wifi"
+            android:summaryOff="@string/preferences_summary_download_only_on_wifi_off"
+            android:summaryOn="@string/preferences_summary_download_only_on_wifi_on" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/preferences_category_misc" >
+        <Preference android:title="@string/preferences_category_about" android:key="@string/preferences_key_about" >
+             <intent android:targetPackage="info.schnatterer.nusic"
+                android:targetClass="info.schnatterer.nusic.android.activities.NusicPreferencesAboutActivity"/>
+        </Preference> 
+        <Preference android:title="@string/action_settings_developer">
+             <intent android:targetPackage="info.schnatterer.nusic"
+                android:targetClass="info.schnatterer.nusic.android.activities.NusicPreferencesDeveloperActivity"/>
+        </Preference> 
+    </PreferenceCategory>
+</PreferenceScreen>
