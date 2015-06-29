@@ -48,7 +48,7 @@
     <string name="WelcomeScreenFirstStartMayTakeAWhile">Depending on the amount of artists on you device, the very first start may take a while.</string>
     <string name="WelcomeScreenSyncronisationWillBeDoneBackground">After that, all further synchronisation will be done in the background. Nusic tells you about new releases via system notifications.</string>
     <string name="WelcomeScreenIfYouLikeNusicPleaseRate">If you like it, please rate nusic at @string/html_link_nusic_google_play or support its translation or development via @string/html_link_nusic_git_hub.</string>
-    <string name="WelcomeScreenAndroid444">Please note: from 4.4.4 android no longer supports music on external SD cards. So nusic will not be able to parse these artists.</string>
+    <string name="WelcomeScreenAndroid444">Please note: from 4.4.4 android no longer supports music on external SD cards. So nusic might not be able to parse these artists.</string>
     <string name="WelcomeScreenAndroid444SDScanner">You might want to have a look at @string/html_link_sd_scanner</string>
     <string name="SDScanner">SD Scanner</string>
 
