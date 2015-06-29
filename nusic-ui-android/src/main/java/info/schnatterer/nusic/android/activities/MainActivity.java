@@ -195,7 +195,6 @@ public class MainActivity extends RoboActionBarActivity {
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		// TODO still necessary for appcompat and design?
 		/*
 		 * This is needed for Android 2.x when clicking a notification an the
 		 * task is already running, the notification is not delivered, but
@@ -208,7 +207,7 @@ public class MainActivity extends RoboActionBarActivity {
 		 */
 		if (intent.hasExtra(EXTRA_ACTIVE_TAB)) {
 			/* Init tab fragments */
-			currentTab = ((TabDefinition) getIntent().getExtras().get(
+			currentTab = ((TabDefinition) intent.getExtras().get(
 					EXTRA_ACTIVE_TAB));
 			ViewPager pager = (ViewPager) findViewById(R.id.mainPager);
 			pager.setCurrentItem(currentTab.position);
