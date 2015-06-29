@@ -1,6 +1,8 @@
 TODOs - Features, enhancements, refactoring, ...
 
+
 - Describe eclipse setup
+- Fix Javadoc warnings
 
 - A new view that shows icon of the release and a link to MB on tap ? --> Remove webview
 

@@ -228,9 +228,6 @@
 					<tagNameFormat>v.@{project.version}</tagNameFormat>
 					<!-- Same version to all submodules -->
 					<autoVersionSubmodules>true</autoVersionSubmodules>
-					<!-- Update version name in android manifest. A explicit commit is not necessary, because the android manifests should not change! -->
-					<preparationGoals>com.jayway.maven.plugins.android.generation2:android-maven-plugin:3.8.2:manifest-update -DworkingDirectory=.
-						-Dandroid.manifest.versionName="@string/versionName"</preparationGoals>
 					<!-- Increase version code and update version name in android manifest 
 						and commit all changes, i.e. not only the changes to POMs made by release 
 						plugin but also the androidManifest.xml -->
