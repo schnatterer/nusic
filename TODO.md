@@ -1,5 +1,7 @@
 TODOs - Features, enhancements, refactoring, ...
 
+- Describe eclipse setup
+
 - A new view that shows icon of the release and a link to MB on tap ? --> Remove webview
 
 LOGGING 

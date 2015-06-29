@@ -38,7 +38,7 @@
 	<name>nusic-data-api</name>
 
 	<properties>
-		<main.basedir>${project.parent.basedir}</main.basedir>
+		<main.basedir>${project.basedir}/..</main.basedir>
 	</properties>
 
 	<dependencies>

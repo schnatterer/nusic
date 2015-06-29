@@ -43,7 +43,7 @@
 		<res.dir.input>${project.basedir}/res</res.dir.input>
 		<res.dir.output>${project.build.directory}/filtered-res</res.dir.output>
 		<raw.mardkown.dir>${project.build.directory}/md-assets</raw.mardkown.dir>
-		<main.basedir>${project.parent.basedir}</main.basedir>
+		<main.basedir>${project.basedir}/..</main.basedir>
 	</properties>
 
 	<profiles>
@@ -57,19 +57,15 @@
 				</property>
 			</activation>
 			<dependencies>
-				<!-- Before building make sure to copy the android JARs to your local 
-					repo using the mave-android-sdk-deployer: https://github.com/mosabua/maven-android-sdk-deployer -->
 				<dependency>
 					<groupId>android</groupId>
 					<artifactId>android</artifactId>
-					<version>${android.sdk.version}</version>
 					<scope>provided</scope>
 				</dependency>
 				<!-- Enable annotation database to improve performance. -->
 				<dependency>
 					<groupId>org.roboguice</groupId>
 					<artifactId>roboblender</artifactId>
-					<version>${roboguice.version}</version>
 					<scope>provided</scope>
 				</dependency>
 				<dependency>
@@ -78,13 +74,11 @@
 					<!-- TODO Find out which APIs are really needed and add only those? -->
 					<groupId>org.robolectric</groupId>
 					<artifactId>android-all</artifactId>
-					<version>${robolectric.android.version}</version>
 					<scope>test</scope>
 				</dependency>
 				<dependency>
 					<groupId>org.robolectric</groupId>
 					<artifactId>robolectric</artifactId>
-					<version>${robolectric.version}</version>
 					<scope>test</scope>
 				</dependency>
 			</dependencies>
@@ -94,29 +88,18 @@
 	<dependencies>
 		<!-- Android dependecies -->
 		<dependency>
-			<!-- Include appcompat for API lvl 4 and 7, as well as backport of material 
-				design -->
 			<groupId>com.android.support</groupId>
 			<artifactId>design</artifactId>
-			<version>${android.compatibility.version}</version>
 			<type>aar</type>
 		</dependency>
 		<dependency>
 			<groupId>org.roboguice</groupId>
 			<artifactId>roboguice</artifactId>
-			<version>${roboguice.version}</version>
 		</dependency>
 		<dependency>
 			<!-- Process log statements produced by dependencies via slf4j with logback -->
 			<groupId>com.github.tony19</groupId>
 			<artifactId>logback-android-classic</artifactId>
-			<version>${logback.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>android</artifactId>
-					<groupId>com.google.android</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<!-- Nusic dependencies -->
 		<dependency>
@@ -144,19 +127,16 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>${commons-io.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
 		</dependency>
 
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -268,7 +248,6 @@
 			<plugin>
 				<groupId>com.simpligility.maven.plugins</groupId>
 				<artifactId>android-maven-plugin</artifactId>
-				<version>${android-maven-plugin.version}</version>
 				<extensions>true</extensions>
 				<configuration>
 					<sdk>

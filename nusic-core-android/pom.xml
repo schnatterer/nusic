@@ -38,7 +38,7 @@
 	<name>nusic-core-android</name>
 
 	<properties>
-		<main.basedir>${project.parent.basedir}</main.basedir>
+		<main.basedir>${project.basedir}/..</main.basedir>
 	</properties>
 
 	<repositories>
@@ -64,14 +64,12 @@
 				<dependency>
 					<groupId>android</groupId>
 					<artifactId>android</artifactId>
-					<version>${android.sdk.version}</version>
 					<scope>provided</scope>
 				</dependency>
 			<!-- Enable annotation corebase to improve performance. -->
 			<dependency>
 				<groupId>org.roboguice</groupId>
 				<artifactId>roboblender</artifactId>
-				<version>${roboguice.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			</dependencies>
@@ -97,12 +95,10 @@
 		<dependency>
 			<groupId>org.roboguice</groupId>
 			<artifactId>roboguice</artifactId>
-			<version>${roboguice.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
 		</dependency>
 
 		<!-- nusic sub modules -->
@@ -128,7 +124,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
