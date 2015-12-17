@@ -1,5 +1,6 @@
 TODOs - Features, enhancements, refactoring, ...
 
+- Clean Up Logs (delete old log files)
 
 - Describe eclipse setup
 - Fix Javadoc warnings

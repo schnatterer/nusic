@@ -23,9 +23,6 @@ package info.schnatterer.nusic.android.activities;
 
 import info.schnatterer.nusic.android.util.Logs;
 import info.schnatterer.nusic.ui.R;
-
-import org.apache.http.protocol.HTTP;
-
 import roboguice.activity.RoboActionBarActivity;
 import android.content.Intent;
 import android.net.Uri;
@@ -63,7 +60,7 @@ public class OpenLogActivity extends RoboActionBarActivity {
 		Uri uriForFile = FileProvider.getUriForFile(this,
 				getString(R.string.authority_log_file_provider),
 				Logs.findNewestLogFile(this));
-		openFile.setDataAndType(uriForFile, HTTP.PLAIN_TEXT_TYPE);
+		openFile.setDataAndType(uriForFile, "text/plain");
 		openFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 		startActivity(openFile);
 
