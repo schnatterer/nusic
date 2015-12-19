@@ -186,9 +186,10 @@
 						</configuration>
 					</execution>
 					<execution>
-						<!-- But execute proguard after running the tests (prepare package) -->
+						<!-- But execute proguard after running the tests
+							Bind to test phase so proguard runs before dexing (prepare package phase)-->
 						<id>progurad-after-test</id>
-						<phase>prepare-package</phase>
+						<phase>test</phase>
 						<goals>
 							<goal>proguard</goal>
 						</goals>
