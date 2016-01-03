@@ -22,7 +22,8 @@
     along with nusic-ui-android.  If not, see <http://www.gnu.org/licenses />.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -68,6 +69,11 @@
 					<scope>provided</scope>
 				</dependency>
 				<dependency>
+					<groupId>com.android.support</groupId>
+					<artifactId>design</artifactId>
+					<type>aar</type>
+				</dependency>
+				<dependency>
 					<!-- This dependency makes it impossible to deploy with eclipse... On 
 						the other hand we can't run unit test without it from eclipse. -->
 					<!-- TODO Find out which APIs are really needed and add only those? -->
@@ -85,12 +91,12 @@
 	</profiles>
 
 	<dependencies>
-		<!-- Android dependecies -->
 		<dependency>
-			<groupId>com.android.support</groupId>
-			<artifactId>design</artifactId>
-			<type>aar</type>
+			<!-- Process log statements produced by dependencies via slf4j with logback -->
+			<groupId>com.github.tony19</groupId>
+			<artifactId>logback-android-classic</artifactId>
 		</dependency>
+		<!-- Android dependecies -->
 		<dependency>
 			<groupId>org.roboguice</groupId>
 			<artifactId>roboguice</artifactId>

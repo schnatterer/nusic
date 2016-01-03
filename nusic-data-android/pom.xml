@@ -76,6 +76,11 @@
 					<artifactId>robolectric</artifactId>
 					<scope>test</scope>
 				</dependency>
+				<dependency>
+					<groupId>junit</groupId>
+					<artifactId>junit</artifactId>
+					<scope>test</scope>
+				</dependency>
 			</dependencies>
 		</profile>
 	</profiles>
@@ -105,13 +110,6 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>nusic-util</artifactId>
 			<version>${project.parent.version}</version>
-		</dependency>
-
-		<!-- Test dependencies -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
