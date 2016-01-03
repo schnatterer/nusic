@@ -33,6 +33,7 @@
 		value="${EXT_DIR:-/sdcard}/Android/data/${PACKAGE_NAME}/files/logs" /> -->
 
 	<!-- Create a logcat appender, that logs only specific statements -->
+	<!-- Note: the logger's name is refered to in the code as well! -->
 	<appender name="LOGCAT" class="ch.qos.logback.classic.android.LogcatAppender">
 		<!-- Don't show trace and debug on logcat -->
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -57,6 +58,7 @@
 			<fileNamePattern>${LOG_PATH}/${APP_NAME}.%d{yyyy-MM-dd}.log
 			</fileNamePattern>
 			<!-- keep 2 days' worth of history -->
+			<!-- Note: the amount of days to keep is refered to in the code as well! -->
 			<maxHistory>2</maxHistory>
 		</rollingPolicy>
 		<encoder>
