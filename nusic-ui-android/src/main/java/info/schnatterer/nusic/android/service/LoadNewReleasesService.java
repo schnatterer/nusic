@@ -24,6 +24,7 @@ package info.schnatterer.nusic.android.service;
 import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.android.activities.MainActivity;
 import info.schnatterer.nusic.android.util.ImageUtil;
+import info.schnatterer.nusic.android.util.Logs;
 import info.schnatterer.nusic.android.util.Notification;
 import info.schnatterer.nusic.android.util.Notification.NotificationId;
 import info.schnatterer.nusic.core.ConnectivityService;
@@ -39,6 +40,7 @@ import info.schnatterer.nusic.data.model.Artist;
 import info.schnatterer.nusic.data.model.Release;
 import info.schnatterer.nusic.ui.R;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
@@ -100,16 +102,25 @@ public class LoadNewReleasesService extends WakefulService {
 
 	@Override
 	public int onStartCommandWakeful(Intent intent, int flags, int startId) {
-		LOG.debug("Flags = "
-				+ flags
-				+ "; startId = "
-				+ startId
-				+ ". Intent = "
-				+ intent
-				+ (intent != null ? (", extra " + EXTRA_REFRESH_ON_START
-						+ " = " + intent.getBooleanExtra(
-						EXTRA_REFRESH_ON_START, false)) : ""));
+		LOG.debug(
+				"Flags = {}; startId = {}. Intent = {}",
+				flags,
+				startId,
+				intent,
+				(intent != null ? (", extra " + EXTRA_REFRESH_ON_START + " = " + intent
+						.getBooleanExtra(EXTRA_REFRESH_ON_START, false)) : ""));
 		boolean refreshing = true;
+
+		/*
+		 * Delete old log files This is definitely not a good place to do this
+		 * (opposite of separation of concerns). On the other hand it's
+		 * pragmatic: logback doesn't delete log files reliably. So nusic checks
+		 * for itself on a daily basis. This service runs once everyday. So it's
+		 * just a fast way to do the log checking here for now :-(
+		 * 
+		 * TODO make logback delete reliably and remove this from here!
+		 */
+		deleteLogFiles();
 
 		if (intent == null) {
 			// When START_STICKY the intent will be null on "restart" after
@@ -134,6 +145,19 @@ public class LoadNewReleasesService extends WakefulService {
 		}
 
 		return Service.START_STICKY;
+	}
+
+	/**
+	 * Deletes old log files.
+	 */
+	private void deleteLogFiles() {
+		LOG.debug("Cleaning up old log files");
+		List<File> failedFiles = new LinkedList<>();
+		List<File> deletedFiles = Logs.deleteOldLogFiles(this, failedFiles);
+		if (!failedFiles.isEmpty()) {
+			LOG.warn("Unable to delete log files: {}", failedFiles);
+		}
+		LOG.debug("Deleted log files: {}", deletedFiles);
 	}
 
 	/**

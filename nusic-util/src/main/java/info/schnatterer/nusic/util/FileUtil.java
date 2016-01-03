@@ -51,6 +51,20 @@ public final class FileUtil {
 	 * @param days
 	 *            amount of days before the current date. Files older than that
 	 *            are deleted
+	 * @return a list of successfully deleted files
+	 */
+	public static List<File> deleteFilesOlderThan(File directory, int days) {
+		return deleteFilesOlderThan(directory, days, null);
+	}
+
+	/**
+	 * Deletes files older than a specific amount of days from the current date.
+	 * 
+	 * @param directory
+	 *            directory where to look for the files.
+	 * @param days
+	 *            amount of days before the current date. Files older than that
+	 *            are deleted
 	 * @param failedFiles
 	 *            (optional, can be <code>null</code>) a list of files that
 	 *            where supposed to be deleted but failed to be deleted
