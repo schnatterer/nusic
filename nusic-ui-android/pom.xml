@@ -91,11 +91,6 @@
 	</profiles>
 
 	<dependencies>
-		<dependency>
-			<!-- Process log statements produced by dependencies via slf4j with logback -->
-			<groupId>com.github.tony19</groupId>
-			<artifactId>logback-android-classic</artifactId>
-		</dependency>
 		<!-- Android dependecies -->
 		<dependency>
 			<groupId>org.roboguice</groupId>
