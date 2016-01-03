@@ -112,12 +112,7 @@
 			<version>${project.version}</version>
 			<exclusions>
 				<exclusion>
-					<!-- Android ships its own implementation of httpclient anyway -->
-					<artifactId>httpclient</artifactId>
-					<groupId>org.apache.httpcomponents</groupId>
-				</exclusion>
-				<exclusion>
-					<!-- This dependency is only used by httpclient, so spare the APK the 
+					<!-- This dependency is provided by android anyway, so spare the APK the 
 						bloat -->
 					<artifactId>commons-logging</artifactId>
 					<groupId>commons-logging</groupId>
@@ -191,9 +186,10 @@
 						</configuration>
 					</execution>
 					<execution>
-						<!-- But execute proguard after running the tests (prepare package) -->
+						<!-- But execute proguard after running the tests
+							Bind to test phase so proguard runs before dexing (prepare package phase)-->
 						<id>progurad-after-test</id>
-						<phase>prepare-package</phase>
+						<phase>test</phase>
 						<goals>
 							<goal>proguard</goal>
 						</goals>

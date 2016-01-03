@@ -59,9 +59,9 @@
 		<slf4j.version>1.7.6</slf4j.version>
 
 		<!-- Android-specific dependencies -->
-		<android.api.level>22</android.api.level>
+		<android.api.level>23</android.api.level>
 		<!-- Compatibility library for android API levels 4 and 7(Android 2.x) -->
-		<android.compatibility.version>22.2.0</android.compatibility.version>
+		<android.compatibility.version>23.1.1</android.compatibility.version>
 		<roboguice.version>3.0.1</roboguice.version>
 	</properties>
 
@@ -92,7 +92,7 @@
 					repo using the mave-android-sdk-deployer: https://github.com/mosabua/maven-android-sdk-deployer -->
 				<groupId>android</groupId>
 				<artifactId>android</artifactId>
-				<version>5.1.1_r2</version>
+				<version>6.0_r2</version>
 				<scope>provided</scope>
 			</dependency>
 			<!-- Android Support libs -->
@@ -268,6 +268,7 @@
 						<exclude>**/project.properties</exclude>
 						<exclude>**/lint.xml</exclude>
 						<exclude>src/main/java/roboguice/activity/RoboAppCompatPreferenceActivity.java</exclude>
+						<exclude>src/main/java/com/google/**</exclude>
 					</excludes>
 				</configuration>
 				<dependencies>

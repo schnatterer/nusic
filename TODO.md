@@ -1,8 +1,11 @@
 TODOs - Features, enhancements, refactoring, ...
 
+- Clean Up Logs (delete old log files)
 
-- Describe eclipse setup
+- Move to gradle and AndroidStudio
+
 - Fix Javadoc warnings
+- SonarQube
 
 - A new view that shows icon of the release and a link to MB on tap ? --> Remove webview
 

@@ -22,7 +22,8 @@
     along with nusic-core-android.  If not, see <http://www.gnu.org/licenses />.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -65,12 +66,23 @@
 					<artifactId>android</artifactId>
 					<scope>provided</scope>
 				</dependency>
-			<!-- Enable annotation corebase to improve performance. -->
-			<dependency>
-				<groupId>org.roboguice</groupId>
-				<artifactId>roboblender</artifactId>
-				<scope>provided</scope>
-			</dependency>
+				<!-- Enable annotation corebase to improve performance. -->
+				<dependency>
+					<groupId>org.roboguice</groupId>
+					<artifactId>roboblender</artifactId>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+					<version>19.0</version>
+				</dependency>
+				<!-- Test dependencies -->
+				<dependency>
+					<groupId>junit</groupId>
+					<artifactId>junit</artifactId>
+					<scope>test</scope>
+				</dependency>
 			</dependencies>
 		</profile>
 	</profiles>
@@ -82,14 +94,16 @@
 			<version>3.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>14.0.1</version>
-		</dependency>
-		<dependency>
 			<groupId>fm.last</groupId>
 			<artifactId>coverartarchive-api</artifactId>
 			<version>2.1.0</version>
+			<exclusions>
+				<exclusion>
+				<!-- Favor nusic's own version of guava -->
+					<artifactId>guava</artifactId>
+					<groupId>com.google.guava</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.roboguice</groupId>
@@ -117,13 +131,6 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>nusic-util</artifactId>
 			<version>${project.parent.version}</version>
-		</dependency>
-
-		<!-- Test dependencies -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
