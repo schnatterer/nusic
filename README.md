@@ -1,5 +1,11 @@
 nusic - your new music
 =====
+| Branch        | Build Status  |
+| ------------- |-------------  |
+| Develop       | [![Build Status Develop](https://jenkins.schnatterer.info/job/nusic-develop/badge/icon)](https://jenkins.schnatterer.info/job/nusic-develop/)  |
+| Features       | [![Build Status Develop](https://jenkins.schnatterer.info/job/nusic-features/badge/icon)](https://jenkins.schnatterer.info/job/nusic-features/)  |
+
+
 Never again miss a new album release of your favorite artists - always stay informed by nusic.
 
 <img alt="nusic icon" src="https://raw.githubusercontent.com/schnatterer/nusic/develop/resources/ic_launcher_highres.png" width="200" height="200" />
