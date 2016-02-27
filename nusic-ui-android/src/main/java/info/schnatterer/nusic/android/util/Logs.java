@@ -22,7 +22,6 @@
 package info.schnatterer.nusic.android.util;
 
 import info.schnatterer.nusic.Constants;
-import info.schnatterer.nusic.util.FileUtil;
 
 import java.io.File;
 import java.util.Arrays;
@@ -48,11 +47,6 @@ import ch.qos.logback.core.filter.Filter;
 public final class Logs {
 	/** Name of the logcat logger, as configured in logback.xml */
 	private static final String LOGCAT_LOGGER_NAME = "LOGCAT";
-	/**
-	 * The amount of days' worth of history to keep, as configured in
-	 * logback.xml
-	 */
-	private static final int MAX_HISTORY_DAYS = 2;
 
 	private Logs() {
 	}
@@ -185,22 +179,5 @@ public final class Logs {
 				Toast.toast(context, message);
 			}
 		}
-	}
-
-	/**
-	 * Explicitly deletes log files older than the configured amount. This
-	 * should be done by logback itself, but doesn't seem to work reliably.
-	 * 
-	 * @param context
-	 *            context to get the app-private files from
-	 * @param failedFiles
-	 *            (optional, can be <code>null</code>) a list of files that
-	 *            where supposed to be deleted but failed to be deleted
-	 * @return a list of successfully deleted files
-	 */
-	public static List<File> deleteOldLogFiles(Context context,
-			List<File> failedFiles) {
-		return FileUtil.deleteFilesOlderThan(getLogFileDirectory(context),
-				MAX_HISTORY_DAYS, failedFiles);
 	}
 }

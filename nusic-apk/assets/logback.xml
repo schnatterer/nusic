@@ -52,13 +52,12 @@
 	<!-- Create a file appender that logs all statements -->
 	<appender name="FILE"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-
+		<file>${LOG_PATH}/${APP_NAME}.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- daily rollover -->
 			<fileNamePattern>${LOG_PATH}/${APP_NAME}.%d{yyyy-MM-dd}.log
 			</fileNamePattern>
 			<!-- keep 2 days' worth of history -->
-			<!-- Note: the amount of days to keep is refered to in the code as well! -->
 			<maxHistory>2</maxHistory>
 		</rollingPolicy>
 		<encoder>
