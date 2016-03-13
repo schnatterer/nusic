@@ -199,6 +199,14 @@
 							</proguard>
 						</configuration>
 					</execution>
+					<execution>
+						<!-- Algin APK -->
+						<id>alignApk</id>
+						<phase>package</phase>
+						<goals>
+							<goal>zipalign</goal>
+						</goals>
+					</execution>
 				</executions>
 				<configuration>
 					<sdk>
