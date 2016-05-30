@@ -25,7 +25,7 @@
 <resources>
     <string name="action_refresh">Alben aktualisieren</string>
     <string name="action_settings">Einstellungen</string>
-        <string name="action_settings_developer">Einstellungen für Entwickler</string>
+    <string name="action_settings_developer">Einstellungen für Entwickler</string>
     
     <string name="releaseListMenu_HideRelease">Album ausblenden</string>
     <string name="releaseListMenu_HideAllByArtist">Alle des Interpreten ausblenden</string>
@@ -42,6 +42,12 @@
     <string name="MainActivity_TabJustAdded">Neu hinzugefügt</string>
     <string name="MainActivity_TabAvailable">Verfügbar</string>
     <string name="MainActivity_TabAnnounced">Angekündigt</string>
+    <string name="MainActivity_AccessDeniedOnceTitle">Zugriff verweigert</string>
+    <string name="MainActivity_AccessDeniedOnceMessage">Du hast den Zugriff auf Medien des Geräts verweigert. Nusic kann ohne Zugriff auf Medien nicht arbeiten. Es benötigt die Interpreten der Lieder, die auf dem Geräte gespeichert sind, um neue Alben zu finden. Wenn du nusic verwenden willst, bitte wähle "Zulassen".</string>
+    <string name="MainActivity_AccessDeniedPermanentlyTitle">Zugriff dauerhaft verweigert</string>
+    <string name="MainActivity_AccessDeniedPermanentlyMessage">Du hast den Zugriff auf Medien des Geräts dauerhaft verweigert. Nusic kann ohne Zugriff auf Medien nicht arbeiten. Es benötigt die Interpreten der Lieder, die auf dem Geräte gespeichert sind, um neue Alben zu finden. Wenn du nusic verwenden willst, lösche die Daten in App Info, starte die App erneut und wähle "Zulassen".</string>
+    <string name="MainActivity_AccessDeniedPermanentlyPositiveButton">Zu App Info</string>
+    <string name="MainActivity_AccessDeniedPermanentlyNegativeButton">Ich möchte nusic nicht nutzen</string>
     <!-- <string name="MainActivity_JustAddedInformation">Alle Alben, die in den letzten %1$d Tagen hinzugefügt wurden</string> -->
     <string name="WelcomeScreenTitle">Willkommen zu nusic v%1$s</string>
     <string name="WelcomeScreenPleaseBePatient">&#8230;bitte habe etwas Geduld ;)</string>
