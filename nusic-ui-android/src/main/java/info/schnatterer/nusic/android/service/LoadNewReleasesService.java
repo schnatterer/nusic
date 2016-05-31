@@ -309,7 +309,8 @@ public class LoadNewReleasesService extends WakefulService {
 			LOG.debug("Checking if read external storage permission is set");
 			boolean permissionGranted = ContextCompat.checkSelfPermission(
 					LoadNewReleasesService.this,
-					Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED;
+					Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+			LOG.debug("External storage permission = {}", permissionGranted);
 			return permissionGranted;
 		}
 	}
