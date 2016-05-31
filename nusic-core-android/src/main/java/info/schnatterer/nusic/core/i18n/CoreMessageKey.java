@@ -41,10 +41,7 @@ public enum CoreMessageKey {
 
 	ERROR_FINDING_RELEASE_ARTIST("ServiceException_errorFindingReleasesArtist"),
 
-	ERROR_LOADING_ARTISTS("ServiceException_errorLoadingArtists"),
-
-	MISSING_PERMISSION_READ_EXTERNAL_STORAGE(
-			"ServiceException_missingPermissionReadExternalStorage");
+	ERROR_LOADING_ARTISTS("ServiceException_errorLoadingArtists");
 
 	public static final String CORE_BUNDLE_NAME = "CoreBundle";
 	/**

@@ -65,11 +65,6 @@
 					<artifactId>android</artifactId>
 					<scope>provided</scope>
 				</dependency>
-				<dependency>
-					<artifactId>support-v4</artifactId>
-					<groupId>com.android.support</groupId>
-					<type>aar</type>
-				</dependency>
 				<!-- Enable annotation corebase to improve performance. -->
 				<dependency>
 					<groupId>org.roboguice</groupId>

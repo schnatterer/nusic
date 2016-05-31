@@ -237,6 +237,7 @@ public class MainActivity extends RoboActionBarActivity {
 	@TargetApi(Build.VERSION_CODES.M)
 	private void requestPermissionThenStartLoadingReleasesFromInternet(
 			boolean updateOnlyIfNecessary) {
+		LOG.debug("Requesting read external storage permission");
 		ActivityCompat.requestPermissions(this,
 				new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
 				updateOnlyIfNecessaryToRequestCode(updateOnlyIfNecessary));
@@ -325,27 +326,24 @@ public class MainActivity extends RoboActionBarActivity {
 			// If request is cancelled, the result arrays are empty.
 			if (grantResults.length > 0) {
 				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					LOG.debug("Read external storage permission granted");
 					startLoadingReleasesFromInternet(updateOnlyIfNecessary);
 				} else if (neverAskAgainCheckedForReadExternalStorage()) {
 					/*
 					 * Never ask again selected, or device policy prohibits the
 					 * app from having that permission.
 					 */
-					LOG.info(
-							"Read External Storage Permission was just permanently denied by the user. Nusic is never going to work. RequestCode={}",
-							requestCode);
+					LOG.info("Read external storage permission request permanently denied. Nusic is never going to work");
 					// inform the user nusic is not going to work.
 					showDialogAccessDeniedPermanently();
 				} else {
 					// Permission denied once
-					LOG.info("Permission request denied once. RequestCode={}",
-							requestCode);
+					LOG.info("Read external storage permission request denied once");
 					// Inform the user that nusic needs this permission
 					showDialogAccessDeniedOnce(updateOnlyIfNecessary);
 				}
 			} else {
-				LOG.warn("Permission request cancelled. RequestCode={}",
-						requestCode);
+				LOG.warn("Read external storage permission request cancelled");
 			}
 			break;
 		}

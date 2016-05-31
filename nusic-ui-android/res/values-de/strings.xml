@@ -61,6 +61,7 @@
         
     <string name="LoadNewReleasesService_newRelease">Neues Album gefunden:</string>
     <string name="LoadNewReleasesService_newReleaseMultiple">%1$d neue Alben gefunden</string>
+    <string name="LoadNewReleasesService_missingPermissionReadExternalStorage">Bitte Zugriff auf Medien zulassen</string>
     <string name="ReleasedTodayService_ReleasedToday">Heute erscheint:</string>
     <string name="ReleasedTodayService_ReleasedTodayMultiple">%1$d Alben werden heute veröffentlicht</string>
     
