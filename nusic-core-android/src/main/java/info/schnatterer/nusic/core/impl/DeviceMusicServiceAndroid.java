@@ -57,6 +57,7 @@ public class DeviceMusicServiceAndroid implements DeviceMusicService {
 		Cursor cursor = null;
 		Artist[] artists = null;
 		try {
+
 			cursor = contentResolver.query(ARTIST_URI, ARTIST_PROJECTION, null,
 					null, ARTIST_SORT_ORDER);
 			if (cursor != null) {

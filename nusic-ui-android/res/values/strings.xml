@@ -30,9 +30,9 @@
     <string name="releaseListMenu_HideRelease">Hide release</string>
     <string name="releaseListMenu_HideAllByArtist">Hide all by artist</string>
     
-     <!-- GUI captions -->
-     <string name="GooglePlay">Google Play</string>
-     <string name="GitHub">GitHub</string>
+    <!-- GUI captions -->
+    <string name="GooglePlay">Google Play</string>
+    <string name="GitHub">GitHub</string>
     <string name="releaseListRow_RightArrow">Click to show details</string>
     <string name="releaseListRow_Thumbnail">Thumbnail of album art</string>
     <string name="LoadNewReleasesBinding_CheckingArtists">Checking all artists for new releases</string>
@@ -42,6 +42,12 @@
     <string name="MainActivity_TabJustAdded">Just added</string>
     <string name="MainActivity_TabAvailable">Available</string>
     <string name="MainActivity_TabAnnounced">Announced</string>
+    <string name="MainActivity_AccessDeniedOnceTitle">Access denied</string>
+    <string name="MainActivity_AccessDeniedOnceMessage">You denied access to the media on the device. Nusic cannot work without accessing the media. It reads the artist names of songs stored on the device in order to find new releases of these artists. If you want nusic to work, please press "allow".</string>
+    <string name="MainActivity_AccessDeniedPermanentlyTitle">Access denied permanently</string>
+    <string name="MainActivity_AccessDeniedPermanentlyMessage">You permanently denied acess to media on the device. Nusic cannot work without accessing the media. It reads the artist names of songs stored on the device in order to find new releases of these artists. If you want nusic to work, clear the data in the app info, start the app again and then choose "allow".</string>
+    <string name="MainActivity_AccessDeniedPermanentlyPositiveButton">Go to app info</string>
+    <string name="MainActivity_AccessDeniedPermanentlyNegativeButton">I do not want to use nusic</string>
     <!-- <string name="MainActivity_JustAddedInformation">All releases that were added within the last %1$d days</string> -->
     <string name="WelcomeScreenTitle">Welcome to nusic %1$s</string>
     <string name="WelcomeScreenPleaseBePatient">&#8230;please be patient ;)</string>
@@ -56,8 +62,8 @@
     
     <string name="LoadNewReleasesService_newRelease">Found new release:</string>
     <string name="LoadNewReleasesService_newReleaseMultiple">Found %1$d new releases</string>
+    <string name="LoadNewReleasesService_missingPermissionReadExternalStorage">Please allow access to media</string>
     <string name="ReleasedTodayService_ReleasedToday">Published today:</string>
-    <string name="ReleasedTodayService_ReleasedTodayMultiple">%1$d releases are published today</string>
     
      <!-- Prefrences -->
      <string name="preferences_category_releases">Releases</string>

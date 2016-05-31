@@ -59,7 +59,7 @@
 					<artifactId>android</artifactId>
 					<scope>provided</scope>
 				</dependency>
-				<!-- "Re-include" the transitive dependency of nusic-ui-android that was excluded for eclipse build -->
+				<!-- "Re-include" the transitive dependency of nusic-*-android that was excluded for eclipse build -->
 				<dependency>
 					<artifactId>support-v4</artifactId>
 					<groupId>com.android.support</groupId>
