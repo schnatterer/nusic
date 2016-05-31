@@ -33,11 +33,18 @@ import java.util.ResourceBundle;
  *
  */
 public enum CoreMessageKey {
-	ERROR_WRITING_TO_DB("ServiceException_errorWritingToDb"), ERROR_READING_FROM_DB(
-			"ServiceException_errorReadingFromDb"), ERROR_QUERYING_MUSIC_BRAINZ(
-			"ServiceException_errorQueryingMusicBrainz"), ERROR_FINDING_RELEASE_ARTIST(
-			"ServiceException_errorFindingReleasesArtist"), ERROR_LOADING_ARTISTS(
-			"ServiceException_errorLoadingArtists");
+	ERROR_WRITING_TO_DB("ServiceException_errorWritingToDb"),
+
+	ERROR_READING_FROM_DB("ServiceException_errorReadingFromDb"),
+
+	ERROR_QUERYING_MUSIC_BRAINZ("ServiceException_errorQueryingMusicBrainz"),
+
+	ERROR_FINDING_RELEASE_ARTIST("ServiceException_errorFindingReleasesArtist"),
+
+	ERROR_LOADING_ARTISTS("ServiceException_errorLoadingArtists"),
+
+	MISSING_PERMISSION_READ_EXTERNAL_STORAGE(
+			"ServiceException_missingPermissionReadExternalStorage");
 
 	public static final String CORE_BUNDLE_NAME = "CoreBundle";
 	/**

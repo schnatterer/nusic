@@ -459,13 +459,8 @@ public class LoadNewReleasesService extends WakefulService {
 			if (potentialException != null) {
 				LOG.error(potentialException.getMessage(), potentialException);
 				if (potentialException instanceof ServiceException) {
-					Notification
-							.notifyWarning(
-									LoadNewReleasesService.this,
-									LoadNewReleasesService.this
-											.getString(R.string.LoadNewReleasesBinding_errorFindingReleases)
-											+ potentialException
-													.getLocalizedMessage());
+					Notification.notifyWarning(LoadNewReleasesService.this,
+							potentialException.getLocalizedMessage());
 				} else {
 					Notification
 							.notifyWarning(

@@ -28,13 +28,18 @@ import info.schnatterer.nusic.data.model.Artist;
 
 import javax.inject.Inject;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.BaseColumns;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Audio.ArtistColumns;
+import android.support.v4.content.ContextCompat;
 
 /**
  * Provides access to music stored on the device via android's APIs.
@@ -58,7 +63,9 @@ public class DeviceMusicServiceAndroid implements DeviceMusicService {
 		Artist[] artists = null;
 		try {
 
-			// TODO ask for permission ContextCompat.checkSelfPermission()).
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+				getReadExternalStoragePermissionOrThrow();
+			}
 
 			cursor = contentResolver.query(ARTIST_URI, ARTIST_PROJECTION, null,
 					null, ARTIST_SORT_ORDER);
@@ -83,6 +90,23 @@ public class DeviceMusicServiceAndroid implements DeviceMusicService {
 			}
 		}
 		return artists;
+	}
+
+	/**
+	 * Checks if the permission for
+	 * {@link Manifest.permission#READ_EXTERNAL_STORAGE} is present. If not
+	 * throws an exception.
+	 * 
+	 * @throws AndroidServiceException
+	 */
+	@TargetApi(Build.VERSION_CODES.M)
+	private void getReadExternalStoragePermissionOrThrow()
+			throws AndroidServiceException {
+		if (ContextCompat.checkSelfPermission(context,
+				Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+			throw new AndroidServiceException(
+					CoreMessageKey.MISSING_PERMISSION_READ_EXTERNAL_STORAGE);
+		}
 	}
 
 	public enum ArtistProjection {
