@@ -37,15 +37,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import roboguice.activity.RoboActionBarActivity;
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.provider.Settings;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -84,6 +91,19 @@ public class MainActivity extends RoboActionBarActivity {
 	 * with the intent.
 	 */
 	public static final String EXTRA_ACTIVE_TAB = "nusic.intent.extra.main.activeTab";
+
+	/**
+	 * Request permission {@link Manifest.permission#READ_EXTERNAL_STORAGE} and
+	 * call {@link #startLoadingReleasesFromInternet(boolean)} with
+	 * <code>false</code> parameter.
+	 */
+	private static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FORCE_UPDATE_ONLY_IF_NECESSARY_FALSE = 0;
+	/**
+	 * Request permission {@link Manifest.permission#READ_EXTERNAL_STORAGE} and
+	 * call {@link #startLoadingReleasesFromInternet(boolean)} with
+	 * <code>true</code> parameter.
+	 */
+	private static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FORCE_UPDATE_ONLY_IF_NECESSARY_TRUE = 1;
 
 	/** Start and bind the {@link LoadNewReleasesService}. */
 	private static LoadNewRelasesServiceBinding loadNewRelasesServiceBinding = null;
@@ -173,15 +193,170 @@ public class MainActivity extends RoboActionBarActivity {
 			loadNewRelasesServiceBinding = new LoadNewRelasesServiceBinding();
 			registerListeners();
 			if (forceUpdate) {
-				startLoadingReleasesFromInternet(false);
+				requestPermissionOrStartLoadingReleasesFromInternet(false);
 			} else {
 				// Update only if necessary
-				startLoadingReleasesFromInternet(true);
+				requestPermissionOrStartLoadingReleasesFromInternet(true);
 			}
-
 		} else {
+			/*
+			 * TODO it would be best to also request the permissions here in
+			 * order to "annoy" any users that checked "Never ask again".
+			 */
 			registerListeners();
 		}
+	}
+
+	/**
+	 * Basically, this method calls
+	 * {@link #startLoadingReleasesFromInternet(boolean)}.
+	 * 
+	 * Depending on the SDK version of the device requests the
+	 * {@link Manifest.permission#READ_EXTERNAL_STORAGE} permission before.
+	 * 
+	 * @param updateOnlyIfNecessary
+	 */
+	private void requestPermissionOrStartLoadingReleasesFromInternet(
+			boolean updateOnlyIfNecessary) {
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+			// Just call the method
+			startLoadingReleasesFromInternet(updateOnlyIfNecessary);
+		} else {
+			// Do the brand new permission dance
+			requestPermissionThenStartLoadingReleasesFromInternet(updateOnlyIfNecessary);
+		}
+	}
+
+	/**
+	 * Calls {@link #startLoadingReleasesFromInternet(boolean)} asynchronously
+	 * via Android M's {@link #onRequestPermissionsResult(int, String[], int[])}
+	 * mechanism.
+	 * 
+	 * @param updateOnlyIfNecessary
+	 */
+	@TargetApi(Build.VERSION_CODES.M)
+	private void requestPermissionThenStartLoadingReleasesFromInternet(
+			boolean updateOnlyIfNecessary) {
+		LOG.debug("Requesting read external storage permission");
+		ActivityCompat.requestPermissions(this,
+				new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
+				updateOnlyIfNecessaryToRequestCode(updateOnlyIfNecessary));
+	}
+
+	private void showDialogAccessDeniedOnce(final boolean updateOnlyIfNecessary) {
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.MainActivity_AccessDeniedOnceTitle)
+				.setMessage(R.string.MainActivity_AccessDeniedOnceMessage)
+				.setPositiveButton(android.R.string.ok,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// Just ask again
+								requestPermissionThenStartLoadingReleasesFromInternet(updateOnlyIfNecessary);
+							}
+						}).setIcon(android.R.drawable.ic_dialog_info).show();
+	}
+
+	private void showDialogAccessDeniedPermanently() {
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.MainActivity_AccessDeniedPermanentlyTitle)
+				.setMessage(
+						R.string.MainActivity_AccessDeniedPermanentlyMessage)
+				.setPositiveButton(
+						R.string.MainActivity_AccessDeniedPermanentlyPositiveButton,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								Intent intent = new Intent(
+										Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+								Uri uri = Uri.fromParts("package",
+										getPackageName(), null);
+								intent.setData(uri);
+								startActivity(intent);
+							}
+						})
+				.setNegativeButton(
+						R.string.MainActivity_AccessDeniedPermanentlyNegativeButton,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+							}
+						}).setIcon(android.R.drawable.ic_dialog_alert).show();
+
+	}
+
+	/**
+	 * "Encodes" updateOnlyIfNecessary into two different request codes
+	 * 
+	 * @param updateOnlyIfNecessary
+	 * @return {@link #PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FORCE_UPDATE_ONLY_IF_NECESSARY_TRUE}
+	 *         if <code>updateOnlyIfNecessary</code> is <code>true</code>.
+	 *         Otherwise
+	 *         {@link #PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FORCE_UPDATE_ONLY_IF_NECESSARY_FALSE}
+	 *         .
+	 */
+	private int updateOnlyIfNecessaryToRequestCode(boolean updateOnlyIfNecessary) {
+		if (updateOnlyIfNecessary) {
+			return PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FORCE_UPDATE_ONLY_IF_NECESSARY_TRUE;
+		}
+		return PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FORCE_UPDATE_ONLY_IF_NECESSARY_FALSE;
+	}
+
+	/**
+	 * "Decodes" the different request codes to boolean updateOnlyIfNecessary
+	 * 
+	 * @param requestCode
+	 * @return <code>true</code> if
+	 *         {@link #PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FORCE_UPDATE_ONLY_IF_NECESSARY_TRUE}
+	 *         is passed. Otherwise <code>false</code>
+	 */
+	private boolean requestCodeToUpdateOnlyIfNecessary(int requestCode) {
+		return requestCode == PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FORCE_UPDATE_ONLY_IF_NECESSARY_TRUE;
+	}
+
+	@Override
+	@TargetApi(Build.VERSION_CODES.M)
+	public void onRequestPermissionsResult(int requestCode,
+			String permissions[], int[] grantResults) {
+		switch (requestCode) {
+		// Fall through, because the request code
+		case PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FORCE_UPDATE_ONLY_IF_NECESSARY_FALSE:
+		case PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FORCE_UPDATE_ONLY_IF_NECESSARY_TRUE: {
+			final boolean updateOnlyIfNecessary = requestCodeToUpdateOnlyIfNecessary(requestCode);
+			// If request is cancelled, the result arrays are empty.
+			if (grantResults.length > 0) {
+				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					LOG.debug("Read external storage permission granted");
+					startLoadingReleasesFromInternet(updateOnlyIfNecessary);
+				} else if (neverAskAgainCheckedForReadExternalStorage()) {
+					/*
+					 * Never ask again selected, or device policy prohibits the
+					 * app from having that permission.
+					 */
+					LOG.info("Read external storage permission request permanently denied. Nusic is never going to work");
+					// inform the user nusic is not going to work.
+					showDialogAccessDeniedPermanently();
+				} else {
+					// Permission denied once
+					LOG.info("Read external storage permission request denied once");
+					// Inform the user that nusic needs this permission
+					showDialogAccessDeniedOnce(updateOnlyIfNecessary);
+				}
+			} else {
+				LOG.warn("Read external storage permission request cancelled");
+			}
+			break;
+		}
+		default:
+			LOG.warn("Unexpected permission request code {}", requestCode);
+			break;
+		}
+	}
+
+	@TargetApi(Build.VERSION_CODES.M)
+	private boolean neverAskAgainCheckedForReadExternalStorage() {
+		return !ActivityCompat.shouldShowRequestPermissionRationale(this,
+				Manifest.permission.READ_EXTERNAL_STORAGE);
 	}
 
 	private ReleaseListFragment createTabFragment(TabDefinition tab) {
@@ -270,13 +445,13 @@ public class MainActivity extends RoboActionBarActivity {
 		}
 	}
 
-	private void startLoadingReleasesFromInternet(boolean updateOnlyIfNeccesary) {
+	private void startLoadingReleasesFromInternet(boolean updateOnlyIfNecessary) {
 		boolean wasRunning = !loadNewRelasesServiceBinding.refreshReleases(
-				this, updateOnlyIfNeccesary);
+				this, updateOnlyIfNecessary);
 		LOG.debug("Explicit refresh triggered. Service was "
 				+ (wasRunning ? "" : " not ") + "running before");
 
-		if (wasRunning && !updateOnlyIfNeccesary) {
+		if (wasRunning && !updateOnlyIfNecessary) {
 			// Task is already running, just show dialog
 			Toast.toast(this, R.string.MainActivity_refreshAlreadyInProgress);
 			loadNewRelasesServiceBinding.showDialog();

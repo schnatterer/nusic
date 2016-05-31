@@ -28,7 +28,7 @@
 	<parent>
 		<groupId>info.schnatterer.nusic</groupId>
 		<artifactId>nusic-parent</artifactId>
-		<version>2.0.1-SNAPSHOT</version>
+		<version>2.1.1</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -68,6 +68,11 @@
 					<scope>provided</scope>
 				</dependency>
 				<dependency>
+					<groupId>com.android.support</groupId>
+					<artifactId>design</artifactId>
+					<type>aar</type>
+				</dependency>
+				<dependency>
 					<!-- This dependency makes it impossible to deploy with eclipse... On 
 						the other hand we can't run unit test without it from eclipse. -->
 					<!-- TODO Find out which APIs are really needed and add only those? -->
@@ -86,11 +91,6 @@
 
 	<dependencies>
 		<!-- Android dependecies -->
-		<dependency>
-			<groupId>com.android.support</groupId>
-			<artifactId>design</artifactId>
-			<type>aar</type>
-		</dependency>
 		<dependency>
 			<groupId>org.roboguice</groupId>
 			<artifactId>roboguice</artifactId>

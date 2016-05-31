@@ -28,7 +28,7 @@
 	<parent>
 		<groupId>info.schnatterer.nusic</groupId>
 		<artifactId>nusic-parent</artifactId>
-		<version>2.0.1-SNAPSHOT</version>
+		<version>2.1.1</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -59,7 +59,7 @@
 					<artifactId>android</artifactId>
 					<scope>provided</scope>
 				</dependency>
-				<!-- "Re-include" the transitive dependency of nusic-ui-android that was excluded for eclipse build -->
+				<!-- "Re-include" the transitive dependency of nusic-*-android that was excluded for eclipse build -->
 				<dependency>
 					<artifactId>support-v4</artifactId>
 					<groupId>com.android.support</groupId>
@@ -112,12 +112,7 @@
 			<version>${project.version}</version>
 			<exclusions>
 				<exclusion>
-					<!-- Android ships its own implementation of httpclient anyway -->
-					<artifactId>httpclient</artifactId>
-					<groupId>org.apache.httpcomponents</groupId>
-				</exclusion>
-				<exclusion>
-					<!-- This dependency is only used by httpclient, so spare the APK the 
+					<!-- This dependency is provided by android anyway, so spare the APK the 
 						bloat -->
 					<artifactId>commons-logging</artifactId>
 					<groupId>commons-logging</groupId>
@@ -191,9 +186,10 @@
 						</configuration>
 					</execution>
 					<execution>
-						<!-- But execute proguard after running the tests (prepare package) -->
+						<!-- But execute proguard after running the tests
+							Bind to test phase so proguard runs before dexing (prepare package phase)-->
 						<id>progurad-after-test</id>
-						<phase>prepare-package</phase>
+						<phase>test</phase>
 						<goals>
 							<goal>proguard</goal>
 						</goals>
@@ -202,6 +198,14 @@
 								<skip>false</skip>
 							</proguard>
 						</configuration>
+					</execution>
+					<execution>
+						<!-- Algin APK -->
+						<id>alignApk</id>
+						<phase>package</phase>
+						<goals>
+							<goal>zipalign</goal>
+						</goals>
 					</execution>
 				</executions>
 				<configuration>

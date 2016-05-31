@@ -1,16 +1,19 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Describe eclipse setup
+- Move to gradle and AndroidStudio
+
+- SonarQube (replace tabs by spaces, ...)
+- Fix Javadoc warnings
 
 - A new view that shows icon of the release and a link to MB on tap ? --> Remove webview
+
+- Copy images & Logs to /sdcard instead of /data: 
+http://www.androidsnippets.com/download-an-http-file-to-sdcard-with-progress-notification
+http://developer.android.com/guide/topics/data/data-storage.html#filesExternal
 
 LOGGING 
 - Output statistic after finishing daily update
 - Manage to grab Logcat output from android to to SLF4J
-
-- Copy images to /sdcard instead of /data: 
-http://www.androidsnippets.com/download-an-http-file-to-sdcard-with-progress-notification
-http://developer.android.com/guide/topics/data/data-storage.html#filesExternal
 
 - Show progress in a snack bar instead of the dialog?
 - Move launcher icons to mipmap: http://developer.android.com/guide/topics/resources/providing-resources.html

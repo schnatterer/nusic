@@ -28,7 +28,7 @@
 	<parent>
 		<groupId>info.schnatterer.nusic</groupId>
 		<artifactId>nusic-parent</artifactId>
-		<version>2.0.1-SNAPSHOT</version>
+		<version>2.1.1</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -65,12 +65,23 @@
 					<artifactId>android</artifactId>
 					<scope>provided</scope>
 				</dependency>
-			<!-- Enable annotation corebase to improve performance. -->
-			<dependency>
-				<groupId>org.roboguice</groupId>
-				<artifactId>roboblender</artifactId>
-				<scope>provided</scope>
-			</dependency>
+				<!-- Enable annotation corebase to improve performance. -->
+				<dependency>
+					<groupId>org.roboguice</groupId>
+					<artifactId>roboblender</artifactId>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+					<version>19.0</version>
+				</dependency>
+				<!-- Test dependencies -->
+				<dependency>
+					<groupId>junit</groupId>
+					<artifactId>junit</artifactId>
+					<scope>test</scope>
+				</dependency>
 			</dependencies>
 		</profile>
 	</profiles>
@@ -82,14 +93,16 @@
 			<version>3.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>14.0.1</version>
-		</dependency>
-		<dependency>
 			<groupId>fm.last</groupId>
 			<artifactId>coverartarchive-api</artifactId>
 			<version>2.1.0</version>
+			<exclusions>
+				<exclusion>
+				<!-- Favor nusic's own version of guava -->
+					<artifactId>guava</artifactId>
+					<groupId>com.google.guava</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.roboguice</groupId>
@@ -117,13 +130,6 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>nusic-util</artifactId>
 			<version>${project.parent.version}</version>
-		</dependency>
-
-		<!-- Test dependencies -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

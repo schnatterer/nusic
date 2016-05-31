@@ -26,7 +26,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>info.schnatterer.nusic</groupId>
 	<artifactId>nusic-parent</artifactId>
-	<version>2.0.1-SNAPSHOT</version>
+	<version>2.1.1</version>
 	<packaging>pom</packaging>
 	<name>nusic</name>
 
@@ -38,10 +38,10 @@
 	</licenses>
 
 	<scm>
-		<connection>scm:git:ssh://github.com/schnatterer/nusic.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/schnatterer/nusic.git</developerConnection>
+		<connection>scm:git:https://github.com/schnatterer/nusic.git</connection>
+		<developerConnection>scm:git:https://github.com/schnatterer/nusic.git</developerConnection>
 		<url>https://github.com/schnatterer/nusic</url>
-		<tag>HEAD</tag>
+		<tag>v.2.1.0</tag>
 	</scm>
 
 	<properties>
@@ -59,9 +59,9 @@
 		<slf4j.version>1.7.6</slf4j.version>
 
 		<!-- Android-specific dependencies -->
-		<android.api.level>22</android.api.level>
+		<android.api.level>23</android.api.level>
 		<!-- Compatibility library for android API levels 4 and 7(Android 2.x) -->
-		<android.compatibility.version>22.2.0</android.compatibility.version>
+		<android.compatibility.version>23.1.1</android.compatibility.version>
 		<roboguice.version>3.0.1</roboguice.version>
 	</properties>
 
@@ -92,7 +92,7 @@
 					repo using the mave-android-sdk-deployer: https://github.com/mosabua/maven-android-sdk-deployer -->
 				<groupId>android</groupId>
 				<artifactId>android</artifactId>
-				<version>5.1.1_r2</version>
+				<version>6.0_r2</version>
 				<scope>provided</scope>
 			</dependency>
 			<!-- Android Support libs -->
@@ -171,6 +171,17 @@
 				<version>4.12</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest-all</artifactId>
+				<version>1.3</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-all</artifactId>
+				<version>1.10.19</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -228,9 +239,6 @@
 					<tagNameFormat>v.@{project.version}</tagNameFormat>
 					<!-- Same version to all submodules -->
 					<autoVersionSubmodules>true</autoVersionSubmodules>
-					<!-- Update version name in android manifest. A explicit commit is not necessary, because the android manifests should not change! -->
-					<preparationGoals>com.jayway.maven.plugins.android.generation2:android-maven-plugin:3.8.2:manifest-update -DworkingDirectory=.
-						-Dandroid.manifest.versionName="@string/versionName"</preparationGoals>
 					<!-- Increase version code and update version name in android manifest 
 						and commit all changes, i.e. not only the changes to POMs made by release 
 						plugin but also the androidManifest.xml -->
@@ -271,6 +279,7 @@
 						<exclude>**/project.properties</exclude>
 						<exclude>**/lint.xml</exclude>
 						<exclude>src/main/java/roboguice/activity/RoboAppCompatPreferenceActivity.java</exclude>
+						<exclude>src/main/java/com/google/**</exclude>
 					</excludes>
 				</configuration>
 				<dependencies>
@@ -288,6 +297,20 @@
 						<phase>validate</phase>
 						<goals>
 							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- prepare jacoco agent for code coverage -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.5.201505241946</version>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
 				</executions>

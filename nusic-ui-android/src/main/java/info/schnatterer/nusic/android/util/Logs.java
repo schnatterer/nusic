@@ -45,7 +45,7 @@ import ch.qos.logback.core.filter.Filter;
  *
  */
 public final class Logs {
-	/** Name of the logcat logger as configured in logback.xml */
+	/** Name of the logcat logger, as configured in logback.xml */
 	private static final String LOGCAT_LOGGER_NAME = "LOGCAT";
 
 	private Logs() {
@@ -103,8 +103,18 @@ public final class Logs {
 	 */
 	public static File[] getLogFiles(Context context) {
 		// TODO NPE check?
-		return new File(context.getFilesDir(), Constants.LOG_FOLDER)
-				.listFiles();
+		return getLogFileDirectory(context).listFiles();
+	}
+
+	/**
+	 * Returns the folder where log files are stored.
+	 * 
+	 * @param context
+	 *            context to get the app-private files from
+	 * @return the directory that contains log files
+	 */
+	public static File getLogFileDirectory(Context context) {
+		return new File(context.getFilesDir(), Constants.LOG_FOLDER);
 	}
 
 	/**

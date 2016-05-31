@@ -1,5 +1,11 @@
 nusic - your new music
 =====
+| Branch        | Build Status  |
+| ------------- |-------------  |
+| Develop       | [![Build Status Develop](https://jenkins.schnatterer.info/job/nusic-develop/badge/icon)](https://jenkins.schnatterer.info/job/nusic-develop/)  |
+| Features       | [![Build Status Develop](https://jenkins.schnatterer.info/job/nusic-features/badge/icon)](https://jenkins.schnatterer.info/job/nusic-features/)  |
+
+
 Never again miss a new album release of your favorite artists - always stay informed by nusic.
 
 <img alt="nusic icon" src="https://raw.githubusercontent.com/schnatterer/nusic/develop/resources/ic_launcher_highres.png" width="200" height="200" />
@@ -16,7 +22,7 @@ Please report any issues [here] (https://github.com/schnatterer/nusic/issues).
 ## Download
 You can download the lates version as APK from [GitHub] (https://github.com/schnatterer/nusic/releases/latest) or get the app directly from [Google Play](https://play.google.com/store/apps/details?id=info.schnatterer.nusic).
 
-[![Google Play Logo](https://developer.android.com/images/brand/en_generic_rgb_wo_60.png)](https://play.google.com/store/apps/details?id=info.schnatterer.nusic)
+<a href="https://play.google.com/store/apps/details?id=info.schnatterer.nusic"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" height="60"/></a>
 
 ## Licenses
 Copyright © 2013 Johannes Schnatterer.

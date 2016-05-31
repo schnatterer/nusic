@@ -51,15 +51,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import roboguice.receiver.RoboBroadcastReceiver;
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.content.ContextCompat;
 
 public class LoadNewReleasesService extends WakefulService {
 	/** Small icon shown in the status bar when a notification is shwown. */
@@ -100,15 +105,13 @@ public class LoadNewReleasesService extends WakefulService {
 
 	@Override
 	public int onStartCommandWakeful(Intent intent, int flags, int startId) {
-		LOG.debug("Flags = "
-				+ flags
-				+ "; startId = "
-				+ startId
-				+ ". Intent = "
-				+ intent
-				+ (intent != null ? (", extra " + EXTRA_REFRESH_ON_START
-						+ " = " + intent.getBooleanExtra(
-						EXTRA_REFRESH_ON_START, false)) : ""));
+		LOG.debug(
+				"Flags = {}; startId = {}. Intent = {}",
+				flags,
+				startId,
+				intent,
+				(intent != null ? (", extra " + EXTRA_REFRESH_ON_START + " = " + intent
+						.getBooleanExtra(EXTRA_REFRESH_ON_START, false)) : ""));
 		boolean refreshing = true;
 
 		if (intent == null) {
@@ -228,7 +231,7 @@ public class LoadNewReleasesService extends WakefulService {
 				// Make sure any changes to the online state are ignored
 				loadNewReleasesServiceConnectivityReceiver.disableReceiver();
 
-				if (!updateOnlyIfNeccesary) {
+				if (!updateOnlyIfNeccesary && hasReadPermissionOrNotify()) {
 					syncReleasesService
 							.addArtistProcessedListener(artistProgressListener);
 					syncReleasesService
@@ -260,6 +263,55 @@ public class LoadNewReleasesService extends WakefulService {
 			// stop service
 			LOG.debug("Service: Explicit stop self");
 			stopSelf();
+		}
+
+		/**
+		 * If necessary (depending on the SDK versin of the device), checks if
+		 * the {@link Manifest.permission#READ_EXTERNAL_STORAGE} is present. If
+		 * it is not present, notifies an error. <br/>
+		 * 
+		 * This would be better be done in the nusic-ui-android package, but for
+		 * now cannot use aar dependencies there (because the
+		 * android-maven-plugin does not support jars). Pragmatic soulution:
+		 * Check the permission right here in the service.
+		 * 
+		 * @return <code>true</code> if the permission is present or checking
+		 *         was not necessary. Otherwise <code>false</code>.
+		 */
+		private boolean hasReadPermissionOrNotify() {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+				boolean permissionGranted = isReadExternalStoragePermissionGranted();
+				if (!permissionGranted) {
+					/*
+					 * TODO a tap on the notifcation opens the trying to request
+					 * the permission again
+					 */
+					Notification
+							.notifyWarning(
+									LoadNewReleasesService.this,
+									LoadNewReleasesService.this
+											.getString(R.string.LoadNewReleasesService_missingPermissionReadExternalStorage));
+				}
+				return permissionGranted;
+			} else {
+				return true;
+			}
+		}
+
+		/**
+		 * Checks if the permission for is present.
+		 * 
+		 * @return <code>true</code> if the permission is present. Otherwise
+		 *         <code>false</code>.
+		 */
+		@TargetApi(Build.VERSION_CODES.M)
+		private boolean isReadExternalStoragePermissionGranted() {
+			LOG.debug("Checking if read external storage permission is set");
+			boolean permissionGranted = ContextCompat.checkSelfPermission(
+					LoadNewReleasesService.this,
+					Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+			LOG.debug("External storage permission = {}", permissionGranted);
+			return permissionGranted;
 		}
 	}
 
@@ -441,18 +493,7 @@ public class LoadNewReleasesService extends WakefulService {
 
 		@Override
 		public void onProgressFinished(Boolean result) {
-			// Don't bother the user about the failure. Better luck next
-			// time!
-			// if (errorArtists != null && errorArtists.size() > 0) {
-			// Application.notifyWarning(
-			// R.string.LoadNewReleasesBinding_finishedWithErrors,
-			// errorArtists.size(), totalArtists);
-			// }
-			// On success, keep quiet
-			// } else if (totalArtists > 0) {
-			// Application.notifyNewReleases("!!SUCESSFULLY FINISHED REFRESHING "
-			// + totalArtists + " ARTISTS!!");
-			// }
+			// Don't bother about the failure. Better luck next time!
 		}
 
 		@Override
