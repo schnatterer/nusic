@@ -79,6 +79,45 @@ You could pass those via the command line or define them in your ~/.m2/settings.
     </properties>
 </profile>
 ```
+## Creating a release
+TODO Automate this, e.g. via Jenkins
+
+- Start release  
+`git-flow release start v.2.1.1`
+- Set Version  
+`mvn org.codehaus.mojo:versions-maven-plugin:2.2:set -DnewVersion=2.1.1`
+- Update Manifest
+`mvn com.jayway.maven.plugins.android.generation2:android-maven-plugin:3.8.2:manifest-update -DworkingDirectory=. -Dandroid.manifest.versionCodeAutoIncrement=true  -Dandroid.manifest.versionName="@string/versionName"`
+- Update [changelog](CHANGELOG.md)
+- Commit  
+```
+git clean -f
+git add .`
+git commit -m 'Prepare release v.2.1.1'
+```
+- Finish release & Tag (+ tag message)
+`git-flow release finish v.2.1.1`
+- Set next dev version & commit
+```
+mvn org.codehaus.mojo:versions-maven-plugin:2.2:set  -DnewVersion=2.1.2-SNAPSHOT`
+git clean -f
+git add .
+git commit -m "Prepare for next development iteration v.2.1.2-SNAPSHOT"
+```
+- Checkout and build tag
+```
+git checkout tags/v.2.1.1
+mvn clean install
+```` 
+- Push all branches & tags
+```
+git push --all
+git push --tags
+```
+- Upload artifact: [Github](https://github.com/schnatterer/nusic/releases), [Google Play](https://play.google.com/apps/publish/)
+- Add changelog to github release page: https://github.com/schnatterer/nusic/releases/tag/v.2.1.1
+- Add changelog to google play entry
+
 
 ### Eclipse
 * When using [m2eclipse](http://eclipse.org/m2e/) and [m2e-android](http://rgladwell.github.io/m2e-android/) and have your local maven repo set up (see above), maven and m2e should set you up with all you need to build an run right away.
