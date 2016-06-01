@@ -33,6 +33,15 @@ See the [License](https://github.com/schnatterer/nusic/blob/master/Nusic/LICENSE
 ## Release notes
 See [Releases] (https://github.com/schnatterer/nusic/releases).
 
+## Permissions
+What kind of permission does nusic require and why does it require them?
+- Network communication, full network access: Check MusicBrainz for new releases
+- Nework communication, view network connections: Get notified about available connection to the internet in order to start checking for new releases.
+- Yor applications information, run at startup: Schedule regular checking for new releases via the Android alarm manager
+- System tools, test access to protected storage: Get the artists that are stored on the device
+- Affects Battery, prevent phone from sleeping: Prevent the device from falling back to sleep while searching for new releases
+
+
 ## Build
 ### Modules
 | Module             | Packaging      | Description   |
@@ -75,12 +84,4 @@ You could pass those via the command line or define them in your ~/.m2/settings.
 * When using [m2eclipse](http://eclipse.org/m2e/) and [m2e-android](http://rgladwell.github.io/m2e-android/) and have your local maven repo set up (see above), maven and m2e should set you up with all you need to build an run right away.
 * For setting up android libs, add nuisc-ui-android as library to nusic-apk and android-support-v7-appcompat from ANDROID_HOME/extras/android/support/v7/appcompat.
 * In order to be able to use RoboBlender properly, add a source folder that points to `target/generated-sources/annotations` to each android-module (nusic-data-android, nusic-core-android, nusic-ui-android). Not doing this will most likely result in a `java.lang.ClassNotFoundException: AnnotationDatabaseImpl` when starting the app.
-* For running robolectric tests from eclipse, you need to add the robolectric libraries (robolectric*.jar and android_all*.jar) to the modules (e.g. nusic-data-android). Those have been removed from the maven build of m2e because m2e doesn't know about scopes and and adding android_all*.jar to the APK will dramatically slow down the eclipse build or even fail it (exceed the 65K limit).
-
-## Permissions
-What kind of permission does nusic require and why does it require them?
-- Network communication, full network access: Check MusicBrainz for new releases
-- Nework communication, view network connections: Get notified about available connection to the internet in order to start checking for new releases.
-- Yor applications information, run at startup: Schedule regular checking for new releases via the Android alarm manager
-- System tools, test access to protected storage: Get the artists that are stored on the device
-- Affects Battery, prevent phone from sleeping: Prevent the device from falling back to sleep while searching for new releases
+* For running robolectric tests from eclipse, you need to add the robolectric libraries (robolectric*.jar and android_all*.jar) to the modules (e.g. nusic-data-android). Those have been removed from the maven build of m2e because m2e doesn't know about scopes and and adding android_all*.jar to the APK will dramatically slow down the eclipse build or even fail it (exceed the 65K limit)
