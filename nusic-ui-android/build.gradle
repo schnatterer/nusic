@@ -41,7 +41,7 @@ dependencies {
     testCompile group: 'org.robolectric', name: 'robolectric', version:'2.4'
 
     // Enable annotation database to improve performance
-    compileOnly 'org.roboguice:roboblender:3.0.1'
+    provided 'org.roboguice:roboblender:3.0.1'
 }
 
 project.tasks.withType(JavaCompile) { task ->
