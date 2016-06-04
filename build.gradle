@@ -40,12 +40,11 @@ subprojects {
 
 // Properties TODO are those still needed?
 ext {
-  // Application constants
-  projectWebsiteUrl = "https://github.com/schnatterer/nusic"
-
-  //Build properties
-  projectBuildSourceEncoding = "UTF-8"
-  mainBasedir=project.path
+    nusicVersionCode = 17
+    nusicMinSdkVersion = 9
+    nusictTargetSdkVersion = 23
+    nusicCompileSdkVersion = 23
+    nusicBuildToolsVersion = "23.0.3"
 
   //Maven Plugins
   licenseMavenPluginVersion = "2.11"
@@ -53,9 +52,6 @@ ext {
   //"Plain java" dependencies
   slf4jVersion = "1.7.6"
 
-  // Android-specific dependencies
-  androidApiLevel = "23"
-  buildToolsVersion = "23.0.3"
   // Compatibility library for android API levels 4 and 7(Android 2.x)
   androidCompatibilityVersion = "23.1.1"
   roboguiceVersion = "3.0.1"

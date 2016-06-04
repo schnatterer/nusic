@@ -1,14 +1,14 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion nusicCompileSdkVersion
+    buildToolsVersion nusicBuildToolsVersion
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 23
-        versionCode 17
-        versionName "2.1.2"
+        minSdkVersion nusicMinSdkVersion
+        targetSdkVersion nusictTargetSdkVersion
+        versionCode nusicVersionCode
+        versionName project.version
     }
     buildTypes {
         release {
@@ -18,7 +18,6 @@ android {
         }
     }
 }
-
 
 // TODO resource filtering: MD files, assets, constants
 // TODO privacy Policy (wagon plugin?)
