@@ -5,6 +5,10 @@ compileJava {
 }
 
 dependencies {
+    /* Before building make sure to copy the android JARs to your local repo using the
+       maven-android-sdk-deployer: https://github.com/mosabua/maven-android-sdk-deployer */
+    compileOnly group: 'android', name: 'android', version:'6.0_r2'
+
     compile group: 'info.schnatterer.musicbrainzws2-java', name: 'musicbrainzws2-java', version: '3.0.0'
     compile(group: 'fm.last', name: 'coverartarchive-api', version: '2.1.0') {
 // Favor nusic's own version of guava

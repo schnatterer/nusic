@@ -4,6 +4,8 @@ TODOs - Features, enhancements, refactoring, ...
 -- MD plugins
 -- License plugin
 -- Sort dependencies in blocks with comments just like in maven
+-- Describe all dependencies in the same way either with map-style notation or group:name:version notation
+-- Format gradle files
 
 - Move all TODOs (or the certain ones?) to GH issues?
 
