@@ -1,5 +1,9 @@
+apply plugin: 'java'
+compileJava {
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
+}
 
-description = 'nusic-util'
 dependencies {
     testCompile group: 'junit', name: 'junit', version:'4.12'
     testCompile group: 'org.hamcrest', name: 'hamcrest-all', version:'1.3'

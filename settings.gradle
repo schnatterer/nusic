@@ -1,4 +1,4 @@
-rootProject.name = 'nusic-parent'
+rootProject.name = 'nusic-parent' // TODO is this necessary?
 include ':nusic-util'
 include ':nusic-domain'
 include ':nusic-data-api'
@@ -8,6 +8,7 @@ include ':nusic-core-android'
 include ':nusic-ui-android'
 include ':nusic-apk'
 
+// TODO is this necessary?
 project(':nusic-util').projectDir = "$rootDir/nusic-util" as File
 project(':nusic-domain').projectDir = "$rootDir/nusic-domain" as File
 project(':nusic-data-api').projectDir = "$rootDir/nusic-data-api" as File

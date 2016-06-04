@@ -1,10 +1,34 @@
+apply plugin: 'com.android.library'
 
-description = 'nusic-ui-android'
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 23
+        versionCode 17
+        versionName "2.1.2"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            // TODO no proguarding here?!
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+
+// TODO resource filtering: MD files, assets, constants
+// TODO privacy Policy (wagon plugin?)
+// TODO MD generation (MD plugin?)
+// TODO non standard android structure?
+
 dependencies {
     compile group: 'org.roboguice', name: 'roboguice', version:'3.0.1'
-    compile(group: 'com.github.tony19', name: 'logback-android-classic', version:'1.1.1-3') {
-exclude(module: 'android')
-    }
+    compile(group: 'com.github.tony19', name: 'logback-android-classic', version:'1.1.1-3')
+    //{ exclude(module: 'android') }
     compile group: 'com.nostra13.universalimageloader', name: 'universal-image-loader', version:'1.9.2'
   compile project(':nusic-data-api')
   compile project(':nusic-core-api')
@@ -15,14 +39,10 @@ exclude(module: 'android')
     testCompile group: 'junit', name: 'junit', version:'4.12'
     testCompile group: 'org.robolectric', name: 'android-all', version:'5.0.0_r2-robolectric-1'
     testCompile group: 'org.robolectric', name: 'robolectric', version:'2.4'
-    compile(group: 'android', name: 'android', version:'6.0_r2') {
-       /* This dependency was originally in the Maven provided scope, but the project was not of type war.
-       This behavior is not yet supported by Gradle, so this dependency has been converted to a compile dependency.
-       Please review and delete this closure when resolved. */
-    }
-    compile(group: 'org.roboguice', name: 'roboblender', version:'3.0.1') {
-       /* This dependency was originally in the Maven provided scope, but the project was not of type war.
-       This behavior is not yet supported by Gradle, so this dependency has been converted to a compile dependency.
-       Please review and delete this closure when resolved. */
-    }
+    // TODO this is only needed for annotation processing --> "provided" scope
+    compile(group: 'org.roboguice', name: 'roboblender', version:'3.0.1')     
+}
+
+project.tasks.withType(JavaCompile) { task ->
+    options.compilerArgs << "-AguiceAnnotationDatabasePackageName=${group}.annotation.apk"
 }

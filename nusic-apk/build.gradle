@@ -1,20 +1,38 @@
+apply plugin: 'com.android.application'
 
-description = 'nusic-apk'
-dependencies {
-    compile group: 'org.roboguice', name: 'roboguice', version:'3.0.1'
-  compile project(':nusic-ui-android')
-  compile project(':nusic-data-api')
-  compile project(':nusic-data-android')
-  compile project(':nusic-core-api')
-  compile project(':nusic-core-android')
-    compile group: 'org.slf4j', name: 'jul-to-slf4j', version:'1.7.6'
-    compile(group: 'com.github.tony19', name: 'logback-android-classic', version:'1.1.1-3') {
-exclude(module: 'android')
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        applicationId "info.schnatterer.nusic"
+        minSdkVersion 9
+        targetSdkVersion 23
+        versionCode 17
+        versionName "2.1.2"
     }
-    compile group: 'com.android.support', name: 'support-v4', version:'23.1.1'
-    compile(group: 'android', name: 'android', version:'6.0_r2') {
-       /* This dependency was originally in the Maven provided scope, but the project was not of type war.
-       This behavior is not yet supported by Gradle, so this dependency has been converted to a compile dependency.
-       Please review and delete this closure when resolved. */
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.cfg'
+        }
     }
 }
+
+// TODO jarsigning?
+// TODO non standard android structure?
+
+dependencies {
+    //compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile group: 'org.roboguice', name: 'roboguice', version:'3.0.1'
+  compile project(':nusic-ui-android') //, ext:'aar')
+  compile project(':nusic-data-api')
+  compile project(':nusic-data-android')
+  compile project(':nusic-core-api') // TODO exclude commons-logging -->  This dependency is provided by android anyway, so spare the APK the bloat 
+  compile project(':nusic-core-android')
+    compile group: 'org.slf4j', name: 'jul-to-slf4j', version:'1.7.6'
+    compile(group: 'com.github.tony19', name: 'logback-android-classic', version:'1.1.1-3') 
+    //{ exclude(module: 'android') }
+    compile group: 'com.android.support', name: 'support-v4', version:'23.1.1'
+}
+

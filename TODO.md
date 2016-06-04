@@ -1,6 +1,11 @@
 TODOs - Features, enhancements, refactoring, ...
 
 - Move to gradle and AndroidStudio
+-- MD plugins
+-- License plugin
+-- Sort dependencies in blocks with comments just like in maven
+
+- Move all TODOs (or the certain ones?) to GH issues?
 
 - introduce support-v4 24 in order to fix 
 java.lang.NoClassDefFoundError: android.support.v7.internal.view.menu.MenuBuilder, https://code.google.com/p/android/issues/detail?id=78377 and

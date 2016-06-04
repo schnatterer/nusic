@@ -1,5 +1,9 @@
+apply plugin: 'java'
+compileJava {
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
+}
 
-description = 'nusic-data-android'
 dependencies {
     compile group: 'commons-io', name: 'commons-io', version:'2.4'
     compile group: 'org.roboguice', name: 'roboguice', version:'3.0.1'
@@ -14,9 +18,10 @@ dependencies {
        This behavior is not yet supported by Gradle, so this dependency has been converted to a compile dependency.
        Please review and delete this closure when resolved. */
     }
-    compile(group: 'org.roboguice', name: 'roboblender', version:'3.0.1') {
-       /* This dependency was originally in the Maven provided scope, but the project was not of type war.
-       This behavior is not yet supported by Gradle, so this dependency has been converted to a compile dependency.
-       Please review and delete this closure when resolved. */
-    }
+    // TODO this is only needed for annotation processing --> "provided" scope
+    compile(group: 'org.roboguice', name: 'roboblender', version:'3.0.1')     
+}
+
+project.tasks.withType(JavaCompile) { task ->
+    options.compilerArgs << "-AguiceAnnotationDatabasePackageName=${group}.annotation.data"
 }

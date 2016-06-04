@@ -1,25 +1,66 @@
-allprojects  {
-  apply plugin: 'maven'
+//External dependencies for the build script
+buildscript {
+    repositories {
+        //mavenCentral()
+        jcenter()
+    }
+    // Gradle plugins
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.0'
 
-  group = 'info.schnatterer.nusic'
-version = '2.1.2-SNAPSHOT'
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
 }
 
-subprojects {
-  apply plugin: 'java'
-  sourceCompatibility = 1.5
-  targetCompatibility = 1.5
+//rootProject and the subprojects
+allprojects  {
+    apply plugin: 'maven'
 
-  
+    group = 'info.schnatterer.nusic'
+    version = '2.1.2-SNAPSHOT'
+
+    repositories {
+        //mavenCentral()
+        jcenter()
+    }
+}
+
+// Only subprojects, not root project
+subprojects {
+
   repositories {
     mavenLocal()
     
-    maven { url "file://${env.ANDROID_HOME}/extras/android/m2repository" }
+    //maven { url "file://${env.ANDROID_HOME}/extras/android/m2repository" }
     maven { url "http://repo.maven.apache.org/maven2" }
     maven { url "https://raw.github.com/schnatterer/musicbrainzws2-java/mvn-repo/" }
   }
+}
 
-  
-  
-  
+// Properties
+ext {
+  // Application constants
+  projectWebsiteUrl = "https://github.com/schnatterer/nusic"
+
+  //Build properties TODO
+  projectBuildSourceEncoding = "UTF-8"
+  //mainBasedir=project.basedir
+
+  //Maven Plugins
+  licenseMavenPluginVersion = "2.11"
+
+  //"Plain java" dependencies
+  slf4jVersion = "1.7.6"
+
+  // Android-specific dependencies
+  androidApiLevel = "23"
+  buildToolsVersion = "23.0.3"
+  // Compatibility library for android API levels 4 and 7(Android 2.x)
+  androidCompatibilityVersion = "23.1.1"
+  roboguiceVersion = "3.0.1"
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
