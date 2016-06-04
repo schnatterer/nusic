@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: "com.android.application"
 
 android {
     compileSdkVersion nusicCompileSdkVersion
@@ -14,30 +14,34 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.cfg'
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard.cfg"
         }
     }
 
     packagingOptions {
         // Both guava and roboguice contain this file. Avoid DuplicateFileException
-        pickFirst  'META-INF/maven/com.google.guava/guava/pom.properties'
-        pickFirst  'META-INF/maven/com.google.guava/guava/pom.xml'
+        pickFirst "META-INF/maven/com.google.guava/guava/pom.properties"
+        pickFirst "META-INF/maven/com.google.guava/guava/pom.xml"
     }
 }
 
 // TODO jarsigning?
-
 dependencies {
-    //compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile group: 'org.roboguice', name: 'roboguice', version:'3.0.1'
-  compile project(':nusic-ui-android') //, ext:'aar')
-  compile project(':nusic-data-api')
-  compile project(':nusic-data-android')
-  compile project(':nusic-core-api') // TODO exclude commons-logging -->  This dependency is provided by android anyway, so spare the APK the bloat 
-  compile project(':nusic-core-android')
-    compile group: 'org.slf4j', name: 'jul-to-slf4j', version:'1.7.6'
-    compile(group: 'com.github.tony19', name: 'logback-android-classic', version:'1.1.1-3')  // TODO exclude android
-    //{ exclude(module: 'android') }
-    compile group: 'com.android.support', name: 'support-v4', version:'23.1.1'
+    // Nusic modules
+    compile project(":nusic-ui-android"),
+            project(":nusic-data-android"),
+            project(":nusic-data-api"),
+            project(":nusic-core-api"),
+            project(":nusic-core-android")
+    // { // This dependency is provided by android anyway, so spare the APK the bloat
+    // TODO   exclude module: "commons-logging"
+    //}
+
+    // External dependencies
+    compile libraries.roboguice,
+            libraries.julToSlf4j,
+            libraries.logback,
+            libraries.androidSupportV4
+
 }
 

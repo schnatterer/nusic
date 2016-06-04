@@ -1,18 +1,15 @@
 TODOs - Features, enhancements, refactoring, ...
 
 - Move to gradle and AndroidStudio
--- CLEAN UP
---- Use common dependency declarations: http://stackoverflow.com/questions/9547170/in-gradle-how-do-i-declare-common-dependencies-in-a-single-place
---- Use properties declared in parent or remove them
---- Sort dependencies in blocks with comments just like in maven or grouped by scope 
---- Describe all dependencies in the same way either with map-style notation or group:name:version notation
---- Format gradle files
---- Remove pom.xml
+-- annotation package names
+-- version of support and 
+-- roboblender
+
 -- Jenkins build
 -- MD plugins
 -- License plugin
 -- apk Signing
--- Fix warnings in android manifests
+-- Remove pom.xml
 
 - Move all TODOs (or the certain ones?) to GH issues?
 
@@ -21,7 +18,7 @@ java.lang.NoClassDefFoundError: android.support.v7.internal.view.menu.MenuBuilde
 android.os.BadParcelableException: ClassNotFoundException when unmarshalling: android.support.design.widget.AppBarLayout$Behavior$SavedState
 https://code.google.com/p/android/issues/detail?id=196430
 
-
+- Specify which files to backup in manifest: https://developer.android.com/training/backup/autosyncapi.html
 
 - SonarQube (replace tabs by spaces, ...)
 - Fix Javadoc warnings
