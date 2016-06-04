@@ -145,8 +145,6 @@ public class ReleasedTodayService extends RoboService {
 	 * 
 	 * @param nReleases
 	 *            the number of releases published today
-	 * 
-	 * @param text
 	 */
 	private void notifyReleaseToday(int nReleases) {
 		Notification.notify(this, NotificationId.RELEASED_TODAY, String.format(

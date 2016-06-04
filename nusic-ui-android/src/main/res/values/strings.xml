@@ -64,6 +64,7 @@
     <string name="LoadNewReleasesService_newReleaseMultiple">Found %1$d new releases</string>
     <string name="LoadNewReleasesService_missingPermissionReadExternalStorage">Please allow access to media</string>
     <string name="ReleasedTodayService_ReleasedToday">Published today:</string>
+    <string name="ReleasedTodayService_ReleasedTodayMultiple">%1$d releases are published today</string>
     
      <!-- Prefrences -->
      <string name="preferences_category_releases">Releases</string>
