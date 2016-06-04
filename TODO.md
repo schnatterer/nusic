@@ -12,6 +12,7 @@ TODOs - Features, enhancements, refactoring, ...
 -- MD plugins
 -- License plugin
 -- apk Signing
+-- Fix warnings in android manifests
 
 - Move all TODOs (or the certain ones?) to GH issues?
 

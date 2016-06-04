@@ -21,7 +21,6 @@
     You should have received a copy of the GNU General Public License
     along with nusic-ui-android.  If not, see <http://www.gnu.org/licenses/>.
 
---><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="17" android:versionName="@string/versionName" package="info.schnatterer.nusic.ui">
-  <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="23"/>
+--><manifest xmlns:android="http://schemas.android.com/apk/res/android" package="info.schnatterer.nusic.ui">
   <application/>
 </manifest>
