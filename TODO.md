@@ -3,9 +3,12 @@ TODOs - Features, enhancements, refactoring, ...
 - Move to gradle and AndroidStudio
 -- MD plugins
 -- License plugin
+
+-- Use common dependency declarations
 -- Sort dependencies in blocks with comments just like in maven
 -- Describe all dependencies in the same way either with map-style notation or group:name:version notation
 -- Format gradle files
+-- Use or remove properties in parent
 
 - Move all TODOs (or the certain ones?) to GH issues?
 

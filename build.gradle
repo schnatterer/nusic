@@ -33,19 +33,19 @@ subprojects {
     mavenLocal()
     
     //maven { url "file://${env.ANDROID_HOME}/extras/android/m2repository" }
-    maven { url "http://repo.maven.apache.org/maven2" }
+    //maven { url "http://repo.maven.apache.org/maven2" }
     maven { url "https://raw.github.com/schnatterer/musicbrainzws2-java/mvn-repo/" }
   }
 }
 
-// Properties
+// Properties TODO are those still needed?
 ext {
   // Application constants
   projectWebsiteUrl = "https://github.com/schnatterer/nusic"
 
-  //Build properties TODO
+  //Build properties
   projectBuildSourceEncoding = "UTF-8"
-  //mainBasedir=project.basedir
+  mainBasedir=project.path
 
   //Maven Plugins
   licenseMavenPluginVersion = "2.11"
@@ -59,8 +59,4 @@ ext {
   // Compatibility library for android API levels 4 and 7(Android 2.x)
   androidCompatibilityVersion = "23.1.1"
   roboguiceVersion = "3.0.1"
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }
