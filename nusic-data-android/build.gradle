@@ -23,5 +23,5 @@ dependencies {
 }
 
 project.tasks.withType(JavaCompile) { task ->
-    options.compilerArgs << "-AguiceAnnotationDatabasePackageName=${group}.annotation.data"
+    options.compilerArgs << "-AguiceAnnotationDatabasePackageName=${project.group}.annotation.data"
 }

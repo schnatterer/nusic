@@ -13,7 +13,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            // TODO no proguarding here?!
+            // TODO no proguarding here, only in nusic-apk?!
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -23,7 +23,6 @@ android {
 // TODO resource filtering: MD files, assets, constants
 // TODO privacy Policy (wagon plugin?)
 // TODO MD generation (MD plugin?)
-// TODO non standard android structure?
 
 dependencies {
     compile group: 'org.roboguice', name: 'roboguice', version:'3.0.1'
@@ -45,5 +44,5 @@ dependencies {
 }
 
 project.tasks.withType(JavaCompile) { task ->
-    options.compilerArgs << "-AguiceAnnotationDatabasePackageName=${group}.annotation.apk"
+    options.compilerArgs << "-AguiceAnnotationDatabasePackageName=${project.group}.annotation.apk"
 }

@@ -26,5 +26,5 @@ dependencies {
     compileOnly 'org.roboguice:roboblender:3.0.1'
 }
 project.tasks.withType(JavaCompile) { task ->
-    options.compilerArgs << "-AguiceAnnotationDatabasePackageName=${group}.annotation.core"
+    options.compilerArgs << "-AguiceAnnotationDatabasePackageName=${project.group}.annotation.core"
 }
