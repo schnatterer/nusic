@@ -29,7 +29,9 @@ dependencies {
 
     // Test dependencies
     testCompile(
-            libraries.junit
+            libraries.junit,
+            // Android API - needed for @SuppressLint
+            libraries.android
     )
 }
 project.tasks.withType(JavaCompile) { task ->
