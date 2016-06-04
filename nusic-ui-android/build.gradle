@@ -39,8 +39,9 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version:'4.12'
     testCompile group: 'org.robolectric', name: 'android-all', version:'5.0.0_r2-robolectric-1'
     testCompile group: 'org.robolectric', name: 'robolectric', version:'2.4'
-    // TODO this is only needed for annotation processing --> "provided" scope
-    compile(group: 'org.roboguice', name: 'roboblender', version:'3.0.1')     
+
+    // Enable annotation database to improve performance
+    compileOnly 'org.roboguice:roboblender:3.0.1'
 }
 
 project.tasks.withType(JavaCompile) { task ->

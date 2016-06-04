@@ -18,8 +18,9 @@ dependencies {
        This behavior is not yet supported by Gradle, so this dependency has been converted to a compile dependency.
        Please review and delete this closure when resolved. */
     }
-    // TODO this is only needed for annotation processing --> "provided" scope
-    compile(group: 'org.roboguice', name: 'roboblender', version:'3.0.1')     
+
+    // Enable annotation database to improve performance
+    compileOnly 'org.roboguice:roboblender:3.0.1'
 }
 
 project.tasks.withType(JavaCompile) { task ->
