@@ -1,10 +1,7 @@
 TODOs - Features, enhancements, refactoring, ...
 
 - Move to gradle and AndroidStudio
--- annotation package names
--- version of support and 
--- roboblender
-
+-- version of support 
 -- Jenkins build
 -- MD plugins
 -- License plugin
