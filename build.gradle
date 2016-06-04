@@ -50,7 +50,7 @@ ext {
     licenseMavenPluginVersion = "2.11"
 
     slf4jVersion = "1.7.6"
-    androidCompatibilityVersion = "23.1.1" // TODO upgrade to 23.4.0
+    androidCompatibilityVersion = "23.4.0"
     roboguiceVersion = "3.0.1"
 
     libraries = [

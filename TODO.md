@@ -1,8 +1,8 @@
 TODOs - Features, enhancements, refactoring, ...
 
 - Move to gradle and AndroidStudio
--- version of support 
 -- Jenkins build
+
 -- MD plugins
 -- License plugin
 -- apk Signing
