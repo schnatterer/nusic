@@ -1,0 +1,25 @@
+allprojects  {
+  apply plugin: 'maven'
+
+  group = 'info.schnatterer.nusic'
+version = '2.1.2-SNAPSHOT'
+}
+
+subprojects {
+  apply plugin: 'java'
+  sourceCompatibility = 1.5
+  targetCompatibility = 1.5
+
+  
+  repositories {
+    mavenLocal()
+    
+    maven { url "file://${env.ANDROID_HOME}/extras/android/m2repository" }
+    maven { url "http://repo.maven.apache.org/maven2" }
+    maven { url "https://raw.github.com/schnatterer/musicbrainzws2-java/mvn-repo/" }
+  }
+
+  
+  
+  
+}

@@ -1,0 +1,5 @@
+
+description = 'nusic-data-api'
+dependencies {
+  compile project(':nusic-domain')
+}
