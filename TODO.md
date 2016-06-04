@@ -2,6 +2,13 @@ TODOs - Features, enhancements, refactoring, ...
 
 - Move to gradle and AndroidStudio
 
+- introduce support-v4 24 in order to fix 
+java.lang.NoClassDefFoundError: android.support.v7.internal.view.menu.MenuBuilder, https://code.google.com/p/android/issues/detail?id=78377 and
+android.os.BadParcelableException: ClassNotFoundException when unmarshalling: android.support.design.widget.AppBarLayout$Behavior$SavedState
+https://code.google.com/p/android/issues/detail?id=196430
+
+
+
 - SonarQube (replace tabs by spaces, ...)
 - Fix Javadoc warnings
 
