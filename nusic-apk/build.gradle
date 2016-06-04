@@ -17,10 +17,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.cfg'
         }
     }
+
+    packagingOptions {
+        // Both guava and roboguice contain this file. Avoid DuplicateFileException
+        pickFirst  'META-INF/maven/com.google.guava/guava/pom.properties'
+        pickFirst  'META-INF/maven/com.google.guava/guava/pom.xml'
+    }
 }
 
 // TODO jarsigning?
-// TODO non standard android structure?
 
 dependencies {
     //compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -31,7 +36,7 @@ dependencies {
   compile project(':nusic-core-api') // TODO exclude commons-logging -->  This dependency is provided by android anyway, so spare the APK the bloat 
   compile project(':nusic-core-android')
     compile group: 'org.slf4j', name: 'jul-to-slf4j', version:'1.7.6'
-    compile(group: 'com.github.tony19', name: 'logback-android-classic', version:'1.1.1-3') 
+    compile(group: 'com.github.tony19', name: 'logback-android-classic', version:'1.1.1-3')  // TODO exclude android
     //{ exclude(module: 'android') }
     compile group: 'com.android.support', name: 'support-v4', version:'23.1.1'
 }

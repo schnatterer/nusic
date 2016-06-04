@@ -1,14 +1,17 @@
 TODOs - Features, enhancements, refactoring, ...
 
 - Move to gradle and AndroidStudio
+-- CLEAN UP
+--- Use common dependency declarations: http://stackoverflow.com/questions/9547170/in-gradle-how-do-i-declare-common-dependencies-in-a-single-place
+--- Use properties declared in parent or remove them
+--- Sort dependencies in blocks with comments just like in maven or grouped by scope 
+--- Describe all dependencies in the same way either with map-style notation or group:name:version notation
+--- Format gradle files
+--- Remove pom.xml
+-- Jenkins build
 -- MD plugins
 -- License plugin
-
--- Use common dependency declarations
--- Sort dependencies in blocks with comments just like in maven
--- Describe all dependencies in the same way either with map-style notation or group:name:version notation
--- Format gradle files
--- Use or remove properties in parent
+-- apk Signing
 
 - Move all TODOs (or the certain ones?) to GH issues?
 

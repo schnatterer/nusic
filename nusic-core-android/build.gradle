@@ -10,10 +10,7 @@ dependencies {
     compileOnly group: 'android', name: 'android', version:'6.0_r2'
 
     compile group: 'info.schnatterer.musicbrainzws2-java', name: 'musicbrainzws2-java', version: '3.0.0'
-    compile(group: 'fm.last', name: 'coverartarchive-api', version: '2.1.0') {
-// Favor nusic's own version of guava
-        exclude(module: 'guava')
-    }
+    compile(group: 'fm.last', name: 'coverartarchive-api', version: '2.1.0')
     compile group: 'org.roboguice', name: 'roboguice', version: '3.0.1'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.6'
     compile project(':nusic-data-api')
