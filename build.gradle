@@ -14,20 +14,19 @@ buildscript {
 }
 
 plugins {
+    id 'maven'
+    id 'jacoco'
     id "org.sonarqube" version "2.0.1"
 }
 
 //rootProject and the subprojects
 allprojects {
-    apply plugin: 'maven'
-
     group = 'info.schnatterer.nusic'
     version = '2.1.2-SNAPSHOT'
 }
 
 // Only subprojects, not root project
 subprojects {
-
     repositories {
         mavenLocal()
 
