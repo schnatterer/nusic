@@ -3,4 +3,5 @@ compileJava {
     sourceCompatibility = nusicSourceCompatibility
     targetCompatibility = nusicTargetCompatibility
     compileJava.options.encoding = nusicSourceEncoding
+    compileTestJava.options.encoding = nusicSourceEncoding
 }
