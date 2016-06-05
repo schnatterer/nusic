@@ -4,8 +4,8 @@ TODOs - Features, enhancements, refactoring, ...
 
 -- SonarQube/Jenkins: Make jenkins and sonar find junit and coverage reports of android projects
 
--- MD plugins
--- License plugin
+-- MD plugins: https://github.com/aalmiray/markdown-gradle-plugin
+-- License plugin: https://github.com/hierynomus/license-gradle-plugin
 -- Remove pom.xml
 -- Update README.md
 

@@ -39,21 +39,21 @@ sonarqube {
         property "sonar.exclusions", "build/**,**/*.png"
         property "sonar.import_unknown_files", true
 
-        property "sonar.binaries", "build/intermediates/classes/${flavor}/debug"
+        property "sonar.binaries", "build/intermediates/classes/release"
         property "sonar.libraries", libraries
-        property "sonar.java.binaries", "build/intermediates/classes/${flavor}/debug"
+        property "sonar.java.binaries", "build/intermediates/classes/release"
         property "sonar.java.libraries", libraries
 
         property "sonar.tests", "src/test/java" // where the tests are located
-        property "sonar.java.test.binaries", "build/intermediates/classes/${flavor}/debug"
+        property "sonar.java.test.binaries", "build/intermediates/classes/release"
         property "sonar.java.test.libraries", libraries
 
         property "sonar.scm.provider", "git"
 
-        property "sonar.jacoco.reportPath", "build/jacoco/test${Flavor}DebugUnitTest.exec" // path to coverage reports
+        property "sonar.jacoco.reportPath", "build/jacoco/testReleaseUnitTest.exec" // path to coverage reports
         property "sonar.java.coveragePlugin", "jacoco"
-        property "sonar.junit.reportsPath", "build/test-results/${flavor}Debug" // path to junit reports
-        property "sonar.android.lint.report", "build/outputs/lint-results-${flavor}Debug.xml" // path to lint reports
+        property "sonar.junit.reportsPath", "build/test-results/release" // path to junit reports
+        property "sonar.android.lint.report", "build/outputs/lint-results-debug.xml" // path to lint reports
     }
 }
 
