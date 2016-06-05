@@ -46,9 +46,9 @@ ext {
     nusicCompileSdkVersion = 23
     nusicBuildToolsVersion = "23.0.3"
 
-    // Properties for java submodules
-    nusicSourceCompatibility = 1.7
-    nusicTargetCompatibility = 1.7
+    // Properties for java & android submodules
+    nusicSourceCompatibility = JavaVersion.VERSION_1_7
+    nusicTargetCompatibility = JavaVersion.VERSION_1_7
     nusicSourceEncoding = "UTF-8"
 
     //Maven Plugins TODO implement

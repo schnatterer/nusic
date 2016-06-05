@@ -10,6 +10,12 @@ android {
         versionCode nusicVersionCode
         versionName project.version
     }
+
+    compileOptions {
+        encoding nusicSourceEncoding
+        sourceCompatibility nusicSourceCompatibility
+        targetCompatibility nusicTargetCompatibility
+    }
 }
 
 // TODO resource filtering: MD files, assets, constants

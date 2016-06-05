@@ -12,6 +12,12 @@ android {
         versionName project.version
     }
 
+    compileOptions {
+        encoding nusicSourceEncoding
+        sourceCompatibility nusicSourceCompatibility
+        targetCompatibility nusicTargetCompatibility
+    }
+
     signingConfigs {
         release {
             storeFile file(signKeystore)
