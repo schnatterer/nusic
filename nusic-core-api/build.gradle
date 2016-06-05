@@ -2,6 +2,7 @@ apply plugin: "java"
 compileJava {
   sourceCompatibility = nusicSourceCompatibility
   targetCompatibility = nusicTargetCompatibility
+  compileJava.options.encoding = nusicSourceEncoding
 }
 
 dependencies {

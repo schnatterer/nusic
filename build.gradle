@@ -49,6 +49,7 @@ ext {
     // Properties for java submodules
     nusicSourceCompatibility = 1.7
     nusicTargetCompatibility = 1.7
+    nusicSourceEncoding = "UTF-8"
 
     //Maven Plugins TODO implement
     licenseMavenPluginVersion = "2.11"
