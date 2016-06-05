@@ -24,6 +24,8 @@ android {
     //}
 
     dexOptions {
+        // Try to force dex in process
+        dexInProcess = true
         javaMaxHeapSize = System.getProperty("dexOptionsJavaMaxHeapSize", "4G")
     }
 
