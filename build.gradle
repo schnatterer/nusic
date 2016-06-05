@@ -13,6 +13,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "org.sonarqube" version "2.0.1"
+}
+
 //rootProject and the subprojects
 allprojects {
     apply plugin: 'maven'
@@ -83,4 +87,10 @@ ext {
             hamcrest          : "org.hamcrest:hamcrest-all:1.3",
             mockito           : "org.mockito:mockito-all:1.10.19"
     ]
+}
+
+sonarqube {
+    properties {
+        property "sonar.sourceEncoding", "UTF-8"
+    }
 }
