@@ -8,8 +8,4 @@
         <!-- Roboguice contains the javax.inject package itself-->
         <ignore path="**/roboguice-*.jar" />
     </issue>
-    <!-- For some reason this error breaks the build on jenkis with the unspecific message
-        "Can't find API database; API check not performed"
-        Just skip it for now-->
-    <issue id="LintError" severity="warning" />
 </lint>
