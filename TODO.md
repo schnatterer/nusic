@@ -8,6 +8,7 @@ TODOs - Features, enhancements, refactoring, ...
 -- MD plugins
 -- License plugin
 -- Remove pom.xml
+-- Update README.md
 
 - Move all TODOs (or the certain ones?) to GH issues?
 
