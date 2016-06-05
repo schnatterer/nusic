@@ -2,8 +2,7 @@ TODOs - Features, enhancements, refactoring, ...
 
 - Move to gradle and AndroidStudio
 
--- Jenkins build
--- Code coverage
+-- SonarQube/Jenkins: Make jenkins and sonar find junit and coverage reports of android projects
 
 -- MD plugins
 -- License plugin
@@ -11,6 +10,8 @@ TODOs - Features, enhancements, refactoring, ...
 -- Update README.md
 
 - Move all TODOs (or the certain ones?) to GH issues?
+- Gradle: Dont repeat yourself - Set common compileJava, android and sonarqube (for android)  options only once
+See e.g https://discuss.gradle.org/t/how-do-i-detect-if-a-sub-project-has-applied-a-given-plugin-e-g-jar-or-war/4974
 
 - introduce support-v4 24 in order to fix 
 java.lang.NoClassDefFoundError: android.support.v7.internal.view.menu.MenuBuilder, https://code.google.com/p/android/issues/detail?id=78377 and
