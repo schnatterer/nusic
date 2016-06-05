@@ -3,7 +3,6 @@ TODOs - Features, enhancements, refactoring, ...
 - Move to gradle and AndroidStudio
 
 -- Jenkins build
--- Proguard - minifyEnabled=true
 
 -- MD plugins
 -- License plugin
