@@ -3,6 +3,7 @@ TODOs - Features, enhancements, refactoring, ...
 - Move to gradle and AndroidStudio
 
 -- Jenkins build
+-- Code coverage
 
 -- MD plugins
 -- License plugin

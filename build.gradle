@@ -88,9 +88,3 @@ ext {
             mockito           : "org.mockito:mockito-all:1.10.19"
     ]
 }
-
-sonarqube {
-    properties {
-        property "sonar.sourceEncoding", "UTF-8"
-    }
-}
