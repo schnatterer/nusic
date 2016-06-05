@@ -10,13 +10,6 @@ android {
         versionCode nusicVersionCode
         versionName project.version
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            // TODO no proguarding here, only in nusic-apk?!
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-        }
-    }
 }
 
 // TODO resource filtering: MD files, assets, constants

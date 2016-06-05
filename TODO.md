@@ -1,11 +1,11 @@
 TODOs - Features, enhancements, refactoring, ...
 
 - Move to gradle and AndroidStudio
+
 -- Jenkins build
 
 -- MD plugins
 -- License plugin
--- apk Signing
 -- Remove pom.xml
 
 - Move all TODOs (or the certain ones?) to GH issues?
