@@ -23,6 +23,10 @@ android {
     //        androidTest.setRoot('src/test')
     //}
 
+    dexOptions {
+        javaMaxHeapSize = System.getProperty("dexOptionsJavaMaxHeapSize", "4G")
+    }
+
     signingConfigs {
         release {
             storeFile file(signKeystore)
@@ -39,7 +43,6 @@ android {
             signingConfig signingConfigs.release
         }
     }
-
     packagingOptions {
         // Both guava and roboguice contain this file. Avoid DuplicateFileException
         pickFirst "META-INF/maven/com.google.guava/guava/pom.properties"
