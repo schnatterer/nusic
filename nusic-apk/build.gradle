@@ -25,14 +25,15 @@ android {
 
     // see https://google.github.io/android-gradle-dsl/current/com.android.build.gradle.internal.dsl.DexOptions.html#com.android.build.gradle.internal.dsl.DexOptions:preDexLibraries
     dexOptions {
-        //javaMaxHeapSize = System.getProperty("dexOptionsJavaMaxHeapSize", null)
-
-        if (System.getProperty("dexOptionsMaxProcessCount") != null)
+        if (System.getProperty("dexOptionsMaxProcessCount") != null) {
             maxProcessCount = System.getProperty("dexOptionsMaxProcessCount").toInteger()
-        if (System.getProperty("dexOptionsJavaMaxHeapSize") != null)
+        }
+        if (System.getProperty("dexOptionsJavaMaxHeapSize") != null) {
             javaMaxHeapSize = System.getProperty("dexOptionsJavaMaxHeapSize")
-        if (System.getProperty("dexOptionsPreDexLibraries") != null)
+        }
+        if (System.getProperty("dexOptionsPreDexLibraries") != null) {
             preDexLibraries = System.getProperty("dexOptionsPreDexLibraries").toBoolean()
+        }
     }
 
     signingConfigs {
@@ -47,6 +48,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard.cfg"
             signingConfig signingConfigs.release
         }
