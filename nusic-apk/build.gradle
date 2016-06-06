@@ -82,7 +82,8 @@ sonarqube {
         property "sonar.java.binaries", "build/intermediates/classes/release"
         property "sonar.java.libraries", libraries
 
-        property "sonar.tests", "src/test/java"
+        // This project does not have test. yet?
+        //property "sonar.tests", "src/test/java"
         property "sonar.java.test.binaries", "build/intermediates/classes/release"
         property "sonar.java.test.libraries", libraries
 
