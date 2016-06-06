@@ -23,10 +23,16 @@ android {
     //        androidTest.setRoot('src/test')
     //}
 
+    // see https://google.github.io/android-gradle-dsl/current/com.android.build.gradle.internal.dsl.DexOptions.html#com.android.build.gradle.internal.dsl.DexOptions:preDexLibraries
     dexOptions {
-        // Try to force dex in process
-        dexInProcess = true
-        javaMaxHeapSize = System.getProperty("dexOptionsJavaMaxHeapSize", "4G")
+        //javaMaxHeapSize = System.getProperty("dexOptionsJavaMaxHeapSize", null)
+
+        if (System.getProperty("dexOptionsMaxProcessCount") != null)
+            maxProcessCount = System.getProperty("dexOptionsMaxProcessCount").toInteger()
+        if (System.getProperty("dexOptionsJavaMaxHeapSize") != null)
+            javaMaxHeapSize = System.getProperty("dexOptionsJavaMaxHeapSize")
+        if (System.getProperty("dexOptionsPreDexLibraries") != null)
+            preDexLibraries = System.getProperty("dexOptionsPreDexLibraries").toBoolean()
     }
 
     signingConfigs {
@@ -55,8 +61,8 @@ android {
 sonarqube {
     properties {
         /* SonarQube needs to be informed about your libraries and the android.jar to understand that methods like
-        * onResume() is called by the Android framework. Without that information SonarQube will very likely create warnings
-        * that those methods are never used and they should be removed. Same applies for libraries where parent classes
+         * onResume() is called by the Android framework. Without that information SonarQube will very likely create warnings
+         * that those methods are never used and they should be removed. Same applies for libraries where parent classes
          * are required to understand how a class works and is used. */
         def libraries = project.android.sdkDirectory.getPath() + "/platforms/android-${nusicCompileSdkVersion}/android.jar," +
                 "build/intermediates/exploded-aar/**/classes.jar"
@@ -64,7 +70,8 @@ sonarqube {
         // See https://github.com/SonarSource/sonar-examples/blob/master/projects/languages/android/android-sonarqube-gradle/app/build.gradle
         // and https://room-15.github.io/blog/2016/01/21/Static-code-quality-measurements-with-SonarQube-Jacoco-and-UnitTests/
         property "sonar.sourceEncoding", nusicSourceEncoding
-        property "sonar.sources", "src/main/java,src/main/res" // first defines where the java files are, the second where the xml files are
+        property "sonar.sources", "src/main/java,src/main/res"
+        // first defines where the java files are, the second where the xml files are
         property "sonar.exclusions", "build/**,**/*.png"
         property "sonar.import_unknown_files", true
 
@@ -73,16 +80,16 @@ sonarqube {
         property "sonar.java.binaries", "build/intermediates/classes/release"
         property "sonar.java.libraries", libraries
 
-        property "sonar.tests", "src/test/java" // where the tests are located
+        property "sonar.tests", "src/test/java"
         property "sonar.java.test.binaries", "build/intermediates/classes/release"
         property "sonar.java.test.libraries", libraries
 
         property "sonar.scm.provider", "git"
 
-        property "sonar.jacoco.reportPath", "build/jacoco/testReleaseUnitTest.exec" // path to coverage reports
+        property "sonar.jacoco.reportPath", "build/jacoco/testReleaseUnitTest.exec"
         property "sonar.java.coveragePlugin", "jacoco"
-        property "sonar.junit.reportsPath", "build/test-results/release" // path to junit reports
-        property "sonar.android.lint.report", "build/outputs/lint-results-debug.xml" // path to lint reports
+        property "sonar.junit.reportsPath", "build/test-results/release"
+        property "sonar.android.lint.report", "build/outputs/lint-results-debug.xml"
     }
 }
 
