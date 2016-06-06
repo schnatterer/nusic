@@ -10,6 +10,16 @@ android {
         targetSdkVersion nusictTargetSdkVersion
         versionCode nusicVersionCode
         versionName project.version
+        // This will produce "nusic-x.y.z-release.apk". We don't want the "release"
+        //archivesBaseName = "nusic-$project.version"
+        // Set final name "nusic-x.y.z.apk" Some things were just easier with maven.
+        applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                output.outputFile = new File(
+                        output.outputFile.parent,
+                        output.outputFile.name.replaceFirst(".*", "nusic-${project.version}.apk"))
+            }
+        }
     }
 
     compileOptions {
