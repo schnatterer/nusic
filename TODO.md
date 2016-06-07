@@ -2,8 +2,6 @@ TODOs - Features, enhancements, refactoring, ...
 
 - Move to gradle and AndroidStudio
 
--- SonarQube/Jenkins: Make jenkins and sonar find junit and coverage reports of android projects
-
 -- MD plugins: https://github.com/aalmiray/markdown-gradle-plugin
 -- License plugin: https://github.com/hierynomus/license-gradle-plugin
 -- Remove pom.xml

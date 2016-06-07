@@ -49,3 +49,14 @@ tasks.withType(Test) {
     // Exclude inner classes
     exclude '**/*$*.class'
 }
+
+sonarqube {
+    properties {
+        def compileDependencies = project.configurations.compile.files.collect {it.path}join(",")
+        def compileOnlyDependencies = project.configurations.compileOnly.files.collect {it.path}join(",")
+
+        property "sonar.java.libraries", "$compileDependencies,$compileOnlyDependencies"
+        property "sonar.test.libraries", "$compileDependencies,$compileOnlyDependencies"
+
+    }
+}

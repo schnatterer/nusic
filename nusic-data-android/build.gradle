@@ -40,3 +40,14 @@ project.tasks.withType(JavaCompile) { task ->
      * roboblender annotation processor*/
     options.compilerArgs << "-AguiceAnnotationDatabasePackageName=${project.group}.annotation.nusicDataAndroid"
 }
+
+sonarqube {
+    properties {
+        def compileDependencies = project.configurations.compile.files.collect {it.path}join(",")
+        def compileOnlyDependencies = project.configurations.compileOnly.files.collect {it.path}join(",")
+
+        property "sonar.java.libraries", "$compileDependencies,$compileOnlyDependencies"
+        property "sonar.test.libraries", "$compileDependencies,$compileOnlyDependencies"
+
+    }
+}
