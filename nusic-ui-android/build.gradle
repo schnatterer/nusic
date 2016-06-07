@@ -30,7 +30,7 @@ sonarqube {
          * that those methods are never used and they should be removed. Same applies for libraries where parent classes
          * are required to understand how a class works and is used. */
         def libraries = project.android.sdkDirectory.getPath() + "/platforms/android-${nusicCompileSdkVersion}/android.jar," +
-                "build/intermediates/exploded-aar/**/classes.jar"
+                "build/intermediates/exploded-aar/**/classes.jar," + sourceSets.main.runtimeClasspath
 
         // See https://github.com/SonarSource/sonar-examples/blob/master/projects/languages/android/android-sonarqube-gradle/app/build.gradle
         // and https://room-15.github.io/blog/2016/01/21/Static-code-quality-measurements-with-SonarQube-Jacoco-and-UnitTests/
@@ -40,13 +40,13 @@ sonarqube {
         property "sonar.exclusions", "build/**,**/*.png"
         property "sonar.import_unknown_files", true
 
-        property "sonar.binaries", "build/intermediates/classes/release"
+        property "sonar.binaries", "build/intermediates/classes/release, " + sourceSets.main.runtimeClasspath
         property "sonar.libraries", libraries
-        property "sonar.java.binaries", "build/intermediates/classes/release"
+        property "sonar.java.binaries", "build/intermediates/classes/release," + sourceSets.main.runtimeClasspath
         property "sonar.java.libraries", libraries
 
         property "sonar.tests", "src/test/java"
-        property "sonar.java.test.binaries", "build/intermediates/classes/release"
+        property "sonar.java.test.binaries", "build/intermediates/classes/release," + sourceSets.main.runtimeClasspath
         property "sonar.java.test.libraries", libraries
 
         property "sonar.scm.provider", "git"
