@@ -81,8 +81,9 @@ sonarqube {
 
         // See https://github.com/SonarSource/sonar-examples/blob/master/projects/languages/android/android-sonarqube-gradle/app/build.gradle
         // and https://room-15.github.io/blog/2016/01/21/Static-code-quality-measurements-with-SonarQube-Jacoco-and-UnitTests/
+
         property "sonar.sourceEncoding", nusicSourceEncoding
-        property "sonar.sources", "src/main/java,src/main/res"
+        property "sonar.sources", "src/main/java // This folder does not exist: (yet?) src/main/res"
         // first defines where the java files are, the second where the xml files are
         property "sonar.exclusions", "build/**,**/*.png"
         property "sonar.import_unknown_files", true
@@ -92,7 +93,7 @@ sonarqube {
         property "sonar.java.binaries", "build/intermediates/classes/release"
         property "sonar.java.libraries", libraries
 
-        // This project does not have test. yet?
+        // This project does not have test (yet?)
         //property "sonar.tests", "src/test/java"
         property "sonar.java.test.binaries", "build/intermediates/classes/release"
         property "sonar.java.test.libraries", libraries
@@ -102,7 +103,7 @@ sonarqube {
         property "sonar.jacoco.reportPath", "build/jacoco/testReleaseUnitTest.exec"
         property "sonar.java.coveragePlugin", "jacoco"
         property "sonar.junit.reportsPath", "build/test-results/release"
-        property "sonar.android.lint.report", "build/outputs/lint-results-debug.xml"
+        property "sonar.android.lint.report", "build/outputs/lint-results-release-fatal.xml"
     }
 }
 
