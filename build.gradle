@@ -1,29 +1,27 @@
 //External dependencies for the build script
 buildscript {
     repositories {
-        //mavenCentral()
         jcenter()
     }
     // Gradle plugins
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.2'
         classpath 'de.undercouch:gradle-download-task:3.0.0'
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        // Mark down generation
+        classpath 'org.pegdown:pegdown:1.6.0'
     }
 }
 
 plugins {
-    id 'maven'
+    id "maven"
+    id "jacoco"
     id "org.sonarqube" version "2.0.1"
 }
 
 //rootProject and the subprojects
 allprojects {
-    apply plugin: "jacoco"
-
-    group = 'info.schnatterer.nusic'
-    version = '2.1.2-SNAPSHOT'
+    group = "info.schnatterer.nusic"
+    version = "2.1.2-SNAPSHOT"
 }
 
 // Only subprojects, not root project
@@ -96,13 +94,4 @@ ext {
 
 jacoco {
     toolVersion = "0.7.5.201505241946"
-}
-
-def getAllDependentProjects(project) {
-    def projectDependencies = project.configurations.runtime.getAllDependencies().withType(ProjectDependency)
-    def dependentProjects = projectDependencies*.dependencyProject
-    if (dependentProjects.size > 0) {
-        dependentProjects.each { dependentProjects += getAllDependentProjects(it) }
-    }
-    return dependentProjects.unique()
 }

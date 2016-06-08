@@ -2,7 +2,6 @@ TODOs - Features, enhancements, refactoring, ...
 
 - Move to gradle and AndroidStudio
 
--- MD plugins: https://github.com/aalmiray/markdown-gradle-plugin
 -- License plugin: https://github.com/hierynomus/license-gradle-plugin
 -- Remove pom.xml
 -- Update README.md
