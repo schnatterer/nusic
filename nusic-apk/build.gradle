@@ -10,8 +10,6 @@ android {
         targetSdkVersion nusictTargetSdkVersion
         versionCode nusicVersionCode
         versionName project.version
-        // This will produce "nusic-x.y.z-release.apk". We don't want the "release"
-        //archivesBaseName = "nusic-$project.version"
         // Set final name "nusic-x.y.z.apk" Some things were just easier with maven.
         applicationVariants.all { variant ->
             variant.outputs.each { output ->
@@ -56,6 +54,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Also proguard debug build, or the 64K limit will be exceeded
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard.cfg"
+        }
         release {
             minifyEnabled true
             shrinkResources true
