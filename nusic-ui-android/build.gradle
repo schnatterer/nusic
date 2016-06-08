@@ -1,4 +1,9 @@
+import de.undercouch.gradle.tasks.download.Download
+
 apply plugin: "com.android.library"
+apply plugin: 'de.undercouch.download'
+
+def assetsDirGenerated = "$projectDir/filtered-assets/"
 
 android {
     compileSdkVersion nusicCompileSdkVersion
@@ -17,10 +22,12 @@ android {
         targetCompatibility nusicTargetCompatibility
     }
 
-    // Use the standard java convention
-    //sourceSets {
-    //   androidTest.setRoot('src/test')
-    //}
+    sourceSets {
+        main {
+            // Add directory where HTML files are put
+            assets.srcDirs += assetsDirGenerated
+        }
+    }
 }
 
 sonarqube {
@@ -57,9 +64,18 @@ sonarqube {
     }
 }
 
-// TODO resource filtering: MD files, assets, constants
-// TODO privacy Policy (wagon plugin?)
+gradle.projectsEvaluated {
+    preBuild.dependsOn(downloadPrivacyPolicy)
+}
+
+task downloadPrivacyPolicy(type: Download) {
+    src "https://schnatterer.github.com/nusic/privacyPolicy.html"
+    // YES download it in input directory! This way we notice when something changed!
+    dest "$projectDir/src/main/assets/privacyPolicy.html"
+}
+
 // TODO MD generation (MD plugin?)
+// TODO resource filtering:  constants
 
 dependencies {
     // Nusic modules
