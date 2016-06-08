@@ -31,7 +31,7 @@ android {
         main {
             // Add directory where HTML files are put
             assets.srcDirs += assetsDirFiltered
-            // Use only filtered dir because there is no exclusion for filtering. TODO Change
+            // Use only filtered dir because there is no exclusion mechanism for filtering.
             res.srcDirs = [resDirFiltered]
         }
     }
@@ -144,7 +144,7 @@ dependencies {
             libraries.androidDesign
     )
     // Enable annotation database to improve performance
-    provided "org.roboguice:roboblender:3.0.1"
+    provided libraries.roboblender
 
     // Test dependencies
     testCompile(
