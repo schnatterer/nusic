@@ -38,6 +38,10 @@ subprojects {
     }
 }
 
+project.ext {
+    website = "https://github.com/schnatterer/nusic"
+}
+
 ext {
     // Properties for android submodules
     nusicVersionCode = 17

@@ -25,7 +25,7 @@
 <!-- Application-wide technical constants (e.g. for preferences). Don't translate! -->
 <resources>
     <string name="app_name" translatable="false">nusic</string>
-    <string name="app_url" translatable="false">${project.website.url}</string>
+    <string name="app_url" translatable="false">${project.website}</string>
     <string name="app_contact" translatable="false">android@schnatterer.info</string>
     <string name="versionName" translatable="false">${project.version}</string>
     
