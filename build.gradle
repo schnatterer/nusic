@@ -3,12 +3,14 @@ buildscript {
     repositories {
         jcenter()
     }
+
     // Gradle plugins
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.2'
         classpath 'de.undercouch:gradle-download-task:3.0.0'
         // Mark down generation
         classpath 'org.pegdown:pegdown:1.6.0'
+        classpath "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.13.1"
     }
 }
 
@@ -22,6 +24,32 @@ plugins {
 allprojects {
     group = "info.schnatterer.nusic"
     version = "2.1.2-SNAPSHOT"
+
+    apply plugin: "com.github.hierynomus.license"
+
+    license {
+        header rootProject.file('resources/GPL-3.txt')
+        strictCheck true
+        skipExistingHeaders false
+        includes(["**/*.*"])
+        excludes(["TODO.md",
+                  "LICENSE.txt",
+                  "**/*.svg",
+                  "**/proguard.cfg",
+                  "**/privacyPolicy.html",
+                  "src/main/java/com/google/**"
+        ])
+        // TODO add build.gradle
+
+        // Properties for substitution
+        ext.setProperty("project.inceptionYear", "2016")
+        ext.setProperty("project.name", "nusic")
+        ext.owner = "Johannes Schnatterer"
+    }
+    // TODO make sure license check is performed on each build/assembleRelease
+    // TODO why is format not formatting all files? format -> check -> fail. WTF? Use mvn license:clean?!
+    // TODO how can ALL file be included, not just sourceSets?
+
 }
 
 // Only subprojects, not root project
