@@ -74,7 +74,8 @@ allprojects {
         }
     }
     licenseFormat.dependsOn licsenseFormatGradleFiles
-    // TODO make sure license check is performed on each build/assembleRelease
+    // Make sure license check is performed on each build
+    check.dependsOn licenseFormat
 }
 
 // Only subprojects, not root project
