@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 
-    ?Copyright (C) 2013 Johannes Schnatterer
+    ﻿Copyright (C) 2013 Johannes Schnatterer
 
     See the NOTICE file distributed with this work for additional
     information regarding copyright ownership.
@@ -21,7 +21,8 @@
     You should have received a copy of the GNU General Public License
     along with nusic-apk.  If not, see <http://www.gnu.org/licenses/>.
 
---><manifest xmlns:android="http://schemas.android.com/apk/res/android"  package="info.schnatterer.nusic" >
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"  package="info.schnatterer.nusic" >
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
