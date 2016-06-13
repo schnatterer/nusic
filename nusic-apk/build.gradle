@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with nusic-apk.  If not, see <http://www.gnu.org/licenses/>.
  */
+import nl.javadude.gradle.plugins.license.License
 apply plugin: "com.android.application"
 
 android {
@@ -94,11 +95,17 @@ android {
     }
 }
 
+// Check licenses in all files, even when their not on the sourceSets.
+task licenseXmlResAndAssets(type: License) {
+    source = fileTree(dir: "src").include("**/*")
+    check = true
+}
+tasks['license'].dependsOn licenseXmlResAndAssets
 // Add licenses to all files, even when their not on the sourceSets.
-task licsenseFormatXmlResAndAssets(type: nl.javadude.gradle.plugins.license.License) {
+task licenseFormatXmlResAndAssets(type: License) {
     source = fileTree(dir: "src").include("**/*")
 }
-licenseFormat.dependsOn licsenseFormatXmlResAndAssets
+licenseFormat.dependsOn licenseFormatXmlResAndAssets
 
 sonarqube {
     //noinspection GroovyAssignabilityCheck
