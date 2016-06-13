@@ -31,25 +31,29 @@ allprojects {
         header rootProject.file('resources/GPL-3.txt')
         strictCheck true
         skipExistingHeaders false
-        includes(["**/*.*"])
         excludes(["TODO.md",
                   "LICENSE.txt",
                   "**/*.svg",
                   "**/proguard.cfg",
                   "**/privacyPolicy.html",
-                  "src/main/java/com/google/**"
+                // This file has a different license, as it was modified from a different project
+                  "**/RoboAppCompatPreferenceActivity.java"
         ])
-        // TODO add build.gradle
-
         // Properties for substitution
-        ext.setProperty("project.inceptionYear", "2016")
-        ext.setProperty("project.name", "nusic")
+        ext.setProperty("project.inceptionYear", "2013")
+        ext.setProperty("project.name", project.name)
         ext.owner = "Johannes Schnatterer"
     }
-    // TODO make sure license check is performed on each build/assembleRelease
-    // TODO why is format not formatting all files? format -> check -> fail. WTF? Use mvn license:clean?!
-    // TODO how can ALL file be included, not just sourceSets?
 
+    // Also add license headers to gradle files
+    task licsenseFormatGradleFiles(type: nl.javadude.gradle.plugins.license.License) {
+        source = fileTree(dir: ".").include("build.gradle")
+        mapping {
+            gradle = 'JAVADOC_STYLE'
+        }
+    }
+    licenseFormat.dependsOn licsenseFormatGradleFiles
+    // TODO make sure license check is performed on each build/assembleRelease
 }
 
 // Only subprojects, not root project

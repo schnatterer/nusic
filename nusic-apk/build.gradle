@@ -73,6 +73,12 @@ android {
     }
 }
 
+// Add licenses to all files, even when their not on the sourceSets.
+task licsenseFormatXmlResAndAssets(type: nl.javadude.gradle.plugins.license.License) {
+    source = fileTree(dir: "src").include("**/*")
+}
+licenseFormat.dependsOn licsenseFormatXmlResAndAssets
+
 sonarqube {
     //noinspection GroovyAssignabilityCheck
     properties {
