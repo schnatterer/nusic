@@ -1,7 +1,6 @@
 TODOs - Features, enhancements, refactoring, ...
 
 - Move to gradle and AndroidStudio
--- Remove pom.xml
 -- Update README.md
 
 - Move all TODOs (or the certain ones?) to GH issues?
