@@ -1,6 +1,7 @@
 TODOs - Features, enhancements, refactoring, ...
 
 - Move to gradle and AndroidStudio
+-- Remove pom.xml
 -- Update README.md
 
 - change license headers, so they show "nusic" instead of the subproject name

@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    ﻿Copyright (C) 2013 Johannes Schnatterer
+
+    See the NOTICE file distributed with this work for additional
+    information regarding copyright ownership.
+
+    This file is part of nusic-ui-android.
+
+    nusic-ui-android is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    nusic-ui-android is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with nusic-ui-android.  If not, see <http://www.gnu.org/licenses />.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>info.schnatterer.nusic</groupId>
+		<artifactId>nusic-parent</artifactId>
+		<version>2.1.2-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>nusic-ui-android</artifactId>
+	<packaging>aar</packaging>
+	<name>nusic-ui-android</name>
+
+	<properties>
+		<assets.dir.input>${project.basedir}/assets</assets.dir.input>
+		<assets.dir.output>${project.build.directory}/filtered-assets</assets.dir.output>
+		<res.dir.input>${project.basedir}/res</res.dir.input>
+		<res.dir.output>${project.build.directory}/filtered-res</res.dir.output>
+		<raw.mardkown.dir>${project.build.directory}/md-assets</raw.mardkown.dir>
+		<main.basedir>${project.basedir}/..</main.basedir>
+	</properties>
+
+	<profiles>
+		<profile>
+			<!-- Use Profiles to distinguish between the "implicit" builds of the 
+				eclipse plugin and "explicit" builds triggered by calling mvn install -->
+			<id>default</id>
+			<activation>
+				<property>
+					<name>!m2e.version</name>
+				</property>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>android</groupId>
+					<artifactId>android</artifactId>
+					<scope>provided</scope>
+				</dependency>
+				<!-- Enable annotation database to improve performance. -->
+				<dependency>
+					<groupId>org.roboguice</groupId>
+					<artifactId>roboblender</artifactId>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>com.android.support</groupId>
+					<artifactId>design</artifactId>
+					<type>aar</type>
+				</dependency>
+				<dependency>
+					<!-- This dependency makes it impossible to deploy with eclipse... On 
+						the other hand we can't run unit test without it from eclipse. -->
+					<!-- TODO Find out which APIs are really needed and add only those? -->
+					<groupId>org.robolectric</groupId>
+					<artifactId>android-all</artifactId>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.robolectric</groupId>
+					<artifactId>robolectric</artifactId>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+
+	<dependencies>
+		<!-- Android dependecies -->
+		<dependency>
+			<groupId>org.roboguice</groupId>
+			<artifactId>roboguice</artifactId>
+		</dependency>
+		<dependency>
+			<!-- Process log statements produced by dependencies via slf4j with logback -->
+			<groupId>com.github.tony19</groupId>
+			<artifactId>logback-android-classic</artifactId>
+		</dependency>
+		<!-- Nusic dependencies -->
+		<dependency>
+			<groupId>com.nostra13.universalimageloader</groupId>
+			<artifactId>universal-image-loader</artifactId>
+			<version>1.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>nusic-data-api</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>nusic-core-api</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>nusic-util</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<!-- Generic dependencies -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<resources>
+			<!-- Copy input assets to outptut assets dir -->
+			<resource>
+				<directory>${assets.dir.input}</directory>
+				<filtering>false</filtering>
+				<targetPath>${assets.dir.output}</targetPath>
+			</resource>
+			<!-- Include markdown sources to target in assets -->
+			<resource>
+				<directory>..</directory>
+				<includes>
+					<include>NOTICE.md</include>
+					<include>CHANGELOG.md</include>
+				</includes>
+				<filtering>false</filtering>
+				<targetPath>${raw.mardkown.dir}</targetPath>
+			</resource>
+			<!-- Filter specific files from res directory -->
+			<resource>
+				<directory>${res.dir.input}</directory>
+				<filtering>true</filtering>
+				<targetPath>${res.dir.output}</targetPath>
+				<includes>
+					<include>values/constants.xml</include>
+				</includes>
+			</resource>
+			<!-- Copy all other files from res without filtering -->
+			<resource>
+				<directory>${res.dir.input}</directory>
+				<filtering>false</filtering>
+				<targetPath>${res.dir.output}</targetPath>
+				<excludes>
+					<exclude>values/constants.xml</exclude>
+				</excludes>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<compilerArgument>-AguiceAnnotationDatabasePackageName=${project.groupId}.annotation.apk</compilerArgument>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+				<version>1.0-beta-5</version>
+				<executions>
+					<execution>
+						<id>update-privacy-policy</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>download-single</goal>
+						</goals>
+						<configuration>
+							<url>https://schnatterer.github.io/nusic/</url>
+							<fromFile>privacyPolicy.html</fromFile>
+							<!-- YES download it in input directory! This way we notice when something 
+								changed! -->
+							<toDir>${assets.dir.input}</toDir>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Bind maven resource filtering to initialize phase, see build/resources 
+				for individual resources -->
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.7</version>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>resources</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Process Markdown to HTML -->
+			<plugin>
+				<groupId>com.ruleoftech</groupId>
+				<artifactId>markdown-page-generator-plugin</artifactId>
+				<version>0.6</version>
+				<executions>
+					<execution>
+						<id>markdown2html</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<inputDirectory>${raw.mardkown.dir}</inputDirectory>
+					<outputDirectory>${assets.dir.output}</outputDirectory>
+				</configuration>
+			</plugin>
+
+			<!-- Starting with Android SDK Tools 23? you might have to copy zipaling -->
+			<plugin>
+				<groupId>com.simpligility.maven.plugins</groupId>
+				<artifactId>android-maven-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<sdk>
+						<platform>${android.api.level}</platform>
+					</sdk>
+					<sign>
+						<debug>false</debug>
+					</sign>
+					<!-- Non standard. Move to standard locaction? -->
+					<androidManifestFile>AndroidManifest.xml</androidManifestFile>
+					<resourceDirectory>${res.dir.output}</resourceDirectory>
+					<assetsDirectory>${assets.dir.output}</assetsDirectory>
+					<!-- We need to maintain assets and res folder in the root (for eclipse) 
+						AND want android-maven-plugin to use the directories in target configured 
+						above. Force android maven plugin to accept that! -->
+					<failOnNonStandardStructure>false</failOnNonStandardStructure>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project> 
