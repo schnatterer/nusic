@@ -4,8 +4,6 @@ TODOs - Features, enhancements, refactoring, ...
 -- Remove pom.xml
 -- Update README.md
 
-- change license headers, so they show "nusic" instead of the subproject name
-
 - Move all TODOs (or the certain ones?) to GH issues?
 - Gradle: Dont repeat yourself - Set common compileJava, android and sonarqube (for android)  options only once
 See e.g https://discuss.gradle.org/t/how-do-i-detect-if-a-sub-project-has-applied-a-given-plugin-e-g-jar-or-war/4974

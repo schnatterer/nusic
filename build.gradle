@@ -63,7 +63,7 @@ allprojects {
 
         // Properties for substitution
         ext.setProperty("project.inceptionYear", "2013")
-        ext.setProperty("project.name", project.name)
+        ext.setProperty("project.name", "nusic")
         ext.owner = "Johannes Schnatterer"
     }
 
