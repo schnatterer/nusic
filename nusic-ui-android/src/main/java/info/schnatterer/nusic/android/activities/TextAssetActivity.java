@@ -4,7 +4,7 @@
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  *
-^^ * This file is part of nusic.
+ * This file is part of nusic.
  *
  * nusic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
