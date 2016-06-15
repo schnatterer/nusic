@@ -45,8 +45,7 @@ plugins {
 //rootProject and the subprojects
 allprojects {
     group = "info.schnatterer.nusic"
-    version = "2.1.2-SNAPSHOT"
-
+    //version = gradle.properties
     apply plugin: "com.github.hierynomus.license"
 
     license {
@@ -108,7 +107,7 @@ project.ext {
 
 ext {
     // Properties for android submodules
-    nusicVersionCode = 17
+    nusicVersionCode = Integer.parseInt(versionCode)
     nusicMinSdkVersion = 9
     nusictTargetSdkVersion = 23
     nusicCompileSdkVersion = 23

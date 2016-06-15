@@ -48,11 +48,6 @@ android {
         targetCompatibility nusicTargetCompatibility
     }
 
-    // Use the standard java convention
-    //sourceSets {
-    //        androidTest.setRoot('src/test')
-    //}
-
     // see https://google.github.io/android-gradle-dsl/current/com.android.build.gradle.internal.dsl.DexOptions.html#com.android.build.gradle.internal.dsl.DexOptions:preDexLibraries
     dexOptions {
         if (System.getProperty("dexOptionsMaxProcessCount") != null) {
