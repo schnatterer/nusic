@@ -1,0 +1,8 @@
+include ':nusic-util'
+include ':nusic-domain'
+include ':nusic-data-api'
+include ':nusic-data-android'
+include ':nusic-core-api'
+include ':nusic-core-android'
+include ':nusic-ui-android'
+include ':nusic-apk'

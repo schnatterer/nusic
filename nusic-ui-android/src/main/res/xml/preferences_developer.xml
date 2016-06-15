@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    Copyright (C) 2013 Johannes Schnatterer
+
+    See the NOTICE file distributed with this work for additional
+    information regarding copyright ownership.
+
+    This file is part of nusic.
+
+    nusic is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    nusic is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with nusic.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+        <ListPreference
+            android:entries="@array/preferences_entry_values_log_levels" 
+            android:entryValues="@array/preferences_entry_values_log_levels"
+            android:defaultValue="@string/preferences_default_log_level"
+            android:key="@string/preferences_key_log_level"
+            android:summary="@string/preferences_summary_loglevel"
+            android:title="@string/preferences_title_loglevel" />
+        <ListPreference
+            android:entries="@array/preferences_entry_values_log_levels" 
+            android:entryValues="@array/preferences_entry_values_log_levels"
+            android:defaultValue="@string/preferences_default_log_level_logcat"
+            android:key="@string/preferences_key_log_level_logcat"
+            android:summary="@string/preferences_summary_loglevel_logcat"
+            android:title="@string/preferences_title_loglevel_logcat" />
+        <Preference android:title="@string/preferences_title_current_log">
+             <intent android:targetPackage="info.schnatterer.nusic"
+                android:targetClass="info.schnatterer.nusic.android.activities.OpenLogActivity"/> 
+       </Preference>
+</PreferenceScreen>

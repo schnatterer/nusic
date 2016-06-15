@@ -1,0 +1,179 @@
+/**
+ * Copyright (C) 2013 Johannes Schnatterer
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This file is part of nusic.
+ *
+ * nusic is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * nusic is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
+ */
+import nl.javadude.gradle.plugins.license.License
+
+//External dependencies for the build script
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    // Gradle plugins
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath 'de.undercouch:gradle-download-task:3.0.0'
+        // Mark down generation
+        classpath 'org.pegdown:pegdown:1.6.0'
+        classpath "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.13.1"
+    }
+}
+
+plugins {
+    id "maven"
+    id "jacoco"
+    id "org.sonarqube" version "2.0.1"
+}
+
+//rootProject and the subprojects
+allprojects {
+    group = "info.schnatterer.nusic"
+    //version = gradle.properties
+    apply plugin: "com.github.hierynomus.license"
+
+    license {
+        header rootProject.file('resources/GPL-3.txt')
+        strictCheck true
+        excludes(["**/build/**",
+                  // This file is downloaded from the github site. Don't fiddle with it.
+                  "**/privacyPolicy.html",
+                  // This file has a different license, as it was modified from a different project
+                  "**/RoboAppCompatPreferenceActivity.java"
+        ])
+        // TODO solve encoding problem°
+        encoding "UTF-8"
+
+        // Properties for substitution
+        ext.setProperty("project.inceptionYear", "2013")
+        ext.setProperty("project.name", "nusic")
+        ext.owner = "Johannes Schnatterer"
+    }
+
+    // We also want to check license headers in gradle files
+    task licenseGradleFiles(type: License) {
+        source = fileTree(dir: ".").include("build.gradle")
+        mapping {
+            gradle = 'JAVADOC_STYLE'
+        }
+        check = true
+    }
+    tasks['license'].dependsOn licenseGradleFiles
+
+    // When adding licenses to files, also add to gradle files
+    task formatLicenseGradleFiles(type: License) {
+        source = fileTree(dir: ".").include("build.gradle")
+        mapping {
+            gradle = 'JAVADOC_STYLE'
+        }
+    }
+    licenseFormat.dependsOn formatLicenseGradleFiles
+
+    // Make sure license check is performed on each build
+    check.dependsOn tasks['license']
+}
+
+// Only subprojects, not root project
+subprojects {
+    repositories {
+        mavenLocal()
+
+        //mavenCentral()
+        jcenter()
+
+        maven { url "https://raw.github.com/schnatterer/musicbrainzws2-java/mvn-repo/" }
+    }
+}
+
+task setVersion << {
+    // Load file
+    def Properties gradleProperties = new Properties()
+    def gradlePropertiesFile = file('gradle.properties')
+    gradleProperties.load(new FileInputStream(gradlePropertiesFile))
+
+    // Increase android version
+    if (newVersion.contains("SNAPSHOT")) {
+        gradleProperties['versionCode'] = (nusicVersionCode + 1).toString()
+    }
+    gradleProperties['version'] = newVersion
+
+    // Write file
+    gradleProperties.store(gradlePropertiesFile.newWriter(), null)
+}
+
+project.ext {
+    website = "https://github.com/schnatterer/nusic"
+}
+
+ext {
+    // Properties for android submodules
+    nusicVersionCode = Integer.parseInt(versionCode)
+    nusicMinSdkVersion = 9
+    nusictTargetSdkVersion = 23
+    nusicCompileSdkVersion = 23
+    nusicBuildToolsVersion = "23.0.3"
+
+    // Properties for java & android submodules
+    nusicSourceCompatibility = JavaVersion.VERSION_1_7
+    nusicTargetCompatibility = JavaVersion.VERSION_1_7
+    nusicSourceEncoding = "UTF-8"
+
+    //Maven Plugins TODO implement
+    licenseMavenPluginVersion = "2.11"
+
+    slf4jVersion = "1.7.6"
+    androidCompatibilityVersion = "23.4.0"
+    roboguiceVersion = "3.0.1"
+
+    libraries = [
+            /** Before building make sure to copy the android JARs to your local
+             repo using the mave-android-sdk-deployer: https://github.com/mosabua/maven-android-sdk-deployer */
+            android           : "android:android:6.0_r2",
+            //Android Support libs
+            androidSupportV4  : "com.android.support:support-v4:${androidCompatibilityVersion}",
+            // Appcompat for API lvl 4 and 7, as well as backport of material design
+            androidDesign     : "com.android.support:design:${androidCompatibilityVersion}",
+            // Roboguice
+            roboguice         : "org.roboguice:roboguice:${roboguiceVersion}",
+            roboblender       : "org.roboguice:roboblender:${roboguiceVersion}",
+            //logback-android - process log statements produced by dependencies via slf4j with logback
+            logback           : dependencies.create("com.github.tony19:logback-android-classic:1.1.1-3") {
+                exclude module: "android" // com.google.android:android
+                force = true
+            },
+            julToSlf4j        : "org.slf4j:jul-to-slf4j:${slf4jVersion}",
+            slf4j             : "org.slf4j:slf4j-api:${slf4jVersion}",
+            guava             : "com.google.guava:guava:19.0",
+            commonsIo         : "commons-io:commons-io:2.4",
+            /*
+             * Test dependencies
+             */
+            // Robolectric
+            robolectric       : "org.robolectric:robolectric:2.4",
+            robolectricAndroid: "org.robolectric:android-all:6.0.0_r1-robolectric-0",
+            junit             : "junit:junit:4.12",
+            hamcrest          : "org.hamcrest:hamcrest-all:1.3",
+            mockito           : "org.mockito:mockito-all:1.10.19"
+    ]
+}
+
+jacoco {
+    toolVersion = "0.7.5.201505241946"
+}
