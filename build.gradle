@@ -20,6 +20,7 @@
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
 import nl.javadude.gradle.plugins.license.License
+
 //External dependencies for the build script
 buildscript {
     repositories {
@@ -99,6 +100,22 @@ subprojects {
 
         maven { url "https://raw.github.com/schnatterer/musicbrainzws2-java/mvn-repo/" }
     }
+}
+
+task setVersion << {
+    // Load file
+    def Properties gradleProperties = new Properties()
+    def gradlePropertiesFile = file('gradle.properties')
+    gradleProperties.load(new FileInputStream(gradlePropertiesFile))
+
+    // Increase android version
+    if (newVersion.contains("SNAPSHOT")) {
+        gradleProperties['versionCode'] = (nusicVersionCode + 1).toString()
+    }
+    gradleProperties['version'] = newVersion
+
+    // Write file
+    gradleProperties.store(gradlePropertiesFile.newWriter(), null)
 }
 
 project.ext {
