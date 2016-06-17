@@ -24,6 +24,7 @@ package info.schnatterer.nusic.core.impl;
 import info.schnatterer.nusic.core.ServiceException;
 import info.schnatterer.nusic.core.i18n.CoreMessageKey;
 
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
@@ -46,7 +47,7 @@ public class AndroidServiceException extends ServiceException {
     public static final Locale DEFAULT_LOCALE = Locale.ROOT;
 
     private CoreMessageKey messageKey;
-    private Object[] args = null;
+    private Serializable[] args = null;
 
     /**
      * Constructs a new exception with the specified detail message. The cause
@@ -72,7 +73,6 @@ public class AndroidServiceException extends ServiceException {
      * , where the technical exception message is put out in the default locale.
      * 
      * @param messageKey
-     * @param t
      */
     public AndroidServiceException(CoreMessageKey messageKey) {
         this(getStringInDefaultLocale(messageKey), messageKey);
@@ -87,7 +87,7 @@ public class AndroidServiceException extends ServiceException {
      * @param message
      *            the (technical) detail message (which is saved for later
      *            retrieval by the {@link #getMessage()} method).
-     * @param CoreMessageKey
+     * @param messageKey
      *            the id to a localized message intended to be displayed to the
      *            user. Passing and invalid id might result in
      *            <code>message</code> being displayed to the user.
@@ -127,7 +127,7 @@ public class AndroidServiceException extends ServiceException {
      *            additional arguments are ignored.
      */
     public AndroidServiceException(String message, CoreMessageKey messageKey,
-            Throwable cause, Object... args) {
+            Throwable cause, Serializable... args) {
         super(message, cause);
         this.args = args;
         this.messageKey = messageKey;
@@ -138,8 +138,8 @@ public class AndroidServiceException extends ServiceException {
      * {@link AndroidServiceException#AndroidServiceException(String, CoreMessageKey, Throwable)}
      * , where the technical exception message is put out in the default locale.
      * 
-     * @param messageId
-     * @param t
+     * @param messageKey
+     * @param cause
      */
     public AndroidServiceException(CoreMessageKey messageKey, Throwable cause) {
         this(getStringInDefaultLocale(messageKey), messageKey, cause);
@@ -147,14 +147,14 @@ public class AndroidServiceException extends ServiceException {
 
     /**
      * Convenience method for
-     * {@link AndroidServiceException#AndroidServiceException(String, CoreMessageKey, Throwable, Object...)}
+     * {@link AndroidServiceException#AndroidServiceException(String, CoreMessageKey, Throwable, Serializable...)}
      * , where the technical exception message is put out in the default locale.
      * 
-     * @param messageId
-     * @param t
+     * @param messageKey
+     * @param cause
      */
     public AndroidServiceException(CoreMessageKey messageKey, Throwable cause,
-            Object... args) {
+            Serializable... args) {
         this(String.format(Locale.US, getStringInDefaultLocale(messageKey),
                 args), messageKey, cause, args);
     }
