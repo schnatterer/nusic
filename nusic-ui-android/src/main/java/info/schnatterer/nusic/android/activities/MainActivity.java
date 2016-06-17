@@ -128,8 +128,8 @@ public class MainActivity extends RoboActionBarActivity {
 
         // Set currentTab
         if (getIntent().hasExtra(EXTRA_ACTIVE_TAB)) {
-            currentTab = ((TabDefinition) getIntent().getExtras().get(
-                    EXTRA_ACTIVE_TAB));
+            setCurrentTab(((TabDefinition) getIntent().getExtras().get(
+                    EXTRA_ACTIVE_TAB)));
         }
 
         // Use toolbar as actionBar, if no actionBar yet
@@ -158,7 +158,7 @@ public class MainActivity extends RoboActionBarActivity {
 
         // Handle first app start, if necessary
         if (!onCreateCalled) {
-            onCreateCalled = true;
+            onCreateCalled();
             switch (NusicApplication.getAppStart()) {
             case FIRST:
                 showWelcomeDialog(TextUtil.loadTextFromAsset(this,
@@ -184,13 +184,20 @@ public class MainActivity extends RoboActionBarActivity {
         registerListenersAndStartLoading(false);
     }
 
+    public static synchronized void setCurrentTab(TabDefinition currentTab) {
+        MainActivity.currentTab = currentTab;
+    }
+
+    private static synchronized void onCreateCalled() {
+       onCreateCalled = true;
+    }
+
     /**
      * Calls {@link #registerListeners()} and also
      * {@link #startLoadingReleasesFromInternet(boolean)} if necessary.
      */
     private void registerListenersAndStartLoading(boolean forceUpdate) {
-        if (loadNewRelasesServiceBinding == null) {
-            loadNewRelasesServiceBinding = new LoadNewRelasesServiceBinding();
+        if (isLoadNewReleasesServiceBindingCreated()) {
             registerListeners();
             if (forceUpdate) {
                 requestPermissionOrStartLoadingReleasesFromInternet(false);
@@ -382,7 +389,7 @@ public class MainActivity extends RoboActionBarActivity {
          */
         if (intent.hasExtra(EXTRA_ACTIVE_TAB)) {
             /* Init tab fragments */
-            currentTab = ((TabDefinition) intent.getExtras().get(
+            setCurrentTab((TabDefinition) intent.getExtras().get(
                     EXTRA_ACTIVE_TAB));
             ViewPager pager = (ViewPager) findViewById(R.id.mainPager);
             pager.setCurrentItem(currentTab.position);
@@ -547,6 +554,14 @@ public class MainActivity extends RoboActionBarActivity {
                         registerListenersAndStartLoading(true);
                     }
                 }).setView(layout).show();
+    }
+
+    private static synchronized boolean isLoadNewReleasesServiceBindingCreated() {
+        if (loadNewRelasesServiceBinding == null) {
+            loadNewRelasesServiceBinding = new LoadNewRelasesServiceBinding();
+            return true;
+        }
+        return false;
     }
 
     /**
