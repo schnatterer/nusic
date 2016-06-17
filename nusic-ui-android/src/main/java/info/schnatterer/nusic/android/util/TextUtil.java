@@ -26,7 +26,10 @@ import info.schnatterer.nusic.ui.R;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -65,7 +68,7 @@ public class TextUtil {
      * {@link #loadTextFromAsset(Context, String, boolean)} that does <i>not</i>
      * try to replace application string resources (e.g.
      * <code>@string/abc</code>)in input
-     * 
+     *
      * @param context
      * @param assetPath
      * @return
@@ -79,7 +82,7 @@ public class TextUtil {
      * Tries to load an asset file as text. If <code>assetPath</code> ends in
      * <code>.html</code>, the HTML code is rendered into "displayable styled"
      * text.
-     * 
+     *
      * @param context
      *            context to load asset and (potential resources) from
      * @param assetPath
@@ -121,10 +124,10 @@ public class TextUtil {
      * Recursively replaces resources such as <code>@string/abc</code> with
      * their localized values from the app's resource strings (e.g.
      * <code>strings.xml</code>) within a <code>source</code> string.
-     * 
+     *
      * Also works recursively, that is, when a resource contains another
      * resource that contains another resource, etc.
-     * 
+     *
      * @param context
      * @param source
      * @return <code>source</code> with replaced resources (if they exist)
@@ -157,7 +160,7 @@ public class TextUtil {
     /**
      * Similar to {@link android.text.Html#fromHtml(String)}, but provides
      * support for more HTML-tags such as lists.
-     * 
+     *
      * @param string
      * @return
      */
@@ -190,7 +193,7 @@ public class TextUtil {
      * android.text.Html.HtmlToSpannedConverter. If you find this code useful,
      * please vote my answer at <a
      * href="http://stackoverflow.com/a/17365740/262462">StackOverflow</a> up.
-     * 
+     *
      * @version v1.0.1
      */
     private static class MyTagHandler implements Html.TagHandler {
@@ -198,8 +201,9 @@ public class TextUtil {
          * A list of tags that do not influence rendering. We don't want to have
          * them on the log as unsupported tags.
          */
-        public static final List<String> IGNORED_TAGS = Arrays
-                .asList(new String[] { "html", "head", "body" });
+        protected static final Set<String> IGNORED_TAGS = Collections.unmodifiableSet(
+                new HashSet<>(Arrays.asList("html", "head", "body")));
+        /**
         /**
          * Keeps track of lists (ol, ul). On bottom of Stack is the outermost
          * list and on top of Stack is the most nested list
