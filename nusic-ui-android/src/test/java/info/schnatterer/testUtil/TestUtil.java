@@ -55,8 +55,8 @@ public final class TestUtil {
         try {
             setFinalField(instance,
                     instance.getClass().getDeclaredField(fieldName), newValue);
-        } catch (Throwable t) {
-            throw new RuntimeException(t);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -88,9 +88,9 @@ public final class TestUtil {
 
             field.set(instance, newValue);
             modifiersField.setInt(field, field.getModifiers() & Modifier.FINAL);
-        } catch (Throwable t) {
+        } catch (Exception e) {
             // This is testing only, safe us some boilerplate
-            throw new RuntimeException(t);
+            throw new RuntimeException(e);
         }
     }
 
@@ -124,8 +124,8 @@ public final class TestUtil {
             field.setAccessible(true);
             field.set(instance, newValue);
             field.setAccessible(false);
-        } catch (Throwable t) {
-            throw new RuntimeException(t);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

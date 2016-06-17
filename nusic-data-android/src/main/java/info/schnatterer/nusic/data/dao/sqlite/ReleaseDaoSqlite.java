@@ -125,10 +125,10 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
             Release release = new Release(SqliteUtil.loadDate(cursor, 1));
             release.setId(cursor.getLong(0));
             return release;
-        } catch (Throwable t) {
+        } catch (Exception e) {
             throw new DatabaseException(
                     "Unable to find release by MusicBrainz id:" + musicBrainzId,
-                    t);
+                    e);
         } finally {
             closeCursor();
         }
@@ -186,8 +186,8 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
                 releases.add(release);
                 cursor.moveToNext();
             }
-        } catch (Throwable t) {
-            throw new DatabaseException("Unable to find all releases", t);
+        } catch (Exception e) {
+            throw new DatabaseException("Unable to find all releases", e);
         } finally {
             closeCursor();
         }

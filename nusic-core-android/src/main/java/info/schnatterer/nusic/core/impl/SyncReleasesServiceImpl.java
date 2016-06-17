@@ -142,9 +142,9 @@ public class SyncReleasesServiceImpl implements SyncReleasesService {
                         return;
                     }
                     potentialException = e;
-                } catch (Throwable t) {
-                    LOG.warn("", t);
-                    progressUpdater.progressFailed(artist, i + 1, t, null);
+                } catch (Exception e) {
+                    LOG.warn("", e);
+                    progressUpdater.progressFailed(artist, i + 1, e, null);
                     return;
                 }
 

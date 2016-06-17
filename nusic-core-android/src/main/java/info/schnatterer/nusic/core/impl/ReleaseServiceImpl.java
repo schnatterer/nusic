@@ -89,9 +89,9 @@ public class ReleaseServiceImpl implements ReleaseService {
                 }
 
                 saveOrUpdate(release);
-            } catch (Throwable t) {
+            } catch (Exception e) {
                 throw new AndroidServiceException(
-                        CoreMessageKey.ERROR_WRITING_TO_DB, t);
+                        CoreMessageKey.ERROR_WRITING_TO_DB, e);
             }
         }
     }

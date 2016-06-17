@@ -167,9 +167,9 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
                     artistName);
         } catch (SecurityException securityException) {
             throw securityException;
-        } catch (Throwable t) {
+        } catch (Exception e) {
             throw new AndroidServiceException(
-                    CoreMessageKey.ERROR_FINDING_RELEASE_ARTIST, t, artistName);
+                    CoreMessageKey.ERROR_FINDING_RELEASE_ARTIST, e, artistName);
         }
         return artist;
     }

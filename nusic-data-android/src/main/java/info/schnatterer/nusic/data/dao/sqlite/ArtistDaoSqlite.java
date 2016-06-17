@@ -124,9 +124,9 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
                     TableArtist.COLUMN_ANDROID_ID + " = " + androidId, null,
                     null, null, null);
             return cursor;
-        } catch (Throwable t) {
+        } catch (Exception e) {
             throw new DatabaseException("Unable to find artist by android id:"
-                    + androidId, t);
+                    + androidId, e);
         }
     }
 }

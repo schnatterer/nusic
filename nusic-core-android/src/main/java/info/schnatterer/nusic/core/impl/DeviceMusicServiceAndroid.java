@@ -72,9 +72,9 @@ public class DeviceMusicServiceAndroid implements DeviceMusicService {
                     artists[i++] = artist;
                 }
             }
-        } catch (Throwable t) {
+        } catch (Exception e) {
             throw new AndroidServiceException(
-                    CoreMessageKey.ERROR_LOADING_ARTISTS, t);
+                    CoreMessageKey.ERROR_LOADING_ARTISTS, e);
         } finally {
             if (cursor != null) {
                 cursor.close();

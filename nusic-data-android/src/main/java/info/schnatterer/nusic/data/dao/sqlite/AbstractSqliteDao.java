@@ -106,8 +106,8 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
                     toContentValuesSave(entity));
             entity.setId(id);
             return id;
-        } catch (Throwable t) {
-            throw new DatabaseException("Unable to save " + entity, t);
+        } catch (Exception e) {
+            throw new DatabaseException("Unable to save " + entity, e);
         }
     }
 
@@ -135,8 +135,8 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
             return db.update(getTableName(), toContentValues(entity),
                     new StringBuffer(BaseColumns._ID).append("=").append(id)
                             .toString(), null);
-        } catch (Throwable t) {
-            throw new DatabaseException("Unable to update " + entity, t);
+        } catch (Exception e) {
+            throw new DatabaseException("Unable to update " + entity, e);
         }
     }
 
@@ -146,10 +146,10 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
         try {
             return db.update(getTableName(),
                     SqliteUtil.toContentValues(values), whereClause, whereArgs);
-        } catch (Throwable t) {
+        } catch (Exception e) {
             throw new DatabaseException("Unable execute update for columns: "
                     + values + "; Where: " + whereClause + ", Args: "
-                    + whereArgs, t);
+                    + whereArgs, e);
         }
     }
 
