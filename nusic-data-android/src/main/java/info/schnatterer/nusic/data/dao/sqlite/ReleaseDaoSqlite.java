@@ -175,10 +175,10 @@ public class ReleaseDaoSqlite extends AbstractSqliteDao<Release> implements
             Map<Long, Artist> artists = new HashMap<Long, Artist>();
             while (!cursor.isAfterLast()) {
                 Artist artist = artists.get(TableArtist.toId(cursor,
-                        TableRelease.COLUMNS.length));
+                        TableRelease.COLUMNS.size()));
                 if (artist == null) {
                     artist = TableArtist.toEntity(cursor,
-                            TableRelease.COLUMNS.length);
+                            TableRelease.COLUMNS.size());
                 }
                 Release release = toEntity(cursor, 0);
                 release.setArtist(artist);

@@ -40,6 +40,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Basic database abstraction. Handles execution of DDL scripts.
  * 
@@ -246,10 +250,11 @@ public class NusicDatabaseSqlite extends SQLiteOpenHelper {
         public static final String TYPE_COLUMN_COVERARTARCHIVE_ID = "INTEGER";
         public static final int INDEX_COLUMN_COVERARTARCHIVE_ID = 8;
 
-        public static final String[] COLUMNS = { COLUMN_ID, COLUMN_MB_ID,
+        public static final List<String> COLUMNS = Collections.unmodifiableList(
+                Arrays.asList(COLUMN_ID, COLUMN_MB_ID,
                 COLUMN_NAME, COLUMN_DATE_RELEASED, COLUMN_DATE_CREATED,
                 COLUMN_RELEASEARTWORK_PATH, COLUMN_FK_ID_ARTIST,
-                COLUMN_IS_HIDDEN, COLUMN_COVERARTARCHIVE_ID };
+                COLUMN_IS_HIDDEN, COLUMN_COVERARTARCHIVE_ID));
 
         public static final String COLUMNS_ALL = new StringBuilder(NAME)
                 .append(".").append(COLUMN_ID).append(",").append(NAME)
