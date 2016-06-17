@@ -1,9 +1,9 @@
 nusic - your new music
 =====
-| Branch        | Build Status  |
-| ------------- |-------------  |
-| Develop       | [![Build Status Develop](https://jenkins.schnatterer.info/job/nusic-develop/badge/icon)](https://jenkins.schnatterer.info/job/nusic-develop/)  |
-| Features       | [![Build Status Develop](https://jenkins.schnatterer.info/job/nusic-features/badge/icon)](https://jenkins.schnatterer.info/job/nusic-features/)  |
+| Branch        | Build Status  | Quality Gate |
+| ------------- |-------------  | ------------ |
+| Develop       | [![Build Status Develop](https://jenkins.schnatterer.info/job/nusic-develop/badge/icon)](https://jenkins.schnatterer.info/job/nusic-develop/)  |![Quality Gates Develop](https://sonarqube.schnatterer.info/api/badges/gate?key=info.schnatterer.nusic:nusic-develop) |
+| Features       | [![Build Status Features](https://jenkins.schnatterer.info/job/nusic-features/badge/icon)](https://jenkins.schnatterer.info/job/nusic-features/)  | |
 
 
 Never again miss a new album release of your favorite artists - always stay informed by nusic.
