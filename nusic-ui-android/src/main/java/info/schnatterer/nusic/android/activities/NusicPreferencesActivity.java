@@ -53,162 +53,162 @@ import android.view.MenuItem;
  *
  */
 public class NusicPreferencesActivity extends RoboAppCompatPreferenceActivity {
-	/**
-	 * Key to the resulting intent's extras that contains the boolean value that
-	 * informs if a check for new releases must be performed.<br/>
-	 * See {@link #isRefreshNecessary}.
-	 */
-	public static final String EXTRA_RESULT_IS_REFRESH_NECESSARY = "nusic.intent.extra.preferences.result.isRefreshNecessary";
-	/**
-	 * Key to the resulting intent's extras that contains the boolean value that
-	 * informs if the content of the release tabs needs to be reloaded. <br/>
-	 * See {@link #isContentChanged}.
-	 */
-	public static final String EXTRA_RESULT_IS_CONTENT_CHANGED = "nusic.intent.extra.preferences.result.isContentChanged";
+    /**
+     * Key to the resulting intent's extras that contains the boolean value that
+     * informs if a check for new releases must be performed.<br/>
+     * See {@link #isRefreshNecessary}.
+     */
+    public static final String EXTRA_RESULT_IS_REFRESH_NECESSARY = "nusic.intent.extra.preferences.result.isRefreshNecessary";
+    /**
+     * Key to the resulting intent's extras that contains the boolean value that
+     * informs if the content of the release tabs needs to be reloaded. <br/>
+     * See {@link #isContentChanged}.
+     */
+    public static final String EXTRA_RESULT_IS_CONTENT_CHANGED = "nusic.intent.extra.preferences.result.isContentChanged";
 
-	private TimePeriodPreferenceChangedListener timePeriodPreferenceChangedListener = new TimePeriodPreferenceChangedListener();
+    private TimePeriodPreferenceChangedListener timePeriodPreferenceChangedListener = new TimePeriodPreferenceChangedListener();
 
-	@Inject
-	private PreferencesService preferencesService;
-	@Inject
-	private PreferenceReleasedTodayTimePickerListener releaseTodayTimePickerListener;
+    @Inject
+    private PreferencesService preferencesService;
+    @Inject
+    private PreferenceReleasedTodayTimePickerListener releaseTodayTimePickerListener;
 
-	@Inject
-	private PreferenceVisibilityButtonListener preferenceVisibilityButtonListener;
+    @Inject
+    private PreferenceVisibilityButtonListener preferenceVisibilityButtonListener;
 
-	/**
-	 * <code>true</code> if a check for new releases must be performed. <br/>
-	 * Value is passed back to the calling activity, see
-	 * {@value #EXTRA_RESULT_IS_REFRESH_NECESSARY}.
-	 */
-	private boolean isRefreshNecessary = false;
-	/**
-	 * <code>true</code> if the release tabs needs to be reloaded. <br/>
-	 * Value is passed back to the calling activity, see
-	 * {@value #EXTRA_RESULT_IS_CONTENT_CHANGED}.
-	 */
-	private boolean isContentChanged = false;
+    /**
+     * <code>true</code> if a check for new releases must be performed. <br/>
+     * Value is passed back to the calling activity, see
+     * {@value #EXTRA_RESULT_IS_REFRESH_NECESSARY}.
+     */
+    private boolean isRefreshNecessary = false;
+    /**
+     * <code>true</code> if the release tabs needs to be reloaded. <br/>
+     * Value is passed back to the calling activity, see
+     * {@value #EXTRA_RESULT_IS_CONTENT_CHANGED}.
+     */
+    private boolean isContentChanged = false;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		// Display the back arrow in the header (left of the icon)
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Display the back arrow in the header (left of the icon)
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-			onCreatePreferenceActivity();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+            onCreatePreferenceActivity();
 
-			preferenceVisibilityButtonListener.setActivity(this);
-			findPreferenceActivity(
-					getString(R.string.preferences_key_display_all_releases))
-					.setOnPreferenceClickListener(
-							preferenceVisibilityButtonListener);
+            preferenceVisibilityButtonListener.setActivity(this);
+            findPreferenceActivity(
+                    getString(R.string.preferences_key_display_all_releases))
+                    .setOnPreferenceClickListener(
+                            preferenceVisibilityButtonListener);
 
-			releaseTodayTimePickerListener.setContext(this);
-			findPreferenceActivity(
-					getString(R.string.preferences_key_released_today_hour_of_day))
-					.setOnPreferenceClickListener(
-							releaseTodayTimePickerListener);
-			// Set app name in "About" preference
-			findPreferenceActivity(getString(R.string.preferences_key_about))
-					.setTitle(
-							getString(R.string.preferences_category_about,
-									getString(R.string.app_name)));
-		} else {
-			onCreatePreferenceFragment();
-		}
-	}
+            releaseTodayTimePickerListener.setContext(this);
+            findPreferenceActivity(
+                    getString(R.string.preferences_key_released_today_hour_of_day))
+                    .setOnPreferenceClickListener(
+                            releaseTodayTimePickerListener);
+            // Set app name in "About" preference
+            findPreferenceActivity(getString(R.string.preferences_key_about))
+                    .setTitle(
+                            getString(R.string.preferences_category_about,
+                                    getString(R.string.app_name)));
+        } else {
+            onCreatePreferenceFragment();
+        }
+    }
 
-	@Override
-	public void onContentChanged() {
-		super.onContentChanged();
-		isContentChanged = true;
-	}
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        isContentChanged = true;
+    }
 
-	/**
-	 * Wraps legacy {@link #findPreference(CharSequence)} code for Android < 3
-	 * (i.e. API lvl < 11).
-	 */
-	@SuppressWarnings("deprecation")
-	private Preference findPreferenceActivity(String key) {
-		return findPreference(key);
-	}
+    /**
+     * Wraps legacy {@link #findPreference(CharSequence)} code for Android < 3
+     * (i.e. API lvl < 11).
+     */
+    @SuppressWarnings("deprecation")
+    private Preference findPreferenceActivity(String key) {
+        return findPreference(key);
+    }
 
-	/**
-	 * Wraps legacy {@link #onCreate(Bundle)} code for Android < 3 (i.e. API lvl
-	 * < 11).
-	 */
-	@SuppressWarnings("deprecation")
-	private void onCreatePreferenceActivity() {
-		addPreferencesFromResource(R.xml.preferences);
-	}
+    /**
+     * Wraps legacy {@link #onCreate(Bundle)} code for Android < 3 (i.e. API lvl
+     * < 11).
+     */
+    @SuppressWarnings("deprecation")
+    private void onCreatePreferenceActivity() {
+        addPreferencesFromResource(R.xml.preferences);
+    }
 
-	/**
-	 * Wraps {@link #onCreate(Bundle)} code for Android >= 3 (i.e. API lvl >=
-	 * 11).
-	 */
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void onCreatePreferenceFragment() {
-		getFragmentManager()
-				.beginTransaction()
-				.replace(
-						android.R.id.content,
-						Fragment.instantiate(this,
-								NusicPreferencesFragment.class.getName()))
-				.commit();
-	}
+    /**
+     * Wraps {@link #onCreate(Bundle)} code for Android >= 3 (i.e. API lvl >=
+     * 11).
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void onCreatePreferenceFragment() {
+        getFragmentManager()
+                .beginTransaction()
+                .replace(
+                        android.R.id.content,
+                        Fragment.instantiate(this,
+                                NusicPreferencesFragment.class.getName()))
+                .commit();
+    }
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		preferencesService
-				.registerOnSharedPreferenceChangeListener(timePeriodPreferenceChangedListener);
-	}
+    @Override
+    protected void onResume() {
+        super.onResume();
+        preferencesService
+                .registerOnSharedPreferenceChangeListener(timePeriodPreferenceChangedListener);
+    }
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		preferencesService
-				.unregisterOnSharedPreferenceChangeListener(timePeriodPreferenceChangedListener);
-	}
+    @Override
+    protected void onPause() {
+        super.onPause();
+        preferencesService
+                .unregisterOnSharedPreferenceChangeListener(timePeriodPreferenceChangedListener);
+    }
 
-	@Override
-	public void finish() {
-		// Prepare data intent
-		Intent data = new Intent();
-		data.putExtra(EXTRA_RESULT_IS_REFRESH_NECESSARY, isRefreshNecessary);
-		data.putExtra(EXTRA_RESULT_IS_CONTENT_CHANGED, isContentChanged);
-		setResult(RESULT_OK, data);
-		super.finish();
-	}
+    @Override
+    public void finish() {
+        // Prepare data intent
+        Intent data = new Intent();
+        data.putExtra(EXTRA_RESULT_IS_REFRESH_NECESSARY, isRefreshNecessary);
+        data.putExtra(EXTRA_RESULT_IS_CONTENT_CHANGED, isContentChanged);
+        setResult(RESULT_OK, data);
+        super.finish();
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == android.R.id.home) {
-			// When the back arrow in the header (left of the icon) is clicked,
-			// "go back one activity"
-			finish();
-		}
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // When the back arrow in the header (left of the icon) is clicked,
+            // "go back one activity"
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-	/**
-	 * Listens for a change in the
-	 * {@link PreferencesService#getDownloadReleasesTimePeriod()} preference and
-	 * triggers an update of the releases.
-	 * 
-	 * @author schnatterer
-	 * 
-	 */
-	private class TimePeriodPreferenceChangedListener implements
-			PreferenceChangedListener {
-		@Override
-		public void onPreferenceChanged(String key, Object newValue) {
-			if (key.equals(NusicPreferencesActivity.this
-					.getString(R.string.preferences_key_download_releases_time_period))) {
-				// Trigger refresh
-				isRefreshNecessary = true;
-			}
-		}
-	}
+    /**
+     * Listens for a change in the
+     * {@link PreferencesService#getDownloadReleasesTimePeriod()} preference and
+     * triggers an update of the releases.
+     * 
+     * @author schnatterer
+     * 
+     */
+    private class TimePeriodPreferenceChangedListener implements
+            PreferenceChangedListener {
+        @Override
+        public void onPreferenceChanged(String key, Object newValue) {
+            if (key.equals(NusicPreferencesActivity.this
+                    .getString(R.string.preferences_key_download_releases_time_period))) {
+                // Trigger refresh
+                isRefreshNecessary = true;
+            }
+        }
+    }
 }

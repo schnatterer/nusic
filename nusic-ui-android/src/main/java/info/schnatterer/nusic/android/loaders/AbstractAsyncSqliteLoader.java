@@ -30,84 +30,84 @@ import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
 public abstract class AbstractAsyncSqliteLoader<RESULT, ENTITY extends Entity>
-		extends AsyncTaskLoader<AsyncResult<RESULT>> {
-	private static final Logger LOG = LoggerFactory
-			.getLogger(AbstractAsyncSqliteLoader.class);
+        extends AsyncTaskLoader<AsyncResult<RESULT>> {
+    private static final Logger LOG = LoggerFactory
+            .getLogger(AbstractAsyncSqliteLoader.class);
 
-	private AsyncResult<RESULT> data;
+    private AsyncResult<RESULT> data;
 
-	/**
-	 * Uses a specific context.
-	 * 
-	 * @param context
-	 */
-	public AbstractAsyncSqliteLoader(Context context) {
-		super(context);
-	}
+    /**
+     * Uses a specific context.
+     * 
+     * @param context
+     */
+    public AbstractAsyncSqliteLoader(Context context) {
+        super(context);
+    }
 
-	public abstract RESULT doLoadInBackground() throws Exception;
+    public abstract RESULT doLoadInBackground() throws Exception;
 
-	@Override
-	public void deliverResult(AsyncResult<RESULT> data) {
-		if (isReset()) {
-			// a query came in while the loader is stopped
-			return;
-		}
+    @Override
+    public void deliverResult(AsyncResult<RESULT> data) {
+        if (isReset()) {
+            // a query came in while the loader is stopped
+            return;
+        }
 
-		this.data = data;
+        this.data = data;
 
-		super.deliverResult(data);
-	}
+        super.deliverResult(data);
+    }
 
-	@Override
-	public AsyncResult<RESULT> loadInBackground() {
-		AsyncResult<RESULT> result = new AsyncResult<RESULT>();
+    @Override
+    public AsyncResult<RESULT> loadInBackground() {
+        AsyncResult<RESULT> result = new AsyncResult<RESULT>();
 
-		RESULT dataList = null;
+        RESULT dataList = null;
 
-		try {
-			dataList = doLoadInBackground();
+        try {
+            dataList = doLoadInBackground();
 
-		} catch (Exception e) {
-			LOG.error(e.getMessage(), e);
-			result.setException(e);
-		}
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+            result.setException(e);
+        }
 
-		result.setData(dataList);
+        result.setData(dataList);
 
-		return result;
-	}
+        return result;
+    }
 
-	@Override
-	protected void onStartLoading() {
-		if (data != null) {
-			deliverResult(data);
-		}
+    @Override
+    protected void onStartLoading() {
+        if (data != null) {
+            deliverResult(data);
+        }
 
-		if (takeContentChanged() || data == null) {
-			forceLoad();
-		}
-	}
+        if (takeContentChanged() || data == null) {
+            forceLoad();
+        }
+    }
 
-	@Override
-	protected void onStopLoading() {
-		cancelLoad();
-	}
+    @Override
+    protected void onStopLoading() {
+        cancelLoad();
+    }
 
-	@Override
-	protected void onReset() {
-		super.onReset();
+    @Override
+    protected void onReset() {
+        super.onReset();
 
-		onStopLoading();
+        onStopLoading();
 
-		data = null;
-	}
+        data = null;
+    }
 
-	@Override
-	public void onCanceled(AsyncResult<RESULT> data) {
-		// Attempt to cancel the current asynchronous load.
-		super.onCanceled(data);
-		// Allow garbage collection
-		data = null;
-	}
+    @Override
+    public void onCanceled(AsyncResult<RESULT> data) {
+        // Attempt to cancel the current asynchronous load.
+        super.onCanceled(data);
+        // Allow garbage collection
+        data = null;
+    }
 }

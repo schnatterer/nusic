@@ -25,36 +25,36 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 
 public interface Constants {
-	/**
-	 * Enum that keeps track of application-wide request codes that are used for
-	 * setting repeating alarms {@link PendingIntent}s with {@link AlarmManager}
-	 * . Uses {@link #ordinal()} as numeric ID.
-	 * 
-	 * @author schnatterer
-	 *
-	 */
-	public enum Alarms {
-		NEW_RELEASES, RELEASED_TODAY;
-	}
+    /**
+     * Enum that keeps track of application-wide request codes that are used for
+     * setting repeating alarms {@link PendingIntent}s with {@link AlarmManager}
+     * . Uses {@link #ordinal()} as numeric ID.
+     * 
+     * @author schnatterer
+     *
+     */
+    public enum Alarms {
+        NEW_RELEASES, RELEASED_TODAY;
+    }
 
-	/**
-	 * List of that keeps track of application-wide loaders, making sure the IDs
-	 * are unique.
-	 * 
-	 * @author schnatterer
-	 *
-	 */
-	public interface Loaders {
-		public static final int RELEASE_LOADER_ALL = 0;
-		public static final int RELEASE_LOADER_JUST_ADDED = 1;
-		public static final int RELEASE_LOADER_ANNOUNCED = 2;
-		public static final int RELEASE_LOADER_AVAILABLE = 3;
-	}
+    /**
+     * List of that keeps track of application-wide loaders, making sure the IDs
+     * are unique.
+     * 
+     * @author schnatterer
+     *
+     */
+    public interface Loaders {
+        public static final int RELEASE_LOADER_ALL = 0;
+        public static final int RELEASE_LOADER_JUST_ADDED = 1;
+        public static final int RELEASE_LOADER_ANNOUNCED = 2;
+        public static final int RELEASE_LOADER_AVAILABLE = 3;
+    }
 
-	/**
-	 * Name of the directory where log files are stored under
-	 * <code>/data/data/appname/files/</code> Create a reference to this
-	 * directory via {@link android.content.ContextWrapper#getFilesDir()}.
-	 */
-	public static final String LOG_FOLDER = "logs";
+    /**
+     * Name of the directory where log files are stored under
+     * <code>/data/data/appname/files/</code> Create a reference to this
+     * directory via {@link android.content.ContextWrapper#getFilesDir()}.
+     */
+    public static final String LOG_FOLDER = "logs";
 }

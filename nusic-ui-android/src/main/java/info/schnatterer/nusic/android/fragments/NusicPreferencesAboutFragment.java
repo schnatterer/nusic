@@ -30,15 +30,15 @@ import android.os.Bundle;
 @SuppressLint("NewApi")
 public class NusicPreferencesAboutFragment extends RoboPreferenceFragment {
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		// Load the preferences from an XML resource
-		addPreferencesFromResource(R.xml.preferences_about);
+        // Load the preferences from an XML resource
+        addPreferencesFromResource(R.xml.preferences_about);
 
-		// Set version
-		findPreference(getString(R.string.preferences_key_version)).setSummary(
-				NusicApplication.getCurrentVersionName());
-	}
+        // Set version
+        findPreference(getString(R.string.preferences_key_version)).setSummary(
+                NusicApplication.getCurrentVersionName());
+    }
 }

@@ -33,60 +33,60 @@ import java.util.ResourceBundle;
  *
  */
 public enum CoreMessageKey {
-	ERROR_WRITING_TO_DB("ServiceException_errorWritingToDb"),
+    ERROR_WRITING_TO_DB("ServiceException_errorWritingToDb"),
 
-	ERROR_READING_FROM_DB("ServiceException_errorReadingFromDb"),
+    ERROR_READING_FROM_DB("ServiceException_errorReadingFromDb"),
 
-	ERROR_QUERYING_MUSIC_BRAINZ("ServiceException_errorQueryingMusicBrainz"),
+    ERROR_QUERYING_MUSIC_BRAINZ("ServiceException_errorQueryingMusicBrainz"),
 
-	ERROR_FINDING_RELEASE_ARTIST("ServiceException_errorFindingReleasesArtist"),
+    ERROR_FINDING_RELEASE_ARTIST("ServiceException_errorFindingReleasesArtist"),
 
-	ERROR_LOADING_ARTISTS("ServiceException_errorLoadingArtists");
+    ERROR_LOADING_ARTISTS("ServiceException_errorLoadingArtists");
 
-	public static final String CORE_BUNDLE_NAME = "CoreBundle";
-	/**
-	 * Fully qualified core bundle name.
-	 */
-	public static final String CORE_BUNDLE_NAME_FQ = CoreMessageKey.class
-			.getPackage().getName() + "." + CORE_BUNDLE_NAME;
-	private String messageKey;
+    public static final String CORE_BUNDLE_NAME = "CoreBundle";
+    /**
+     * Fully qualified core bundle name.
+     */
+    public static final String CORE_BUNDLE_NAME_FQ = CoreMessageKey.class
+            .getPackage().getName() + "." + CORE_BUNDLE_NAME;
+    private String messageKey;
 
-	private CoreMessageKey(String msgKey) {
-		this.messageKey = msgKey;
-	}
+    private CoreMessageKey(String msgKey) {
+        this.messageKey = msgKey;
+    }
 
-	public String get() {
-		return messageKey;
-	}
+    public String get() {
+        return messageKey;
+    }
 
-	/**
-	 * Finds the named {@code ResourceBundle} for the specified {@code Locale}
-	 * and the caller {@code ClassLoader}.
-	 *
-	 * @param bundleName
-	 *            the name of the {@code ResourceBundle}.
-	 * @param locale
-	 *            the {@code Locale}.
-	 * @return the requested resource bundle.
-	 * @throws MissingResourceException
-	 *             if the resource bundle cannot be found.
-	 */
-	public static ResourceBundle getBundle(Locale loc)
-			throws MissingResourceException {
-		return ResourceBundle.getBundle(CORE_BUNDLE_NAME_FQ, loc);
-	}
+    /**
+     * Finds the named {@code ResourceBundle} for the specified {@code Locale}
+     * and the caller {@code ClassLoader}.
+     *
+     * @param bundleName
+     *            the name of the {@code ResourceBundle}.
+     * @param locale
+     *            the {@code Locale}.
+     * @return the requested resource bundle.
+     * @throws MissingResourceException
+     *             if the resource bundle cannot be found.
+     */
+    public static ResourceBundle getBundle(Locale loc)
+            throws MissingResourceException {
+        return ResourceBundle.getBundle(CORE_BUNDLE_NAME_FQ, loc);
+    }
 
-	/**
-	 * Finds the named resource bundle for the default {@code Locale} and the
-	 * caller's {@code ClassLoader}.
-	 *
-	 * @param bundleName
-	 *            the name of the {@code ResourceBundle}.
-	 * @return the requested {@code ResourceBundle}.
-	 * @throws MissingResourceException
-	 *             if the {@code ResourceBundle} cannot be found.
-	 */
-	public static ResourceBundle getBundle() throws MissingResourceException {
-		return ResourceBundle.getBundle(CORE_BUNDLE_NAME_FQ);
-	}
+    /**
+     * Finds the named resource bundle for the default {@code Locale} and the
+     * caller's {@code ClassLoader}.
+     *
+     * @param bundleName
+     *            the name of the {@code ResourceBundle}.
+     * @return the requested {@code ResourceBundle}.
+     * @throws MissingResourceException
+     *             if the {@code ResourceBundle} cannot be found.
+     */
+    public static ResourceBundle getBundle() throws MissingResourceException {
+        return ResourceBundle.getBundle(CORE_BUNDLE_NAME_FQ);
+    }
 }

@@ -22,12 +22,12 @@
 package info.schnatterer.nusic.data.model;
 
 public interface Entity {
-	Long getId();
+    Long getId();
 
-	void setId(Long id);
+    void setId(Long id);
 
-	/**
-	 * Called before persisting.
-	 */
-	void prePersist();
+    /**
+     * Called before persisting.
+     */
+    void prePersist();
 }

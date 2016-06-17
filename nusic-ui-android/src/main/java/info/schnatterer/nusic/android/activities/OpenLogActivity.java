@@ -51,19 +51,19 @@ import android.support.v4.content.FileProvider;
  *
  */
 public class OpenLogActivity extends RoboActionBarActivity {
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		/* Get URIs for log files using android.support.v4.content.FileProvider */
-		final Intent openFile = new Intent(Intent.ACTION_VIEW);
-		Uri uriForFile = FileProvider.getUriForFile(this,
-				getString(R.string.authority_log_file_provider),
-				Logs.findNewestLogFile(this));
-		openFile.setDataAndType(uriForFile, "text/plain");
-		openFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-		startActivity(openFile);
+        /* Get URIs for log files using android.support.v4.content.FileProvider */
+        final Intent openFile = new Intent(Intent.ACTION_VIEW);
+        Uri uriForFile = FileProvider.getUriForFile(this,
+                getString(R.string.authority_log_file_provider),
+                Logs.findNewestLogFile(this));
+        openFile.setDataAndType(uriForFile, "text/plain");
+        openFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(openFile);
 
-		finish();
-	}
+        finish();
+    }
 }

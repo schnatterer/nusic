@@ -43,42 +43,42 @@ import android.widget.TextView;
  */
 public class TextAssetActivity extends RoboActionBarActivity {
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.simple_textview_layout);
-		TextView textView = (TextView) findViewById(R.id.renderRawHtmlTextView);
-		// Display the back arrow in the header (left of the icon)
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.simple_textview_layout);
+        TextView textView = (TextView) findViewById(R.id.renderRawHtmlTextView);
+        // Display the back arrow in the header (left of the icon)
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		String title = getIntent().getStringExtra(
-				getString(R.string.extra_activity_title));
-		if (title != null) {
-			setTitle(title);
-		}
+        String title = getIntent().getStringExtra(
+                getString(R.string.extra_activity_title));
+        if (title != null) {
+            setTitle(title);
+        }
 
-		textView.setMovementMethod(LinkMovementMethod.getInstance());
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
 
-		/*
-		 * This results in not clickable HTML links However, without this
-		 * non-html URLs are not auto linked. So: use <a href="http://..">xz</a>
-		 * syntax!
-		 */
-		String assetPath = getIntent().getStringExtra(
-				getString(R.string.extra_asset_name));
-		CharSequence text = TextUtil.loadTextFromAsset(this, assetPath);
-		if (text != null) {
-			textView.setText(text);
-		}
-	}
+        /*
+         * This results in not clickable HTML links However, without this
+         * non-html URLs are not auto linked. So: use <a href="http://..">xz</a>
+         * syntax!
+         */
+        String assetPath = getIntent().getStringExtra(
+                getString(R.string.extra_asset_name));
+        CharSequence text = TextUtil.loadTextFromAsset(this, assetPath);
+        if (text != null) {
+            textView.setText(text);
+        }
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == android.R.id.home) {
-			// When the back arrow in the header (left of the icon) is clicked,
-			// "go back one activity"
-			finish();
-		}
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // When the back arrow in the header (left of the icon) is clicked,
+            // "go back one activity"
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

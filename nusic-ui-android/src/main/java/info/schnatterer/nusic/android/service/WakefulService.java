@@ -44,77 +44,77 @@ import android.os.PowerManager;
  * 
  */
 public abstract class WakefulService extends RoboService {
-	private static final Logger LOG = LoggerFactory
-			.getLogger(WakefulService.class);
+    private static final Logger LOG = LoggerFactory
+            .getLogger(WakefulService.class);
 
-	private static final String LOCK_NAME = "info.schnatterer.nusic.android.service.WakefulService";
+    private static final String LOCK_NAME = "info.schnatterer.nusic.android.service.WakefulService";
 
-	private static volatile PowerManager.WakeLock lockStatic = null;
+    private static volatile PowerManager.WakeLock lockStatic = null;
 
-	/**
-	 * Keeps the lock after {@link #onStartCommand(Intent, int, int)} has been
-	 * finished. <b> Note: </b> The derived class that sets this to
-	 * <code>true</code> is responsible for calling {@link #releaseLock()}
-	 * itself!
-	 */
-	protected boolean keepLock = false;
+    /**
+     * Keeps the lock after {@link #onStartCommand(Intent, int, int)} has been
+     * finished. <b> Note: </b> The derived class that sets this to
+     * <code>true</code> is responsible for calling {@link #releaseLock()}
+     * itself!
+     */
+    protected boolean keepLock = false;
 
-	@Override
-	public void onCreate() {
-		super.onCreate();
-	}
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
 
-	abstract protected int onStartCommandWakeful(Intent intent, int flags,
-			int startId);
+    abstract protected int onStartCommandWakeful(Intent intent, int flags,
+            int startId);
 
-	synchronized protected static PowerManager.WakeLock getLock(Context context) {
-		if (lockStatic == null) {
-			PowerManager mgr = (PowerManager) context
-					.getSystemService(Context.POWER_SERVICE);
+    synchronized protected static PowerManager.WakeLock getLock(Context context) {
+        if (lockStatic == null) {
+            PowerManager mgr = (PowerManager) context
+                    .getSystemService(Context.POWER_SERVICE);
 
-			lockStatic = mgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-					LOCK_NAME);
-			lockStatic.setReferenceCounted(true);
-		}
+            lockStatic = mgr.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                    LOCK_NAME);
+            lockStatic.setReferenceCounted(true);
+        }
 
-		return lockStatic;
-	}
+        return lockStatic;
+    }
 
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		acquireLock(this.getApplicationContext());
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        acquireLock(this.getApplicationContext());
 
-		try {
-			LOG.debug("Calling service method");
-			return onStartCommandWakeful(intent, flags, startId);
-		} finally {
-			if (!keepLock) {
-				releaseLock(this.getApplicationContext());
-			}
-		}
-	}
+        try {
+            LOG.debug("Calling service method");
+            return onStartCommandWakeful(intent, flags, startId);
+        } finally {
+            if (!keepLock) {
+                releaseLock(this.getApplicationContext());
+            }
+        }
+    }
 
-	/**
-	 * Tries to acquire the lock, if not held.
-	 */
-	protected static void acquireLock(Context context) {
-		PowerManager.WakeLock lock = getLock(context);
+    /**
+     * Tries to acquire the lock, if not held.
+     */
+    protected static void acquireLock(Context context) {
+        PowerManager.WakeLock lock = getLock(context);
 
-		if (!lock.isHeld()) {
-			lock.acquire();
-			LOG.debug("Lock acquired");
-		}
-	}
+        if (!lock.isHeld()) {
+            lock.acquire();
+            LOG.debug("Lock acquired");
+        }
+    }
 
-	/**
-	 * Releases the lock, if held.
-	 */
-	protected static void releaseLock(Context context) {
-		PowerManager.WakeLock lock = getLock(context);
-		if (lock.isHeld()) {
-			lock.release();
-			LOG.debug("Lock released");
-		}
-	}
+    /**
+     * Releases the lock, if held.
+     */
+    protected static void releaseLock(Context context) {
+        PowerManager.WakeLock lock = getLock(context);
+        if (lock.isHeld()) {
+            lock.release();
+            LOG.debug("Lock released");
+        }
+    }
 
 }

@@ -34,30 +34,30 @@ import android.os.Bundle;
 @SuppressLint("NewApi")
 public class NusicPreferencesFragment extends RoboPreferenceFragment {
 
-	@Inject
-	private PreferenceReleasedTodayTimePickerListener releaseTodayTimePickerListener;
-	@Inject
-	private PreferenceVisibilityButtonListener preferenceVisibilityButtonListener;
+    @Inject
+    private PreferenceReleasedTodayTimePickerListener releaseTodayTimePickerListener;
+    @Inject
+    private PreferenceVisibilityButtonListener preferenceVisibilityButtonListener;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		// Load the preferences from an XML resource
-		addPreferencesFromResource(R.xml.preferences);
+        // Load the preferences from an XML resource
+        addPreferencesFromResource(R.xml.preferences);
 
-		preferenceVisibilityButtonListener.setActivity(getActivity());
-		findPreference(getString(R.string.preferences_key_display_all_releases))
-				.setOnPreferenceClickListener(
-						preferenceVisibilityButtonListener);
+        preferenceVisibilityButtonListener.setActivity(getActivity());
+        findPreference(getString(R.string.preferences_key_display_all_releases))
+                .setOnPreferenceClickListener(
+                        preferenceVisibilityButtonListener);
 
-		releaseTodayTimePickerListener.setContext(getActivity());
-		findPreference(
-				getString(R.string.preferences_key_released_today_hour_of_day))
-				.setOnPreferenceClickListener(releaseTodayTimePickerListener);
-		// Set app name in "About" preference
-		findPreference(getString(R.string.preferences_key_about)).setTitle(
-				getString(R.string.preferences_category_about,
-						getString(R.string.app_name)));
-	}
+        releaseTodayTimePickerListener.setContext(getActivity());
+        findPreference(
+                getString(R.string.preferences_key_released_today_hour_of_day))
+                .setOnPreferenceClickListener(releaseTodayTimePickerListener);
+        // Set app name in "About" preference
+        findPreference(getString(R.string.preferences_key_about)).setTitle(
+                getString(R.string.preferences_category_about,
+                        getString(R.string.app_name)));
+    }
 }

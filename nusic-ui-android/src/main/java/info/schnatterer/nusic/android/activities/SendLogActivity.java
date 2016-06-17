@@ -57,35 +57,35 @@ import android.support.v4.content.FileProvider;
  */
 public class SendLogActivity extends RoboActionBarActivity {
 
-	/** Subject to use. */
-	private static final String SUBJECT = "[nusic @string/versionName] - Issue";
+    /** Subject to use. */
+    private static final String SUBJECT = "[nusic @string/versionName] - Issue";
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		/* Get URIs for log files using android.support.v4.content.FileProvider */
-		ArrayList<Uri> uris = new ArrayList<Uri>();
-		for (final File fileEntry : Logs.getLogFiles(this)) {
-			// Don't recurse!
-			if (!fileEntry.isDirectory()) {
-				// Create content provider URI
-				uris.add(FileProvider.getUriForFile(this,
-						getString(R.string.authority_log_file_provider),
-						fileEntry));
-			}
-		}
+        /* Get URIs for log files using android.support.v4.content.FileProvider */
+        ArrayList<Uri> uris = new ArrayList<Uri>();
+        for (final File fileEntry : Logs.getLogFiles(this)) {
+            // Don't recurse!
+            if (!fileEntry.isDirectory()) {
+                // Create content provider URI
+                uris.add(FileProvider.getUriForFile(this,
+                        getString(R.string.authority_log_file_provider),
+                        fileEntry));
+            }
+        }
 
-		final Intent email = new Intent(Intent.ACTION_SEND_MULTIPLE);
-		email.setType("message/rfc822");
-		email.putExtra(Intent.EXTRA_EMAIL,
-				new String[] { getString(R.string.app_contact) });
-		email.putExtra(Intent.EXTRA_SUBJECT,
-				TextUtil.replaceResourceStrings(this, SUBJECT));
-		email.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
-		email.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-		startActivity(email);
+        final Intent email = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        email.setType("message/rfc822");
+        email.putExtra(Intent.EXTRA_EMAIL,
+                new String[] { getString(R.string.app_contact) });
+        email.putExtra(Intent.EXTRA_SUBJECT,
+                TextUtil.replaceResourceStrings(this, SUBJECT));
+        email.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+        email.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(email);
 
-		finish();
-	}
+        finish();
+    }
 }

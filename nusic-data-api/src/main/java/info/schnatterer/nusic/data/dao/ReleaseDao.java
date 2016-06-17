@@ -28,79 +28,79 @@ import java.util.List;
 
 public interface ReleaseDao extends GenericDao<Release> {
 
-	/**
-	 * Finds out of if release with a specific
-	 * {@link Release#getMusicBrainzId()} exists.
-	 * 
-	 * @param musicBrainzId
-	 * @return the {@link Release} containing ID and dateCreated, if existing
-	 *         Otherwise <code>null</code>.
-	 * @throws DatabaseException
-	 */
-	Release findByMusicBrainzId(String musicBrainzId) throws DatabaseException;
+    /**
+     * Finds out of if release with a specific
+     * {@link Release#getMusicBrainzId()} exists.
+     * 
+     * @param musicBrainzId
+     * @return the {@link Release} containing ID and dateCreated, if existing
+     *         Otherwise <code>null</code>.
+     * @throws DatabaseException
+     */
+    Release findByMusicBrainzId(String musicBrainzId) throws DatabaseException;
 
-	/**
-	 * Finds all releases that were created after a specific date and are not
-	 * hidden. Order by release date descending.
-	 * 
-	 * @param gtDateCreated
-	 *            all releases whose creation data is greater than this date are
-	 *            returned.
-	 * 
-	 * @return all releases that were created after <code>gtDateCreated</code>
-	 * @throws DatabaseException
-	 */
-	List<Release> findByDateCreatedGreaterThanAndIsHiddenNotTrue(
-			long gtDateCreated) throws DatabaseException;
+    /**
+     * Finds all releases that were created after a specific date and are not
+     * hidden. Order by release date descending.
+     * 
+     * @param gtDateCreated
+     *            all releases whose creation data is greater than this date are
+     *            returned.
+     * 
+     * @return all releases that were created after <code>gtDateCreated</code>
+     * @throws DatabaseException
+     */
+    List<Release> findByDateCreatedGreaterThanAndIsHiddenNotTrue(
+            long gtDateCreated) throws DatabaseException;
 
-	/**
-	 * Finds all releases whose release date is greater than or equal to a
-	 * specific date and are not hidden. Order by release date ascending.
-	 * 
-	 * @param gtEqReleaseDate
-	 *            all releases whose release date greater than or equal to this
-	 *            date are returned
-	 * @return all releases whose release date is at or after
-	 *         <code>gtEqReleaseDate</code>
-	 * @throws DatabaseException
-	 */
-	List<Release> findByReleaseDateGreaterThanEqualsAndIsHiddenNotTrueSortByReleaseDateAsc(
-			long gtEqReleaseDate) throws DatabaseException;
+    /**
+     * Finds all releases whose release date is greater than or equal to a
+     * specific date and are not hidden. Order by release date ascending.
+     * 
+     * @param gtEqReleaseDate
+     *            all releases whose release date greater than or equal to this
+     *            date are returned
+     * @return all releases whose release date is at or after
+     *         <code>gtEqReleaseDate</code>
+     * @throws DatabaseException
+     */
+    List<Release> findByReleaseDateGreaterThanEqualsAndIsHiddenNotTrueSortByReleaseDateAsc(
+            long gtEqReleaseDate) throws DatabaseException;
 
-	/**
-	 * Finds all releases whose release date is greater than or equal to a
-	 * specific date and are not hidden. Order by release date descending.
-	 * 
-	 * @param gtEqReleaseDate
-	 *            all releases whose release date greater than or equal to this
-	 *            date are returned
-	 * @return all releases whose release date is at or after
-	 *         <code>gtEqReleaseDate</code>
-	 * @throws DatabaseException
-	 */
-	List<Release> findByReleaseDateGreaterThanEqualsAndIsHiddenNotTrueSortByReleaseDateDesc(
-			long gtEqReleaseDate) throws DatabaseException;
+    /**
+     * Finds all releases whose release date is greater than or equal to a
+     * specific date and are not hidden. Order by release date descending.
+     * 
+     * @param gtEqReleaseDate
+     *            all releases whose release date greater than or equal to this
+     *            date are returned
+     * @return all releases whose release date is at or after
+     *         <code>gtEqReleaseDate</code>
+     * @throws DatabaseException
+     */
+    List<Release> findByReleaseDateGreaterThanEqualsAndIsHiddenNotTrueSortByReleaseDateDesc(
+            long gtEqReleaseDate) throws DatabaseException;
 
-	/**
-	 * Finds all releases whose release date is within a specific range and are
-	 * not hidden. Order by release date descending.
-	 * 
-	 * @param gtEqReleaseDate
-	 *            all releases whose release date greater than or equal to this
-	 *            date are returned
-	 * @param ltReleaseDate
-	 *            all releases whose release date is less than this date are
-	 *            returned
-	 * @return all releases whose release date is at or after
-	 *         <code>gtEqReleaseDate</code> and before
-	 *         <code>ltReleaseDate</code>
-	 * @throws DatabaseException
-	 */
-	List<Release> findByReleaseDateGreaterThanEqualsAndReleaseDateLessThanAndIsHiddenNotTrue(
-			long gtEqReleaseDate, long ltRealaseDate) throws DatabaseException;
+    /**
+     * Finds all releases whose release date is within a specific range and are
+     * not hidden. Order by release date descending.
+     * 
+     * @param gtEqReleaseDate
+     *            all releases whose release date greater than or equal to this
+     *            date are returned
+     * @param ltReleaseDate
+     *            all releases whose release date is less than this date are
+     *            returned
+     * @return all releases whose release date is at or after
+     *         <code>gtEqReleaseDate</code> and before
+     *         <code>ltReleaseDate</code>
+     * @throws DatabaseException
+     */
+    List<Release> findByReleaseDateGreaterThanEqualsAndReleaseDateLessThanAndIsHiddenNotTrue(
+            long gtEqReleaseDate, long ltRealaseDate) throws DatabaseException;
 
-	/**
-	 * Set <code>isHidden</code> to <code>false</code> for all {@link Release}s.
-	 */
-	void setIsHiddenFalse() throws DatabaseException;
+    /**
+     * Set <code>isHidden</code> to <code>false</code> for all {@link Release}s.
+     */
+    void setIsHiddenFalse() throws DatabaseException;
 }

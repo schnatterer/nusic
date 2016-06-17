@@ -44,42 +44,42 @@ import android.content.Intent;
  * 
  */
 public class LoadNewReleasesServiceBootReceiver extends RoboBroadcastReceiver {
-	private static final Logger LOG = LoggerFactory
-			.getLogger(LoadNewReleasesServiceBootReceiver.class);
+    private static final Logger LOG = LoggerFactory
+            .getLogger(LoadNewReleasesServiceBootReceiver.class);
 
-	private static final int BOOT_DELAY_MINUTES = 10;
-	@Inject
-	private PreferencesService preferencesService;
-	@Inject
-	private LoadNewReleasesServiceScheduler loadNewReleasesServiceScheduler;
+    private static final int BOOT_DELAY_MINUTES = 10;
+    @Inject
+    private PreferencesService preferencesService;
+    @Inject
+    private LoadNewReleasesServiceScheduler loadNewReleasesServiceScheduler;
 
-	@Override
-	public void handleReceive(final Context context, final Intent intent) {
-		Date nextReleaseRefresh = preferencesService.getNextReleaseRefresh();
-		LOG.debug("Boot Receiver: Boot completed!");
+    @Override
+    public void handleReceive(final Context context, final Intent intent) {
+        Date nextReleaseRefresh = preferencesService.getNextReleaseRefresh();
+        LOG.debug("Boot Receiver: Boot completed!");
 
-		if (nextReleaseRefresh == null || isHistorical(nextReleaseRefresh)) {
-			// Delay start of service in order not to slow down device boot up
-			Date delayedRefresh = DateUtil.addMinutes(BOOT_DELAY_MINUTES);
-			LOG.debug("Boot Receiver: Delaying service to start at "
-					+ delayedRefresh);
-			loadNewReleasesServiceScheduler.schedule(
-					preferencesService.getRefreshPeriod(), delayedRefresh);
-		} else {
-			// Schedule service
-			LOG.debug("Boot Receiver: Scheduling service to "
-					+ nextReleaseRefresh);
-			loadNewReleasesServiceScheduler.schedule(
-					preferencesService.getRefreshPeriod(), nextReleaseRefresh);
-		}
-	}
+        if (nextReleaseRefresh == null || isHistorical(nextReleaseRefresh)) {
+            // Delay start of service in order not to slow down device boot up
+            Date delayedRefresh = DateUtil.addMinutes(BOOT_DELAY_MINUTES);
+            LOG.debug("Boot Receiver: Delaying service to start at "
+                    + delayedRefresh);
+            loadNewReleasesServiceScheduler.schedule(
+                    preferencesService.getRefreshPeriod(), delayedRefresh);
+        } else {
+            // Schedule service
+            LOG.debug("Boot Receiver: Scheduling service to "
+                    + nextReleaseRefresh);
+            loadNewReleasesServiceScheduler.schedule(
+                    preferencesService.getRefreshPeriod(), nextReleaseRefresh);
+        }
+    }
 
-	/**
-	 * @param d
-	 * @return <code>true</code> if <code>d</code> is in the past. Otherwise
-	 *         <code>false</code>.
-	 */
-	private boolean isHistorical(Date d) {
-		return d.before(new Date());
-	}
+    /**
+     * @param d
+     * @return <code>true</code> if <code>d</code> is in the past. Otherwise
+     *         <code>false</code>.
+     */
+    private boolean isHistorical(Date d) {
+        return d.before(new Date());
+    }
 }

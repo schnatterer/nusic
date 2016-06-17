@@ -41,36 +41,36 @@ import java.util.EventListener;
  * @author schnatterer
  */
 public interface ProgressListener<PROCESSED_ENTITY, RESULT_ENTITY> extends
-		EventListener {
+        EventListener {
 
-	void onProgressStarted(int nEntities);
+    void onProgressStarted(int nEntities);
 
-	/**
-	 * The main progress method.
-	 * 
-	 * @param entity
-	 * @param progress
-	 * @param max
-	 * @param potentialException
-	 *            a non-fatal exception that might have occurred during
-	 *            progressing this specific instance of the entity but didn't
-	 *            fail the whole progress
-	 */
-	void onProgress(PROCESSED_ENTITY entity, int progress, int max,
-			Throwable potentialException);
+    /**
+     * The main progress method.
+     * 
+     * @param entity
+     * @param progress
+     * @param max
+     * @param potentialException
+     *            a non-fatal exception that might have occurred during
+     *            progressing this specific instance of the entity but didn't
+     *            fail the whole progress
+     */
+    void onProgress(PROCESSED_ENTITY entity, int progress, int max,
+            Throwable potentialException);
 
-	void onProgressFinished(RESULT_ENTITY result);
+    void onProgressFinished(RESULT_ENTITY result);
 
-	/**
-	 * A fatal error occurred, stopping the process.
-	 * 
-	 * @param entity
-	 * @param progress
-	 * @param max
-	 * @param resultOnFailure
-	 *            the intermediate result, when the error occured.
-	 * @param potentialException
-	 */
-	void onProgressFailed(PROCESSED_ENTITY entity, int progress, int max,
-			RESULT_ENTITY resultOnFailure, Throwable potentialException);
+    /**
+     * A fatal error occurred, stopping the process.
+     * 
+     * @param entity
+     * @param progress
+     * @param max
+     * @param resultOnFailure
+     *            the intermediate result, when the error occured.
+     * @param potentialException
+     */
+    void onProgressFailed(PROCESSED_ENTITY entity, int progress, int max,
+            RESULT_ENTITY resultOnFailure, Throwable potentialException);
 }

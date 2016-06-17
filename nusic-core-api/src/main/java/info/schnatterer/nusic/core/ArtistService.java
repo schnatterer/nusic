@@ -31,18 +31,18 @@ import info.schnatterer.nusic.data.model.Artist;
  */
 public interface ArtistService {
 
-	long save(Artist artist) throws ServiceException;
+    long save(Artist artist) throws ServiceException;
 
-	int update(Artist artist) throws ServiceException;
+    int update(Artist artist) throws ServiceException;
 
-	/**
-	 * Creates a new {@link Artist} or updates an existing one (matching by
-	 * {@link Artist#getAndroidAudioArtistId()}).
-	 * 
-	 * @param artist
-	 * @return
-	 * @throws DatabaseException
-	 */
-	long saveOrUpdate(Artist artist) throws ServiceException;
+    /**
+     * Creates a new {@link Artist} or updates an existing one (matching by
+     * {@link Artist#getAndroidAudioArtistId()}).
+     * 
+     * @param artist
+     * @return
+     * @throws DatabaseException
+     */
+    long saveOrUpdate(Artist artist) throws ServiceException;
 
 }

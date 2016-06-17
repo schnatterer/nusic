@@ -28,25 +28,25 @@ import org.junit.Test;
 //@RunWith(RobolectricTestRunner.class)
 //@Config(manifest = Config.NONE)
 public class NusicDatabaseSqliteTest {
-	//
-	// @Before
-	// public void setUp() {
-	// Provider<Context> contextProviderMock = new Provider<Context>() {
-	// @Override
-	// public Context get() {
-	// return Robolectric.application;
-	// }
-	// };
-	// NusicDatabaseSqlite.contextProvider = contextProviderMock;
-	// }
+    //
+    // @Before
+    // public void setUp() {
+    // Provider<Context> contextProviderMock = new Provider<Context>() {
+    // @Override
+    // public Context get() {
+    // return Robolectric.application;
+    // }
+    // };
+    // NusicDatabaseSqlite.contextProvider = contextProviderMock;
+    // }
 
-	@Test
-	public void testCreateTable() {
-		String expected = "CREATE TABLE testdb(id INTEGER PRIMARY KEY AUTOINCREMENT, someText TEXT NOT NULL);";
-		String actual = NusicDatabaseSqlite.createTable("testdb", "id",
-				"INTEGER PRIMARY KEY AUTOINCREMENT", "someText",
-				"TEXT NOT NULL");
-		assertEquals("Unexpected sql query returned", expected, actual);
-	}
+    @Test
+    public void testCreateTable() {
+        String expected = "CREATE TABLE testdb(id INTEGER PRIMARY KEY AUTOINCREMENT, someText TEXT NOT NULL);";
+        String actual = NusicDatabaseSqlite.createTable("testdb", "id",
+                "INTEGER PRIMARY KEY AUTOINCREMENT", "someText",
+                "TEXT NOT NULL");
+        assertEquals("Unexpected sql query returned", expected, actual);
+    }
 
 }

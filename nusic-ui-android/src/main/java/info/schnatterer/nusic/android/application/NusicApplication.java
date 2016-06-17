@@ -32,102 +32,102 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class NusicApplication extends AbstractApplication {
-	private static final String DEPRECATED_PREFERENCES_KEY_REFRESH_SUCCESFUL = "last_release_refresh_succesful";
-	private static final String DEPRECATED_PREFERENCES_KEY_FULL_UPDATE = "fullUpdate";
-	private static final String DEPRECATED_PREFERENCES_KEY_FUTURE_RELEASES = "includeFutureReleases";
-	private static final String DEPRECATED_PREFERENCES_KEY_LAST_APP_VERSION = "last_app_version";
+    private static final String DEPRECATED_PREFERENCES_KEY_REFRESH_SUCCESFUL = "last_release_refresh_succesful";
+    private static final String DEPRECATED_PREFERENCES_KEY_FULL_UPDATE = "fullUpdate";
+    private static final String DEPRECATED_PREFERENCES_KEY_FUTURE_RELEASES = "includeFutureReleases";
+    private static final String DEPRECATED_PREFERENCES_KEY_LAST_APP_VERSION = "last_app_version";
 
-	public static interface NusicVersion {
-		/**
-		 * v.0.6 last Version before 1.0
-		 */
-		int V_0_6 = 10;
-	}
+    public static interface NusicVersion {
+        /**
+         * v.0.6 last Version before 1.0
+         */
+        int V_0_6 = 10;
+    }
 
-	private ReleasedTodayServiceScheduler releasedTodayServiceScheduler;
+    private ReleasedTodayServiceScheduler releasedTodayServiceScheduler;
 
-	@Override
-	public void onCreate() {
-		/*
-		 * Create global configuration and initialize ImageLoader with this
-		 * configuration
-		 */
-		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
-				getApplicationContext()).memoryCacheSize(2 * 1024 * 1024)
-				.build();
-		ImageLoader.getInstance().init(config);
+    @Override
+    public void onCreate() {
+        /*
+         * Create global configuration and initialize ImageLoader with this
+         * configuration
+         */
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+                getApplicationContext()).memoryCacheSize(2 * 1024 * 1024)
+                .build();
+        ImageLoader.getInstance().init(config);
 
-		initGlobals();
+        initGlobals();
 
-		/*
-		 * Enable annotation database to improve performance.
-		 */
-		RoboGuice.setUseAnnotationDatabases(true);
+        /*
+         * Enable annotation database to improve performance.
+         */
+        RoboGuice.setUseAnnotationDatabases(true);
 
-		/*
-		 * Can't use annotations in this class, because the module is set up in
-		 * this very method. So get instances explicitly here.
-		 */
-		releasedTodayServiceScheduler = RoboGuice.getInjector(this)
-				.getInstance(ReleasedTodayServiceScheduler.class);
+        /*
+         * Can't use annotations in this class, because the module is set up in
+         * this very method. So get instances explicitly here.
+         */
+        releasedTodayServiceScheduler = RoboGuice.getInjector(this)
+                .getInstance(ReleasedTodayServiceScheduler.class);
 
-		// Set log levels (this overrides settings in logback.xml)
-		PreferencesService preferenceService = RoboGuice.getInjector(this)
-				.getInstance(PreferencesService.class);
-		Logs.setRootLogLevel(preferenceService.getLogLevel());
-		// Set log cat level but don't toast warnings
-		Logs.setLogCatLevel(preferenceService.getLogLevelLogCat(), null);
+        // Set log levels (this overrides settings in logback.xml)
+        PreferencesService preferenceService = RoboGuice.getInjector(this)
+                .getInstance(PreferencesService.class);
+        Logs.setRootLogLevel(preferenceService.getLogLevel());
+        // Set log cat level but don't toast warnings
+        Logs.setLogCatLevel(preferenceService.getLogLevelLogCat(), null);
 
-		// Causes onUpgrade() to be called, etc.
-		super.onCreate();
-	}
+        // Causes onUpgrade() to be called, etc.
+        super.onCreate();
+    }
 
-	@Override
-	protected void onFirstCreate() {
-		SharedPreferences sharedPreferences = PreferenceManager
-				.getDefaultSharedPreferences(this);
+    @Override
+    protected void onFirstCreate() {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(this);
 
-		/*
-		 * Is this actually an first start ever or is it an upgrade from version
-		 * < V_0_6? Before using the onUpgrade() mechanism from
-		 * AbstractApplication the last version was stored in default shared
-		 * preferences. Do all the clean up for this version here.
-		 */
-		int lastAppVersion = sharedPreferences.getInt(
-				DEPRECATED_PREFERENCES_KEY_LAST_APP_VERSION,
-				DEFAULT_LAST_APP_VERSION);
-		if (lastAppVersion > DEFAULT_LAST_APP_VERSION) {
-			// Clean up preferences
-			sharedPreferences.edit()
-					.remove(DEPRECATED_PREFERENCES_KEY_FUTURE_RELEASES)
-					.commit();
-			sharedPreferences.edit()
-					.remove(DEPRECATED_PREFERENCES_KEY_LAST_APP_VERSION)
-					.commit();
-			sharedPreferences.edit()
-					.remove(DEPRECATED_PREFERENCES_KEY_FULL_UPDATE).commit();
-			sharedPreferences.edit()
-					.remove(DEPRECATED_PREFERENCES_KEY_REFRESH_SUCCESFUL)
-					.commit();
-			setLastVersionCode(lastAppVersion);
-			setAppStart(AppStart.UPGRADE);
-		}
-		/*
-		 * Make sure the Release Today service is scheduled (if not switched off
-		 * in preferences). Schedule it only after updates and new installations
-		 * to avoid overhead.
-		 */
-		releasedTodayServiceScheduler.schedule();
-	}
+        /*
+         * Is this actually an first start ever or is it an upgrade from version
+         * < V_0_6? Before using the onUpgrade() mechanism from
+         * AbstractApplication the last version was stored in default shared
+         * preferences. Do all the clean up for this version here.
+         */
+        int lastAppVersion = sharedPreferences.getInt(
+                DEPRECATED_PREFERENCES_KEY_LAST_APP_VERSION,
+                DEFAULT_LAST_APP_VERSION);
+        if (lastAppVersion > DEFAULT_LAST_APP_VERSION) {
+            // Clean up preferences
+            sharedPreferences.edit()
+                    .remove(DEPRECATED_PREFERENCES_KEY_FUTURE_RELEASES)
+                    .commit();
+            sharedPreferences.edit()
+                    .remove(DEPRECATED_PREFERENCES_KEY_LAST_APP_VERSION)
+                    .commit();
+            sharedPreferences.edit()
+                    .remove(DEPRECATED_PREFERENCES_KEY_FULL_UPDATE).commit();
+            sharedPreferences.edit()
+                    .remove(DEPRECATED_PREFERENCES_KEY_REFRESH_SUCCESFUL)
+                    .commit();
+            setLastVersionCode(lastAppVersion);
+            setAppStart(AppStart.UPGRADE);
+        }
+        /*
+         * Make sure the Release Today service is scheduled (if not switched off
+         * in preferences). Schedule it only after updates and new installations
+         * to avoid overhead.
+         */
+        releasedTodayServiceScheduler.schedule();
+    }
 
-	@Override
-	protected void onUpgrade(int oldVersion, int newVersion) {
-		/*
-		 * Make sure the Release Today service is scheduled (if not switched off
-		 * in preferences). Schedule it only after updates and new installations
-		 * to avoid overhead.
-		 */
-		releasedTodayServiceScheduler.schedule();
-	}
+    @Override
+    protected void onUpgrade(int oldVersion, int newVersion) {
+        /*
+         * Make sure the Release Today service is scheduled (if not switched off
+         * in preferences). Schedule it only after updates and new installations
+         * to avoid overhead.
+         */
+        releasedTodayServiceScheduler.schedule();
+    }
 
 }

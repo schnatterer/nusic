@@ -35,95 +35,95 @@ import java.util.List;
  */
 public interface ReleaseService {
 
-	int update(Release release) throws ServiceException;
+    int update(Release release) throws ServiceException;
 
-	/**
-	 * Convenience method for {@link #saveOrUpdate(List)}, that checks if the
-	 * artists
-	 * 
-	 * @param releases
-	 * @throws ServiceException
-	 */
-	void saveOrUpdate(List<Release> releases) throws ServiceException;
+    /**
+     * Convenience method for {@link #saveOrUpdate(List)}, that checks if the
+     * artists
+     * 
+     * @param releases
+     * @throws ServiceException
+     */
+    void saveOrUpdate(List<Release> releases) throws ServiceException;
 
-	/**
-	 * Creates new {@link Release}s or updates existing ones (matching by
-	 * {@link Release#getMusicBrainzId()}). Does not update the
-	 * {@link Release#getArtist()}.
-	 * 
-	 * @param releases
-	 * @param saveArtist
-	 *            <code>false</code> assumes that the artist is persisted
-	 *            (increases performance). Make sure {@link Artist#getId()} is
-	 *            not <code>null</code>. Otherwise the
-	 *            {@link Release#getArtist()} is saved during the process, if
-	 *            the it does not exist.
-	 * @throws ServiceException
-	 */
-	void saveOrUpdate(List<Release> releases, boolean saveArtist)
-			throws ServiceException;
+    /**
+     * Creates new {@link Release}s or updates existing ones (matching by
+     * {@link Release#getMusicBrainzId()}). Does not update the
+     * {@link Release#getArtist()}.
+     * 
+     * @param releases
+     * @param saveArtist
+     *            <code>false</code> assumes that the artist is persisted
+     *            (increases performance). Make sure {@link Artist#getId()} is
+     *            not <code>null</code>. Otherwise the
+     *            {@link Release#getArtist()} is saved during the process, if
+     *            the it does not exist.
+     * @throws ServiceException
+     */
+    void saveOrUpdate(List<Release> releases, boolean saveArtist)
+            throws ServiceException;
 
-	/**
-	 * Saves or updates only the {@link Release}, not any related {@link Artist}
-	 * .
-	 * 
-	 * @param release
-	 * @return
-	 * @throws ServiceException
-	 */
-	long saveOrUpdate(Release release) throws ServiceException;
+    /**
+     * Saves or updates only the {@link Release}, not any related {@link Artist}
+     * .
+     * 
+     * @param release
+     * @return
+     * @throws ServiceException
+     */
+    long saveOrUpdate(Release release) throws ServiceException;
 
-	/**
-	 * Finds all releases that were created after a specific date and that are
-	 * visible.
-	 * 
-	 * @param gtDateCreated
-	 *            all releases whose creation data is greater than this date are
-	 *            returned.
-	 * 
-	 * @return all releases that were created after <code>gtDateCreated</code>
-	 * @throws ServiceException
-	 */
-	List<Release> findByDateCreatedGreaterThan(long beforeRefresh)
-			throws ServiceException;
+    /**
+     * Finds all releases that were created after a specific date and that are
+     * visible.
+     * 
+     * @param gtDateCreated
+     *            all releases whose creation data is greater than this date are
+     *            returned.
+     * 
+     * @return all releases that were created after <code>gtDateCreated</code>
+     * @throws ServiceException
+     */
+    List<Release> findByDateCreatedGreaterThan(long beforeRefresh)
+            throws ServiceException;
 
-	/**
-	 * Finds all releases that are released today. That is all releases whose
-	 * release date is greater than or equal today midnight and less than
-	 * tomorrow midnight.
-	 * 
-	 * @return all releases that will be released today
-	 * @throws ServiceException
-	 */
-	List<Release> findReleasedToday() throws ServiceException;
+    /**
+     * Finds all releases that are released today. That is all releases whose
+     * release date is greater than or equal today midnight and less than
+     * tomorrow midnight.
+     * 
+     * @return all releases that will be released today
+     * @throws ServiceException
+     */
+    List<Release> findReleasedToday() throws ServiceException;
 
-	/**
-	 * Finds all release that are available as of today. *
-	 * 
-	 * @param isAvailable
-	 *            if <code>true</code> all releases that are available today are
-	 *            returned. Otherwise, all releases that are announced are
-	 *            returned.
-	 * @return
-	 * @throws ServiceException
-	 */
-	List<Release> findAvailableToday(boolean isAvailable)
-			throws ServiceException;
+    /**
+     * Finds all release that are available as of today. *
+     * 
+     * @param isAvailable
+     *            if <code>true</code> all releases that are available today are
+     *            returned. Otherwise, all releases that are announced are
+     *            returned.
+     * @return
+     * @throws ServiceException
+     */
+    List<Release> findAvailableToday(boolean isAvailable)
+            throws ServiceException;
 
-	/**
-	 * Finds all releases that are not hidden.
-	 * 
-	 * @return
-	 * @throws ServiceException
-	 */
-	List<Release> findAllNotHidden() throws ServiceException;
+    /**
+     * Finds all releases that are not hidden.
+     * 
+     * @return
+     * @throws ServiceException
+     */
+    List<Release> findAllNotHidden() throws ServiceException;
 
-	/**
-	 * Set <code>isHidden</code> to <code>false</code> for all {@link Release}s
-	 * <b>and {@link Artist}s</b>.
-	 */
-	void showAll() throws ServiceException;
+    /**
+     * Set <code>isHidden</code> to <code>false</code> for all {@link Release}s
+     * <b>and {@link Artist}s</b>.
+     */
+    void showAll() throws ServiceException;
 
-	List<Release> findJustCreated() throws ServiceException;
+    List<Release> findJustCreated() throws ServiceException;
 
 }

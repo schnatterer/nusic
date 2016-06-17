@@ -39,67 +39,67 @@ import android.view.MenuItem;
  *
  */
 public class NusicPreferencesAboutActivity extends
-		RoboAppCompatPreferenceActivity {
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		// Display the back arrow in the header (left of the icon)
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getSupportActionBar().setTitle(
-				getString(R.string.preferences_category_about,
-						getString(R.string.app_name)));
+        RoboAppCompatPreferenceActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Display the back arrow in the header (left of the icon)
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(
+                getString(R.string.preferences_category_about,
+                        getString(R.string.app_name)));
 
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-			onCreatePreferenceActivity();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+            onCreatePreferenceActivity();
 
-			// Set version
-			findPreferenceActivity(getString(R.string.preferences_key_version))
-					.setSummary(NusicApplication.getCurrentVersionName());
-		} else {
-			onCreatePreferenceFragment();
-		}
-	}
+            // Set version
+            findPreferenceActivity(getString(R.string.preferences_key_version))
+                    .setSummary(NusicApplication.getCurrentVersionName());
+        } else {
+            onCreatePreferenceFragment();
+        }
+    }
 
-	/**
-	 * Wraps legacy {@link #findPreference(CharSequence)} code for Android < 3
-	 * (i.e. API lvl < 11).
-	 */
-	@SuppressWarnings("deprecation")
-	private Preference findPreferenceActivity(String key) {
-		return findPreference(key);
-	}
+    /**
+     * Wraps legacy {@link #findPreference(CharSequence)} code for Android < 3
+     * (i.e. API lvl < 11).
+     */
+    @SuppressWarnings("deprecation")
+    private Preference findPreferenceActivity(String key) {
+        return findPreference(key);
+    }
 
-	/**
-	 * Wraps legacy {@link #onCreate(Bundle)} code for Android < 3 (i.e. API lvl
-	 * < 11).
-	 */
-	@SuppressWarnings("deprecation")
-	private void onCreatePreferenceActivity() {
-		addPreferencesFromResource(R.xml.preferences_about);
-	}
+    /**
+     * Wraps legacy {@link #onCreate(Bundle)} code for Android < 3 (i.e. API lvl
+     * < 11).
+     */
+    @SuppressWarnings("deprecation")
+    private void onCreatePreferenceActivity() {
+        addPreferencesFromResource(R.xml.preferences_about);
+    }
 
-	/**
-	 * Wraps {@link #onCreate(Bundle)} code for Android >= 3 (i.e. API lvl >=
-	 * 11).
-	 */
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void onCreatePreferenceFragment() {
-		getFragmentManager()
-				.beginTransaction()
-				.replace(
-						android.R.id.content,
-						Fragment.instantiate(this,
-								NusicPreferencesAboutFragment.class.getName()))
-				.commit();
-	}
+    /**
+     * Wraps {@link #onCreate(Bundle)} code for Android >= 3 (i.e. API lvl >=
+     * 11).
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void onCreatePreferenceFragment() {
+        getFragmentManager()
+                .beginTransaction()
+                .replace(
+                        android.R.id.content,
+                        Fragment.instantiate(this,
+                                NusicPreferencesAboutFragment.class.getName()))
+                .commit();
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == android.R.id.home) {
-			// When the back arrow in the header (left of the icon) is clicked,
-			// "go back one activity"
-			finish();
-		}
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // When the back arrow in the header (left of the icon) is clicked,
+            // "go back one activity"
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

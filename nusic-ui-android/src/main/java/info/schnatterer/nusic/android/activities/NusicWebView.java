@@ -49,57 +49,57 @@ import android.webkit.WebViewClient;
  */
 public class NusicWebView extends RoboActionBarActivity {
 
-	/** "Protocol" prefix of a link for E-mails. */
-	private static final String MAILTO_LINK = "mailto:";
+    /** "Protocol" prefix of a link for E-mails. */
+    private static final String MAILTO_LINK = "mailto:";
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_web_view);
-		WebView webView = (WebView) findViewById(R.id.webview);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_web_view);
+        WebView webView = (WebView) findViewById(R.id.webview);
 
-		// Display the back arrow in the header (left of the icon)
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // Display the back arrow in the header (left of the icon)
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		String url = getIntent().getData().toString();
-		if (url.startsWith(MAILTO_LINK)) {
-			Intent send = new Intent(Intent.ACTION_SENDTO);
-			Uri uri = Uri.parse(TextUtil.replaceResourceStrings(this, url));
+        String url = getIntent().getData().toString();
+        if (url.startsWith(MAILTO_LINK)) {
+            Intent send = new Intent(Intent.ACTION_SENDTO);
+            Uri uri = Uri.parse(TextUtil.replaceResourceStrings(this, url));
 
-			send.setData(uri);
-			startActivity(send);
-			finish();
-		} else {
-			/* Activate JavaScript */
-			// webView.getSettings().setJavaScriptEnabled(true);
+            send.setData(uri);
+            startActivity(send);
+            finish();
+        } else {
+            /* Activate JavaScript */
+            // webView.getSettings().setJavaScriptEnabled(true);
 
-			// webView.getSettings().setLoadWithOverviewMode(true);
-			webView.getSettings().setUseWideViewPort(true);
-			webView.getSettings().setBuiltInZoomControls(true);
+            // webView.getSettings().setLoadWithOverviewMode(true);
+            webView.getSettings().setUseWideViewPort(true);
+            webView.getSettings().setBuiltInZoomControls(true);
 
-			webView.loadUrl(url);
+            webView.loadUrl(url);
 
-			/* Prevent WebView from Opening the Browser on external links */
-			webView.setWebViewClient(new InsideWebViewClient());
-		}
-	}
+            /* Prevent WebView from Opening the Browser on external links */
+            webView.setWebViewClient(new InsideWebViewClient());
+        }
+    }
 
-	/* Class that prevents opening the Browser */
-	private class InsideWebViewClient extends WebViewClient {
-		@Override
-		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-			view.loadUrl(url);
-			return true;
-		}
-	}
+    /* Class that prevents opening the Browser */
+    private class InsideWebViewClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == android.R.id.home) {
-			// When the back arrow in the header (left of the icon) is clicked,
-			// "go back one activity"
-			finish();
-		}
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // When the back arrow in the header (left of the icon) is clicked,
+            // "go back one activity"
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

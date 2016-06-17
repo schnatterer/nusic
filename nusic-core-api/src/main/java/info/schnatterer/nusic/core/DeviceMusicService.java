@@ -31,12 +31,12 @@ import info.schnatterer.nusic.data.model.Artist;
  */
 public interface DeviceMusicService {
 
-	/**
-	 * Gets the names of all artists stored on local device.
-	 * 
-	 * @return
-	 * @throws ServiceException
-	 */
-	Artist[] getArtists() throws ServiceException;
+    /**
+     * Gets the names of all artists stored on local device.
+     * 
+     * @return
+     * @throws ServiceException
+     */
+    Artist[] getArtists() throws ServiceException;
 
 }

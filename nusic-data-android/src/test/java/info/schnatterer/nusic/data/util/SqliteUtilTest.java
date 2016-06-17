@@ -40,75 +40,75 @@ import android.content.ContentValues;
 // Test is faster without dependency Injection!
 public class SqliteUtilTest {
 
-	@Test
-	public void testToBoolean0() {
-		assertEquals(Boolean.FALSE, SqliteUtil.toBoolean(0));
-	}
+    @Test
+    public void testToBoolean0() {
+        assertEquals(Boolean.FALSE, SqliteUtil.toBoolean(0));
+    }
 
-	@Test
-	public void testToBoolean1() {
-		assertEquals(Boolean.TRUE, SqliteUtil.toBoolean(1));
-	}
+    @Test
+    public void testToBoolean1() {
+        assertEquals(Boolean.TRUE, SqliteUtil.toBoolean(1));
+    }
 
-	@Test
-	public void testToBooleanGt1() {
-		assertEquals(Boolean.TRUE, SqliteUtil.toBoolean(10000000));
-	}
+    @Test
+    public void testToBooleanGt1() {
+        assertEquals(Boolean.TRUE, SqliteUtil.toBoolean(10000000));
+    }
 
-	@Test
-	public void testToBooleanLt0() {
-		assertEquals(Boolean.TRUE, SqliteUtil.toBoolean(-1));
-	}
+    @Test
+    public void testToBooleanLt0() {
+        assertEquals(Boolean.TRUE, SqliteUtil.toBoolean(-1));
+    }
 
-	@Test
-	public void testToBooleanNull() {
-		assertNull(SqliteUtil.toBoolean(null));
-	}
+    @Test
+    public void testToBooleanNull() {
+        assertNull(SqliteUtil.toBoolean(null));
+    }
 
-	@Test
-	public void testToIntegerFalse() {
-		assertEquals(Integer.valueOf(0), SqliteUtil.toInteger(Boolean.FALSE));
-	}
+    @Test
+    public void testToIntegerFalse() {
+        assertEquals(Integer.valueOf(0), SqliteUtil.toInteger(Boolean.FALSE));
+    }
 
-	@Test
-	public void testToIntegerTrue() {
-		assertEquals(Integer.valueOf(1), SqliteUtil.toInteger(Boolean.TRUE));
-	}
+    @Test
+    public void testToIntegerTrue() {
+        assertEquals(Integer.valueOf(1), SqliteUtil.toInteger(Boolean.TRUE));
+    }
 
-	@Test
-	public void testToIntegerNull() {
-		assertNull(SqliteUtil.toInteger(null));
-	}
+    @Test
+    public void testToIntegerNull() {
+        assertNull(SqliteUtil.toInteger(null));
+    }
 
-	@Test
-	public void testToContentValues() {
-		Map<String, Object> expected = new HashMap<String, Object>();
-		expected.put("key1", Integer.valueOf(42));
-		expected.put("KEY2", "value2");
+    @Test
+    public void testToContentValues() {
+        Map<String, Object> expected = new HashMap<String, Object>();
+        expected.put("key1", Integer.valueOf(42));
+        expected.put("KEY2", "value2");
 
-		ContentValues actual = SqliteUtil.toContentValues(expected);
+        ContentValues actual = SqliteUtil.toContentValues(expected);
 
-		assertEquals("ContentValues contans unexpected amount of values",
-				expected.size(), actual.keySet().size());
+        assertEquals("ContentValues contans unexpected amount of values",
+                expected.size(), actual.keySet().size());
 
-		for (Entry<String, Object> expectedEntry : expected.entrySet()) {
-			assertEquals("ContentValue returns different value for key "
-					+ expectedEntry.getKey(), expectedEntry.getValue(),
-					actual.get(expectedEntry.getKey()));
-		}
-	}
+        for (Entry<String, Object> expectedEntry : expected.entrySet()) {
+            assertEquals("ContentValue returns different value for key "
+                    + expectedEntry.getKey(), expectedEntry.getValue(),
+                    actual.get(expectedEntry.getKey()));
+        }
+    }
 
-	@Test
-	public void testToContentValuesNull() {
-		assertNull(SqliteUtil.toContentValues(null));
-	}
+    @Test
+    public void testToContentValuesNull() {
+        assertNull(SqliteUtil.toContentValues(null));
+    }
 
-	@Test
-	public void testToContentValuesEmpty() {
-		ContentValues actual = SqliteUtil
-				.toContentValues(new HashMap<String, Object>());
+    @Test
+    public void testToContentValuesEmpty() {
+        ContentValues actual = SqliteUtil
+                .toContentValues(new HashMap<String, Object>());
 
-		assertEquals("ContentValues contans unexpected amount of values", 0,
-				actual.keySet().size());
-	}
+        assertEquals("ContentValues contans unexpected amount of values", 0,
+                actual.keySet().size());
+    }
 }

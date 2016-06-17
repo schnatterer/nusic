@@ -46,50 +46,50 @@ import android.preference.Preference;
  * <b>Make sure to call {@link #setContext(Context)}.</b>
  */
 public class PreferenceVisibilityButtonListener implements
-		Preference.OnPreferenceClickListener {
-	private static final Logger LOG = LoggerFactory
-			.getLogger(PreferenceVisibilityButtonListener.class);
+        Preference.OnPreferenceClickListener {
+    private static final Logger LOG = LoggerFactory
+            .getLogger(PreferenceVisibilityButtonListener.class);
 
-	private Activity activity;
+    private Activity activity;
 
-	@Inject
-	private ReleaseService releaseService;
+    @Inject
+    private ReleaseService releaseService;
 
-	@Override
-	public boolean onPreferenceClick(Preference preference) {
-		if (activity == null) {
-			LOG.warn("No activity set in " + this.getClass().getName());
-			return false;
-		}
-		new AlertDialog.Builder(activity)
-				// .setTitle(
-				// R.string.preferences_title_display_all_releases)
-				.setMessage(R.string.preferences_message_display_all_releases)
-				// .setIcon(android.R.drawable.ic_dialog_alert)
-				.setNegativeButton(android.R.string.no, null)
-				.setPositiveButton(android.R.string.yes,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
+    @Override
+    public boolean onPreferenceClick(Preference preference) {
+        if (activity == null) {
+            LOG.warn("No activity set in " + this.getClass().getName());
+            return false;
+        }
+        new AlertDialog.Builder(activity)
+                // .setTitle(
+                // R.string.preferences_title_display_all_releases)
+                .setMessage(R.string.preferences_message_display_all_releases)
+                // .setIcon(android.R.drawable.ic_dialog_alert)
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                    int whichButton) {
 
-								try {
-									releaseService.showAll();
-									// Trigger reload in main activity
-									activity.onContentChanged();
-								} catch (ServiceException e) {
-									Toast.toast(activity,
-											e.getLocalizedMessage());
-								}
-							}
-						}).show();
-		return true;
-	}
+                                try {
+                                    releaseService.showAll();
+                                    // Trigger reload in main activity
+                                    activity.onContentChanged();
+                                } catch (ServiceException e) {
+                                    Toast.toast(activity,
+                                            e.getLocalizedMessage());
+                                }
+                            }
+                        }).show();
+        return true;
+    }
 
-	public Activity getActivity() {
-		return activity;
-	}
+    public Activity getActivity() {
+        return activity;
+    }
 
-	public void setActivity(Activity activity) {
-		this.activity = activity;
-	}
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
 }

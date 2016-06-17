@@ -38,45 +38,45 @@ import android.net.NetworkInfo;
  *
  */
 public class ConnectivityServiceAndroid implements ConnectivityService {
-	@Inject
-	private PreferencesService preferencesService;
-	@Inject
-	private Context context;
+    @Inject
+    private PreferencesService preferencesService;
+    @Inject
+    private Context context;
 
-	@Override
-	public boolean isOnline() {
-		boolean state = false;
-		final boolean isOnlyOnWifi = preferencesService.isUseOnlyWifi();
+    @Override
+    public boolean isOnline() {
+        boolean state = false;
+        final boolean isOnlyOnWifi = preferencesService.isUseOnlyWifi();
 
-		/* Monitor network connections */
-		final ConnectivityManager connectivityManager = (ConnectivityManager) context
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
+        /* Monitor network connections */
+        final ConnectivityManager connectivityManager = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
 
-		/* Wi-Fi connection */
-		final NetworkInfo wifiNetwork = connectivityManager
-				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-		if (wifiNetwork != null) {
-			state = wifiNetwork.isConnectedOrConnecting();
-		}
+        /* Wi-Fi connection */
+        final NetworkInfo wifiNetwork = connectivityManager
+                .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (wifiNetwork != null) {
+            state = wifiNetwork.isConnectedOrConnecting();
+        }
 
-		/* Mobile data connection */
-		final NetworkInfo mobileNetwork = connectivityManager
-				.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-		if (mobileNetwork != null) {
-			if (!isOnlyOnWifi) {
-				state = mobileNetwork.isConnectedOrConnecting();
-			}
-		}
+        /* Mobile data connection */
+        final NetworkInfo mobileNetwork = connectivityManager
+                .getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if (mobileNetwork != null) {
+            if (!isOnlyOnWifi) {
+                state = mobileNetwork.isConnectedOrConnecting();
+            }
+        }
 
-		/* Other networks */
-		final NetworkInfo activeNetwork = connectivityManager
-				.getActiveNetworkInfo();
-		if (activeNetwork != null) {
-			if (!isOnlyOnWifi) {
-				state = activeNetwork.isConnectedOrConnecting();
-			}
-		}
+        /* Other networks */
+        final NetworkInfo activeNetwork = connectivityManager
+                .getActiveNetworkInfo();
+        if (activeNetwork != null) {
+            if (!isOnlyOnWifi) {
+                state = activeNetwork.isConnectedOrConnecting();
+            }
+        }
 
-		return state;
-	}
+        return state;
+    }
 }

@@ -29,11 +29,11 @@ import android.os.Bundle;
 @SuppressLint("NewApi")
 public class NusicPreferencesDeveloperFragment extends RoboPreferenceFragment {
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		// Load the preferences from an XML resource
-		addPreferencesFromResource(R.xml.preferences_developer);
-	}
+        // Load the preferences from an XML resource
+        addPreferencesFromResource(R.xml.preferences_developer);
+    }
 }

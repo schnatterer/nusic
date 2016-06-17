@@ -33,73 +33,73 @@ import android.content.Context;
  *
  */
 public class Toast {
-	private static final Logger LOG = LoggerFactory.getLogger(Toast.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Toast.class);
 
-	private Toast() {
-	}
+    private Toast() {
+    }
 
-	/**
-	 * Prints a toast to the screen.
-	 * 
-	 * @param context
-	 *            The context to use. Usually your android.app.Application or
-	 *            android.app.Activity object.
-	 * @param text
-	 *            The text to show. Can be formatted text.
-	 */
-	public static void toast(Context context, String text) {
-		LOG.info("Toast: " + text);
-		android.widget.Toast.makeText(context, text,
-				android.widget.Toast.LENGTH_LONG).show();
-	}
+    /**
+     * Prints a toast to the screen.
+     * 
+     * @param context
+     *            The context to use. Usually your android.app.Application or
+     *            android.app.Activity object.
+     * @param text
+     *            The text to show. Can be formatted text.
+     */
+    public static void toast(Context context, String text) {
+        LOG.info("Toast: " + text);
+        android.widget.Toast.makeText(context, text,
+                android.widget.Toast.LENGTH_LONG).show();
+    }
 
-	/**
-	 * Prints a toast to the screen, using a localized string from the
-	 * application's package's default string table.
-	 * 
-	 * 
-	 * @param context
-	 *            The context to use. Usually your android.app.Application or
-	 *            android.app.Activity object.
-	 * @param stringId
-	 *            Resource id for the string
-	 */
-	public static void toast(Context context, int stringId) {
-		toast(context, context.getString(stringId));
-	}
+    /**
+     * Prints a toast to the screen, using a localized string from the
+     * application's package's default string table.
+     * 
+     * 
+     * @param context
+     *            The context to use. Usually your android.app.Application or
+     *            android.app.Activity object.
+     * @param stringId
+     *            Resource id for the string
+     */
+    public static void toast(Context context, int stringId) {
+        toast(context, context.getString(stringId));
+    }
 
-	/**
-	 * Prints a toast to the screen, using a localized formatted string.
-	 * 
-	 * @param context
-	 *            The context to use. Usually your android.app.Application or
-	 *            android.app.Activity object.
-	 * @param message
-	 *            the format string (see {@link java.util.Formatter#format})
-	 * @param args
-	 *            the list of arguments passed to the formatter. If there are
-	 *            more arguments than required by {@code format}, additional
-	 *            arguments are ignored.
-	 */
-	public static void toast(Context context, String message, Object... args) {
-		toast(context, String.format(message, args));
-	}
+    /**
+     * Prints a toast to the screen, using a localized formatted string.
+     * 
+     * @param context
+     *            The context to use. Usually your android.app.Application or
+     *            android.app.Activity object.
+     * @param message
+     *            the format string (see {@link java.util.Formatter#format})
+     * @param args
+     *            the list of arguments passed to the formatter. If there are
+     *            more arguments than required by {@code format}, additional
+     *            arguments are ignored.
+     */
+    public static void toast(Context context, String message, Object... args) {
+        toast(context, String.format(message, args));
+    }
 
-	/**
-	 * Prints a toast to the screen using a localized string from the
-	 * application's package's default string table that is formatted.
-	 * 
-	 * @param context
-	 *            The context to use. Usually your android.app.Application or
-	 *            android.app.Activity object.
-	 * @param stringId
-	 *            Resource id for the string
-	 * @param args
-	 *            the list of arguments passed to the formatter. If there are
-	 *            more arguments than required by {@code format}, additional
-	 *            arguments are ignored.
-	 */
-	public static void toast(Context context, int stringId, Object... args) {
-		toast(context, String.format(context.getString(stringId), args));
-	}
+    /**
+     * Prints a toast to the screen using a localized string from the
+     * application's package's default string table that is formatted.
+     * 
+     * @param context
+     *            The context to use. Usually your android.app.Application or
+     *            android.app.Activity object.
+     * @param stringId
+     *            Resource id for the string
+     * @param args
+     *            the list of arguments passed to the formatter. If there are
+     *            more arguments than required by {@code format}, additional
+     *            arguments are ignored.
+     */
+    public static void toast(Context context, int stringId, Object... args) {
+        toast(context, String.format(context.getString(stringId), args));
+    }
 }

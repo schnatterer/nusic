@@ -33,147 +33,147 @@ import java.util.Date;
  * 
  */
 public interface PreferencesService {
-	/**
-	 * Resets all your preferences. Careful with that!
-	 */
-	void clearPreferences();
+    /**
+     * Resets all your preferences. Careful with that!
+     */
+    void clearPreferences();
 
-	/**
-	 * Gets the last time the {@link Release}s have been loaded from the
-	 * internet.
-	 * 
-	 * This is useful to determine the start date for the next refresh.
-	 */
-	Date getLastReleaseRefresh();
+    /**
+     * Gets the last time the {@link Release}s have been loaded from the
+     * internet.
+     * 
+     * This is useful to determine the start date for the next refresh.
+     */
+    Date getLastReleaseRefresh();
 
-	/**
-	 * Set last time the {@link Release}s have been loaded from the internet.
-	 * 
-	 * This is useful to determine the start date for the next refresh.
-	 * 
-	 * @return <code>true</code> if the new values were successfully written to
-	 *         persistent storage
-	 */
-	boolean setLastReleaseRefresh(Date date);
+    /**
+     * Set last time the {@link Release}s have been loaded from the internet.
+     * 
+     * This is useful to determine the start date for the next refresh.
+     * 
+     * @return <code>true</code> if the new values were successfully written to
+     *         persistent storage
+     */
+    boolean setLastReleaseRefresh(Date date);
 
-	/**
-	 * @return <code>true</code> if the user has checked to only download images
-	 *         on Wi-Fi. Otherwise <code>false</code>
-	 */
-	boolean isUseOnlyWifi();
+    /**
+     * @return <code>true</code> if the user has checked to only download images
+     *         on Wi-Fi. Otherwise <code>false</code>
+     */
+    boolean isUseOnlyWifi();
 
-	/**
-	 * @return time period in months (from today back in time) for which
-	 *         releases are downloaded and displayed.
-	 */
-	int getDownloadReleasesTimePeriod();
+    /**
+     * @return time period in months (from today back in time) for which
+     *         releases are downloaded and displayed.
+     */
+    int getDownloadReleasesTimePeriod();
 
-	void registerOnSharedPreferenceChangeListener(
-			PreferenceChangedListener preferenceChangedListener);
+    void registerOnSharedPreferenceChangeListener(
+            PreferenceChangedListener preferenceChangedListener);
 
-	void unregisterOnSharedPreferenceChangeListener(
-			PreferenceChangedListener preferenceChangedListener);
+    void unregisterOnSharedPreferenceChangeListener(
+            PreferenceChangedListener preferenceChangedListener);
 
-	/**
-	 * @return amount of days between two scheduled (as opposed to manual)
-	 *         refreshs of the releases.
-	 */
-	int getRefreshPeriod();
+    /**
+     * @return amount of days between two scheduled (as opposed to manual)
+     *         refreshs of the releases.
+     */
+    int getRefreshPeriod();
 
-	/**
-	 * @return time period in days beginning now, which defines the "just" in
-	 *         "just added".
-	 */
-	int getJustAddedTimePeriod();
+    /**
+     * @return time period in days beginning now, which defines the "just" in
+     *         "just added".
+     */
+    int getJustAddedTimePeriod();
 
-	Date getNextReleaseRefresh();
+    Date getNextReleaseRefresh();
 
-	boolean setNextReleaseRefresh(Date date);
+    boolean setNextReleaseRefresh(Date date);
 
-	/**
-	 * @return <code>true</code> synchronization of releases is started when the
-	 *         connection status changes to "connected". Otherwise
-	 *         <code>false</code>.
-	 * 
-	 */
-	boolean isEnabledConnectivityReceiver();
+    /**
+     * @return <code>true</code> synchronization of releases is started when the
+     *         connection status changes to "connected". Otherwise
+     *         <code>false</code>.
+     * 
+     */
+    boolean isEnabledConnectivityReceiver();
 
-	/**
-	 * Setting to <code>true</code> starts synchronization of releases when the
-	 * connection status changes to "connected". <code>false</code>
-	 * syncronization on connection change.
-	 * 
-	 * @param enabled
-	 * @return <code>true</code> if the new values were successfully written to
-	 *         persistent storage
-	 */
-	boolean setEnabledConnectivityReceiver(boolean enabled);
+    /**
+     * Setting to <code>true</code> starts synchronization of releases when the
+     * connection status changes to "connected". <code>false</code>
+     * syncronization on connection change.
+     * 
+     * @param enabled
+     * @return <code>true</code> if the new values were successfully written to
+     *         persistent storage
+     */
+    boolean setEnabledConnectivityReceiver(boolean enabled);
 
-	/**
-	 * @return <code>true</code> if the check for albums getting release today
-	 *         is enabled.
-	 */
-	boolean isEnabledNotifyReleasedToday();
+    /**
+     * @return <code>true</code> if the check for albums getting release today
+     *         is enabled.
+     */
+    boolean isEnabledNotifyReleasedToday();
 
-	/**
-	 * @return <code>true</code> if a notification is shown when new releases
-	 *         are found during syncronization.
-	 */
-	boolean isEnabledNotifyNewReleases();
+    /**
+     * @return <code>true</code> if a notification is shown when new releases
+     *         are found during syncronization.
+     */
+    boolean isEnabledNotifyNewReleases();
 
-	/**
-	 * @return the hour of day when the check for new releases is performed if
-	 *         {@link #isEnabledNotifyReleasedToday()} is <code>true</code>.
-	 */
-	int getReleasedTodayScheduleHourOfDay();
+    /**
+     * @return the hour of day when the check for new releases is performed if
+     *         {@link #isEnabledNotifyReleasedToday()} is <code>true</code>.
+     */
+    int getReleasedTodayScheduleHourOfDay();
 
-	/**
-	 * Sets the time when checking for the check for new releases is performed
-	 * if {@link #isEnabledNotifyReleasedToday()} is <code>true</code>.
-	 * 
-	 * @param hourOfDay
-	 * @param minute
-	 * @return <code>true</code> if the new values were successfully written to
-	 *         persistent storage
-	 */
-	boolean setReleasedTodaySchedule(int hourOfDay, int minute);
+    /**
+     * Sets the time when checking for the check for new releases is performed
+     * if {@link #isEnabledNotifyReleasedToday()} is <code>true</code>.
+     * 
+     * @param hourOfDay
+     * @param minute
+     * @return <code>true</code> if the new values were successfully written to
+     *         persistent storage
+     */
+    boolean setReleasedTodaySchedule(int hourOfDay, int minute);
 
-	/**
-	 * @return the minute when the check for new releases is performed if
-	 *         {@link #isEnabledNotifyReleasedToday()} is <code>true</code>.
-	 */
-	int getReleasedTodayScheduleMinute();
+    /**
+     * @return the minute when the check for new releases is performed if
+     *         {@link #isEnabledNotifyReleasedToday()} is <code>true</code>.
+     */
+    int getReleasedTodayScheduleMinute();
 
-	/**
-	 * @param logLevel
-	 *            the logLevel that is initialized on the root logger when
-	 *            starting the the app.
-	 * @return <code>true</code> if the new values were successfully written to
-	 *         persistent storage
-	 */
-	boolean setLogLevel(String logLevel);
+    /**
+     * @param logLevel
+     *            the logLevel that is initialized on the root logger when
+     *            starting the the app.
+     * @return <code>true</code> if the new values were successfully written to
+     *         persistent storage
+     */
+    boolean setLogLevel(String logLevel);
 
-	/**
-	 * @return the logLevel that was initialized on the root logger when
-	 *         starting the the app.
-	 */
-	String getLogLevel();
+    /**
+     * @return the logLevel that was initialized on the root logger when
+     *         starting the the app.
+     */
+    String getLogLevel();
 
-	/**
-	 * Sets the log level for the logCat appender. Note that this depends on the
-	 * root logger ({@link #setLogLevel(String)}).
-	 * 
-	 * @param logLevel
-	 *            the logLevel that is initialized on the logcat appender when
-	 *            starting the the app.
-	 * @return <code>true</code> if the new values were successfully written to
-	 *         persistent storage
-	 */
-	boolean setLogLevelLogCat(String logLevel);
+    /**
+     * Sets the log level for the logCat appender. Note that this depends on the
+     * root logger ({@link #setLogLevel(String)}).
+     * 
+     * @param logLevel
+     *            the logLevel that is initialized on the logcat appender when
+     *            starting the the app.
+     * @return <code>true</code> if the new values were successfully written to
+     *         persistent storage
+     */
+    boolean setLogLevelLogCat(String logLevel);
 
-	/**
-	 * @return the logLevel that was initialized on the logCat appender when
-	 *         starting the the app.
-	 */
-	String getLogLevelLogCat();
+    /**
+     * @return the logLevel that was initialized on the logCat appender when
+     *         starting the the app.
+     */
+    String getLogLevelLogCat();
 }

@@ -22,6 +22,6 @@
 package info.schnatterer.nusic.core.event;
 
 public interface PreferenceChangedListener {
-	void onPreferenceChanged(String key, Object newValue);
+    void onPreferenceChanged(String key, Object newValue);
 
 }

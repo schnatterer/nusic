@@ -34,41 +34,41 @@ import info.schnatterer.nusic.core.event.ArtistProgressListener;
  */
 public interface SyncReleasesService {
 
-	/**
-	 * Synchronizes the releases in the local database with the one from the
-	 * internet. The time period queried depends on
-	 * {@link PreferencesService#getDownloadReleasesTimePeriod()},
-	 * {@link PreferencesService#getLastReleaseRefresh()},
-	 * {@link PreferencesService#isIncludeFutureReleases()} and
-	 * {@link PreferencesService#isForceFullRefresh()}.
-	 * 
-	 */
-	void syncReleases();
+    /**
+     * Synchronizes the releases in the local database with the one from the
+     * internet. The time period queried depends on
+     * {@link PreferencesService#getDownloadReleasesTimePeriod()},
+     * {@link PreferencesService#getLastReleaseRefresh()},
+     * {@link PreferencesService#isIncludeFutureReleases()} and
+     * {@link PreferencesService#isForceFullRefresh()}.
+     * 
+     */
+    void syncReleases();
 
-	/**
-	 * Adds an {@link ArtistProgressListener} to the Service. This is called
-	 * whenever an {@link Artist} was processed by one of the method calls.
-	 * 
-	 * @param artistProcessedListener
-	 *            the progress lListener to be added
-	 */
-	void addArtistProcessedListener(
-			ArtistProgressListener artistProcessedListener);
+    /**
+     * Adds an {@link ArtistProgressListener} to the Service. This is called
+     * whenever an {@link Artist} was processed by one of the method calls.
+     * 
+     * @param artistProcessedListener
+     *            the progress lListener to be added
+     */
+    void addArtistProcessedListener(
+            ArtistProgressListener artistProcessedListener);
 
-	/**
-	 * Return an {@link ArtistProgressListener} from the service.
-	 * 
-	 * @param artistProcessedListener
-	 *            the progress lListener to be removed
-	 * @return <code>true</code> if the listener was present and is now removed.
-	 *         <code>false</code> otherwise.
-	 */
-	boolean removeArtistProcessedListener(
-			ArtistProgressListener artistProcessedListener);
+    /**
+     * Return an {@link ArtistProgressListener} from the service.
+     * 
+     * @param artistProcessedListener
+     *            the progress lListener to be removed
+     * @return <code>true</code> if the listener was present and is now removed.
+     *         <code>false</code> otherwise.
+     */
+    boolean removeArtistProcessedListener(
+            ArtistProgressListener artistProcessedListener);
 
-	/**
-	 * Removes all process listeners.
-	 */
-	void removeArtistProcessedListeners();
+    /**
+     * Removes all process listeners.
+     */
+    void removeArtistProcessedListeners();
 
 }

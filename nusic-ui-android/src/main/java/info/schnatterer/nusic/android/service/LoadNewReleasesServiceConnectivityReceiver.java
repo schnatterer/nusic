@@ -46,65 +46,65 @@ import android.content.Intent;
  * disableReceiver() affect not only one instance.
  */
 public class LoadNewReleasesServiceConnectivityReceiver extends
-		RoboBroadcastReceiver {
-	private static final Logger LOG = LoggerFactory
-			.getLogger(LoadNewReleasesServiceConnectivityReceiver.class);
+        RoboBroadcastReceiver {
+    private static final Logger LOG = LoggerFactory
+            .getLogger(LoadNewReleasesServiceConnectivityReceiver.class);
 
-	@Inject
-	private ConnectivityService connectivityService;
+    @Inject
+    private ConnectivityService connectivityService;
 
-	@Inject
-	private PreferencesService preferencesService;
+    @Inject
+    private PreferencesService preferencesService;
 
-	/**
-	 * Enables static ConnectivityReceiver registered in AndroidManifest.<br/>
-	 * <br/>
-	 * <b>Note: This will disable this will not only affect this very instance
-	 * of the receiver. It will be enabled application-wide</b>
-	 * 
-	 * @param context
-	 */
-	public void enableReceiver() {
-		preferencesService.setEnabledConnectivityReceiver(true);
-	}
+    /**
+     * Enables static ConnectivityReceiver registered in AndroidManifest.<br/>
+     * <br/>
+     * <b>Note: This will disable this will not only affect this very instance
+     * of the receiver. It will be enabled application-wide</b>
+     * 
+     * @param context
+     */
+    public void enableReceiver() {
+        preferencesService.setEnabledConnectivityReceiver(true);
+    }
 
-	/**
-	 * Disables static ConnectivityReceiver registered in AndroidManifest.<br/>
-	 * <br/>
-	 * <b>Note: This will disable this will not only affect this very instance
-	 * of the receiver. It will be disabled application-wide</b>
-	 * 
-	 * @param context
-	 */
-	public void disableReceiver() {
-		preferencesService.setEnabledConnectivityReceiver(false);
-	}
+    /**
+     * Disables static ConnectivityReceiver registered in AndroidManifest.<br/>
+     * <br/>
+     * <b>Note: This will disable this will not only affect this very instance
+     * of the receiver. It will be disabled application-wide</b>
+     * 
+     * @param context
+     */
+    public void disableReceiver() {
+        preferencesService.setEnabledConnectivityReceiver(false);
+    }
 
-	@Override
-	public void handleReceive(final Context context, final Intent intent) {
-		if (connectivityService.isOnline()) {
-			LOG.debug("Connectivity receiver: Device online");
-			onConnectionEstablished(context);
-		} else {
-			LOG.debug("Connectivity receiver: Device offline");
-			onConnectionLost(context);
-		}
-	}
+    @Override
+    public void handleReceive(final Context context, final Intent intent) {
+        if (connectivityService.isOnline()) {
+            LOG.debug("Connectivity receiver: Device online");
+            onConnectionEstablished(context);
+        } else {
+            LOG.debug("Connectivity receiver: Device offline");
+            onConnectionLost(context);
+        }
+    }
 
-	/**
-	 * Disables the receiver and starts the service.
-	 * 
-	 * @param context
-	 */
-	public void onConnectionEstablished(Context context) {
-		if (preferencesService.isEnabledConnectivityReceiver()) {
-			context.startService(LoadNewReleasesService
-					.createIntentRefreshReleases(context));
-		}
-	}
+    /**
+     * Disables the receiver and starts the service.
+     * 
+     * @param context
+     */
+    public void onConnectionEstablished(Context context) {
+        if (preferencesService.isEnabledConnectivityReceiver()) {
+            context.startService(LoadNewReleasesService
+                    .createIntentRefreshReleases(context));
+        }
+    }
 
-	public void onConnectionLost(Context context) {
-		// Don't care for now
-		// TODO listen all the time and stop updating releases?
-	}
+    public void onConnectionLost(Context context) {
+        // Don't care for now
+        // TODO listen all the time and stop updating releases?
+    }
 }

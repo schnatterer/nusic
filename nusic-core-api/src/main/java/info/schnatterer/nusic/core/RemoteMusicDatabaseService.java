@@ -36,21 +36,21 @@ import java.util.Date;
  */
 public interface RemoteMusicDatabaseService {
 
-	/**
-	 * Finds releases by artist.
-	 * 
-	 * @param artist
-	 *            the artist to query releases for.
-	 * @param fromDate
-	 *            the lower boundary of the time range in which release were
-	 *            published
-	 * @param endDate
-	 *            the upper boundary of the time range in which release were
-	 *            published
-	 * @return an artists object that contains all the releases that were
-	 *         published in the specified time range
-	 * @throws ServiceException
-	 */
-	Artist findReleases(Artist artist, Date fromDate, Date endDate)
-			throws ServiceException;
+    /**
+     * Finds releases by artist.
+     * 
+     * @param artist
+     *            the artist to query releases for.
+     * @param fromDate
+     *            the lower boundary of the time range in which release were
+     *            published
+     * @param endDate
+     *            the upper boundary of the time range in which release were
+     *            published
+     * @return an artists object that contains all the releases that were
+     *         published in the specified time range
+     * @throws ServiceException
+     */
+    Artist findReleases(Artist artist, Date fromDate, Date endDate)
+            throws ServiceException;
 }

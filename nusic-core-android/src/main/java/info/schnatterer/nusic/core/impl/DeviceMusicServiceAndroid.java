@@ -44,75 +44,75 @@ import android.provider.MediaStore.Audio.ArtistColumns;
  */
 public class DeviceMusicServiceAndroid implements DeviceMusicService {
 
-	@Inject
-	private Context context;
-	private static final String ARTIST_SORT_ORDER = Audio.Artists.DEFAULT_SORT_ORDER;
-	private static final String[] ARTIST_PROJECTION = ArtistProjection
-			.getArtistProjection();
-	private static final Uri ARTIST_URI = Audio.Artists.EXTERNAL_CONTENT_URI;
+    @Inject
+    private Context context;
+    private static final String ARTIST_SORT_ORDER = Audio.Artists.DEFAULT_SORT_ORDER;
+    private static final String[] ARTIST_PROJECTION = ArtistProjection
+            .getArtistProjection();
+    private static final Uri ARTIST_URI = Audio.Artists.EXTERNAL_CONTENT_URI;
 
-	@Override
-	public Artist[] getArtists() throws ServiceException {
-		ContentResolver contentResolver = context.getContentResolver();
-		Cursor cursor = null;
-		Artist[] artists = null;
-		try {
+    @Override
+    public Artist[] getArtists() throws ServiceException {
+        ContentResolver contentResolver = context.getContentResolver();
+        Cursor cursor = null;
+        Artist[] artists = null;
+        try {
 
-			cursor = contentResolver.query(ARTIST_URI, ARTIST_PROJECTION, null,
-					null, ARTIST_SORT_ORDER);
-			if (cursor != null) {
-				artists = new Artist[cursor.getCount()];
-				int i = 0;
-				while (cursor.moveToNext()) {
-					Artist artist = new Artist();
-					artist.setAndroidAudioArtistId(cursor
-							.getLong(ArtistProjection.ID.getIndex()));
-					artist.setArtistName(cursor
-							.getString(ArtistProjection.ARTIST.getIndex()));
-					artists[i++] = artist;
-				}
-			}
-		} catch (Throwable t) {
-			throw new AndroidServiceException(
-					CoreMessageKey.ERROR_LOADING_ARTISTS, t);
-		} finally {
-			if (cursor != null) {
-				cursor.close();
-			}
-		}
-		return artists;
-	}
+            cursor = contentResolver.query(ARTIST_URI, ARTIST_PROJECTION, null,
+                    null, ARTIST_SORT_ORDER);
+            if (cursor != null) {
+                artists = new Artist[cursor.getCount()];
+                int i = 0;
+                while (cursor.moveToNext()) {
+                    Artist artist = new Artist();
+                    artist.setAndroidAudioArtistId(cursor
+                            .getLong(ArtistProjection.ID.getIndex()));
+                    artist.setArtistName(cursor
+                            .getString(ArtistProjection.ARTIST.getIndex()));
+                    artists[i++] = artist;
+                }
+            }
+        } catch (Throwable t) {
+            throw new AndroidServiceException(
+                    CoreMessageKey.ERROR_LOADING_ARTISTS, t);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return artists;
+    }
 
-	public enum ArtistProjection {
-		ID(0, BaseColumns._ID), ARTIST(1, ArtistColumns.ARTIST);
-		private static final String[] artistProjection = { ID.getColumnKey(),
-				ARTIST.getColumnKey() };
-		private int index;
-		private String columnKey;
+    public enum ArtistProjection {
+        ID(0, BaseColumns._ID), ARTIST(1, ArtistColumns.ARTIST);
+        private static final String[] artistProjection = { ID.getColumnKey(),
+                ARTIST.getColumnKey() };
+        private int index;
+        private String columnKey;
 
-		private ArtistProjection(int index, String columnKey) {
-			this.setIndex(index);
-			this.setColumnKey(columnKey);
-		}
+        private ArtistProjection(int index, String columnKey) {
+            this.setIndex(index);
+            this.setColumnKey(columnKey);
+        }
 
-		public int getIndex() {
-			return index;
-		}
+        public int getIndex() {
+            return index;
+        }
 
-		public String getColumnKey() {
-			return columnKey;
-		}
+        public String getColumnKey() {
+            return columnKey;
+        }
 
-		private void setIndex(int index) {
-			this.index = index;
-		}
+        private void setIndex(int index) {
+            this.index = index;
+        }
 
-		private void setColumnKey(String columnKey) {
-			this.columnKey = columnKey;
-		}
+        private void setColumnKey(String columnKey) {
+            this.columnKey = columnKey;
+        }
 
-		public static String[] getArtistProjection() {
-			return artistProjection;
-		}
-	}
+        public static String[] getArtistProjection() {
+            return artistProjection;
+        }
+    }
 }

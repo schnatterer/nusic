@@ -39,57 +39,57 @@ import javax.inject.Inject;
  */
 public class ArtistServiceImpl implements ArtistService {
 
-	@Inject
-	private ReleaseService releaseService;
-	@Inject
-	private ArtistDao artistDao;
+    @Inject
+    private ReleaseService releaseService;
+    @Inject
+    private ArtistDao artistDao;
 
-	@Override
-	public long save(Artist artist) throws ServiceException {
-		try {
-			long ret = artistDao.save(artist);
-			releaseService.saveOrUpdate(artist.getReleases(), false);
-			return ret;
-		} catch (DatabaseException e) {
-			throw new AndroidServiceException(
-					CoreMessageKey.ERROR_WRITING_TO_DB, e);
-		}
-	}
+    @Override
+    public long save(Artist artist) throws ServiceException {
+        try {
+            long ret = artistDao.save(artist);
+            releaseService.saveOrUpdate(artist.getReleases(), false);
+            return ret;
+        } catch (DatabaseException e) {
+            throw new AndroidServiceException(
+                    CoreMessageKey.ERROR_WRITING_TO_DB, e);
+        }
+    }
 
-	@Override
-	public int update(Artist artist) throws ServiceException {
-		int ret;
-		try {
-			ret = artistDao.update(artist);
-			releaseService.saveOrUpdate(artist.getReleases());
-			return ret;
-		} catch (DatabaseException e) {
-			throw new AndroidServiceException(
-					CoreMessageKey.ERROR_WRITING_TO_DB, e);
-		}
-	}
+    @Override
+    public int update(Artist artist) throws ServiceException {
+        int ret;
+        try {
+            ret = artistDao.update(artist);
+            releaseService.saveOrUpdate(artist.getReleases());
+            return ret;
+        } catch (DatabaseException e) {
+            throw new AndroidServiceException(
+                    CoreMessageKey.ERROR_WRITING_TO_DB, e);
+        }
+    }
 
-	@Override
-	public long saveOrUpdate(Artist artist) throws ServiceException {
-		try {
-			// Does artist exist?
-			if (artist.getId() == null) {
-				Artist existingArtist = artistDao.findByAndroidId(artist
-						.getAndroidAudioArtistId());
-				if (existingArtist != null) {
-					artist.setId(existingArtist.getId());
-					artist.setDateCreated(existingArtist.getDateCreated());
-				}
-			}
-			if (artist.getId() == null) {
-				save(artist);
-			} else {
-				update(artist);
-			}
-			return artist.getId();
-		} catch (DatabaseException e) {
-			throw new AndroidServiceException(
-					CoreMessageKey.ERROR_WRITING_TO_DB, e);
-		}
-	}
+    @Override
+    public long saveOrUpdate(Artist artist) throws ServiceException {
+        try {
+            // Does artist exist?
+            if (artist.getId() == null) {
+                Artist existingArtist = artistDao.findByAndroidId(artist
+                        .getAndroidAudioArtistId());
+                if (existingArtist != null) {
+                    artist.setId(existingArtist.getId());
+                    artist.setDateCreated(existingArtist.getDateCreated());
+                }
+            }
+            if (artist.getId() == null) {
+                save(artist);
+            } else {
+                update(artist);
+            }
+            return artist.getId();
+        } catch (DatabaseException e) {
+            throw new AndroidServiceException(
+                    CoreMessageKey.ERROR_WRITING_TO_DB, e);
+        }
+    }
 }

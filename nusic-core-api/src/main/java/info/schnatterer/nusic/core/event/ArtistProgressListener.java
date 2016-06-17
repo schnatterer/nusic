@@ -31,6 +31,6 @@ import info.schnatterer.nusic.data.model.Artist;
  * 
  */
 public interface ArtistProgressListener extends
-		ProgressListener<Artist, Boolean> {
+        ProgressListener<Artist, Boolean> {
 
 }

@@ -39,114 +39,114 @@ import android.annotation.SuppressLint;
 
 // Test is faster without dependency Injection!
 public class RemoteMusicDatabaseServiceMusicBrainzTest {
-	@SuppressLint("SimpleDateFormat")
-	private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    @SuppressLint("SimpleDateFormat")
+    private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-	private RemoteMusicDatabaseServiceMusicBrainz remoteMusicDatabaseServiceMusicBrainz;
+    private RemoteMusicDatabaseServiceMusicBrainz remoteMusicDatabaseServiceMusicBrainz;
 
-	private final String expectedFromDateStr = "2013-01-01";
-	private Date expectedFromDate = null;
-	private final String expectedToDateStr = "9000-12-30";
-	private Date expectedToDate = null;
-	private String EXPECTED_STRING_BASE = " AND date:[";
-	private String EXPECTED_STRING_OPEN_BEGINNING = EXPECTED_STRING_BASE
-			+ "0 TO " + expectedToDateStr + "]";
-	private String EXPECTED_STRING_OPEN_END = EXPECTED_STRING_BASE
-			+ expectedFromDateStr + " TO ?]";
-	private String EXPECTED_STRING_NO_DATES = "";
-	private String EXPECTED_STRING_REGULAR_DATES = EXPECTED_STRING_BASE
-			+ expectedFromDateStr + " TO " + expectedToDateStr + "]";
+    private final String expectedFromDateStr = "2013-01-01";
+    private Date expectedFromDate = null;
+    private final String expectedToDateStr = "9000-12-30";
+    private Date expectedToDate = null;
+    private String EXPECTED_STRING_BASE = " AND date:[";
+    private String EXPECTED_STRING_OPEN_BEGINNING = EXPECTED_STRING_BASE
+            + "0 TO " + expectedToDateStr + "]";
+    private String EXPECTED_STRING_OPEN_END = EXPECTED_STRING_BASE
+            + expectedFromDateStr + " TO ?]";
+    private String EXPECTED_STRING_NO_DATES = "";
+    private String EXPECTED_STRING_REGULAR_DATES = EXPECTED_STRING_BASE
+            + expectedFromDateStr + " TO " + expectedToDateStr + "]";
 
-	@Before
-	public void setUp() throws Exception {
-		remoteMusicDatabaseServiceMusicBrainz = new QueryMusicMetadataServiceMusicUnderTest();
+    @Before
+    public void setUp() throws Exception {
+        remoteMusicDatabaseServiceMusicBrainz = new QueryMusicMetadataServiceMusicUnderTest();
 
-		expectedFromDate = dateFormat.parse(expectedFromDateStr);
-		expectedToDate = dateFormat.parse(expectedToDateStr);
-	}
+        expectedFromDate = dateFormat.parse(expectedFromDateStr);
+        expectedToDate = dateFormat.parse(expectedToDateStr);
+    }
 
-	@Test
-	public void testAppendDate() {
-		// Open beginning
-		StringBuffer actual = new StringBuffer();
-		remoteMusicDatabaseServiceMusicBrainz.appendDate(null, expectedToDate,
-				actual);
-		assertEquals("Unexpected result for open start date",
-				EXPECTED_STRING_OPEN_BEGINNING, actual.toString());
+    @Test
+    public void testAppendDate() {
+        // Open beginning
+        StringBuffer actual = new StringBuffer();
+        remoteMusicDatabaseServiceMusicBrainz.appendDate(null, expectedToDate,
+                actual);
+        assertEquals("Unexpected result for open start date",
+                EXPECTED_STRING_OPEN_BEGINNING, actual.toString());
 
-		// Open end
-		actual = new StringBuffer();
-		remoteMusicDatabaseServiceMusicBrainz.appendDate(expectedFromDate,
-				null, actual);
-		assertEquals("Unexpected result for open end date",
-				EXPECTED_STRING_OPEN_END, actual.toString());
+        // Open end
+        actual = new StringBuffer();
+        remoteMusicDatabaseServiceMusicBrainz.appendDate(expectedFromDate,
+                null, actual);
+        assertEquals("Unexpected result for open end date",
+                EXPECTED_STRING_OPEN_END, actual.toString());
 
-		// No dates
-		actual = new StringBuffer();
-		remoteMusicDatabaseServiceMusicBrainz.appendDate(null, null, actual);
-		assertEquals("Unexpected result for open end date",
-				EXPECTED_STRING_NO_DATES, actual.toString());
+        // No dates
+        actual = new StringBuffer();
+        remoteMusicDatabaseServiceMusicBrainz.appendDate(null, null, actual);
+        assertEquals("Unexpected result for open end date",
+                EXPECTED_STRING_NO_DATES, actual.toString());
 
-		// Defined beginning and end dates
-		actual = new StringBuffer();
-		remoteMusicDatabaseServiceMusicBrainz.appendDate(expectedFromDate,
-				expectedToDate, actual);
-		assertEquals("Unexpected result for open end date",
-				EXPECTED_STRING_REGULAR_DATES, actual.toString());
-	}
+        // Defined beginning and end dates
+        actual = new StringBuffer();
+        remoteMusicDatabaseServiceMusicBrainz.appendDate(expectedFromDate,
+                expectedToDate, actual);
+        assertEquals("Unexpected result for open end date",
+                EXPECTED_STRING_REGULAR_DATES, actual.toString());
+    }
 
-	public class QueryMusicMetadataServiceMusicUnderTest extends
-			RemoteMusicDatabaseServiceMusicBrainz {
+    public class QueryMusicMetadataServiceMusicUnderTest extends
+            RemoteMusicDatabaseServiceMusicBrainz {
 
-		public QueryMusicMetadataServiceMusicUnderTest() {
-			super(null, null, null);
-		}
+        public QueryMusicMetadataServiceMusicUnderTest() {
+            super(null, null, null);
+        }
 
-		private String lastSearchText;
-		private List<ReleaseWs2> mockedReleases;
+        private String lastSearchText;
+        private List<ReleaseWs2> mockedReleases;
 
-		public String getLastSearchText() {
-			return lastSearchText;
-		}
+        public String getLastSearchText() {
+            return lastSearchText;
+        }
 
-		public List<ReleaseWs2> getMockedReleases() {
-			return mockedReleases;
-		}
+        public List<ReleaseWs2> getMockedReleases() {
+            return mockedReleases;
+        }
 
-		public void setMockedReleases(List<ReleaseWs2> mockedReleases) {
-			this.mockedReleases = mockedReleases;
-		}
+        public void setMockedReleases(List<ReleaseWs2> mockedReleases) {
+            this.mockedReleases = mockedReleases;
+        }
 
-		@Override
-		protected org.musicbrainz.controller.Release createReleaseSearch(
-				String userAgentName, String userAgentVersion,
-				String userAgentContact) {
-			return new org.musicbrainz.controller.Release() {
-				@Override
-				public boolean hasMore() {
-					return false;
-				}
+        @Override
+        protected org.musicbrainz.controller.Release createReleaseSearch(
+                String userAgentName, String userAgentVersion,
+                String userAgentContact) {
+            return new org.musicbrainz.controller.Release() {
+                @Override
+                public boolean hasMore() {
+                    return false;
+                }
 
-				@Override
-				public void search(String searchText) {
-					super.search(searchText);
-					lastSearchText = searchText;
-				}
+                @Override
+                public void search(String searchText) {
+                    super.search(searchText);
+                    lastSearchText = searchText;
+                }
 
-				@Override
-				public List<ReleaseResultWs2> getFirstSearchResultPage()
-						throws MBWS2Exception {
-					List<ReleaseResultWs2> ret = new LinkedList<ReleaseResultWs2>();
-					for (ReleaseWs2 releaseWs2 : mockedReleases) {
-						ReleaseResultWs2 result = new ReleaseResultWs2();
-						result.setRelease(releaseWs2);
-						result.getEntity().setIdUri("someId");
-						ret.add(result);
-					}
+                @Override
+                public List<ReleaseResultWs2> getFirstSearchResultPage()
+                        throws MBWS2Exception {
+                    List<ReleaseResultWs2> ret = new LinkedList<ReleaseResultWs2>();
+                    for (ReleaseWs2 releaseWs2 : mockedReleases) {
+                        ReleaseResultWs2 result = new ReleaseResultWs2();
+                        result.setRelease(releaseWs2);
+                        result.getEntity().setIdUri("someId");
+                        ret.add(result);
+                    }
 
-					return ret;
-				}
-			};
-		}
-	}
+                    return ret;
+                }
+            };
+        }
+    }
 }

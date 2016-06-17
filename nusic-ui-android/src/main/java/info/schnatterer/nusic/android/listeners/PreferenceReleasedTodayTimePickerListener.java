@@ -43,49 +43,49 @@ import android.widget.TimePicker;
  * <b>Make sure to call {@link #setContext(Context)}.</b>
  */
 public class PreferenceReleasedTodayTimePickerListener implements
-		Preference.OnPreferenceClickListener {
-	private static final Logger LOG = LoggerFactory
-			.getLogger(PreferenceReleasedTodayTimePickerListener.class);
+        Preference.OnPreferenceClickListener {
+    private static final Logger LOG = LoggerFactory
+            .getLogger(PreferenceReleasedTodayTimePickerListener.class);
 
-	@Inject
-	private PreferencesService preferencesService;
+    @Inject
+    private PreferencesService preferencesService;
 
-	@Inject
-	private Context context;
-	@Inject
-	private ReleasedTodayServiceScheduler releasedTodayService;
+    @Inject
+    private Context context;
+    @Inject
+    private ReleasedTodayServiceScheduler releasedTodayService;
 
-	@Override
-	public boolean onPreferenceClick(Preference preference) {
-		if (context == null) {
-			LOG.warn("No context set in " + this.getClass().getName());
-			return false;
-		}
-		new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
-			// Workaround for onTimeSet() being called twice
-			boolean isTimeSet = false;
+    @Override
+    public boolean onPreferenceClick(Preference preference) {
+        if (context == null) {
+            LOG.warn("No context set in " + this.getClass().getName());
+            return false;
+        }
+        new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+            // Workaround for onTimeSet() being called twice
+            boolean isTimeSet = false;
 
-			@Override
-			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-				if (!isTimeSet) {
-					isTimeSet = true;
-					if (preferencesService.setReleasedTodaySchedule(hourOfDay,
-							minute)) {
-						releasedTodayService.schedule();
-					}
-				}
-			}
-		}, preferencesService.getReleasedTodayScheduleHourOfDay(),
-				preferencesService.getReleasedTodayScheduleMinute(), true)
-				.show();
-		return true;
-	}
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                if (!isTimeSet) {
+                    isTimeSet = true;
+                    if (preferencesService.setReleasedTodaySchedule(hourOfDay,
+                            minute)) {
+                        releasedTodayService.schedule();
+                    }
+                }
+            }
+        }, preferencesService.getReleasedTodayScheduleHourOfDay(),
+                preferencesService.getReleasedTodayScheduleMinute(), true)
+                .show();
+        return true;
+    }
 
-	public Context getContext() {
-		return context;
-	}
+    public Context getContext() {
+        return context;
+    }
 
-	public void setContext(Context context) {
-		this.context = context;
-	}
+    public void setContext(Context context) {
+        this.context = context;
+    }
 }

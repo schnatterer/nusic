@@ -35,32 +35,32 @@ import org.junit.Test;
  */
 public class LogsTest {
 
-	@Test
-	public void testSetRootLogLevel() {
-		// TODO test with mockito
-	}
+    @Test
+    public void testSetRootLogLevel() {
+        // TODO test with mockito
+    }
 
-	@Test
-	public void testSetLogCatLevel() {
-		// TODO test with mockito (and robolectric?)
-	}
+    @Test
+    public void testSetLogCatLevel() {
+        // TODO test with mockito (and robolectric?)
+    }
 
-	/**
-	 * Tests {@link Logs#findNewestLogFile(File[])}.
-	 */
-	@Test
-	public void testFindNewestLogFile() {
-		String expectedPath = "test2015-12-01.log";
-		File[] input = new File[] { new File("test2015-01-30.log"),
-				new File("test2015-06-20.log"), new File(expectedPath) };
-		File actualFile = Logs.findNewestLogFile(input);
-		assertEquals("find newest returned unexpected result", expectedPath,
-				actualFile.getPath());
-	}
+    /**
+     * Tests {@link Logs#findNewestLogFile(File[])}.
+     */
+    @Test
+    public void testFindNewestLogFile() {
+        String expectedPath = "test2015-12-01.log";
+        File[] input = new File[] { new File("test2015-01-30.log"),
+                new File("test2015-06-20.log"), new File(expectedPath) };
+        File actualFile = Logs.findNewestLogFile(input);
+        assertEquals("find newest returned unexpected result", expectedPath,
+                actualFile.getPath());
+    }
 
-	@Test
-	public void testGetLogFiles() {
-		// TODO test with robolectric
-	}
+    @Test
+    public void testGetLogFiles() {
+        // TODO test with robolectric
+    }
 
 }
