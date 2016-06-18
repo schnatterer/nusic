@@ -127,19 +127,16 @@ ext {
     nusicVersionCode = Integer.parseInt(versionCode)
     nusicMinSdkVersion = 9
     nusictTargetSdkVersion = 23
-    nusicCompileSdkVersion = 23
-    nusicBuildToolsVersion = "23.0.3"
+    nusicCompileSdkVersion = 24
+    nusicBuildToolsVersion = "24"
 
     // Properties for java & android submodules
     nusicSourceCompatibility = JavaVersion.VERSION_1_7
     nusicTargetCompatibility = JavaVersion.VERSION_1_7
     nusicSourceEncoding = "UTF-8"
 
-    //Maven Plugins TODO implement
-    licenseMavenPluginVersion = "2.11"
-
     slf4jVersion = "1.7.6"
-    androidCompatibilityVersion = "23.4.0"
+    androidCompatibilityVersion = "24.0.0"
     roboguiceVersion = "3.0.1"
 
     libraries = [
