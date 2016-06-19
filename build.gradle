@@ -152,7 +152,7 @@ ext {
             roboblender       : "org.roboguice:roboblender:${roboguiceVersion}",
             //logback-android - process log statements produced by dependencies via slf4j with logback
             logback           : dependencies.create("com.github.tony19:logback-android-classic:1.1.1-3") {
-                exclude module: "android" // com.google.android:android
+                exclude group: "com.google.android:android", module: "android"
                 force = true
             },
             julToSlf4j        : "org.slf4j:jul-to-slf4j:${slf4jVersion}",
