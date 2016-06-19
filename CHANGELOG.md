@@ -1,6 +1,11 @@
 nusic Changelog
 =========
 
+**v.3.0.0** - 2016/06/19
+
+* Updated android support libraries - fixing errors for legacy android versions
+* Technical reconstructions (maven -> gradle)
+
 **v.2.1.1** - 2016/06/01
 
 * Android 6: Request Read Media Permissions at Run Time

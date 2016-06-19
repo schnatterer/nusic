@@ -113,7 +113,6 @@ TODO Automate this, e.g. via Jenkins
 - Commit  
 
     ```sh
-    git clean -f
     git add .
     git commit -m 'Prepare release v.2.1.1'
     ```
@@ -126,7 +125,6 @@ TODO Automate this, e.g. via Jenkins
 
     ```sh
     gradle setVersion -PnewVersion=2.1.2-SNAPSHOT
-    git clean -f
     git add .
     git commit -m "Prepare for next development iteration v.2.1.2-SNAPSHOT"
     ```
