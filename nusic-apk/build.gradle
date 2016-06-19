@@ -20,6 +20,7 @@
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
 import nl.javadude.gradle.plugins.license.License
+
 apply plugin: "com.android.application"
 
 android {
@@ -50,6 +51,7 @@ android {
 
     // see https://google.github.io/android-gradle-dsl/current/com.android.build.gradle.internal.dsl.DexOptions.html#com.android.build.gradle.internal.dsl.DexOptions:preDexLibraries
     dexOptions {
+
         if (System.getProperty("dexOptionsMaxProcessCount") != null) {
             maxProcessCount = System.getProperty("dexOptionsMaxProcessCount").toInteger()
         }
@@ -143,15 +145,20 @@ dependencies {
     compile project(":nusic-ui-android"),
             project(":nusic-data-android"),
             project(":nusic-data-api"),
-            project(":nusic-core-api"),
-            project(":nusic-core-android")
-    // { // This dependency is provided by android anyway, so spare the APK the bloat
-    // TODO   exclude module: "commons-logging"
-    //}
+            project(":nusic-core-api")
+
+    compile( project(":nusic-core-android")) {
+        // This dependency is provided by android anyway, so spare the APK the bloat
+        exclude group: "commons-logging", module: "commons-logging"
+    }
 
     // External dependencies
     compile libraries.roboguice,
             libraries.julToSlf4j,
-            libraries.logback,
             libraries.androidSupportV4
+
+    compile (libraries.logback) {
+        // This dependency is provided by android anyway, so spare the APK the bloat
+        exclude group: "commons-logging", module: "commons-logging"
+    }
 }
