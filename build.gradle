@@ -128,7 +128,7 @@ ext {
     nusicMinSdkVersion = 9
     nusictTargetSdkVersion = 23
     nusicCompileSdkVersion = 24
-    nusicBuildToolsVersion = "24"
+    nusicBuildToolsVersion = "23.0.3"
 
     // Properties for java & android submodules
     nusicSourceCompatibility = JavaVersion.VERSION_1_7
