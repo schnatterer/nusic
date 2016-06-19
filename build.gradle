@@ -140,9 +140,7 @@ ext {
     roboguiceVersion = "3.0.1"
 
     libraries = [
-            /** Before building make sure to copy the android JARs to your local
-             repo using the mave-android-sdk-deployer: https://github.com/mosabua/maven-android-sdk-deployer */
-            android           : "android:android:6.0_r2",
+            android           : "com.google.android:android:4.1.1.4",
             //Android Support libs
             androidSupportV4  : "com.android.support:support-v4:${androidCompatibilityVersion}",
             // Appcompat for API lvl 4 and 7, as well as backport of material design
