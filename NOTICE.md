@@ -31,7 +31,7 @@ published under MIT License, Version 2.0
 [Website](http://www.slf4j.org/)
 
 **logback-android**
-published under  GNU Lesser General Public License version 2.1
+published under  GNU Lesser General Public License version 2.1  
 [Website](http://tony19.github.io/logback-android/)
 
 **Apache Commons IO**
