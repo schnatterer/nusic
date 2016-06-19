@@ -5,6 +5,8 @@ TODOs - Features, enhancements, refactoring, ...
 See e.g https://discuss.gradle.org/t/how-do-i-detect-if-a-sub-project-has-applied-a-given-plugin-e-g-jar-or-war/4974
 
 - Set TargetSDK to 24 and test on emu
+https://developer.android.com/preview/api-overview.html
+- Use newest build tools version, as soon as openshift updates GLIBC to GLIBC_2.14 needed by aapt (test with "ldd --version")
 
 - Specify which files to backup in manifest: https://developer.android.com/training/backup/autosyncapi.html
 
