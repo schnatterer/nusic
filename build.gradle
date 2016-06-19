@@ -58,7 +58,6 @@ allprojects {
                   // This file has a different license, as it was modified from a different project
                   "**/RoboAppCompatPreferenceActivity.java"
         ])
-        // TODO solve encoding problem°
         encoding "UTF-8"
 
         // Properties for substitution
