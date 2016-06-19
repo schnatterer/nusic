@@ -1,23 +1,23 @@
 /**
- * ﻿Copyright (C) 2013 Johannes Schnatterer
+ * Copyright (C) 2013 Johannes Schnatterer
  *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  *
- * This file is part of nusic-ui-android.
+ * This file is part of nusic.
  *
- * nusic-ui-android is free software: you can redistribute it and/or modify
+ * nusic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * nusic-ui-android is distributed in the hope that it will be useful,
+ * nusic is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with nusic-ui-android.  If not, see <http://www.gnu.org/licenses/>.
+ * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package info.schnatterer.nusic.android.activities;
 
@@ -57,35 +57,35 @@ import android.support.v4.content.FileProvider;
  */
 public class SendLogActivity extends RoboActionBarActivity {
 
-	/** Subject to use. */
-	private static final String SUBJECT = "[nusic @string/versionName] - Issue";
+    /** Subject to use. */
+    private static final String SUBJECT = "[nusic @string/versionName] - Issue";
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		/* Get URIs for log files using android.support.v4.content.FileProvider */
-		ArrayList<Uri> uris = new ArrayList<Uri>();
-		for (final File fileEntry : Logs.getLogFiles(this)) {
-			// Don't recurse!
-			if (!fileEntry.isDirectory()) {
-				// Create content provider URI
-				uris.add(FileProvider.getUriForFile(this,
-						getString(R.string.authority_log_file_provider),
-						fileEntry));
-			}
-		}
+        /* Get URIs for log files using android.support.v4.content.FileProvider */
+        ArrayList<Uri> uris = new ArrayList<Uri>();
+        for (final File fileEntry : Logs.getLogFiles(this)) {
+            // Don't recurse!
+            if (!fileEntry.isDirectory()) {
+                // Create content provider URI
+                uris.add(FileProvider.getUriForFile(this,
+                        getString(R.string.authority_log_file_provider),
+                        fileEntry));
+            }
+        }
 
-		final Intent email = new Intent(Intent.ACTION_SEND_MULTIPLE);
-		email.setType("message/rfc822");
-		email.putExtra(Intent.EXTRA_EMAIL,
-				new String[] { getString(R.string.app_contact) });
-		email.putExtra(Intent.EXTRA_SUBJECT,
-				TextUtil.replaceResourceStrings(this, SUBJECT));
-		email.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
-		email.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-		startActivity(email);
+        final Intent email = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        email.setType("message/rfc822");
+        email.putExtra(Intent.EXTRA_EMAIL,
+                new String[] { getString(R.string.app_contact) });
+        email.putExtra(Intent.EXTRA_SUBJECT,
+                TextUtil.replaceResourceStrings(this, SUBJECT));
+        email.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+        email.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(email);
 
-		finish();
-	}
+        finish();
+    }
 }

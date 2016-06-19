@@ -1,23 +1,23 @@
 /**
- * ﻿Copyright (C) 2013 Johannes Schnatterer
+ * Copyright (C) 2013 Johannes Schnatterer
  *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  *
- * This file is part of nusic-core-api.
+ * This file is part of nusic.
  *
- * nusic-core-api is free software: you can redistribute it and/or modify
+ * nusic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * nusic-core-api is distributed in the hope that it will be useful,
+ * nusic is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with nusic-core-api.  If not, see <http://www.gnu.org/licenses/>.
+ * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package info.schnatterer.nusic.core.event;
 
@@ -41,36 +41,36 @@ import java.util.EventListener;
  * @author schnatterer
  */
 public interface ProgressListener<PROCESSED_ENTITY, RESULT_ENTITY> extends
-		EventListener {
+        EventListener {
 
-	void onProgressStarted(int nEntities);
+    void onProgressStarted(int nEntities);
 
-	/**
-	 * The main progress method.
-	 * 
-	 * @param entity
-	 * @param progress
-	 * @param max
-	 * @param potentialException
-	 *            a non-fatal exception that might have occurred during
-	 *            progressing this specific instance of the entity but didn't
-	 *            fail the whole progress
-	 */
-	void onProgress(PROCESSED_ENTITY entity, int progress, int max,
-			Throwable potentialException);
+    /**
+     * The main progress method.
+     * 
+     * @param entity
+     * @param progress
+     * @param max
+     * @param potentialException
+     *            a non-fatal exception that might have occurred during
+     *            progressing this specific instance of the entity but didn't
+     *            fail the whole progress
+     */
+    void onProgress(PROCESSED_ENTITY entity, int progress, int max,
+            Throwable potentialException);
 
-	void onProgressFinished(RESULT_ENTITY result);
+    void onProgressFinished(RESULT_ENTITY result);
 
-	/**
-	 * A fatal error occurred, stopping the process.
-	 * 
-	 * @param entity
-	 * @param progress
-	 * @param max
-	 * @param resultOnFailure
-	 *            the intermediate result, when the error occured.
-	 * @param potentialException
-	 */
-	void onProgressFailed(PROCESSED_ENTITY entity, int progress, int max,
-			RESULT_ENTITY resultOnFailure, Throwable potentialException);
+    /**
+     * A fatal error occurred, stopping the process.
+     * 
+     * @param entity
+     * @param progress
+     * @param max
+     * @param resultOnFailure
+     *            the intermediate result, when the error occured.
+     * @param potentialException
+     */
+    void onProgressFailed(PROCESSED_ENTITY entity, int progress, int max,
+            RESULT_ENTITY resultOnFailure, Throwable potentialException);
 }

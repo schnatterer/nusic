@@ -1,23 +1,23 @@
 /**
- * ﻿Copyright (C) 2013 Johannes Schnatterer
+ * Copyright (C) 2013 Johannes Schnatterer
  *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  *
- * This file is part of nusic-core-api.
+ * This file is part of nusic.
  *
- * nusic-core-api is free software: you can redistribute it and/or modify
+ * nusic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * nusic-core-api is distributed in the hope that it will be useful,
+ * nusic is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with nusic-core-api.  If not, see <http://www.gnu.org/licenses/>.
+ * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package info.schnatterer.nusic.core.event;
 
@@ -36,47 +36,47 @@ import java.util.Set;
  */
 public class ProgressUpdater<PROCESSED_ENTITY, RESULT_ENTITY> {
 
-	private Set<ProgressListener<PROCESSED_ENTITY, RESULT_ENTITY>> listenerList;
-	private int max = 0;
+    private Set<ProgressListener<PROCESSED_ENTITY, RESULT_ENTITY>> listenerList;
+    private int max = 0;
 
-	public ProgressUpdater(
-			Set<ProgressListener<PROCESSED_ENTITY, RESULT_ENTITY>> listenerList) {
-		this.listenerList = listenerList;
-	}
+    public ProgressUpdater(
+            Set<ProgressListener<PROCESSED_ENTITY, RESULT_ENTITY>> listenerList) {
+        this.listenerList = listenerList;
+    }
 
-	public void progressStarted(int nEntities) {
-		max = nEntities;
-		for (ProgressListener<PROCESSED_ENTITY, RESULT_ENTITY> progressListener : listenerList) {
-			progressListener.onProgressStarted(nEntities);
-		}
-	}
+    public void progressStarted(int nEntities) {
+        max = nEntities;
+        for (ProgressListener<PROCESSED_ENTITY, RESULT_ENTITY> progressListener : listenerList) {
+            progressListener.onProgressStarted(nEntities);
+        }
+    }
 
-	/**
-	 * Notifies all {@link ProgressListener}s.
-	 * 
-	 * @param artist
-	 * @param progress
-	 * @param potentialException
-	 */
-	public void progress(PROCESSED_ENTITY entity, int progress,
-			Throwable potentialException) {
-		for (ProgressListener<PROCESSED_ENTITY, RESULT_ENTITY> progressListener : listenerList) {
-			progressListener.onProgress(entity, progress, max,
-					potentialException);
-		}
-	}
+    /**
+     * Notifies all {@link ProgressListener}s.
+     * 
+     * @param artist
+     * @param progress
+     * @param potentialException
+     */
+    public void progress(PROCESSED_ENTITY entity, int progress,
+            Throwable potentialException) {
+        for (ProgressListener<PROCESSED_ENTITY, RESULT_ENTITY> progressListener : listenerList) {
+            progressListener.onProgress(entity, progress, max,
+                    potentialException);
+        }
+    }
 
-	public void progressFinished(RESULT_ENTITY result) {
-		for (ProgressListener<PROCESSED_ENTITY, RESULT_ENTITY> progressListener : listenerList) {
-			progressListener.onProgressFinished(result);
-		}
-	}
+    public void progressFinished(RESULT_ENTITY result) {
+        for (ProgressListener<PROCESSED_ENTITY, RESULT_ENTITY> progressListener : listenerList) {
+            progressListener.onProgressFinished(result);
+        }
+    }
 
-	public void progressFailed(PROCESSED_ENTITY entity, int progress,
-			Throwable potentialException, RESULT_ENTITY resultOnFailure) {
-		for (ProgressListener<PROCESSED_ENTITY, RESULT_ENTITY> progressListener : listenerList) {
-			progressListener.onProgressFailed(entity, progress, max,
-					resultOnFailure, potentialException);
-		}
-	}
+    public void progressFailed(PROCESSED_ENTITY entity, int progress,
+            Throwable potentialException, RESULT_ENTITY resultOnFailure) {
+        for (ProgressListener<PROCESSED_ENTITY, RESULT_ENTITY> progressListener : listenerList) {
+            progressListener.onProgressFailed(entity, progress, max,
+                    resultOnFailure, potentialException);
+        }
+    }
 }

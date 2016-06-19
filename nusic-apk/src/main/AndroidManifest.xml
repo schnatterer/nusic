@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    Copyright (C) 2013 Johannes Schnatterer
+
+    See the NOTICE file distributed with this work for additional
+    information regarding copyright ownership.
+
+    This file is part of nusic.
+
+    nusic is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    nusic is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with nusic.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"  package="info.schnatterer.nusic" >
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <!-- Needed for querying artists from provider from android 4.4; From Android 6, the user is also asked programatically before actually using the permission -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <application android:allowBackup="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:name=".android.application.NusicApplication" android:theme="@style/AppTheme">
+
+        <!-- Use theme without actionbar here because we're going to use the toolbar here -->
+        <activity android:label="@string/app_name" android:name=".android.activities.MainActivity" android:theme="@style/Theme.Nusic.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:label="@string/action_settings" android:name=".android.activities.NusicPreferencesActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MANAGE_NETWORK_USAGE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+       <activity android:label="@string/action_settings_developer" android:name=".android.activities.NusicPreferencesDeveloperActivity"/>
+       <activity android:name=".android.activities.NusicPreferencesAboutActivity"/>
+        <activity android:name=".android.activities.NusicWebView"/>
+        <activity android:name=".android.activities.TextAssetActivity"/>
+        <activity android:name=".android.activities.SendLogActivity"/>
+        <activity android:name=".android.activities.OpenLogActivity"/>
+
+        <receiver android:name=".android.service.LoadNewReleasesServiceConnectivityReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <!-- <action android:name="android.net.wifi.WIFI_STATE_CHANGED" /> -->
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".android.service.LoadNewReleasesServiceBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+
+                <category android:name="android.intent.category.HOME"/>
+            </intent-filter>
+        </receiver>
+        <!-- Register receiver that starts service after alarm -->
+        <receiver android:name=".android.service.LoadNewReleasesService$LoadNewReleasesServiceAlarmReceiver"/>
+
+        <service android:name=".android.service.LoadNewReleasesService"/>
+
+        <!-- Schedule execution of released today check after boot and timezone changed -->
+        <receiver android:name=".android.service.ReleasedTodayService$ReleasedTodaySchedulerReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
+            </intent-filter>
+        </receiver>
+        <!-- Register receiver that starts service after alarm -->
+        <receiver android:name=".android.service.ReleasedTodayService$ReleasedTodayServiceStarterReceiver"/>
+
+       <service android:name=".android.service.ReleasedTodayService"/>
+
+        <!-- Expose log files for email clients -->
+        <provider android:authorities="@string/authority_log_file_provider" android:exported="false" android:grantUriPermissions="true" android:name="android.support.v4.content.FileProvider">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/logpath"/>
+        </provider>
+        
+        <meta-data android:name="roboguice.modules" android:value="info.schnatterer.nusic.android.NusicAndroidModule"/>
+        <!-- This lists the class names of the annotation databases, generated by the modules by  the roboblender annotation processor to speed up roboguice -->
+        <meta-data android:name="roboguice.annotations.packages" android:value="info.schnatterer.nusic.annotation.nusicUiAndroid,info.schnatterer.nusic.annotation.nusicDataAndroid,info.schnatterer.nusic.annotation.nusicCoreAndroid"/>
+    </application>
+
+</manifest>

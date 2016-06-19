@@ -1,0 +1,103 @@
+<!--
+
+    Copyright (C) 2013 Johannes Schnatterer
+
+    See the NOTICE file distributed with this work for additional
+    information regarding copyright ownership.
+
+    This file is part of nusic.
+
+    nusic is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    nusic is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with nusic.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<configuration>
+	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator" />
+
+	<property name="ANDROID_PACKAGE" value="${PACKAGE_NAME}" />
+	<property name="LOG_DIR" value="files/logs" />
+	<property name="APP_NAME" value="nusic" />
+	<property name="LOG_PATH" value="/data/data/${ANDROID_PACKAGE}/${LOG_DIR}" />
+	<!-- ExternalFilesDir. Won't work on API lvl < 19! -->
+	<!-- <property name="LOG_PATH"
+		value="${EXT_DIR:-/sdcard}/Android/data/${PACKAGE_NAME}/files/logs" /> -->
+
+	<!-- Create a logcat appender, that logs only specific statements -->
+	<!-- Note: the logger's name is refered to in the code as well! -->
+	<appender name="LOGCAT" class="ch.qos.logback.classic.android.LogcatAppender">
+		<!-- Don't show trace and debug on logcat -->
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<filter class="ch.qos.logback.classic.filter.ThresholdLoggerFilter">
+			<!-- Don't log MB IDs to Logcat -->
+			<logger>fm.last.musicbrainz.coverart</logger>
+			<level>WARN</level>
+		</filter>
+		<encoder>
+			<pattern>%msg</pattern>
+		</encoder>
+	</appender>
+
+	<!-- Create a file appender that logs all statements -->
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH}/${APP_NAME}.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>${LOG_PATH}/${APP_NAME}.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+			<!-- keep 2 days' worth of history -->
+			<maxHistory>2</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{ISO8601} [%thread] %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<!-- Write all info to the appenders to allow for individual filtering. -->
+	<root level="TRACE">
+		<appender-ref ref="LOGCAT" />
+		<appender-ref ref="FILE" />
+	</root>
+
+	<!-- JDOMParserWs2 floods the log with warnings. Put him down. -->
+	<logger name="org.musicbrainz.wsxml.impl.JDOMParserWs2" level="ERROR"
+		additivity="false">
+		<!-- Don't appent to logcat, because java.util.logging writes to logcat 
+			too -->
+		<appender-ref ref="FILE" />
+	</logger>
+	<!-- HttpClientWebServiceWs2 logs a debug message for every request. Too 
+		much information. -->
+	<logger name="org.musicbrainz.webservice.impl.HttpClientWebServiceWs2"
+		level="INFO" additivity="false">
+		<!-- Don't appent to logcat, because java.util.logging writes to logcat 
+			too -->
+		<appender-ref ref="FILE" />
+	</logger>
+	<!-- DefaultCoverArtArchiveClient logs an info message for every request. 
+		Too much information. -->
+	<logger
+		name="fm.last.musicbrainz.coverart.impl.DefaultCoverArtArchiveClient"
+		level="WARN" additivity="false">
+		<appender-ref ref="LOGCAT" />
+		<appender-ref ref="FILE" />
+	</logger>
+	<!-- Stopwatch logs a bit too much -->
+	<logger name="com.google.inject" level="INFO" additivity="false">
+		<appender-ref ref="LOGCAT" />
+		<appender-ref ref="FILE" />
+	</logger>
+</configuration>

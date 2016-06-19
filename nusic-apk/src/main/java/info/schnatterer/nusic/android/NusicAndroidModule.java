@@ -1,23 +1,23 @@
 /**
- * ﻿Copyright (C) 2013 Johannes Schnatterer
+ * Copyright (C) 2013 Johannes Schnatterer
  *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  *
- * This file is part of nusic-apk.
+ * This file is part of nusic.
  *
- * nusic-apk is free software: you can redistribute it and/or modify
+ * nusic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * nusic-apk is distributed in the hope that it will be useful,
+ * nusic is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with nusic-apk.  If not, see <http://www.gnu.org/licenses/>.
+ * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package info.schnatterer.nusic.android;
 
@@ -81,174 +81,174 @@ import com.google.inject.AbstractModule;
  *
  */
 public class NusicAndroidModule extends AbstractModule {
-	private Application application;
+    private Application application;
 
-	public NusicAndroidModule(Application application) {
-		this.application = application;
-	}
+    public NusicAndroidModule(Application application) {
+        this.application = application;
+    }
 
-	@Override
-	protected void configure() {
-		installSlf4jJulHandler();
+    @Override
+    protected void configure() {
+        installSlf4jJulHandler();
 
-		/*
-		 * Database requires static injection, because the context must be
-		 * injected at construction time
-		 */
-		requestStaticInjection(NusicDatabaseSqlite.class);
-		/*
-		 * A lot of constants are injected here
-		 */
-		requestStaticInjection(PreferencesServiceSharedPreferences.class);
+        /*
+         * Database requires static injection, because the context must be
+         * injected at construction time
+         */
+        requestStaticInjection(NusicDatabaseSqlite.class);
+        /*
+         * A lot of constants are injected here
+         */
+        requestStaticInjection(PreferencesServiceSharedPreferences.class);
 
-		// Services
-		bind(ArtistService.class).to(ArtistServiceImpl.class);
-		bind(ConnectivityService.class).to(ConnectivityServiceAndroid.class);
-		bind(DeviceMusicService.class).to(DeviceMusicServiceAndroid.class);
-		bind(PreferencesService.class).to(
-				PreferencesServiceSharedPreferences.class);
-		bind(ReleaseService.class).to(ReleaseServiceImpl.class);
-		bind(RemoteMusicDatabaseService.class).to(
-				RemoteMusicDatabaseServiceMusicBrainz.class);
-		bind(SyncReleasesService.class).to(SyncReleasesServiceImpl.class);
+        // Services
+        bind(ArtistService.class).to(ArtistServiceImpl.class);
+        bind(ConnectivityService.class).to(ConnectivityServiceAndroid.class);
+        bind(DeviceMusicService.class).to(DeviceMusicServiceAndroid.class);
+        bind(PreferencesService.class).to(
+                PreferencesServiceSharedPreferences.class);
+        bind(ReleaseService.class).to(ReleaseServiceImpl.class);
+        bind(RemoteMusicDatabaseService.class).to(
+                RemoteMusicDatabaseServiceMusicBrainz.class);
+        bind(SyncReleasesService.class).to(SyncReleasesServiceImpl.class);
 
-		// DAOs
-		bind(ReleaseDao.class).to(ReleaseDaoSqlite.class);
-		bind(ArtistDao.class).to(ArtistDaoSqlite.class);
-		bind(ArtworkDao.class).to(ArtworkDaoFileSystem.class);
+        // DAOs
+        bind(ReleaseDao.class).to(ReleaseDaoSqlite.class);
+        bind(ArtistDao.class).to(ArtistDaoSqlite.class);
+        bind(ArtworkDao.class).to(ArtworkDaoFileSystem.class);
 
-		// Resources
-		bind(String.class).annotatedWith(ApplicationName.class).toInstance(
-				application.getString(R.string.app_name));
-		bind(String.class).annotatedWith(ApplicationVersion.class).toInstance(
-				NusicApplication.getCurrentVersionName());
-		bind(String.class).annotatedWith(ApplicationContact.class).toInstance(
-				application.getString(R.string.app_url));
+        // Resources
+        bind(String.class).annotatedWith(ApplicationName.class).toInstance(
+                application.getString(R.string.app_name));
+        bind(String.class).annotatedWith(ApplicationVersion.class).toInstance(
+                NusicApplication.getCurrentVersionName());
+        bind(String.class).annotatedWith(ApplicationContact.class).toInstance(
+                application.getString(R.string.app_url));
 
-		bind(String.class)
-				.annotatedWith(PreferencesKeyDownloadOnlyOnWifi.class)
-				.toInstance(
-						application
-								.getString(R.string.preferences_key_download_only_on_wifi));
-		bind(Boolean.class).annotatedWith(
-				PreferencesDefaultDownloadOnlyOnWifi.class).toInstance(
-				application.getResources().getBoolean(
-						R.bool.preferences_default_download_only_on_wifi));
-		bind(String.class)
-				.annotatedWith(PreferencesKeyDownloadReleasesTimePeriod.class)
-				.toInstance(
-						application
-								.getString(R.string.preferences_key_download_releases_time_period));
-		bind(String.class)
-				.annotatedWith(
-						PreferencesDefaultDownloadReleasesTimePeriod.class)
-				.toInstance(
-						application
-								.getString(R.string.preferences_default_download_releases_time_period));
-		bind(String.class)
-				.annotatedWith(PreferencesKeyRefreshPeriod.class)
-				.toInstance(
-						application
-								.getString(R.string.preferences_key_refresh_period));
-		bind(String.class)
-				.annotatedWith(PreferencesDefaultRefreshPeriod.class)
-				.toInstance(
-						application
-								.getString(R.string.preferences_default_refresh_period));
-		bind(String.class)
-				.annotatedWith(PreferencesKeyIsEnabledNotifyReleasedToday.class)
-				.toInstance(
-						application
-								.getString(R.string.preferences_key_is_enabled_notify_released_today));
-		bind(Boolean.class)
-				.annotatedWith(
-						PreferencesDefaultIsEnabledNotifyReleasedToday.class)
-				.toInstance(
-						application
-								.getResources()
-								.getBoolean(
-										R.bool.preferences_default_is_enabled_notify_released_today));
-		bind(String.class)
-				.annotatedWith(PreferencesKeyIsEnabledNotifyNewReleases.class)
-				.toInstance(
-						application
-								.getString(R.string.preferences_key_is_enabled_notify_new_releases));
-		bind(Boolean.class)
-				.annotatedWith(
-						PreferencesDefaultIsEnabledNotifyNewReleases.class)
-				.toInstance(
-						application
-								.getResources()
-								.getBoolean(
-										R.bool.preferences_default_is_enabled_notify_new_releases));
-		bind(String.class)
-				.annotatedWith(PreferencesKeyReleasedTodayHourOfDay.class)
-				.toInstance(
-						application
-								.getString(R.string.preferences_key_released_today_hour_of_day));
-		bind(Integer.class)
-				.annotatedWith(PreferencesDefaultReleasedTodayHourOfDay.class)
-				.toInstance(
-						parseIntOrThrow(
-								PreferencesDefaultReleasedTodayHourOfDay.class,
-								application
-										.getString(R.string.preferences_default_released_today_hour_of_day)));
-		bind(String.class)
-				.annotatedWith(PreferencesKeyReleasedTodayMinute.class)
-				.toInstance(
-						application
-								.getString(R.string.preferences_key_released_today_minute));
-		bind(Integer.class)
-				.annotatedWith(PreferencesDefaultReleasedTodayMinute.class)
-				.toInstance(
-						parseIntOrThrow(
-								PreferencesDefaultReleasedTodayMinute.class,
-								application
-										.getString(R.string.preferences_default_released_today_minute)));
-		bind(String.class).annotatedWith(PreferencesKeyLogLevel.class)
-				.toInstance(
-						application
-								.getString(R.string.preferences_key_log_level));
-		bind(String.class)
-				.annotatedWith(PreferencesDefaultLogLevel.class)
-				.toInstance(
-						application
-								.getString(R.string.preferences_default_log_level));
-		bind(String.class)
-				.annotatedWith(PreferencesKeyLogLevelLogCat.class)
-				.toInstance(
-						application
-								.getString(R.string.preferences_key_log_level_logcat));
-		bind(String.class)
-				.annotatedWith(PreferencesDefaultLogLevelLogCat.class)
-				.toInstance(
-						application
-								.getString(R.string.preferences_default_log_level_logcat));
+        bind(String.class)
+                .annotatedWith(PreferencesKeyDownloadOnlyOnWifi.class)
+                .toInstance(
+                        application
+                                .getString(R.string.preferences_key_download_only_on_wifi));
+        bind(Boolean.class).annotatedWith(
+                PreferencesDefaultDownloadOnlyOnWifi.class).toInstance(
+                application.getResources().getBoolean(
+                        R.bool.preferences_default_download_only_on_wifi));
+        bind(String.class)
+                .annotatedWith(PreferencesKeyDownloadReleasesTimePeriod.class)
+                .toInstance(
+                        application
+                                .getString(R.string.preferences_key_download_releases_time_period));
+        bind(String.class)
+                .annotatedWith(
+                        PreferencesDefaultDownloadReleasesTimePeriod.class)
+                .toInstance(
+                        application
+                                .getString(R.string.preferences_default_download_releases_time_period));
+        bind(String.class)
+                .annotatedWith(PreferencesKeyRefreshPeriod.class)
+                .toInstance(
+                        application
+                                .getString(R.string.preferences_key_refresh_period));
+        bind(String.class)
+                .annotatedWith(PreferencesDefaultRefreshPeriod.class)
+                .toInstance(
+                        application
+                                .getString(R.string.preferences_default_refresh_period));
+        bind(String.class)
+                .annotatedWith(PreferencesKeyIsEnabledNotifyReleasedToday.class)
+                .toInstance(
+                        application
+                                .getString(R.string.preferences_key_is_enabled_notify_released_today));
+        bind(Boolean.class)
+                .annotatedWith(
+                        PreferencesDefaultIsEnabledNotifyReleasedToday.class)
+                .toInstance(
+                        application
+                                .getResources()
+                                .getBoolean(
+                                        R.bool.preferences_default_is_enabled_notify_released_today));
+        bind(String.class)
+                .annotatedWith(PreferencesKeyIsEnabledNotifyNewReleases.class)
+                .toInstance(
+                        application
+                                .getString(R.string.preferences_key_is_enabled_notify_new_releases));
+        bind(Boolean.class)
+                .annotatedWith(
+                        PreferencesDefaultIsEnabledNotifyNewReleases.class)
+                .toInstance(
+                        application
+                                .getResources()
+                                .getBoolean(
+                                        R.bool.preferences_default_is_enabled_notify_new_releases));
+        bind(String.class)
+                .annotatedWith(PreferencesKeyReleasedTodayHourOfDay.class)
+                .toInstance(
+                        application
+                                .getString(R.string.preferences_key_released_today_hour_of_day));
+        bind(Integer.class)
+                .annotatedWith(PreferencesDefaultReleasedTodayHourOfDay.class)
+                .toInstance(
+                        parseIntOrThrow(
+                                PreferencesDefaultReleasedTodayHourOfDay.class,
+                                application
+                                        .getString(R.string.preferences_default_released_today_hour_of_day)));
+        bind(String.class)
+                .annotatedWith(PreferencesKeyReleasedTodayMinute.class)
+                .toInstance(
+                        application
+                                .getString(R.string.preferences_key_released_today_minute));
+        bind(Integer.class)
+                .annotatedWith(PreferencesDefaultReleasedTodayMinute.class)
+                .toInstance(
+                        parseIntOrThrow(
+                                PreferencesDefaultReleasedTodayMinute.class,
+                                application
+                                        .getString(R.string.preferences_default_released_today_minute)));
+        bind(String.class).annotatedWith(PreferencesKeyLogLevel.class)
+                .toInstance(
+                        application
+                                .getString(R.string.preferences_key_log_level));
+        bind(String.class)
+                .annotatedWith(PreferencesDefaultLogLevel.class)
+                .toInstance(
+                        application
+                                .getString(R.string.preferences_default_log_level));
+        bind(String.class)
+                .annotatedWith(PreferencesKeyLogLevelLogCat.class)
+                .toInstance(
+                        application
+                                .getString(R.string.preferences_key_log_level_logcat));
+        bind(String.class)
+                .annotatedWith(PreferencesDefaultLogLevelLogCat.class)
+                .toInstance(
+                        application
+                                .getString(R.string.preferences_default_log_level_logcat));
 
-	}
+    }
 
-	/**
-	 * Installs the java.util.logging (jul-to-slf4j) {@link SLF4JBridgeHandler}.
-	 * As a result, all (yes, also {@link java.util.logging.Level#FINE}, etc.)
-	 * Level JUL log statements are routed to SLF4J.
-	 */
-	private void installSlf4jJulHandler() {
-		/*
-		 * add SLF4JBridgeHandler to j.u.l's root logger, should be done once
-		 * during the initialization phase of your application
-		 */
-		SLF4JBridgeHandler.install();
-	}
+    /**
+     * Installs the java.util.logging (jul-to-slf4j) {@link SLF4JBridgeHandler}.
+     * As a result, all (yes, also {@link java.util.logging.Level#FINE}, etc.)
+     * Level JUL log statements are routed to SLF4J.
+     */
+    private void installSlf4jJulHandler() {
+        /*
+         * add SLF4JBridgeHandler to j.u.l's root logger, should be done once
+         * during the initialization phase of your application
+         */
+        SLF4JBridgeHandler.install();
+    }
 
-	private Integer parseIntOrThrow(Class<?> annotation, String prefValue) {
-		try {
-			return Integer.parseInt(prefValue);
-		} catch (NumberFormatException e) {
-			throw new RuntimeException(
-					"Unable to parse integer from property \""
-							+ annotation.getName() + "\", value:" + prefValue,
-					e);
-		}
-	}
+    private Integer parseIntOrThrow(Class<?> annotation, String prefValue) {
+        try {
+            return Integer.parseInt(prefValue);
+        } catch (NumberFormatException e) {
+            throw new RuntimeException(
+                    "Unable to parse integer from property \""
+                            + annotation.getName() + "\", value:" + prefValue,
+                    e);
+        }
+    }
 
 }

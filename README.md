@@ -1,9 +1,9 @@
 nusic - your new music
 =====
-| Branch        | Build Status  |
-| ------------- |-------------  |
-| Develop       | [![Build Status Develop](https://jenkins.schnatterer.info/job/nusic-develop/badge/icon)](https://jenkins.schnatterer.info/job/nusic-develop/)  |
-| Features       | [![Build Status Develop](https://jenkins.schnatterer.info/job/nusic-features/badge/icon)](https://jenkins.schnatterer.info/job/nusic-features/)  |
+| Branch        | Build Status  | Quality Gate |
+| ------------- |-------------  | ------------ |
+| Develop       | [![Build Status Develop](https://jenkins.schnatterer.info/job/nusic-develop/badge/icon)](https://jenkins.schnatterer.info/job/nusic-develop/)  |[![Quality Gates Develop](https://sonarqube.schnatterer.info/api/badges/gate?key=info.schnatterer.nusic:nusic-develop)](https://sonarqube.schnatterer.info/dashboard/index/279?did=1) |
+| Features       | [![Build Status Features](https://jenkins.schnatterer.info/job/nusic-features/badge/icon)](https://jenkins.schnatterer.info/job/nusic-features/)  | |
 
 
 Never again miss a new album release of your favorite artists - always stay informed by nusic.
@@ -28,16 +28,25 @@ You can download the lates version as APK from [GitHub] (https://github.com/schn
 Copyright © 2013 Johannes Schnatterer.
 
 Licensed under the GNU General Public License Version 3.
-See the [License](https://github.com/schnatterer/nusic/blob/master/Nusic/LICENSE.txt) and the [licenses of dependencies](https://github.com/schnatterer/nusic/blob/master/Nusic/NOTICE.txt).
+See the [License](LICENSE.txt) and the [licenses of dependencies](NOTICE.md).
 
 ## Release notes
-See [Releases] (https://github.com/schnatterer/nusic/releases).
+See [Changelog](CHANGELOG.md) and [Releases] (https://github.com/schnatterer/nusic/releases).
+
+## Permissions
+What kind of permission does nusic require and why does it require them?
+- Network communication, full network access: Check MusicBrainz for new releases
+- Nework communication, view network connections: Get notified about available connection to the internet in order to start checking for new releases.
+- Yor applications information, run at startup: Schedule regular checking for new releases via the Android alarm manager
+- System tools, test access to protected storage: Get the artists that are stored on the device
+- Affects Battery, prevent phone from sleeping: Prevent the device from falling back to sleep while searching for new releases
+
 
 ## Build
 ### Modules
 | Module             | Packaging      | Description   |
 | -------------      | ------------- | ------------- |
-| parent             | pom | Global build properties for all modules |
+| parent             | - | Global build properties for all modules |
 | nusic-apk          | apk | Assembly maven module containing the guice module, wires up all dependencies and builds the APK |
 | nusic-ui-android   | aar | Contains all android specific frontend-code |
 | nusic-core-api     | jar | Interfaces of the central logic module |
@@ -47,40 +56,90 @@ See [Releases] (https://github.com/schnatterer/nusic/releases).
 | nusic-domain       | jar | Domain objects for persistence and migration between the layers |
 | nusic-util         | jar | Utility module, containing logic common to all modules |
 
-### Maven
-In order to build the APK use the [SDK manager](https://developer.android.com/tools/help/sdk-manager.html) to download the SDK Version specified in the [parent POM's properties](https://github.com/schnatterer/nusic/blob/develop/pom.xml) and deploy android to your local maven repo using [maven-android-sdk-deployer](https://github.com/mosabua/maven-android-sdk-deployer). Also make sure to set your `ANDROID_HOME` environment variable to `sdk` folder of your Android SDK.
-Then just run
-    mvn install
-Or if you want to deploy to your devices (vie ADB):
-    mvn install android:deploy android:run
-    
-Note: During the build, the APK is signed using a keystore. In order not to hard-code any credentials, it uses variables.
-You could pass those via the command line or define them in your ~/.m2/settings.xml like so:
-```xml
-<profile>
- <id>keystore</id>
-    <activation>
-        <activeByDefault>true</activeByDefault>
-    </activation>
-    <properties>
-        <sign.keystore>FULL/path/to/keystore</sign.keystore>
-        <sign.alias>the key's alias within the keystore</sign.alias>
-        <sign.keypass>password for keystore</sign.keypass>
-        <sign.storepass>password for key</sign.storepass>
-    </properties>
-</profile>
+### Gradle
+In order to build the APK use the [SDK manager](https://developer.android.com/tools/help/sdk-manager.html) to download the SDK Version specified in the [parent project's build.gradle](build.gradle) and deploy android to your local maven repo using [maven-android-sdk-deployer](https://github.com/mosabua/maven-android-sdk-deployer). Also make sure to set your `ANDROID_HOME` environment variable to `sdk` folder of your Android SDK.
+Then just run  
+```sh
+gradle clean check assembleDebug
 ```
+to compile from scratch, run the tests and create a debug-signed APK, or run  
 
-### Eclipse
-* When using [m2eclipse](http://eclipse.org/m2e/) and [m2e-android](http://rgladwell.github.io/m2e-android/) and have your local maven repo set up (see above), maven and m2e should set you up with all you need to build an run right away.
-* For setting up android libs, add nuisc-ui-android as library to nusic-apk and android-support-v7-appcompat from ANDROID_HOME/extras/android/support/v7/appcompat.
-* In order to be able to use RoboBlender properly, add a source folder that points to `target/generated-sources/annotations` to each android-module (nusic-data-android, nusic-core-android, nusic-ui-android). Not doing this will most likely result in a `java.lang.ClassNotFoundException: AnnotationDatabaseImpl` when starting the app.
-* For running robolectric tests from eclipse, you need to add the robolectric libraries (robolectric*.jar and android_all*.jar) to the modules (e.g. nusic-data-android). Those have been removed from the maven build of m2e because m2e doesn't know about scopes and and adding android_all*.jar to the APK will dramatically slow down the eclipse build or even fail it (exceed the 65K limit).
+```sh
+gradle clean check assembleRelease
+```
+to create a signed APK, using an custom keystore.  
 
-## Permissions
-What kind of permission does nusic require and why does it require them?
-- Network communication, full network access: Check MusicBrainz for new releases
-- Nework communication, view network connections: Get notified about available connection to the internet in order to start checking for new releases.
-- Yor applications information, run at startup: Schedule regular checking for new releases via the Android alarm manager
-- System tools, test access to protected storage: Get the artists that are stored on the device
-- Affects Battery, prevent phone from sleeping: Prevent the device from falling back to sleep while searching for new releases
+For passing the credentials for this keystore via the command line there are four options  
+
+1. Define them in your `~/.gradle/gradle.properties` like so  
+
+   ```ini
+   signKeystore=FULL/path/to/keystore
+   signAlias=the key's alias within the keystore
+   signKeypass=password for keystore
+   signStorepasss=password for key
+   ```
+2. Pass them as command line properties, e.g.  
+
+   ```sh
+   gradle clean check assembleRelease -PsignAlias="the key's alias within the keystore"
+   ```  
+3. Pass them as environment variables, e.g.  
+
+   ```sh
+   export ORG_GRADLE_PROJECT_signAlias=the key's alias within the keystore
+   ```
+4. or pass them as system property, e.g.
+
+   ```sh
+   gradle clean check assembleRelease -Dorg.gradle.project.signKeystore=signAlias="the key's alias within the keystore"
+   ```
+
+
+## Creating a release
+TODO Automate this, e.g. via Jenkins
+
+- Start release  
+
+   ```sh
+   git-flow release start v.2.1.1
+   ```
+- Set Version  
+
+   ```sh
+   gradle setVersion -PnewVersion=2.1.1
+   ```
+- Update [changelog](CHANGELOG.md)
+- Commit  
+
+    ```sh
+    git add .
+    git commit -m 'Prepare release v.2.1.1'
+    ```
+- Finish release & Tag (+ tag message)
+
+   ```sh
+   git-flow release finish v.2.1.1
+   ```
+- Set next dev version & commit
+
+    ```sh
+    gradle setVersion -PnewVersion=2.1.2-SNAPSHOT
+    git add .
+    git commit -m "Prepare for next development iteration v.2.1.2-SNAPSHOT"
+    ```
+- Checkout and build tag
+
+    ```sh
+    git checkout tags/v.2.1.1
+    gradle clean check assembleRelease
+    ```
+- Push all branches & tags
+
+    ```sh
+    git push --all
+    git push --tags
+    ```
+- Upload artifact: [Github](https://github.com/schnatterer/nusic/releases), [Google Play](https://play.google.com/apps/publish/)
+- Add changelog to github release page: https://github.com/schnatterer/nusic/releases/tag/v.2.1.1
+- Add changelog to google play entry

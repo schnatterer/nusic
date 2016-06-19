@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    Copyright (C) 2013 Johannes Schnatterer
+
+    See the NOTICE file distributed with this work for additional
+    information regarding copyright ownership.
+
+    This file is part of nusic.
+
+    nusic is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    nusic is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with nusic.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<resources>
+    <string name="action_refresh">Alben aktualisieren</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="action_settings_developer">Einstellungen für Entwickler</string>
+    
+    <string name="releaseListMenu_HideRelease">Album ausblenden</string>
+    <string name="releaseListMenu_HideAllByArtist">Alle des Interpreten ausblenden</string>
+    
+    <!-- GUI captions -->
+    <string name="GooglePlay">Google Play</string>
+    <string name="GitHub">GitHub</string>
+    <string name="releaseListRow_RightArrow">Anklicken für mehr Details</string>
+    <string name="releaseListRow_Thumbnail">Vorschaubild des Albumcovers</string>
+    <string name="LoadNewReleasesBinding_CheckingArtists">Prüfe alle Interpreten auf neue Alben</string>
+    <string name="MainActivity_noReleasesFound">Keine Alben gefunden für die auf dem Gerät vorhandenen Interpreten und den angegebenen Zeitraum.</string>
+    <string name="MainActivity_noNewReleasesFound">In der letzten Zeit wurden keine neuen Alben gefunden für die auf dem Gerät vorhandenen Interpreten und den angegebenen Zeitraum.</string>
+    <string name="MainActivity_TabAll">Alle</string>
+    <string name="MainActivity_TabJustAdded">Neu hinzugefügt</string>
+    <string name="MainActivity_TabAvailable">Verfügbar</string>
+    <string name="MainActivity_TabAnnounced">Angekündigt</string>
+    <string name="MainActivity_AccessDeniedOnceTitle">Zugriff verweigert</string>
+    <string name="MainActivity_AccessDeniedOnceMessage">Du hast den Zugriff auf Medien des Geräts verweigert. Nusic kann ohne Zugriff auf Medien nicht arbeiten. Es benötigt die Interpreten der Lieder, die auf dem Geräte gespeichert sind, um neue Alben zu finden. Wenn du nusic verwenden willst, bitte wähle "Zulassen".</string>
+    <string name="MainActivity_AccessDeniedPermanentlyTitle">Zugriff dauerhaft verweigert</string>
+    <string name="MainActivity_AccessDeniedPermanentlyMessage">Du hast den Zugriff auf Medien des Geräts dauerhaft verweigert. Nusic kann ohne Zugriff auf Medien nicht arbeiten. Es benötigt die Interpreten der Lieder, die auf dem Geräte gespeichert sind, um neue Alben zu finden. Wenn du nusic verwenden willst, lösche die Daten in App Info, starte die App erneut und wähle "Zulassen".</string>
+    <string name="MainActivity_AccessDeniedPermanentlyPositiveButton">Zu App Info</string>
+    <string name="MainActivity_AccessDeniedPermanentlyNegativeButton">Ich möchte nusic nicht nutzen</string>
+    <!-- <string name="MainActivity_JustAddedInformation">Alle Alben, die in den letzten %1$d Tagen hinzugefügt wurden</string> -->
+    <string name="WelcomeScreenTitle">Willkommen zu nusic v%1$s</string>
+    <string name="WelcomeScreenPleaseBePatient">&#8230;bitte habe etwas Geduld ;)</string>
+    <string name="WelcomeScreenFirstStartMayTakeAWhile">Abhängig von der Anzahl der Interpreten auf dem Gerät kann der erste Start etwas dauern.</string>
+    <string name="WelcomeScreenSyncronisationWillBeDoneBackground">Danach laufen alle weiteren Abfragen im Hintgrund. Nusic informiert dich über Systemnachrichten (notifications), sobald es neue Alben findet.</string>
+    <string name="WelcomeScreenIfYouLikeNusicPleaseRate">Wenn dir nusic gefällt, bitte bewerte es bei @string/html_link_nusic_google_play oder unterstütze uns durch Übersetzungen oder durch Weiterentwicklung über @string/html_link_nusic_git_hub. Im Fehlerfall schreib uns bitte eine @string/html_link_email.</string>
+    <string name="WelcomeScreenAndroid444">Anmerkung: Ab 4.4.4 unterstützt Android keine Musik mehr auf externen SD Karten. Daher kann nusic die Interpreten möglicherweise nicht auslesen.</string>
+    <string name="WelcomeScreenAndroid444SDScanner">Möglicherweise hilft in diesem Fall @string/html_link_sd_scanner</string>
+    <string name="SDScanner">SD Scanner</string>
+    <string name="Email">E-Mail</string>
+        
+    <string name="LoadNewReleasesService_newRelease">Neues Album gefunden:</string>
+    <string name="LoadNewReleasesService_newReleaseMultiple">%1$d neue Alben gefunden</string>
+    <string name="LoadNewReleasesService_missingPermissionReadExternalStorage">Bitte Zugriff auf Medien zulassen</string>
+    <string name="ReleasedTodayService_ReleasedToday">Heute erscheint:</string>
+    <string name="ReleasedTodayService_ReleasedTodayMultiple">%1$d Alben werden heute veröffentlicht</string>
+    
+    <!-- Prefrences -->
+    <string name="preferences_category_releases">Alben</string>
+    <string name="preferences_title_download_releases_time_period">Zeitspanne</string>
+    <string name="preferences_summary_download_releases_time_period">Zurückliegende Zeitspanne vom heutigen Datum aus, für die Alben heruntergeladen und angezeigt werden sollen</string>
+    <string-array name="preferences_entries_download_releases_time_period">
+        <item>Ein Monat</item>
+        <item>Drei Monate</item>
+        <item>Sechs Monate</item>
+        <item>Ein Jahr</item>
+    </string-array>
+    <string name="preferences_title_display_all_releases">Ausgeblendete Alben wieder anzeigen</string>
+    <string name="preferences_summary_display_all_releases">Mittels langem Tap auf ein Album können diese ausgeblendet werden. Diese Option setzt ausgeblendete Alben und Interpreten zurück</string>
+    <string name="preferences_message_display_all_releases">Wirklich alle ausgeblendeten Alben und Interpreten wieder anzeigen?</string>
+    
+    <string name="preferences_category_bandwitdth">Datennutzung</string>
+    <string name="preferences_title_download_only_on_wifi">Nur WLAN</string>
+    <string name="preferences_summary_download_only_on_wifi_on">Keine Internetverbindung über Mobilfunknetzwerke verwenden</string>
+    <string name="preferences_summary_download_only_on_wifi_off">Auch Internetverbindung über Mobilfunknetzwerke verwenden</string>
+    
+    <string name="preferences_category_notifications">Benachrichtigungen</string>
+    <string name="preferences_title_is_enabled_notify_new_releases">Neue Alben</string>
+    <string name="preferences_summary_is_enabled_notify_new_releases_on">Benachrichtigen wenn neue Alben gefunden werden</string>
+    <string name="preferences_summary_is_enabled_notify_new_releases_off">Keine Benachrichtigung wenn neue Alben gefunden werden</string>
+    <string name="preferences_title_is_enabled_notify_released_today">Erscheinungstermine</string>
+    <string name="preferences_summary_is_enabled_notify_released_today_on">Am Tag der Veröffentlichung von Alben benachrichtigen</string>
+    <string name="preferences_summary_is_enabled_notify_released_today_off">Keine Benachrichtigung am Tag der Veröffentlichung von Alben</string>
+    <string name="preferences_title_released_today_hour_of_day">Zeit der Benachrichtigung</string>
+    
+    <string name="preferences_category_about">Über %1$s</string>
+    <string name="preferences_title_version">Version</string>
+    <string name="preferences_title_privacy_policy">Datenschutzrichtlinie</string>
+    <string name="preferences_summary_privacy_policy">Finde heraus auf welche Daten nusic zugreift und was mit ihnen geschieht</string>
+    <string name="preferences_title_licences">Lizenzen</string>
+    <string name="preferences_summary_licences">Lizenzen, unter denen nusic und seine Abhängigkeiten veröffentlicht wurden</string>
+    <string name="preferences_summary_released_hour_of_day">Ungefähre Zeit zu der die Benachrichtigung über Erscheinungstermine erscheint. Android kann die Ausführung verzögern um Strom zu sparen</string>
+    <string name="preferences_title_changelog">Änderungshistorie</string>
+    <string name="preferences_summary_changelog">Schau dir an was es Neues gibt</string>
+    <string name="preferences_category_web">nusic im Netz</string>
+    <string name="preferences_category_contact">Kontakt</string>
+    <string name="preferences_summary_google_play">Wenn dir nusic gefällt, bitte bewerte es. Wenn es dir nicht gefällt, bitte hilf uns es zu verbessern und erstelle einen issue bei GitHub</string>
+    <string name="preferences_summary_git_hub">Melde Fehler, schaue dir denn Quellcode an, füge Übersetzungen hinzu oder unterstütze die Entwicklung</string>
+    <string name="preferences_title_email">E-Mail</string>
+    <string name="preferences_summary_email">Schreib uns eine E-Mail</string>
+    <string name="preferences_title_report">Fehlerbericht</string>
+    <string name="preferences_summary_report">Fehlerbericht als E-mail schreiben und Log-Dateien anhängen</string>
+    <string name="preferences_category_misc">Verschiedenes</string>
+    <string name="preferences_title_loglevel">Root Log Level</string>
+    <string name="preferences_summary_loglevel">Festlegen welche Log Meldungen gespeichert werden</string>
+    <string name="preferences_title_current_log">Aktuelle Log Datei öffnen</string>
+    <string name="preferences_title_loglevel_logcat">LogCat Log Level</string>
+    <string name="preferences_summary_loglevel_logcat">Festlegen welche Log Meldungen an LogCat weiter gereicht werden. Hinweis: Muss >= Root Log level sein</string>
+    
+    <!-- (Error) messages -->
+    <string name="GenericError">Etwas beinahe unmögliches ist geschehen: %1s!</string>
+    <string name="NotOnline">Keine Verbindung zum Internet (Einstellungen prüfen, um die Verwendung des mobilen Internet zu ermöglichen)</string>
+    <string name="MainActivity_errorLoadingReleases">Fehler beim Laden der Alben vom Gerät</string>
+    <string name="MainActivity_refreshAlreadyInProgress">Aktualisierung bereits im Gange</string>
+    <string name="MainActivity_pleaseWaitUntilRefreshIsFinished">Bitte warten bis die Aktualisierung der Alben abgeschlossen ist.</string>
+
+	<string name="TextAssetActivity_errorLoadingFile">Fehler beim Laden der Textdatei</string>
+	
+    <string name="LoadNewReleasesBinding_errorFindingReleases">Aktualisieren der Alben fehlgeschlagen: </string>
+    <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">Unfassbarer Fehler beim Aktualiseren der Alben: </string>
+    <string name="LoadNewReleasesBinding_finishedWithErrors">Update der Alben für %1$d Interpreten von %2$d fehlgeschlagen</string>
+    
+    <string name="ReleasedTodayService_ReleasedTodayError">Fehler beim Finden heutiger Veröffentlichungen</string>
+</resources>

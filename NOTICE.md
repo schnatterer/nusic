@@ -1,6 +1,6 @@
 nusic - you new music
 =========
-Copyright 2014 Johannes Schnatterer.  
+Copyright 2016 Johannes Schnatterer.  
 Published under GNU General Public License (GPL), Version 3.0  
 
 
@@ -13,10 +13,6 @@ published under The Apache Software License, Version 2.0
 **RoboGuice**
 published under The Apache Software License, Version 2.0  
 [Website](https://github.com/roboguice/roboguice)
-
-**roboguice-sherlock**
-published under The Apache Software License, Version 2.0  
-[Website](https://github.com/rtyley/roboguice-sherlock)
 
 **musicbrainzws2-java**  
 published under GNU General Public License (GPL), Version 3.0  
@@ -35,7 +31,7 @@ published under MIT License, Version 2.0
 [Website](http://www.slf4j.org/)
 
 **logback-android**
-published under  GNU Lesser General Public License version 2.1
+published under  GNU Lesser General Public License version 2.1  
 [Website](http://tony19.github.io/logback-android/)
 
 **Apache Commons IO**

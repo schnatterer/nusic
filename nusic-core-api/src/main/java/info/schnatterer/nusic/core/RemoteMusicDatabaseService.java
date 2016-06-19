@@ -1,23 +1,23 @@
 /**
- * ﻿Copyright (C) 2013 Johannes Schnatterer
+ * Copyright (C) 2013 Johannes Schnatterer
  *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  *
- * This file is part of nusic-core-api.
+ * This file is part of nusic.
  *
- * nusic-core-api is free software: you can redistribute it and/or modify
+ * nusic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * nusic-core-api is distributed in the hope that it will be useful,
+ * nusic is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with nusic-core-api.  If not, see <http://www.gnu.org/licenses/>.
+ * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package info.schnatterer.nusic.core;
 
@@ -36,21 +36,21 @@ import java.util.Date;
  */
 public interface RemoteMusicDatabaseService {
 
-	/**
-	 * Finds releases by artist.
-	 * 
-	 * @param artist
-	 *            the artist to query releases for.
-	 * @param fromDate
-	 *            the lower boundary of the time range in which release were
-	 *            published
-	 * @param endDate
-	 *            the upper boundary of the time range in which release were
-	 *            published
-	 * @return an artists object that contains all the releases that were
-	 *         published in the specified time range
-	 * @throws ServiceException
-	 */
-	Artist findReleases(Artist artist, Date fromDate, Date endDate)
-			throws ServiceException;
+    /**
+     * Finds releases by artist.
+     * 
+     * @param artist
+     *            the artist to query releases for.
+     * @param fromDate
+     *            the lower boundary of the time range in which release were
+     *            published
+     * @param endDate
+     *            the upper boundary of the time range in which release were
+     *            published
+     * @return an artists object that contains all the releases that were
+     *         published in the specified time range
+     * @throws ServiceException
+     */
+    Artist findReleases(Artist artist, Date fromDate, Date endDate)
+            throws ServiceException;
 }

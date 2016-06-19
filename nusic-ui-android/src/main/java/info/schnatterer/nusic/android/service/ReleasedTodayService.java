@@ -1,23 +1,23 @@
 /**
- * ﻿Copyright (C) 2013 Johannes Schnatterer
+ * Copyright (C) 2013 Johannes Schnatterer
  *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  *
- * This file is part of nusic-ui-android.
+ * This file is part of nusic.
  *
- * nusic-ui-android is free software: you can redistribute it and/or modify
+ * nusic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * nusic-ui-android is distributed in the hope that it will be useful,
+ * nusic is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with nusic-ui-android.  If not, see <http://www.gnu.org/licenses/>.
+ * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
 package info.schnatterer.nusic.android.service;
 
@@ -63,235 +63,233 @@ import android.os.IBinder;
  *
  */
 public class ReleasedTodayService extends RoboService {
-	/** Small icon shown in the status bar when a notification is shwown. */
-	private static final int NOTIFICATION_SMALL_ICON = R.drawable.ic_album_white_24dp;
+    /** Small icon shown in the status bar when a notification is shwown. */
+    private static final int NOTIFICATION_SMALL_ICON = R.drawable.ic_album_white_24dp;
 
-	private static final Logger LOG = LoggerFactory
-			.getLogger(ReleasedTodayService.class);
+    private static final Logger LOG = LoggerFactory
+            .getLogger(ReleasedTodayService.class);
 
-	@Inject
-	private PreferencesService preferencesService;
-	@Inject
-	private ReleaseService releaseService;
-	@Inject
-	private ArtworkDao artworkDao;
+    @Inject
+    private PreferencesService preferencesService;
+    @Inject
+    private ReleaseService releaseService;
+    @Inject
+    private ArtworkDao artworkDao;
 
-	private ReleasedTodayServiceBinder binder = new ReleasedTodayServiceBinder();
+    private ReleasedTodayServiceBinder binder = new ReleasedTodayServiceBinder();
 
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		if (preferencesService.isEnabledNotifyReleasedToday()) {
-			try {
-				List<Release> releasedToday = releaseService
-						.findReleasedToday();
-				if (releasedToday.size() == 1) {
-					notifyReleaseToday(releasedToday.get(0));
-				} else if (releasedToday.size() > 1) {
-					// If more than one release, put less detail in notification
-					notifyReleaseToday(releasedToday.size());
-				}
-			} catch (ServiceException e) {
-				Notification
-						.notifyWarning(
-								this,
-								getString(R.string.ReleasedTodayService_ReleasedTodayError),
-								e.getLocalizedMessage());
-			}
-		} else {
-			// Stop schedule
-			stopSchedule(this);
-		}
-		// Avoid this service from being started all over again
-		stopSelf();
-		return Service.START_NOT_STICKY;
-	}
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (preferencesService.isEnabledNotifyReleasedToday()) {
+            try {
+                List<Release> releasedToday = releaseService
+                        .findReleasedToday();
+                if (releasedToday.size() == 1) {
+                    notifyReleaseToday(releasedToday.get(0));
+                } else if (releasedToday.size() > 1) {
+                    // If more than one release, put less detail in notification
+                    notifyReleaseToday(releasedToday.size());
+                }
+            } catch (ServiceException e) {
+                Notification
+                        .notifyWarning(
+                                this,
+                                getString(R.string.ReleasedTodayService_ReleasedTodayError),
+                                e.getLocalizedMessage());
+            }
+        } else {
+            // Stop schedule
+            stopSchedule(this);
+        }
+        // Avoid this service from being started all over again
+        stopSelf();
+        return Service.START_NOT_STICKY;
+    }
 
-	/**
-	 * Puts out a notification informing about one release published today.<br/>
-	 * <br/>
-	 * <br/>
-	 * Future calls overwrite any previous instances of this notification still
-	 * on display.
-	 * 
-	 * @param release
-	 * 
-	 */
-	private void notifyReleaseToday(Release release) {
-		try {
-			Bitmap createScaledBitmap = ImageUtil.createScaledBitmap(
-					artworkDao.findStreamByRelease(release, ArtworkType.SMALL),
-					this);
-			Notification.notify(
-					this,
-					NotificationId.RELEASED_TODAY,
-					getString(R.string.ReleasedTodayService_ReleasedToday),
-					release.getArtist().getArtistName() + " - "
-							+ release.getReleaseName(),
-					NOTIFICATION_SMALL_ICON, createScaledBitmap,
-					MainActivity.class, createExtraActiveTab());
-		} catch (DatabaseException e) {
-			LOG.warn("Unable to load artwork for notification. " + release, e);
-		} catch (IllegalArgumentException e) {
-			LOG.warn("Unable scale artwork for notification. " + release, e);
-		}
-	}
+    /**
+     * Puts out a notification informing about one release published today.<br/>
+     * <br/>
+     * <br/>
+     * Future calls overwrite any previous instances of this notification still
+     * on display.
+     * 
+     * @param release
+     * 
+     */
+    private void notifyReleaseToday(Release release) {
+        try {
+            Bitmap createScaledBitmap = ImageUtil.createScaledBitmap(
+                    artworkDao.findStreamByRelease(release, ArtworkType.SMALL),
+                    this);
+            Notification.notify(
+                    this,
+                    NotificationId.RELEASED_TODAY,
+                    getString(R.string.ReleasedTodayService_ReleasedToday),
+                    release.getArtist().getArtistName() + " - "
+                            + release.getReleaseName(),
+                    NOTIFICATION_SMALL_ICON, createScaledBitmap,
+                    MainActivity.class, createExtraActiveTab());
+        } catch (DatabaseException e) {
+            LOG.warn("Unable to load artwork for notification. " + release, e);
+        } catch (IllegalArgumentException e) {
+            LOG.warn("Unable scale artwork for notification. " + release, e);
+        }
+    }
 
-	/**
-	 * Puts out a notification informing about multiple releases published
-	 * today.<br/>
-	 * <br/>
-	 * Future calls overwrite any previous instances of this notification still
-	 * on display.
-	 * 
-	 * @param nReleases
-	 *            the number of releases published today
-	 * 
-	 * @param text
-	 */
-	private void notifyReleaseToday(int nReleases) {
-		Notification.notify(this, NotificationId.RELEASED_TODAY, String.format(
-				getString(R.string.ReleasedTodayService_ReleasedTodayMultiple),
-				nReleases), null, NOTIFICATION_SMALL_ICON, null,
-				MainActivity.class, createExtraActiveTab());
-	}
+    /**
+     * Puts out a notification informing about multiple releases published
+     * today.<br/>
+     * <br/>
+     * Future calls overwrite any previous instances of this notification still
+     * on display.
+     * 
+     * @param nReleases
+     *            the number of releases published today
+     */
+    private void notifyReleaseToday(int nReleases) {
+        Notification.notify(this, NotificationId.RELEASED_TODAY, String.format(
+                getString(R.string.ReleasedTodayService_ReleasedTodayMultiple),
+                nReleases), null, NOTIFICATION_SMALL_ICON, null,
+                MainActivity.class, createExtraActiveTab());
+    }
 
-	/**
-	 * Creates an extra bundle that contains the tab to be shown when
-	 * {@link MainActivity} is launched.
-	 * 
-	 * @return
-	 */
-	private Bundle createExtraActiveTab() {
-		Bundle extras = new Bundle();
-		extras.putSerializable(MainActivity.EXTRA_ACTIVE_TAB,
-				MainActivity.TabDefinition.AVAILABLE);
-		return extras;
-	}
+    /**
+     * Creates an extra bundle that contains the tab to be shown when
+     * {@link MainActivity} is launched.
+     * 
+     * @return
+     */
+    private Bundle createExtraActiveTab() {
+        Bundle extras = new Bundle();
+        extras.putSerializable(MainActivity.EXTRA_ACTIVE_TAB,
+                MainActivity.TabDefinition.AVAILABLE);
+        return extras;
+    }
 
-	/**
-	 * Class used for the client Binder. Because we know this service always
-	 * runs in the same process as its clients, we don't need to deal with IPC.
-	 */
-	public class ReleasedTodayServiceBinder extends Binder {
-		public ReleasedTodayService getService() {
-			return ReleasedTodayService.this;
-		}
-	}
+    /**
+     * Class used for the client Binder. Because we know this service always
+     * runs in the same process as its clients, we don't need to deal with IPC.
+     */
+    public class ReleasedTodayServiceBinder extends Binder {
+        public ReleasedTodayService getService() {
+            return ReleasedTodayService.this;
+        }
+    }
 
-	/**
-	 * Creates the pending intent that is passed to the alarm manager for
-	 * scheduling the service.
-	 * 
-	 * @param context
-	 * @return
-	 */
-	private static PendingIntent createPendingIntent(Context context) {
-		PendingIntent pintent = PendingIntent.getBroadcast(context,
-				Constants.Alarms.RELEASED_TODAY.ordinal(), new Intent(context,
-						ReleasedTodayServiceStarterReceiver.class),
-				PendingIntent.FLAG_UPDATE_CURRENT);
-		return pintent;
-	}
+    /**
+     * Creates the pending intent that is passed to the alarm manager for
+     * scheduling the service.
+     * 
+     * @param context
+     * @return
+     */
+    private static PendingIntent createPendingIntent(Context context) {
+        PendingIntent pintent = PendingIntent.getBroadcast(context,
+                Constants.Alarms.RELEASED_TODAY.ordinal(), new Intent(context,
+                        ReleasedTodayServiceStarterReceiver.class),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        return pintent;
+    }
 
-	/**
-	 * Cancel this task so it is not scheduled anymore.
-	 * 
-	 * @param context
-	 */
-	public void stopSchedule(Context context) {
-		((AlarmManager) getSystemService(ALARM_SERVICE))
-				.cancel(createPendingIntent(context));
-	}
+    /**
+     * Cancel this task so it is not scheduled anymore.
+     * 
+     * @param context
+     */
+    public void stopSchedule(Context context) {
+        ((AlarmManager) getSystemService(ALARM_SERVICE))
+                .cancel(createPendingIntent(context));
+    }
 
-	@Override
-	public IBinder onBind(Intent intent) {
-		return binder;
-	}
+    @Override
+    public IBinder onBind(Intent intent) {
+        return binder;
+    }
 
-	/**
-	 * Broadcast receiver that triggers execution of
-	 * {@link ReleasedTodayService}.
-	 * 
-	 * @author schnatterer
-	 * 
-	 */
-	public static class ReleasedTodayServiceStarterReceiver extends
-			RoboBroadcastReceiver {
-		@Override
-		public void handleReceive(final Context context, final Intent intent) {
-			context.startService(new Intent(context, ReleasedTodayService.class));
-		}
-	}
+    /**
+     * Broadcast receiver that triggers execution of
+     * {@link ReleasedTodayService}.
+     * 
+     * @author schnatterer
+     * 
+     */
+    public static class ReleasedTodayServiceStarterReceiver extends
+            RoboBroadcastReceiver {
+        @Override
+        public void handleReceive(final Context context, final Intent intent) {
+            context.startService(new Intent(context, ReleasedTodayService.class));
+        }
+    }
 
-	/**
-	 * Broadcast receiver that schedules execution of
-	 * {@link ReleasedTodayService}.
-	 * 
-	 * @author schnatterer
-	 * 
-	 */
-	public static class ReleasedTodaySchedulerReceiver extends
-			RoboBroadcastReceiver {
-		@Inject
-		ReleasedTodayServiceScheduler releasedTodayServiceScheduler;
+    /**
+     * Broadcast receiver that schedules execution of
+     * {@link ReleasedTodayService}.
+     * 
+     * @author schnatterer
+     * 
+     */
+    public static class ReleasedTodaySchedulerReceiver extends
+            RoboBroadcastReceiver {
+        @Inject
+        ReleasedTodayServiceScheduler releasedTodayServiceScheduler;
 
-		@Override
-		public void handleReceive(final Context context, final Intent intent) {
-			releasedTodayServiceScheduler.schedule();
-		}
-	}
+        @Override
+        public void handleReceive(final Context context, final Intent intent) {
+            releasedTodayServiceScheduler.schedule();
+        }
+    }
 
-	public static class ReleasedTodayServiceScheduler {
-		@Inject
-		private Context context;
-		@Inject
-		private PreferencesService preferencesService;
+    public static class ReleasedTodayServiceScheduler {
+        @Inject
+        private Context context;
+        @Inject
+        private PreferencesService preferencesService;
 
-		/**
-		 * Schedule this task to run regularly, if enabled in the preferences.
-		 * 
-		 * @param context
-		 */
-		public void schedule() {
-			boolean isEnabled = preferencesService
-					.isEnabledNotifyReleasedToday();
-			if (isEnabled) {
-				int hourOfDay = preferencesService
-						.getReleasedTodayScheduleHourOfDay();
-				int minute = preferencesService
-						.getReleasedTodayScheduleMinute();
+        /**
+         * Schedule this task to run regularly, if enabled in the preferences.
+         * 
+         * @param context
+         */
+        public void schedule() {
+            boolean isEnabled = preferencesService
+                    .isEnabledNotifyReleasedToday();
+            if (isEnabled) {
+                int hourOfDay = preferencesService
+                        .getReleasedTodayScheduleHourOfDay();
+                int minute = preferencesService
+                        .getReleasedTodayScheduleMinute();
 
-				Calendar triggerAtCal = Calendar.getInstance();
-				triggerAtCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-				triggerAtCal.set(Calendar.MINUTE, minute);
-				triggerAtCal.set(Calendar.SECOND, 0);
-				if (triggerAtCal.getTimeInMillis() < System.currentTimeMillis()) {
-					/*
-					 * Trigger only for today if time is in the future. If not,
-					 * trigger same time tomorrow.
-					 * 
-					 * If the triggering time is in the past, android will
-					 * trigger it directly.
-					 */
-					LOG.debug("Triggering notification service for tommorrow");
-					triggerAtCal.add(Calendar.DAY_OF_MONTH, 1);
-				}
+                Calendar triggerAtCal = Calendar.getInstance();
+                triggerAtCal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                triggerAtCal.set(Calendar.MINUTE, minute);
+                triggerAtCal.set(Calendar.SECOND, 0);
+                if (triggerAtCal.getTimeInMillis() < System.currentTimeMillis()) {
+                    /*
+                     * Trigger only for today if time is in the future. If not,
+                     * trigger same time tomorrow.
+                     * 
+                     * If the triggering time is in the past, android will
+                     * trigger it directly.
+                     */
+                    LOG.debug("Triggering notification service for tommorrow");
+                    triggerAtCal.add(Calendar.DAY_OF_MONTH, 1);
+                }
 
-				/*
-				 * Set a repeating schedule, so there always is a next alarm
-				 * even when one alarm should fail for some reason
-				 */
-				((AlarmManager) context.getSystemService(Context.ALARM_SERVICE))
-						.setRepeating(AlarmManager.RTC,
-								triggerAtCal.getTimeInMillis(),
-								AlarmManager.INTERVAL_DAY,
-								createPendingIntent(context));
-				LOG.debug("Scheduled "
-						+ ReleasedTodayService.class.getSimpleName()
-						+ " to run again every day, starting at "
-						+ new Date(+triggerAtCal.getTimeInMillis()));
-			}
-		}
-	}
+                /*
+                 * Set a repeating schedule, so there always is a next alarm
+                 * even when one alarm should fail for some reason
+                 */
+                ((AlarmManager) context.getSystemService(Context.ALARM_SERVICE))
+                        .setRepeating(AlarmManager.RTC,
+                                triggerAtCal.getTimeInMillis(),
+                                AlarmManager.INTERVAL_DAY,
+                                createPendingIntent(context));
+                LOG.debug("Scheduled "
+                        + ReleasedTodayService.class.getSimpleName()
+                        + " to run again every day, starting at "
+                        + new Date(+triggerAtCal.getTimeInMillis()));
+            }
+        }
+    }
 
 }
