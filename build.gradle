@@ -97,7 +97,8 @@ subprojects {
         //mavenCentral()
         jcenter()
 
-        maven { url "https://raw.github.com/schnatterer/musicbrainzws2-java/mvn-repo/" }
+        // For musicbrainzws from github
+        maven { url "https://jitpack.io" }
     }
 }
 
