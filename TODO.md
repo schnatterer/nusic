@@ -1,5 +1,6 @@
 TODOs - Features, enhancements, refactoring, ...
 
+- Stores: Publish on F-Droid
 
 - Gradle: Dont repeat yourself - Set common compileJava, android and sonarqube (for android)  options only once
 See e.g https://discuss.gradle.org/t/how-do-i-detect-if-a-sub-project-has-applied-a-given-plugin-e-g-jar-or-war/4974
@@ -46,11 +47,6 @@ LIST
 - Use WeakReferences in ReleaseRefreshService in order to allow longer time ranges
 
 - Feature: Tablet optimization: Layout + Screens for 7" + 10"
-
-....Stores
-- Stores: Publish on F-Droid
-- Stores: Publish on Amazon: https://developer.amazon.com/welcome.html
-
 
 .... Even more ideas
 - Feature: Kind of releases: Album, Release, Live ...

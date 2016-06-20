@@ -24,6 +24,7 @@
 -->
 <!-- Application-wide technical constants (e.g. for preferences). Don't translate! -->
 <resources>
+    <!-- There is another app_name in nusic-apk, keep in sync with this one! -->
     <string name="app_name" translatable="false">nusic</string>
     <string name="app_url" translatable="false">${project.website}</string>
     <string name="app_contact" translatable="false">android@schnatterer.info</string>
