@@ -28,8 +28,7 @@
     <string name="app_name" translatable="false">nusic</string>
     <string name="app_url" translatable="false">${project.website}</string>
     <string name="app_contact" translatable="false">android@schnatterer.info</string>
-    <string name="versionName" translatable="false">${project.version}</string>
-    
+
     <string name="authority_log_file_provider" translatable="false">info.schnatterer.nusic.android.provider.LogFileProvider</string>
     
     <string name="extra_asset_name" translatable="false">nusic.intent.extra.assetName</string>

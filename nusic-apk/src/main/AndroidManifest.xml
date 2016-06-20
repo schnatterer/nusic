@@ -22,7 +22,9 @@
     along with nusic.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"  package="info.schnatterer.nusic" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"  package="info.schnatterer.nusic"
+    android:versionCode="19"
+    android:versionName="3.0.1-SNAPSHOT">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>

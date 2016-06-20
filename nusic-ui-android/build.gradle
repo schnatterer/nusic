@@ -39,8 +39,6 @@ android {
     defaultConfig {
         minSdkVersion nusicMinSdkVersion
         targetSdkVersion nusictTargetSdkVersion
-        versionCode nusicVersionCode
-        versionName project.version
     }
 
     compileOptions {
