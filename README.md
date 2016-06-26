@@ -20,9 +20,11 @@ Note that this app is not optimized for tablets, yet. Please be patient.
 Please report any issues [here] (https://github.com/schnatterer/nusic/issues).
 
 ## Download
-You can download the lates version as APK from [GitHub] (https://github.com/schnatterer/nusic/releases/latest) or get the app directly from [Google Play](https://play.google.com/store/apps/details?id=info.schnatterer.nusic).
+You can download the lates version as APK from [GitHub] (https://github.com/schnatterer/nusic/releases/latest) or get the app directly from [F-Droid](https://f-droid.org/app/info.schnatterer.nusic) or [Google Play](https://play.google.com/store/apps/details?id=info.schnatterer.nusic).
 
-<a href="https://play.google.com/store/apps/details?id=info.schnatterer.nusic"><img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" height="60"/></a>
+[<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/app/info.schnatterer.nusic)
+
+[<img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" height="60"/>](https://play.google.com/store/apps/details?id=info.schnatterer.nusic)
 
 ## Licenses
 Copyright © 2013 Johannes Schnatterer.
