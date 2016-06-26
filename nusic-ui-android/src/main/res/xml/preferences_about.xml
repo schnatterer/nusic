@@ -51,6 +51,13 @@
             </intent>
 		</Preference> 
     <PreferenceCategory android:title="@string/preferences_category_web" >
+        <Preference android:title="@string/FDroid"
+            android:summary="@string/preferences_summary_fdroid">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/link_nusic_fdroid" >
+            </intent>
+        </Preference>
         <Preference android:title="@string/GooglePlay" 
             android:summary="@string/preferences_summary_google_play">
                <intent
@@ -58,7 +65,6 @@
                    android:data="@string/link_nusic_google_play" >
                </intent>
        </Preference>
-        
         <Preference android:title="@string/GitHub"
             android:summary="@string/preferences_summary_git_hub">
                <intent

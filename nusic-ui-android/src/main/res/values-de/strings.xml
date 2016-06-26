@@ -31,6 +31,7 @@
     <string name="releaseListMenu_HideAllByArtist">Alle des Interpreten ausblenden</string>
     
     <!-- GUI captions -->
+    <string name="FDroid">F-Droid</string>
     <string name="GooglePlay">Google Play</string>
     <string name="GitHub">GitHub</string>
     <string name="releaseListRow_RightArrow">Anklicken für mehr Details</string>
@@ -104,6 +105,7 @@
     <string name="preferences_summary_changelog">Schau dir an was es Neues gibt</string>
     <string name="preferences_category_web">nusic im Netz</string>
     <string name="preferences_category_contact">Kontakt</string>
+    <string name="preferences_summary_fdroid">Wenn du eine Leidenschaft für Freie und Open Source Software hast, kannst du nusic über F-Droid beziehen</string>
     <string name="preferences_summary_google_play">Wenn dir nusic gefällt, bitte bewerte es. Wenn es dir nicht gefällt, bitte hilf uns es zu verbessern und erstelle einen issue bei GitHub</string>
     <string name="preferences_summary_git_hub">Melde Fehler, schaue dir denn Quellcode an, füge Übersetzungen hinzu oder unterstütze die Entwicklung</string>
     <string name="preferences_title_email">E-Mail</string>

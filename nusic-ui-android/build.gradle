@@ -145,7 +145,7 @@ task copyRes(type: Copy) {
         expand(project.properties)
     }
 }
-// Make sure to copy resources before doing anything wiht them
+// Make sure to copy resources before doing anything with them
 build.dependsOn copyRes
 preBuild.dependsOn copyRes
 

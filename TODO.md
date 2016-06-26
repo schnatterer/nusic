@@ -47,11 +47,6 @@ LIST
 
 - Feature: Tablet optimization: Layout + Screens for 7" + 10"
 
-....Stores
-- Stores: Publish on F-Droid
-- Stores: Publish on Amazon: https://developer.amazon.com/welcome.html
-
-
 .... Even more ideas
 - Feature: Kind of releases: Album, Release, Live ...
 - Feature: Check connectivity while refreshing and cancel with error when lost: http://developer.android.com/training/monitoring-device-state/connectivity-monitoring.html
