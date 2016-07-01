@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    Copyright (C) 2013 Johannes Schnatterer
+
+    See the NOTICE file distributed with this work for additional
+    information regarding copyright ownership.
+
+    This file is part of nusic.
+
+    nusic is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    nusic is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with nusic.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<resources>
+    <string name="action_refresh">リリースの更新</string>
+    <string name="action_settings">設定</string>
+    <string name="action_settings_developer">開発者設定</string>
+    
+    <string name="releaseListMenu_HideRelease">リリースを非表示</string>
+    <string name="releaseListMenu_HideAllByArtist">アーティスト別にすべて非表示</string>
+    
+    <!-- GUI captions -->
+    <string name="GooglePlay">Google Play</string>
+    <string name="GitHub">GitHub</string>
+    <string name="releaseListRow_RightArrow">クリックすると詳細を表示</string>
+    <string name="releaseListRow_Thumbnail">アルバムアートのサムネイル</string>
+    <string name="LoadNewReleasesBinding_CheckingArtists">すべてのアーティストの新しいリリースを確認中</string>
+    <string name="MainActivity_noReleasesFound">指定した期間で、お使いのデバイスにアーティストのリリースは見つかりませんでした。</string>
+    <string name="MainActivity_noNewReleasesFound">最近、指定した期間で、お使いのデバイスにアーティストの新しいリリースは見つかりませんでした。</string>
+    <string name="MainActivity_TabAll">すべて</string>
+    <string name="MainActivity_TabJustAdded">追加したばかり</string>
+    <string name="MainActivity_TabAvailable">利用可能</string>
+    <string name="MainActivity_TabAnnounced">アナウンス</string>
+    <string name="MainActivity_AccessDeniedOnceTitle">アクセスが拒否されました</string>
+    <string name="MainActivity_AccessDeniedOnceMessage">デバイスのメディアにアクセスが拒否されました。 nusic はメディアにアクセスしないと動作しません。 デバイスに格納された曲のアーティスト名を読み込んで新しいリリースを探します。 nusic を動作させたい場合は "許可" を押してください。</string>
+    <string name="MainActivity_AccessDeniedPermanentlyTitle">永久にアクセスが拒否されました</string>
+    <string name="MainActivity_AccessDeniedPermanentlyMessage">デバイスのメディアにアクセスが永久に拒否されました。 nusic はメディアにアクセスしないと動作しません。 デバイスに格納された曲のアーティスト名を読み込んで新しいリリースを探します。 nusic を動作させたい場合は アプリ情報でデータをクリアして、もう一度アプリを起動した後に "許可" を押してください。</string>
+    <string name="MainActivity_AccessDeniedPermanentlyPositiveButton">アプリ情報に移動</string>
+    <string name="MainActivity_AccessDeniedPermanentlyNegativeButton">nusic を使いたくありません</string>
+    <!-- <string name="MainActivity_JustAddedInformation">最近 %1$d 日以内に追加したすべてのリリース</string> -->
+    <string name="WelcomeScreenTitle">nusic へようこそ %1$s</string>
+    <string name="WelcomeScreenPleaseBePatient">&#8230;しばらくお待ちください ;)</string>
+    <string name="WelcomeScreenFirstStartMayTakeAWhile">デバイス上のアーティストの数によっては、最初の起動は時間がかかることがあります。</string>
+    <string name="WelcomeScreenSyncronisationWillBeDoneBackground">その後、バックグラウンドでさらにすべての同期が行われます。 nusic はシステム通知で新しいリリースについてお知らせします。</string>
+    <string name="WelcomeScreenIfYouLikeNusicPleaseRate">気に入っていただけた場合、@string/html_link_nusic_google_play で評価したり、翻訳のサポートや、@string/html_link_nusic_git_hub で開発をサポートしてください。エラーが発生した場合は、@string/html_link_email で送信してください。</string>
+    <string name="WelcomeScreenAndroid444">ご注意ください: Android 4.4.4 から、外部 SD カード上の音楽はサポートされなくなりました。そのため、nusic はこれらのアーティストを解析できません。</string>
+    <string name="WelcomeScreenAndroid444SDScanner">@string/html_link_sd_scanner をご覧ください</string>
+    <string name="SDScanner">SD スキャナー</string>
+    <string name="Email">メール</string>
+
+    
+    <string name="LoadNewReleasesService_newRelease">新しいリリースが見つかりました:</string>
+    <string name="LoadNewReleasesService_newReleaseMultiple">%1$d の新しいリリースが見つかりました</string>
+    <string name="LoadNewReleasesService_missingPermissionReadExternalStorage">メディアにアクセスを許可してください</string>
+    <string name="ReleasedTodayService_ReleasedToday">今日公開:</string>
+    <string name="ReleasedTodayService_ReleasedTodayMultiple">%1$d リリースが今日公開されました</string>
+    
+     <!-- Prefrences -->
+     <string name="preferences_category_releases">リリース</string>
+    <string name="preferences_title_download_releases_time_period">期間</string>
+	<string name="preferences_summary_download_releases_time_period">リリースがダウンロードおよび表示される期間 (今日以前)</string>
+    <string-array name="preferences_entries_download_releases_time_period">
+        <item>1 ヵ月</item>
+        <item>3 ヵ月</item>
+        <item>6 ヵ月</item>
+        <item>1 年</item>
+    </string-array>
+    <string name="preferences_title_display_all_releases">非表示のアルバムを再表示する</string>
+    <string name="preferences_summary_display_all_releases">アルバムは長押しして非表示にできます。 このオプションは非表示のアルバムとアーティストをすべてリセットします</string>
+    <string name="preferences_message_display_all_releases">非表示のアルバムとアーティストをすべてリセットしてもよろしいですか?</string>
+    
+    <string name="preferences_category_bandwitdth">使用帯域</string>
+    <string name="preferences_title_download_only_on_wifi">WiFi のみ</string>
+    <string name="preferences_summary_download_only_on_wifi_on">モバイル通信を使用しません</string>
+    <string name="preferences_summary_download_only_on_wifi_off">モバイル通信も使用します</string>
+    
+    <string name="preferences_category_notifications">通知</string>
+    <string name="preferences_title_is_enabled_notify_new_releases">新しいリリース</string>
+    <string name="preferences_summary_is_enabled_notify_new_releases_on">新しいリリースが見つかったときに通知します</string>
+    <string name="preferences_summary_is_enabled_notify_new_releases_off">新しいリリースが見つかったときに通知しません</string>
+    <string name="preferences_title_is_enabled_notify_released_today">リリース日</string>
+    <string name="preferences_summary_is_enabled_notify_released_today_on">リリースが公開された日に通知します</string>
+    <string name="preferences_summary_is_enabled_notify_released_today_off">リリースが公開された日に通知しません</string>
+    <string name="preferences_title_released_today_hour_of_day">通知の時刻</string>
+    <string name="preferences_summary_released_hour_of_day">リリース日を知らせる通知のおおよその時刻。 Android は、エネルギーを節約するために実行を遅らせることがあります</string>
+    
+    <string name="preferences_category_about">%1$s について</string>
+    <string name="preferences_title_version">バージョン</string>
+    <string name="preferences_title_privacy_policy">プライバシーポリシー</string>
+    <string name="preferences_summary_privacy_policy">nusic がアクセスするデータと、それで何をするを確認します</string>
+    <string name="preferences_title_licences">ライセンス</string>
+    <string name="preferences_summary_licences">nusic に適用および依存するライセンス</string>
+    <string name="preferences_title_changelog">変更履歴</string>
+    <string name="preferences_summary_changelog">新着情報を参照します</string>
+    <string name="preferences_category_web">nusic の web</string>
+    <string name="preferences_category_contact">連絡先</string>
+    <string name="preferences_summary_google_play">nusic を気に入っていただけた場合は評価してください。 気に入っていただけなかった場合は、GitHub でイシューを作成して改善を支援してください</string>
+    <string name="preferences_summary_git_hub">イシューの報告、ソースコードの解析、および翻訳または開発のサポート</string>
+    <string name="preferences_title_email">メール</string>
+    <string name="preferences_summary_email">メールで連絡します。</string>
+    <string name="preferences_title_report">イシューの報告</string>
+    <string name="preferences_summary_report">メールでイシューを報告します。ログを添付してください</string>
+        <string name="preferences_category_misc">その他</string>
+    <string name="preferences_title_loglevel">ルート ログレベル</string>
+    <string name="preferences_summary_loglevel">どのログを記録するかを決定します</string>
+    <string name="preferences_title_current_log">現在のログファイルを開く</string>
+    <string name="preferences_title_loglevel_logcat">LogCat ログレベル</string>
+    <string name="preferences_summary_loglevel_logcat">どのログを LogCat に転送するかを決定します。 注: >= ルート ログレベルの必要があります</string>
+        
+    <!-- (Error) messages -->
+    <string name="GenericError">ほとんど実行できないことが発生しました: %1s!</string>
+    <string name="NotOnline">インターネット接続がありません (設定を確認して、モバイル通信の使用を許可してください)</string>
+    <string name="MainActivity_errorLoadingReleases">デバイスからリリースの読み込み時にエラー</string>
+    <string name="MainActivity_refreshAlreadyInProgress">更新はすでに実行中です。</string>
+    <string name="MainActivity_pleaseWaitUntilRefreshIsFinished">リリースの更新が完了するまで、しばらくお待ちください</string>
+    
+    <string name="TextAssetActivity_errorLoadingFile">テキストファイルの読み込みエラー</string>
+    
+    <string name="LoadNewReleasesBinding_errorFindingReleases">リリースの更新に失敗しました: </string>
+    <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">リリースを更新しようとした時に信じられないエラーが発生しました: </string>
+    <string name="LoadNewReleasesBinding_finishedWithErrors">%1$d / %2$d アーティストのリリースの更新に失敗しました</string>
+    
+     <string name="ReleasedTodayService_ReleasedTodayError">今日のリリースの検索時にエラー</string>
+</resources>
