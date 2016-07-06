@@ -66,7 +66,7 @@
     <string name="ReleasedTodayService_ReleasedToday">Heute erscheint:</string>
     <string name="ReleasedTodayService_ReleasedTodayMultiple">%1$d Alben werden heute veröffentlicht</string>
     
-    <!-- Prefrences -->
+    <!-- Preferences -->
     <string name="preferences_category_releases">Alben</string>
     <string name="preferences_title_download_releases_time_period">Zeitspanne</string>
     <string name="preferences_summary_download_releases_time_period">Zurückliegende Zeitspanne vom heutigen Datum aus, für die Alben heruntergeladen und angezeigt werden sollen</string>
@@ -126,8 +126,8 @@
     <string name="MainActivity_refreshAlreadyInProgress">Aktualisierung bereits im Gange</string>
     <string name="MainActivity_pleaseWaitUntilRefreshIsFinished">Bitte warten bis die Aktualisierung der Alben abgeschlossen ist.</string>
 
-	<string name="TextAssetActivity_errorLoadingFile">Fehler beim Laden der Textdatei</string>
-	
+    <string name="TextAssetActivity_errorLoadingFile">Fehler beim Laden der Textdatei</string>
+    
     <string name="LoadNewReleasesBinding_errorFindingReleases">Aktualisieren der Alben fehlgeschlagen: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">Unfassbarer Fehler beim Aktualiseren der Alben: </string>
     <string name="LoadNewReleasesBinding_finishedWithErrors">Update der Alben für %1$d Interpreten von %2$d fehlgeschlagen</string>

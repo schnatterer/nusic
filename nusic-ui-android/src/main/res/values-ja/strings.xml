@@ -31,6 +31,7 @@
     <string name="releaseListMenu_HideAllByArtist">アーティスト別にすべて非表示</string>
     
     <!-- GUI captions -->
+    <string name="FDroid">F-Droid</string>
     <string name="GooglePlay">Google Play</string>
     <string name="GitHub">GitHub</string>
     <string name="releaseListRow_RightArrow">クリックすると詳細を表示</string>
@@ -59,17 +60,16 @@
     <string name="SDScanner">SD スキャナー</string>
     <string name="Email">メール</string>
 
-    
     <string name="LoadNewReleasesService_newRelease">新しいリリースが見つかりました:</string>
     <string name="LoadNewReleasesService_newReleaseMultiple">%1$d の新しいリリースが見つかりました</string>
     <string name="LoadNewReleasesService_missingPermissionReadExternalStorage">メディアにアクセスを許可してください</string>
     <string name="ReleasedTodayService_ReleasedToday">今日公開:</string>
     <string name="ReleasedTodayService_ReleasedTodayMultiple">%1$d リリースが今日公開されました</string>
-    
-     <!-- Prefrences -->
-     <string name="preferences_category_releases">リリース</string>
+
+    <!-- Preferences -->
+    <string name="preferences_category_releases">リリース</string>
     <string name="preferences_title_download_releases_time_period">期間</string>
-	<string name="preferences_summary_download_releases_time_period">リリースがダウンロードおよび表示される期間 (今日以前)</string>
+    <string name="preferences_summary_download_releases_time_period">リリースがダウンロードおよび表示される期間 (今日以前)</string>
     <string-array name="preferences_entries_download_releases_time_period">
         <item>1 ヵ月</item>
         <item>3 ヵ月</item>
@@ -105,13 +105,15 @@
     <string name="preferences_summary_changelog">新着情報を参照します</string>
     <string name="preferences_category_web">nusic の web</string>
     <string name="preferences_category_contact">連絡先</string>
+    <!-- TODO translate this -->
+    <string name="preferences_summary_fdroid">Those with a passion for Free and Open Source software can get nusic from F-Droid</string>
     <string name="preferences_summary_google_play">nusic を気に入っていただけた場合は評価してください。 気に入っていただけなかった場合は、GitHub でイシューを作成して改善を支援してください</string>
     <string name="preferences_summary_git_hub">イシューの報告、ソースコードの解析、および翻訳または開発のサポート</string>
     <string name="preferences_title_email">メール</string>
     <string name="preferences_summary_email">メールで連絡します。</string>
     <string name="preferences_title_report">イシューの報告</string>
     <string name="preferences_summary_report">メールでイシューを報告します。ログを添付してください</string>
-        <string name="preferences_category_misc">その他</string>
+    <string name="preferences_category_misc">その他</string>
     <string name="preferences_title_loglevel">ルート ログレベル</string>
     <string name="preferences_summary_loglevel">どのログを記録するかを決定します</string>
     <string name="preferences_title_current_log">現在のログファイルを開く</string>
