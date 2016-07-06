@@ -55,7 +55,7 @@
     <string name="WelcomeScreenSyncronisationWillBeDoneBackground">その後、バックグラウンドでさらにすべての同期が行われます。 nusic はシステム通知で新しいリリースについてお知らせします。</string>
     <string name="WelcomeScreenIfYouLikeNusicPleaseRate">気に入っていただけた場合、@string/html_link_nusic_google_play で評価したり、翻訳のサポートや、@string/html_link_nusic_git_hub で開発をサポートしてください。エラーが発生した場合は、@string/html_link_email で送信してください。</string>
     <string name="WelcomeScreenAndroid444">ご注意ください: Android 4.4.4 から、外部 SD カード上の音楽はサポートされなくなりました。そのため、nusic はこれらのアーティストを解析できません。</string>
-    <string name="WelcomeScreenAndroid444SDScanner">@string/html_link_sd_scanner をご覧ください</string>
+    <string name="WelcomeScreenAndroid444SDScanner">\@string/html_link_sd_scanner をご覧ください</string>
     <string name="SDScanner">SD スキャナー</string>
     <string name="Email">メール</string>
 
