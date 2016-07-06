@@ -45,13 +45,13 @@ local.properties
 .buildpath
 /Nusic/assets/CHANGELOG.html
 /Nusic/assets/NOTICE.html
-/target
+**/target
 project.properties
 
 ##Gradle
 
 .gradle
-build/
+**/build
 
 # Ignore Gradle GUI config
 gradle-app.setting
