@@ -112,22 +112,23 @@ project.tasks.withType(JavaCompile) { task ->
 }
 
 /**
- * Convertes markdown files to HTML and copies them to assets
+ * Converts markdown files to HTML and copies them to assets
  * // TODO replace by plugin
  */
 task markdownToHtml << {
     def sourceDir = project.parent.projectDir
     def outputDir = file(assetsDirFiltered)
-    def inputFiles = ["NOTICE.md", "CHANGELOG.md"]
+    def inputFiles = ["NOTICE.md", "CHANGELOG.md", "contributors.md"]
 
     def pdp = new PegDownProcessor()
     outputDir.mkdirs()
     inputFiles.each {
         def inputFile = new File(sourceDir, it)
-        new File(outputDir, inputFile.name.replaceFirst(~/\.[^\.]+$/, '') + '.html').withWriter { w ->
-            w.write(pdp.markdownToHtml(inputFile.text))
-        }
+        new File(outputDir, inputFile.name.replaceFirst(~/\.[^\.]+$/, '') + '.html').withWriter
+                { w -> w.write(pdp.markdownToHtml(inputFile.text)) }
     }
+
+    //project.ext.contributors = pdp.markdownToHtml(new File(sourceDir, "contributors.md").text)
 }
 
 /**

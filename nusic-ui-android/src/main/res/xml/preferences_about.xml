@@ -23,33 +23,33 @@
 
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-          <!-- Version summary is set in preference activity-->
+          <!-- Version summary and contributors are set in preference activity/fragment -->
           <Preference
-            android:key="@string/preferences_key_version"
-            android:title="@string/preferences_title_version" />
-		<Preference android:title="@string/preferences_title_changelog" 
-		    android:summary="@string/preferences_summary_changelog">
+            android:key="@string/preferences_key_version"/>
+
+        <Preference android:title="@string/preferences_title_changelog"
+            android:summary="@string/preferences_summary_changelog">
             <intent android:targetPackage="info.schnatterer.nusic" 
                 android:targetClass="info.schnatterer.nusic.android.activities.TextAssetActivity">
                 <extra android:name="@string/extra_activity_title" android:value="Changelog" />
                 <extra android:name="@string/extra_asset_name" android:value="CHANGELOG.html" />
             </intent>
-		</Preference>
-		<Preference android:title="@string/preferences_title_licences" android:summary="@string/preferences_summary_licences">
+        </Preference>
+        <Preference android:title="@string/preferences_title_licences" android:summary="@string/preferences_summary_licences">
             <intent android:targetPackage="info.schnatterer.nusic" 
                 android:targetClass="info.schnatterer.nusic.android.activities.TextAssetActivity">
                 <extra android:name="@string/extra_activity_title" android:value="@string/preferences_title_licences" />
                 <extra android:name="@string/extra_asset_name" android:value="NOTICE.html" />
             </intent>
-		</Preference> 
-		<Preference android:title="@string/preferences_title_privacy_policy"
-		       android:summary="@string/preferences_summary_privacy_policy">
+        </Preference> 
+        <Preference android:title="@string/preferences_title_privacy_policy"
+               android:summary="@string/preferences_summary_privacy_policy">
             <intent android:targetPackage="info.schnatterer.nusic" 
                 android:targetClass="info.schnatterer.nusic.android.activities.TextAssetActivity">
                 <extra android:name="@string/extra_activity_title" android:value="@string/preferences_title_privacy_policy" />
                 <extra android:name="@string/extra_asset_name" android:value="privacyPolicy.html" />
             </intent>
-		</Preference> 
+        </Preference> 
     <PreferenceCategory android:title="@string/preferences_category_web" >
         <Preference android:title="@string/FDroid"
             android:summary="@string/preferences_summary_fdroid">
@@ -75,7 +75,7 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/preferences_category_contact" >
         <Preference android:title="@string/preferences_title_email"
-		       android:summary="@string/preferences_summary_email">
+               android:summary="@string/preferences_summary_email">
              <intent android:targetPackage="info.schnatterer.nusic"
                 android:targetClass="info.schnatterer.nusic.android.activities.NusicWebView"
                 android:data="mailto:@string/app_contact?subject=[nusic @string/versionName]&amp;body="/> 

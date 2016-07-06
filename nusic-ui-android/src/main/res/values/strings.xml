@@ -96,7 +96,7 @@
     <string name="preferences_summary_released_hour_of_day">Approximate time of notification that informs of releases dates. Android might delay execution in order to save energy</string>
     
     <string name="preferences_category_about">About %1$s</string>
-    <string name="preferences_title_version">Version</string>
+    <string name="preferences_title_contributors">Contributors</string>
     <string name="preferences_title_privacy_policy">Privacy Policy</string>
     <string name="preferences_summary_privacy_policy">Find out what data is accessed by nusic and what it does with it</string>
     <string name="preferences_title_licences">Licenses</string>

@@ -21,15 +21,15 @@
  */
 package info.schnatterer.nusic.android.fragments;
 
-import info.schnatterer.nusic.android.application.NusicApplication;
+import info.schnatterer.nusic.android.activities.NusicPreferencesAboutActivity;
 import info.schnatterer.nusic.ui.R;
 import roboguice.fragment.provided.RoboPreferenceFragment;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 @SuppressLint("NewApi")
 public class NusicPreferencesAboutFragment extends RoboPreferenceFragment {
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +37,8 @@ public class NusicPreferencesAboutFragment extends RoboPreferenceFragment {
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences_about);
 
-        // Set version
+        // Set version and contributors
         findPreference(getString(R.string.preferences_key_version)).setSummary(
-                NusicApplication.getCurrentVersionName());
+                NusicPreferencesAboutActivity.createNameAndContributors(getContext()));
     }
 }
