@@ -23,25 +23,33 @@
 
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-          <!-- Version summary and contributors are set in preference activity/fragment -->
-          <Preference
-            android:key="@string/preferences_key_version"/>
+          <!-- Version summary is set in preference activity/fragment -->
+         <Preference
+            android:key="@string/preferences_key_version"
+            android:title="@string/preferences_title_version" />
 
-        <Preference android:title="@string/preferences_title_changelog"
-            android:summary="@string/preferences_summary_changelog">
+        <Preference android:title="@string/preferences_title_contributors" >
             <intent android:targetPackage="info.schnatterer.nusic" 
                 android:targetClass="info.schnatterer.nusic.android.activities.TextAssetActivity">
-                <extra android:name="@string/extra_activity_title" android:value="Changelog" />
-                <extra android:name="@string/extra_asset_name" android:value="CHANGELOG.html" />
+                <extra android:name="@string/extra_activity_title" android:value="@string/preferences_title_contributors" />
+                <extra android:name="@string/extra_asset_name" android:value="contributors.html" />
             </intent>
         </Preference>
+    <Preference android:title="@string/preferences_title_changelog"
+        android:summary="@string/preferences_summary_changelog">
+        <intent android:targetPackage="info.schnatterer.nusic"
+            android:targetClass="info.schnatterer.nusic.android.activities.TextAssetActivity">
+            <extra android:name="@string/extra_activity_title" android:value="Changelog" />
+            <extra android:name="@string/extra_asset_name" android:value="CHANGELOG.html" />
+        </intent>
+    </Preference>
         <Preference android:title="@string/preferences_title_licences" android:summary="@string/preferences_summary_licences">
-            <intent android:targetPackage="info.schnatterer.nusic" 
+            <intent android:targetPackage="info.schnatterer.nusic"
                 android:targetClass="info.schnatterer.nusic.android.activities.TextAssetActivity">
                 <extra android:name="@string/extra_activity_title" android:value="@string/preferences_title_licences" />
                 <extra android:name="@string/extra_asset_name" android:value="NOTICE.html" />
             </intent>
-        </Preference> 
+        </Preference>
         <Preference android:title="@string/preferences_title_privacy_policy"
                android:summary="@string/preferences_summary_privacy_policy">
             <intent android:targetPackage="info.schnatterer.nusic" 

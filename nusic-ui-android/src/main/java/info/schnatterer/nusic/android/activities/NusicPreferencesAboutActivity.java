@@ -56,28 +56,12 @@ public class NusicPreferencesAboutActivity extends
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             onCreatePreferenceActivity();
 
-            // Set version and contributors
+            // Set version
             findPreferenceActivity(getString(R.string.preferences_key_version))
-                    .setSummary(createNameAndContributors(this));
+                    .setSummary(NusicApplication.getCurrentVersionName());
         } else {
             onCreatePreferenceFragment();
         }
-    }
-
-    /**
-     * Creates a styled text containing the name and version of the app as well as a list of
-     * contributors.
-     *
-     * @param context needed for loading strings and assets.
-     * @return
-     */
-    public static CharSequence createNameAndContributors(Context context) {
-        return TextUtil.fromHtml(
-                String.format(TEMPLATE_NAME_VERSION_AND_CONTRIBUTORS,
-                        context.getString(R.string.app_name),
-                        NusicApplication.getCurrentVersionName(),
-                        context.getString(R.string.preferences_title_contributors),
-                        TextUtil.loadTextFromAssetAsString(context, "contributors.html")));
     }
 
     /**

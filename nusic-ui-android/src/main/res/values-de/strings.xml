@@ -95,6 +95,7 @@
     <string name="preferences_title_released_today_hour_of_day">Zeit der Benachrichtigung</string>
     
     <string name="preferences_category_about">Über %1$s</string>
+    <string name="preferences_title_version">Version</string>
     <string name="preferences_title_contributors">Mitwirkende</string>
     <string name="preferences_title_privacy_policy">Datenschutzrichtlinie</string>
     <string name="preferences_summary_privacy_policy">Finde heraus auf welche Daten nusic zugreift und was mit ihnen geschieht</string>
