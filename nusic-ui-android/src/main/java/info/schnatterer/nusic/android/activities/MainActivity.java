@@ -162,7 +162,7 @@ public class MainActivity extends RoboActionBarActivity {
             switch (NusicApplication.getAppStart()) {
             case FIRST:
                 showWelcomeDialog(TextUtil.loadTextFromAsset(this,
-                        "welcomeDialog.html", true));
+                        "welcomeDialog.html"));
                 /*
                  * The initialization is finished once the user dismisses the
                  * dialog in order to avoid overlapping dialogs.

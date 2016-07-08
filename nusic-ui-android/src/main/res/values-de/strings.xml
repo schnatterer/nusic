@@ -31,6 +31,7 @@
     <string name="releaseListMenu_HideAllByArtist">Alle des Interpreten ausblenden</string>
     
     <!-- GUI captions -->
+    <string name="FDroid">F-Droid</string>
     <string name="GooglePlay">Google Play</string>
     <string name="GitHub">GitHub</string>
     <string name="releaseListRow_RightArrow">Anklicken für mehr Details</string>
@@ -65,7 +66,7 @@
     <string name="ReleasedTodayService_ReleasedToday">Heute erscheint:</string>
     <string name="ReleasedTodayService_ReleasedTodayMultiple">%1$d Alben werden heute veröffentlicht</string>
     
-    <!-- Prefrences -->
+    <!-- Preferences -->
     <string name="preferences_category_releases">Alben</string>
     <string name="preferences_title_download_releases_time_period">Zeitspanne</string>
     <string name="preferences_summary_download_releases_time_period">Zurückliegende Zeitspanne vom heutigen Datum aus, für die Alben heruntergeladen und angezeigt werden sollen</string>
@@ -95,6 +96,7 @@
     
     <string name="preferences_category_about">Über %1$s</string>
     <string name="preferences_title_version">Version</string>
+    <string name="preferences_title_contributors">Mitwirkende</string>
     <string name="preferences_title_privacy_policy">Datenschutzrichtlinie</string>
     <string name="preferences_summary_privacy_policy">Finde heraus auf welche Daten nusic zugreift und was mit ihnen geschieht</string>
     <string name="preferences_title_licences">Lizenzen</string>
@@ -104,6 +106,7 @@
     <string name="preferences_summary_changelog">Schau dir an was es Neues gibt</string>
     <string name="preferences_category_web">nusic im Netz</string>
     <string name="preferences_category_contact">Kontakt</string>
+    <string name="preferences_summary_fdroid">Wenn du eine Leidenschaft für Freie und Open Source Software hast, kannst du nusic über F-Droid beziehen</string>
     <string name="preferences_summary_google_play">Wenn dir nusic gefällt, bitte bewerte es. Wenn es dir nicht gefällt, bitte hilf uns es zu verbessern und erstelle einen issue bei GitHub</string>
     <string name="preferences_summary_git_hub">Melde Fehler, schaue dir denn Quellcode an, füge Übersetzungen hinzu oder unterstütze die Entwicklung</string>
     <string name="preferences_title_email">E-Mail</string>
@@ -124,8 +127,8 @@
     <string name="MainActivity_refreshAlreadyInProgress">Aktualisierung bereits im Gange</string>
     <string name="MainActivity_pleaseWaitUntilRefreshIsFinished">Bitte warten bis die Aktualisierung der Alben abgeschlossen ist.</string>
 
-	<string name="TextAssetActivity_errorLoadingFile">Fehler beim Laden der Textdatei</string>
-	
+    <string name="TextAssetActivity_errorLoadingFile">Fehler beim Laden der Textdatei</string>
+    
     <string name="LoadNewReleasesBinding_errorFindingReleases">Aktualisieren der Alben fehlgeschlagen: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">Unfassbarer Fehler beim Aktualiseren der Alben: </string>
     <string name="LoadNewReleasesBinding_finishedWithErrors">Update der Alben für %1$d Interpreten von %2$d fehlgeschlagen</string>

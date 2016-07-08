@@ -28,13 +28,14 @@
     <string name="app_url" translatable="false">${project.website}</string>
     <string name="app_contact" translatable="false">android@schnatterer.info</string>
     <string name="versionName" translatable="false">${project.version}</string>
-    
+
     <string name="authority_log_file_provider" translatable="false">info.schnatterer.nusic.android.provider.LogFileProvider</string>
     
     <string name="extra_asset_name" translatable="false">nusic.intent.extra.assetName</string>
     <string name="extra_activity_title" translatable="false">nusic.intent.extra.activity.title</string>
      
     <!-- Plain links -->
+    <string name="link_nusic_fdroid" translatable="false">https://f-droid.org/app/info.schnatterer.nusic</string>
     <string name="link_nusic_google_play" translatable="false">https://play.google.com/store/apps/details?id=info.schnatterer.nusic</string>
     <string name="link_sd_scanner" translatable="false">https://play.google.com/store/apps/details?id=com.gmail.jerickson314.sdscanner</string>
     <string name="link_email" translatable="false">mailto:@string/app_contact?subject=[nusic @string/versionName]&amp;body=</string>

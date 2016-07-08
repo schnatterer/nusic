@@ -64,18 +64,39 @@ public class TextUtil {
     }
 
     /**
-     * Convenience method for
-     * {@link #loadTextFromAsset(Context, String, boolean)} that does <i>not</i>
-     * try to replace application string resources (e.g.
-     * <code>@string/abc</code>)in input
+     * Tries to load an asset file as text. If <code>assetPath</code> ends in
+     * <code>.html</code>, the HTML code is rendered into "displayable styled"
+     * text.
      *
      * @param context
+     *            context to load asset and (potential resources) from
      * @param assetPath
-     * @return
+     *            path of the asset to load
+     * @return (potentially styled) text from asset
      */
     public static CharSequence loadTextFromAsset(Context context,
             String assetPath) {
-        return loadTextFromAsset(context, assetPath, false);
+        if (assetPath != null) {
+            InputStream is = null;
+            try {
+                is = context.getResources().getAssets().open(assetPath);
+                String assetText = IOUtils.toString(is);
+                if (assetPath.matches(REGEX_ENDING_HTML)) {
+                    return fromHtml(replaceResourceStrings(context, assetText));
+                } else {
+                    return assetText;
+                }
+            } catch (IOException e) {
+                LOG.warn(
+                        "Unable to load asset from path \"" + assetPath + "\"",
+                        e);
+                return context
+                        .getString(R.string.TextAssetActivity_errorLoadingFile);
+            } finally {
+                IOUtils.closeQuietly(is);
+            }
+        }
+        return null;
     }
 
     /**
@@ -87,26 +108,15 @@ public class TextUtil {
      *            context to load asset and (potential resources) from
      * @param assetPath
      *            path of the asset to load
-     * @param replaceResources
-     *            if <code>true</code>, resources such as
-     *            <code>@string/abc</code> are replaced with their localized
-     *            values from the app's resource strings (e.g.
-     *            <code>strings.xml</code>). Set to <code>false</code> for
-     *            better performance.
-     * @return (potentially styled) text from asset
+     * @return  text from asset
      */
-    public static CharSequence loadTextFromAsset(Context context,
-            String assetPath, boolean replaceResources) {
+    public static String loadTextFromAssetAsString(Context context,
+            String assetPath) {
         if (assetPath != null) {
             InputStream is = null;
             try {
                 is = context.getResources().getAssets().open(assetPath);
-                String assetText = IOUtils.toString(is);
-                if (assetPath.matches(REGEX_ENDING_HTML)) {
-                    return fromHtml(replaceResourceStrings(context, assetText));
-                } else {
-                    return assetText;
-                }
+                return  IOUtils.toString(is);
             } catch (IOException e) {
                 LOG.warn(
                         "Unable to load asset from path \"" + assetPath + "\"",
