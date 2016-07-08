@@ -1,6 +1,12 @@
 nusic Changelog
 =========
 
+**v.3.1.0** - 2016/07/08
+
+* Added Japanese translation (thanks, naofum!)
+* Added contributors to "about" menu
+* Added F-Droid link
+
 **v.3.0.0** - 2016/06/19
 
 * Updated android support libraries - fixing errors for legacy android versions
