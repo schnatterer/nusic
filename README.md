@@ -142,6 +142,7 @@ TODO Automate this, e.g. via Jenkins
     git push --all
     git push --tags
     ```
+- Update [F-Droid metadata](https://gitlab.com/fdroid/fdroiddata/blob/master/metadata/info.schnatterer.nusic.txt) by adding new release to the metadata (e.g. via [this fork](https://gitlab.com/schnatterer/fdroiddata)) and [creating a merge request](https://gitlab.com/schnatterer/fdroiddata/merge_requests/new) 
 - Upload artifact: [Github](https://github.com/schnatterer/nusic/releases), [Google Play](https://play.google.com/apps/publish/)
 - Add changelog to github release page: https://github.com/schnatterer/nusic/releases/tag/v.2.1.1
 - Add changelog to google play entry
