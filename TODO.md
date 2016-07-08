@@ -1,5 +1,10 @@
 TODOs - Features, enhancements, refactoring, ...
 
+- Simplify contributors by using a separate preference
+
+- Rename "constants.xml" to "donottranslate.xml" (best practice: See http://tools.android.com/recent/non-translatablestrings)
+
+- Use Transifex for translation? E.g. https://www.transifex.com/vanilla_music/vanilla-music-1/
 
 - Gradle: Dont repeat yourself - Set common compileJava, android and sonarqube (for android)  options only once
 See e.g https://discuss.gradle.org/t/how-do-i-detect-if-a-sub-project-has-applied-a-given-plugin-e-g-jar-or-war/4974

@@ -23,10 +23,12 @@ package info.schnatterer.nusic.android.activities;
 
 import info.schnatterer.nusic.android.application.NusicApplication;
 import info.schnatterer.nusic.android.fragments.NusicPreferencesAboutFragment;
+import info.schnatterer.nusic.android.util.TextUtil;
 import info.schnatterer.nusic.ui.R;
 import roboguice.activity.RoboAppCompatPreferenceActivity;
 import android.annotation.TargetApi;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -40,6 +42,8 @@ import android.view.MenuItem;
  */
 public class NusicPreferencesAboutActivity extends
         RoboAppCompatPreferenceActivity {
+    private static final String TEMPLATE_NAME_VERSION_AND_CONTRIBUTORS = "<h2>%1$s %2$s</h2><h4>%3$s</h4><p>%4$s</p>";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

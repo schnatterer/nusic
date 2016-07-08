@@ -21,15 +21,15 @@
  */
 package info.schnatterer.nusic.android.fragments;
 
-import info.schnatterer.nusic.android.application.NusicApplication;
-import info.schnatterer.nusic.ui.R;
-import roboguice.fragment.provided.RoboPreferenceFragment;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import info.schnatterer.nusic.android.application.NusicApplication;
+import info.schnatterer.nusic.ui.R;
+import roboguice.fragment.provided.RoboPreferenceFragment;
+
 @SuppressLint("NewApi")
 public class NusicPreferencesAboutFragment extends RoboPreferenceFragment {
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
