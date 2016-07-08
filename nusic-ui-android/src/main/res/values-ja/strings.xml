@@ -105,8 +105,7 @@
     <string name="preferences_summary_changelog">新着情報を参照します</string>
     <string name="preferences_category_web">nusic の web</string>
     <string name="preferences_category_contact">連絡先</string>
-    <!-- TODO translate this -->
-    <string name="preferences_summary_fdroid">Those with a passion for Free and Open Source software can get nusic from F-Droid</string>
+    <string name="preferences_summary_fdroid">フリーおよびオープンソース ソフトウェアの情熱がある人は、F-Droid から nusic を入手することができます</string>
     <string name="preferences_summary_google_play">nusic を気に入っていただけた場合は評価してください。 気に入っていただけなかった場合は、GitHub でイシューを作成して改善を支援してください</string>
     <string name="preferences_summary_git_hub">イシューの報告、ソースコードの解析、および翻訳または開発のサポート</string>
     <string name="preferences_title_email">メール</string>
