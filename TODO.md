@@ -1,6 +1,7 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Simplify contributors by using a separate preference
+- Setup Github Pull Request Jenkins Plugin: https://www.theguild.nl/building-github-pull-requests-with-jenkins
+- Setup Master Build in Jenkins with SonarQube
 
 - Rename "constants.xml" to "donottranslate.xml" (best practice: See http://tools.android.com/recent/non-translatablestrings)
 
