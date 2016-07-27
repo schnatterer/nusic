@@ -41,6 +41,10 @@ android {
                         output.outputFile.name.replaceFirst(".*", "nusic-${project.version}.apk"))
             }
         }
+        // Enable java 8
+        jackOptions {
+            enabled true
+        }
     }
 
     compileOptions {
@@ -75,11 +79,11 @@ android {
     buildTypes {
         debug {
             // Also proguard debug build, or the 64K limit will be exceeded
-            minifyEnabled true
+            minifyEnabled false // TODO true wont work with jack, false wont work because of 65k limit :-(
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard.cfg"
         }
         release {
-            minifyEnabled true
+            minifyEnabled false
             shrinkResources true
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard.cfg"
             signingConfig signingConfigs.release
