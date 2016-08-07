@@ -25,6 +25,7 @@ import nl.javadude.gradle.plugins.license.License
 
 apply plugin: "com.android.library"
 apply plugin: 'de.undercouch.download'
+apply plugin: 'jacoco-android'
 
 def assetsDir = "src/main/assets/"
 def resDir = "src/main/res/"
@@ -187,4 +188,11 @@ dependencies {
             libraries.robolectric,
             libraries.robolectricAndroid
     )
+}
+
+
+jacocoAndroidUnitTestReport {
+    csv.enabled true
+    html.enabled true
+    xml.enabled true
 }
