@@ -2,8 +2,11 @@ TODOs - Features, enhancements, refactoring, ...
 
 - Setup Github Pull Request Jenkins Plugin: https://www.theguild.nl/building-github-pull-requests-with-jenkins
 - Setup Master Build in Jenkins with SonarQube
+- No longer check artists that were removed
 
 - Rename "constants.xml" to "donottranslate.xml" (best practice: See http://tools.android.com/recent/non-translatablestrings)
+- Download Artist Image? http://stackoverflow.com/questions/28458654/musicbrainz-artist-image-and-information
+Or use placeholder image (just like in k9)
 
 - Use Transifex for translation? E.g. https://www.transifex.com/vanilla_music/vanilla-music-1/
 

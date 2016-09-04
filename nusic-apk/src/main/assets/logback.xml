@@ -22,6 +22,10 @@
 
 -->
 <configuration>
+    <!-- Propagates changes made to the level of any logback-classic logger onto jul.
+     Such propagation eliminates the performance impact of disabled log statements.
+     Instances of LogRecord will be sent to logback (via SLF4J) only for enabled log statements.
+     This makes it reasonable for real-world applications to use the jul-to-slf4j bridge. -->
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator" />
 
     <property name="ANDROID_PACKAGE" value="${PACKAGE_NAME}" />
