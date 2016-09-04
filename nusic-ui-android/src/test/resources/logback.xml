@@ -23,7 +23,7 @@
 -->
 <configuration>
     <!-- Create a logcat appender, that logs only specific statements -->
-    <!-- Note: the logger's name is refered to in the code as well! -->
+    <!-- Note: the logger's name is referred to in the code as well! -->
     <appender name="LOGCAT" class="ch.qos.logback.classic.android.LogcatAppender">
         <!-- Don't show trace and debug on logcat -->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
