@@ -21,8 +21,6 @@
  */
 package info.schnatterer.nusic.android.util;
 
-import info.schnatterer.nusic.Constants;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,13 +38,18 @@ import ch.qos.logback.core.filter.Filter;
 
 /**
  * Basic abstraction of the log mechanism (SLF4J + logback-android) used here.
- * 
- * @author schnatterer
  *
  */
 public final class Logs {
     /** Name of the logcat logger, as configured in logback.xml */
-    private static final String LOGCAT_LOGGER_NAME = "LOGCAT";
+    static final String LOGCAT_LOGGER_NAME = "LOGCAT";
+
+    /**
+     * Name of the directory where log files are stored under
+     * <code>/data/data/appname/files/</code> Create a reference to this
+     * directory via {@link android.content.ContextWrapper#getFilesDir()}.
+     */
+    public static final String LOG_FOLDER = "logs";
 
     private Logs() {
     }
@@ -54,7 +57,7 @@ public final class Logs {
     /**
      * Set the log level of the root logger. <b>Note</b>: This depends on the
      * actual logging framework.
-     * 
+     *
      * @param level
      *            the log level to set
      */
@@ -68,10 +71,10 @@ public final class Logs {
 
     /**
      * Returns the current log file.
-     * 
+     *
      * @param context
      *            context to get the app-private files from
-     * 
+     *
      * @return the current log file
      */
     public static File findNewestLogFile(Context context) {
@@ -83,44 +86,46 @@ public final class Logs {
      * file names like <code>2015-06-25.log</code> and
      * <code>2015-06-26.log</code> this returns the newest log file, for example
      * <code>2015-06-26.log</code>.
-     * 
+     *
      * @param logFiles
      *            the array of log files
-     * @return the
+     * @return the newest log file or <code>null</code> if <code>logFiles</code> is <code>null</code>
      */
     static File findNewestLogFile(File[] logFiles) {
         // Sort descendingly
+        if (logFiles == null) {
+            return null;
+        }
         Arrays.sort(logFiles, Collections.reverseOrder());
         return logFiles[0];
     }
 
     /**
      * Returns all log files.
-     * 
+     *
      * @param context
      *            context to get the app-private files from
      * @return all log files
      */
     public static File[] getLogFiles(Context context) {
-        // TODO NPE check?
         return getLogFileDirectory(context).listFiles();
     }
 
     /**
      * Returns the folder where log files are stored.
-     * 
+     *
      * @param context
      *            context to get the app-private files from
      * @return the directory that contains log files
      */
     public static File getLogFileDirectory(Context context) {
-        return new File(context.getFilesDir(), Constants.LOG_FOLDER);
+        return new File(context.getFilesDir(), LOG_FOLDER);
     }
 
     /**
      * Sets the threshold log level for the logCat appender. Note: Must be >=
      * Root Log Level. If not, a warning is toasted.
-     * 
+     *
      * @param logLevelLogCat
      *            the threshold level to set for logCat appender
      * @param context
