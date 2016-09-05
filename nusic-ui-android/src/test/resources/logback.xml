@@ -29,6 +29,9 @@
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
         </filter>
+        <tagEncoder>
+            <pattern>%logger{12}</pattern>
+        </tagEncoder>
         <encoder>
             <pattern>%msg</pattern>
         </encoder>

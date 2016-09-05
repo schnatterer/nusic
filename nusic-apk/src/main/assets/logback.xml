@@ -48,6 +48,9 @@
             <logger>fm.last.musicbrainz.coverart</logger>
             <level>WARN</level>
         </filter>
+        <tagEncoder>
+            <pattern>%logger{12}</pattern>
+        </tagEncoder>
         <encoder>
             <pattern>%msg</pattern>
         </encoder>
