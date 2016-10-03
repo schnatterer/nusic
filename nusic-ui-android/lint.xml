@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
-<issue id="InvalidPackage">
-    <!-- logback-android is not going to use javax.mail see https://github.com/tony19/logback-android/issues/29 -->
-    <ignore path="**/logback-android-core*.jar" />
-</issue>
+    <issue id="InvalidPackage">
+        <!-- logback-android is not going to use javax.mail see https://github.com/tony19/logback-android/issues/29 -->
+        <ignore path="**/logback-android-core*.jar" />
+        <!-- Roboguice contains the javax.inject package itself-->
+        <ignore path="**/roboguice-*.jar" />
+    </issue>
 </lint>
