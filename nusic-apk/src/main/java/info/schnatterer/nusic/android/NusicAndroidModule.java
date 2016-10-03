@@ -118,8 +118,8 @@ public class NusicAndroidModule extends AbstractModule {
         bind(Integer.class).annotatedWith(Names.named("PreferencesDefaultReleasedTodayHourOfDay")).toInstance(parseIntOrThrow("PreferencesDefaultReleasedTodayHourOfDay", application.getString(R.string.preferences_default_released_today_hour_of_day)));
         bind(String.class).annotatedWith(Names.named("PreferencesKeyReleasedTodayMinute")).toInstance(application.getString(R.string.preferences_key_released_today_minute));
         bind(Integer.class).annotatedWith(Names.named("PreferencesDefaultReleasedTodayMinute")).toInstance(parseIntOrThrow("PreferencesDefaultReleasedTodayMinute", application.getString(R.string.preferences_default_released_today_minute)));
-        bind(String.class).annotatedWith(Names.named("PreferencesKeyLogLevelFile")).toInstance(application.getString(R.string.preferences_key_log_level_file));
-        bind(String.class).annotatedWith(Names.named("PreferencesDefaultLogLevelFile")).toInstance(application.getString(R.string.preferences_default_log_level_file));
+        bind(String.class).annotatedWith(Names.named("PreferencesKeyLogLevel")).toInstance(application.getString(R.string.preferences_key_log_level));
+        bind(String.class).annotatedWith(Names.named("PreferencesDefaultLogLevel")).toInstance(application.getString(R.string.preferences_default_log_level));
         bind(String.class).annotatedWith(Names.named("PreferencesKeyLogLevelLogCat")).toInstance(application.getString(R.string.preferences_key_log_level_logcat));
         bind(String.class).annotatedWith(Names.named("PreferencesDefaultLogLevelLogCat")).toInstance(application.getString(R.string.preferences_default_log_level_logcat));
     }
