@@ -29,7 +29,7 @@ buildscript {
 
     // Gradle plugins
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.3'
+        classpath 'com.android.tools.build:gradle:2.2.0'
         classpath 'de.undercouch:gradle-download-task:3.0.0'
         // Mark down generation
         classpath 'org.pegdown:pegdown:1.6.0'
