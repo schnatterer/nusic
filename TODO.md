@@ -6,7 +6,7 @@ TODOs - Features, enhancements, refactoring, ...
 
 - Rename "constants.xml" to "donottranslate.xml" (best practice: See http://tools.android.com/recent/non-translatablestrings)
 - Download Artist Image? http://stackoverflow.com/questions/28458654/musicbrainz-artist-image-and-information
-Or use placeholder image (just like in k9)
+Or use placeholder image (just like in k9): http://stackoverflow.com/questions/23122088/colored-boxed-with-letters-a-la-gmail
 
 - Use Transifex for translation? E.g. https://www.transifex.com/vanilla_music/vanilla-music-1/
 
