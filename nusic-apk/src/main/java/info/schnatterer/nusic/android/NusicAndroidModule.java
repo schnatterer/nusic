@@ -1,21 +1,21 @@
 /**
  * Copyright (C) 2013 Johannes Schnatterer
- * <p>
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
- * <p>
+ *
  * This file is part of nusic.
- * <p>
+ *
  * nusic is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * <p>
+ *
  * nusic is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with nusic.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -118,8 +118,8 @@ public class NusicAndroidModule extends AbstractModule {
         bind(Integer.class).annotatedWith(Names.named("PreferencesDefaultReleasedTodayHourOfDay")).toInstance(parseIntOrThrow("PreferencesDefaultReleasedTodayHourOfDay", application.getString(R.string.preferences_default_released_today_hour_of_day)));
         bind(String.class).annotatedWith(Names.named("PreferencesKeyReleasedTodayMinute")).toInstance(application.getString(R.string.preferences_key_released_today_minute));
         bind(Integer.class).annotatedWith(Names.named("PreferencesDefaultReleasedTodayMinute")).toInstance(parseIntOrThrow("PreferencesDefaultReleasedTodayMinute", application.getString(R.string.preferences_default_released_today_minute)));
-        bind(String.class).annotatedWith(Names.named("PreferencesKeyLogLevel")).toInstance(application.getString(R.string.preferences_key_log_level));
-        bind(String.class).annotatedWith(Names.named("PreferencesDefaultLogLevel")).toInstance(application.getString(R.string.preferences_default_log_level));
+        bind(String.class).annotatedWith(Names.named("PreferencesKeyLogLevelFile")).toInstance(application.getString(R.string.preferences_key_log_level_file));
+        bind(String.class).annotatedWith(Names.named("PreferencesDefaultLogLevelFile")).toInstance(application.getString(R.string.preferences_default_log_level_file));
         bind(String.class).annotatedWith(Names.named("PreferencesKeyLogLevelLogCat")).toInstance(application.getString(R.string.preferences_key_log_level_logcat));
         bind(String.class).annotatedWith(Names.named("PreferencesDefaultLogLevelLogCat")).toInstance(application.getString(R.string.preferences_default_log_level_logcat));
     }
