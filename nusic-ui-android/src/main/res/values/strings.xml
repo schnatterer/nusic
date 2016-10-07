@@ -26,10 +26,10 @@
     <string name="action_refresh">Refresh releases</string>
     <string name="action_settings">Settings</string>
     <string name="action_settings_developer">Developer Settings</string>
-    
+
     <string name="releaseListMenu_HideRelease">Hide release</string>
     <string name="releaseListMenu_HideAllByArtist">Hide all by artist</string>
-    
+
     <!-- GUI captions -->
     <string name="FDroid">F-Droid</string>
     <string name="GooglePlay">Google Play</string>
@@ -65,7 +65,7 @@
     <string name="LoadNewReleasesService_missingPermissionReadExternalStorage">Please allow access to media</string>
     <string name="ReleasedTodayService_ReleasedToday">Published today:</string>
     <string name="ReleasedTodayService_ReleasedTodayMultiple">%1$d releases are published today</string>
-    
+
     <!-- Preferences -->
     <string name="preferences_category_releases">Releases</string>
     <string name="preferences_title_download_releases_time_period">Time period</string>
@@ -79,12 +79,12 @@
     <string name="preferences_title_display_all_releases">Make hidden albums reappear</string>
     <string name="preferences_summary_display_all_releases">Albums can be hidden by long tapping them. This option resets all hidden albums and artists</string>
     <string name="preferences_message_display_all_releases">Do you really want to reset all hidden albums and artists?</string>
-    
+
     <string name="preferences_category_bandwitdth">Bandwidth usage</string>
     <string name="preferences_title_download_only_on_wifi">WiFi only</string>
     <string name="preferences_summary_download_only_on_wifi_on">Don\'t use mobile networks</string>
     <string name="preferences_summary_download_only_on_wifi_off">Also use mobile networks</string>
-    
+
     <string name="preferences_category_notifications">Notifications</string>
     <string name="preferences_title_is_enabled_notify_new_releases">New releases</string>
     <string name="preferences_summary_is_enabled_notify_new_releases_on">Notify when new releases are found</string>
@@ -94,7 +94,7 @@
     <string name="preferences_summary_is_enabled_notify_released_today_off">No Notification on the day releases are published</string>
     <string name="preferences_title_released_today_hour_of_day">Time of notification</string>
     <string name="preferences_summary_released_hour_of_day">Approximate time of notification that informs of releases dates. Android might delay execution in order to save energy</string>
-    
+
     <string name="preferences_category_about">About %1$s</string>
     <string name="preferences_title_version">Version</string>
     <string name="preferences_title_contributors">Contributors</string>
@@ -114,24 +114,24 @@
     <string name="preferences_title_report">Report issue</string>
     <string name="preferences_summary_report">Report issue via E-mail, attaching your log files</string>
     <string name="preferences_category_misc">Misc.</string>
-    <string name="preferences_title_loglevel">Root Log Level</string>
-    <string name="preferences_summary_loglevel">Determine which log statements are recorded</string>
     <string name="preferences_title_current_log">Open current log file</string>
     <string name="preferences_title_loglevel_logcat">LogCat Log Level</string>
-    <string name="preferences_summary_loglevel_logcat">Determine which log statements are forwarded to LogCat. Note: Must be >= Root Log Level</string>
-        
+    <string name="preferences_summary_loglevel_logcat">Determine which log statements are forwarded to LogCat.</string>
+    <string name="preferences_title_loglevel_file">File Log Level</string>
+    <string name="preferences_summary_loglevel_file">Determine which log statements are forwarded to the log file.</string>
+
     <!-- (Error) messages -->
     <string name="GenericError">Something almost impossible has happened: %1s!</string>
     <string name="NotOnline">No connection to the internet (Check settings to allow usage of mobile connection)</string>
     <string name="MainActivity_errorLoadingReleases">Error loading releases from the device</string>
     <string name="MainActivity_refreshAlreadyInProgress">Refresh already in progress.</string>
     <string name="MainActivity_pleaseWaitUntilRefreshIsFinished">Please wait until refreshing releases has finished</string>
-    
+
     <string name="TextAssetActivity_errorLoadingFile">Error load text file</string>
-    
+
     <string name="LoadNewReleasesBinding_errorFindingReleases">Refreshing releases failed: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">Unbelievable error while trying to refresh releases: </string>
     <string name="LoadNewReleasesBinding_finishedWithErrors">Updating releases failed for %1$d of %2$d artists</string>
-    
+
     <string name="ReleasedTodayService_ReleasedTodayError">Error finding today\'s releases</string>
 </resources>

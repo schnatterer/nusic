@@ -48,9 +48,14 @@ public interface Constants {
      *
      */
     interface Loaders {
-       int RELEASE_LOADER_ALL = 0;
+        int RELEASE_LOADER_ALL = 0;
         int RELEASE_LOADER_JUST_ADDED = 1;
         int RELEASE_LOADER_ANNOUNCED = 2;
         int RELEASE_LOADER_AVAILABLE = 3;
     }
+
+    /**
+     * Name of the logcat appender, as configured in logback.xml
+     */
+    String FILE_APPENDER_NAME = "file";
 }

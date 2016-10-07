@@ -28,9 +28,9 @@ import java.util.Date;
 
 /**
  * Provides access to the preferences of the application.
- * 
+ *
  * @author schnatterer
- * 
+ *
  */
 public interface PreferencesService {
     /**
@@ -41,16 +41,16 @@ public interface PreferencesService {
     /**
      * Gets the last time the {@link Release}s have been loaded from the
      * internet.
-     * 
+     *
      * This is useful to determine the start date for the next refresh.
      */
     Date getLastReleaseRefresh();
 
     /**
      * Set last time the {@link Release}s have been loaded from the internet.
-     * 
+     *
      * This is useful to determine the start date for the next refresh.
-     * 
+     *
      * @return <code>true</code> if the new values were successfully written to
      *         persistent storage
      */
@@ -94,7 +94,7 @@ public interface PreferencesService {
      * @return <code>true</code> synchronization of releases is started when the
      *         connection status changes to "connected". Otherwise
      *         <code>false</code>.
-     * 
+     *
      */
     boolean isEnabledConnectivityReceiver();
 
@@ -102,7 +102,7 @@ public interface PreferencesService {
      * Setting to <code>true</code> starts synchronization of releases when the
      * connection status changes to "connected". <code>false</code>
      * syncronization on connection change.
-     * 
+     *
      * @param enabled
      * @return <code>true</code> if the new values were successfully written to
      *         persistent storage
@@ -130,7 +130,7 @@ public interface PreferencesService {
     /**
      * Sets the time when checking for the check for new releases is performed
      * if {@link #isEnabledNotifyReleasedToday()} is <code>true</code>.
-     * 
+     *
      * @param hourOfDay
      * @param minute
      * @return <code>true</code> if the new values were successfully written to
@@ -145,31 +145,10 @@ public interface PreferencesService {
     int getReleasedTodayScheduleMinute();
 
     /**
-     * @param logLevel
-     *            the logLevel that is initialized on the root logger when
-     *            starting the the app.
-     * @return <code>true</code> if the new values were successfully written to
-     *         persistent storage
-     */
-    boolean setLogLevel(String logLevel);
-
-    /**
-     * @return the logLevel that was initialized on the root logger when
+     * the logLevel that was initialized on the file appender when
      *         starting the the app.
      */
-    String getLogLevel();
-
-    /**
-     * Sets the log level for the logCat appender. Note that this depends on the
-     * root logger ({@link #setLogLevel(String)}).
-     * 
-     * @param logLevel
-     *            the logLevel that is initialized on the logcat appender when
-     *            starting the the app.
-     * @return <code>true</code> if the new values were successfully written to
-     *         persistent storage
-     */
-    boolean setLogLevelLogCat(String logLevel);
+    String getLogLevelFile();
 
     /**
      * @return the logLevel that was initialized on the logCat appender when

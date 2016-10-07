@@ -30,10 +30,10 @@
     <string name="versionName" translatable="false">${project.version}</string>
 
     <string name="authority_log_file_provider" translatable="false">info.schnatterer.nusic.android.provider.LogFileProvider</string>
-    
+
     <string name="extra_asset_name" translatable="false">nusic.intent.extra.assetName</string>
     <string name="extra_activity_title" translatable="false">nusic.intent.extra.activity.title</string>
-     
+
     <!-- Plain links -->
     <string name="link_nusic_fdroid" translatable="false">https://f-droid.org/app/info.schnatterer.nusic</string>
     <string name="link_nusic_google_play" translatable="false">https://play.google.com/store/apps/details?id=info.schnatterer.nusic</string>
@@ -44,7 +44,7 @@
     <string name="html_link_nusic_git_hub" translatable="false">&lt;a href="@string/app_url"&gt;@string/GitHub&lt;a&gt;</string>
     <string name="html_link_sd_scanner" translatable="false">&lt;a href="@string/link_sd_scanner"&gt;@string/SDScanner&lt;a&gt;</string>
     <string name="html_link_email" translatable="false">&lt;a href="@string/link_email"&gt;@string/Email&lt;a&gt;</string>
-    
+
     <!-- Preferences -->
     <string name="preferences_key_download_releases_time_period" translatable="false">downloadReleasesNumberOfMonths</string>
     <string name="preferences_default_download_releases_time_period" translatable="false">6</string>
@@ -62,24 +62,24 @@
 
     <string name="preferences_key_refresh_period" translatable="false">refreshPeriod</string>
     <string name="preferences_default_refresh_period" translatable="false">1</string>
-    
+
     <string name="preferences_key_is_enabled_notify_new_releases" translatable="false">isEnabledNotifyNewReleases</string>
     <bool name="preferences_default_is_enabled_notify_new_releases" translatable="false">true</bool>
-    
+
     <string name="preferences_key_is_enabled_notify_released_today" translatable="false">isEnabledNotifyReleasedToday</string>
     <bool name="preferences_default_is_enabled_notify_released_today" translatable="false">true</bool>
-    
+
     <string name="preferences_key_released_today_hour_of_day" translatable="false">releaseTodayHourOfDay</string>
     <string name="preferences_default_released_today_hour_of_day" translatable="false">12</string>
-    
+
     <string name="preferences_key_released_today_minute" translatable="false">releaseTodayMinute</string>
     <string name="preferences_default_released_today_minute" translatable="false">00</string>
-    
+
     <string name="preferences_key_version" translatable="false">version</string>
     <string name="preferences_key_about" translatable="false">about</string>
-    
-    <string name="preferences_key_log_level" translatable="false">logLevel</string>
-    <string name="preferences_default_log_level" translatable="false">INFO</string>
+
+    <string name="preferences_key_log_level_file" translatable="false">logLevelFile</string>
+    <string name="preferences_default_log_level_file" translatable="false">INFO</string>
     <string name="preferences_key_log_level_logcat" translatable="false">logLevelLogCat</string>
     <string name="preferences_default_log_level_logcat" translatable="false">INFO</string>
     <string-array name="preferences_entry_values_log_levels" translatable="false">

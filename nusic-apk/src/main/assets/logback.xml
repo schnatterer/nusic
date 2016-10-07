@@ -38,7 +38,7 @@
 
     <!-- Create a logcat appender, that logs only specific statements -->
     <!-- Note: the logger's name is referred to in the code as well! -->
-    <appender name="LOGCAT" class="ch.qos.logback.classic.android.LogcatAppender">
+    <appender name="logcat" class="ch.qos.logback.classic.android.LogcatAppender">
         <!-- Don't show trace and debug on logcat -->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>INFO</level>
@@ -57,7 +57,7 @@
     </appender>
 
     <!-- Create a file appender that logs all statements -->
-    <appender name="FILE"
+    <appender name="file"
         class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH}/${APP_NAME}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -75,8 +75,8 @@
 
     <!-- Write all info to the appenders to allow for individual filtering. -->
     <root level="TRACE">
-        <appender-ref ref="LOGCAT" />
-        <appender-ref ref="FILE" />
+        <appender-ref ref="logcat" />
+        <appender-ref ref="file" />
     </root>
 
     <!-- JDOMParserWs2 floods the log with warnings. Put him down. -->
@@ -84,7 +84,7 @@
         additivity="false">
         <!-- Don't appent to logcat, because java.util.logging writes to logcat
             too -->
-        <appender-ref ref="FILE" />
+        <appender-ref ref="file" />
     </logger>
     <!-- HttpClientWebServiceWs2 logs a debug message for every request. Too
         much information. -->
@@ -92,19 +92,19 @@
         level="INFO" additivity="false">
         <!-- Don't appent to logcat, because java.util.logging writes to logcat
             too -->
-        <appender-ref ref="FILE" />
+        <appender-ref ref="file" />
     </logger>
     <!-- DefaultCoverArtArchiveClient logs an info message for every request.
         Too much information. -->
     <logger
         name="fm.last.musicbrainz.coverart.impl.DefaultCoverArtArchiveClient"
         level="WARN" additivity="false">
-        <appender-ref ref="LOGCAT" />
-        <appender-ref ref="FILE" />
+        <appender-ref ref="logcat" />
+        <appender-ref ref="file" />
     </logger>
     <!-- Stopwatch logs a bit too much -->
     <logger name="com.google.inject" level="INFO" additivity="false">
-        <appender-ref ref="LOGCAT" />
-        <appender-ref ref="FILE" />
+        <appender-ref ref="logcat" />
+        <appender-ref ref="file" />
     </logger>
 </configuration>

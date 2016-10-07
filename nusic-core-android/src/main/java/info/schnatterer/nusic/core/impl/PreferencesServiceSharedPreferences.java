@@ -25,10 +25,6 @@ import info.schnatterer.nusic.core.PreferencesService;
 import info.schnatterer.nusic.core.event.PreferenceChangedListener;
 import info.schnatterer.nusic.util.DateUtil;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,7 +38,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
 
-import com.google.inject.BindingAnnotation;
 import com.google.inject.Provider;
 
 /**
@@ -78,10 +73,6 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
      * for preferences.xml
      */
 
-    /*
-     * TODO find less verbose solution for passing XML values from APK to core
-     * See also Module, where annotations are defined
-     */
     @Inject
     @Named("PreferencesKeyDownloadOnlyOnWifi")
     private String KEY_DOWLOAD_ONLY_ON_WIFI;
@@ -131,11 +122,11 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
     private Integer DEFAULT_RELEASED_TODAY_MINUTE;
 
     @Inject
-    @Named("PreferencesKeyLogLevel")
-    private String KEY_LOG_LEVEL;
+    @Named("PreferencesKeyLogLevelFile")
+    private String KEY_LOG_LEVEL_FILE;
     @Inject
-    @Named("PreferencesDefaultLogLevel")
-    private String DEFAULT_LOG_LEVEL;
+    @Named("PreferencesDefaultLogLevelFile")
+    private String DEFAULT_LOG_LEVEL_FILE;
 
     @Inject
     @Named("PreferencesKeyLogLevelLogCat")
@@ -313,25 +304,13 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
     }
 
     @Override
-    public String getLogLevel() {
-        return sharedPreferences.getString(KEY_LOG_LEVEL, DEFAULT_LOG_LEVEL);
-    }
-
-    @Override
-    public boolean setLogLevel(String logLevel) {
-        return sharedPreferences.edit().putString(KEY_LOG_LEVEL, logLevel)
-                .commit();
+    public String getLogLevelFile() {
+        return sharedPreferences.getString(KEY_LOG_LEVEL_FILE, DEFAULT_LOG_LEVEL_FILE);
     }
 
     @Override
     public String getLogLevelLogCat() {
         return sharedPreferences.getString(KEY_LOG_LEVEL_LOGCAT,
                 DEFAULT_LOG_LEVEL_LOGCAT);
-    }
-
-    @Override
-    public boolean setLogLevelLogCat(String logLevel) {
-        return sharedPreferences.edit()
-                .putString(KEY_LOG_LEVEL_LOGCAT, logLevel).commit();
     }
 }

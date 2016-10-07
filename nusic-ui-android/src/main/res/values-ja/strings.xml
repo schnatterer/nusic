@@ -26,10 +26,10 @@
     <string name="action_refresh">リリースの更新</string>
     <string name="action_settings">設定</string>
     <string name="action_settings_developer">開発者設定</string>
-    
+
     <string name="releaseListMenu_HideRelease">リリースを非表示</string>
     <string name="releaseListMenu_HideAllByArtist">アーティスト別にすべて非表示</string>
-    
+
     <!-- GUI captions -->
     <string name="FDroid">F-Droid</string>
     <string name="GooglePlay">Google Play</string>
@@ -79,12 +79,12 @@
     <string name="preferences_title_display_all_releases">非表示のアルバムを再表示する</string>
     <string name="preferences_summary_display_all_releases">アルバムは長押しして非表示にできます。 このオプションは非表示のアルバムとアーティストをすべてリセットします</string>
     <string name="preferences_message_display_all_releases">非表示のアルバムとアーティストをすべてリセットしてもよろしいですか?</string>
-    
+
     <string name="preferences_category_bandwitdth">使用帯域</string>
     <string name="preferences_title_download_only_on_wifi">WiFi のみ</string>
     <string name="preferences_summary_download_only_on_wifi_on">モバイル通信を使用しません</string>
     <string name="preferences_summary_download_only_on_wifi_off">モバイル通信も使用します</string>
-    
+
     <string name="preferences_category_notifications">通知</string>
     <string name="preferences_title_is_enabled_notify_new_releases">新しいリリース</string>
     <string name="preferences_summary_is_enabled_notify_new_releases_on">新しいリリースが見つかったときに通知します</string>
@@ -94,7 +94,7 @@
     <string name="preferences_summary_is_enabled_notify_released_today_off">リリースが公開された日に通知しません</string>
     <string name="preferences_title_released_today_hour_of_day">通知の時刻</string>
     <string name="preferences_summary_released_hour_of_day">リリース日を知らせる通知のおおよその時刻。 Android は、エネルギーを節約するために実行を遅らせることがあります</string>
-    
+
     <string name="preferences_category_about">%1$s について</string>
     <string name="preferences_title_version">バージョン</string>
     <!-- TODO translate this --><string name="preferences_title_contributors">Contributors</string>
@@ -114,24 +114,24 @@
     <string name="preferences_title_report">イシューの報告</string>
     <string name="preferences_summary_report">メールでイシューを報告します。ログを添付してください</string>
     <string name="preferences_category_misc">その他</string>
-    <string name="preferences_title_loglevel">ルート ログレベル</string>
-    <string name="preferences_summary_loglevel">どのログを記録するかを決定します</string>
     <string name="preferences_title_current_log">現在のログファイルを開く</string>
     <string name="preferences_title_loglevel_logcat">LogCat ログレベル</string>
-    <string name="preferences_summary_loglevel_logcat">どのログを LogCat に転送するかを決定します。 注: >= ルート ログレベルの必要があります</string>
-        
+    <!-- TODO translate this --><string name="preferences_summary_loglevel_logcat">Determine which log statements are forwarded to LogCat.</string>
+    <!-- TODO translate this --><string name="preferences_title_loglevel_file">File Log Level</string>
+    <!-- TODO translate this --> <string name="preferences_summary_loglevel_file">Determine which log statements are forwarded to the log file. Note: Must be >= Root Log Level</string>
+
     <!-- (Error) messages -->
     <string name="GenericError">ほとんど実行できないことが発生しました: %1s!</string>
     <string name="NotOnline">インターネット接続がありません (設定を確認して、モバイル通信の使用を許可してください)</string>
     <string name="MainActivity_errorLoadingReleases">デバイスからリリースの読み込み時にエラー</string>
     <string name="MainActivity_refreshAlreadyInProgress">更新はすでに実行中です。</string>
     <string name="MainActivity_pleaseWaitUntilRefreshIsFinished">リリースの更新が完了するまで、しばらくお待ちください</string>
-    
+
     <string name="TextAssetActivity_errorLoadingFile">テキストファイルの読み込みエラー</string>
-    
+
     <string name="LoadNewReleasesBinding_errorFindingReleases">リリースの更新に失敗しました: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">リリースを更新しようとした時に信じられないエラーが発生しました: </string>
     <string name="LoadNewReleasesBinding_finishedWithErrors">%1$d / %2$d アーティストのリリースの更新に失敗しました</string>
-    
+
      <string name="ReleasedTodayService_ReleasedTodayError">今日のリリースの検索時にエラー</string>
 </resources>

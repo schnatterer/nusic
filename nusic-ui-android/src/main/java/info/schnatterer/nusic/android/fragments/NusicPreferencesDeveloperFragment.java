@@ -21,10 +21,15 @@
  */
 package info.schnatterer.nusic.android.fragments;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.os.Bundle;
+import android.preference.Preference;
+
+import info.schnatterer.logbackandroidutils.Logs;
+import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.ui.R;
 import roboguice.fragment.provided.RoboPreferenceFragment;
-import android.annotation.SuppressLint;
-import android.os.Bundle;
 
 @SuppressLint("NewApi")
 public class NusicPreferencesDeveloperFragment extends RoboPreferenceFragment {
@@ -35,5 +40,50 @@ public class NusicPreferencesDeveloperFragment extends RoboPreferenceFragment {
 
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences_developer);
+
+        findPreference(getString(R.string.preferences_key_log_level_logcat))
+            .setOnPreferenceChangeListener(new LogCatLogLevelPreferenceChangedListener(getActivity()));
+        findPreference(getString(R.string.preferences_key_log_level_file))
+            .setOnPreferenceChangeListener(new FileLevelPreferenceChangedListener(getActivity()));
+    }
+
+    /**
+     * Listens for a change in the preference that contains the log level of log cat appender.
+     */
+    public static class LogCatLogLevelPreferenceChangedListener implements
+        Preference.OnPreferenceChangeListener {
+
+        private final Context context;
+
+        public LogCatLogLevelPreferenceChangedListener(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            Logs.setLogCatLevel(newValue.toString(), context);
+            //  update the state of the Preference with the new value
+            return true;
+        }
+    }
+
+    /**
+     * * Listens for a change in the preference that contains the log level of file appender.
+     */
+    public static class FileLevelPreferenceChangedListener implements
+        Preference.OnPreferenceChangeListener {
+
+        private final Context context;
+
+        public FileLevelPreferenceChangedListener(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            Logs.setThresholdFilterLevel(newValue.toString(), Constants.FILE_APPENDER_NAME, context);
+            //  update the state of the Preference with the new value
+            return true;
+        }
     }
 }
