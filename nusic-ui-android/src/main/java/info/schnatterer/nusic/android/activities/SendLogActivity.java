@@ -21,7 +21,7 @@
  */
 package info.schnatterer.nusic.android.activities;
 
-import info.schnatterer.nusic.android.util.Logs;
+import info.schnatterer.logbackandroidutils.Logs;
 import info.schnatterer.nusic.android.util.TextUtil;
 import info.schnatterer.nusic.ui.R;
 
@@ -38,7 +38,7 @@ import android.support.v4.content.FileProvider;
  * Sends an intent that contains all available log files. It is supposed to be
  * consumed by an emailer app. Note that you need to set up the
  * {@link FileProvider} in your android manifest. For example: <br/>
- * 
+ *
  * <pre>
  *    &lt;!-- Expose log files for email clients --&gt;
  *    &lt;provider
@@ -51,7 +51,7 @@ import android.support.v4.content.FileProvider;
  *             android:resource=&quot;@xml/logpath&quot; /&gt;
  *     &lt;/provider&gt;
  * </pre>
- * 
+ *
  * @author schnatterer
  *
  */

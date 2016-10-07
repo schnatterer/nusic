@@ -26,10 +26,10 @@
     <string name="action_refresh">Alben aktualisieren</string>
     <string name="action_settings">Einstellungen</string>
     <string name="action_settings_developer">Einstellungen für Entwickler</string>
-    
+
     <string name="releaseListMenu_HideRelease">Album ausblenden</string>
     <string name="releaseListMenu_HideAllByArtist">Alle des Interpreten ausblenden</string>
-    
+
     <!-- GUI captions -->
     <string name="FDroid">F-Droid</string>
     <string name="GooglePlay">Google Play</string>
@@ -59,13 +59,13 @@
     <string name="WelcomeScreenAndroid444SDScanner">Möglicherweise hilft in diesem Fall @string/html_link_sd_scanner</string>
     <string name="SDScanner">SD Scanner</string>
     <string name="Email">E-Mail</string>
-        
+
     <string name="LoadNewReleasesService_newRelease">Neues Album gefunden:</string>
     <string name="LoadNewReleasesService_newReleaseMultiple">%1$d neue Alben gefunden</string>
     <string name="LoadNewReleasesService_missingPermissionReadExternalStorage">Bitte Zugriff auf Medien zulassen</string>
     <string name="ReleasedTodayService_ReleasedToday">Heute erscheint:</string>
     <string name="ReleasedTodayService_ReleasedTodayMultiple">%1$d Alben werden heute veröffentlicht</string>
-    
+
     <!-- Preferences -->
     <string name="preferences_category_releases">Alben</string>
     <string name="preferences_title_download_releases_time_period">Zeitspanne</string>
@@ -79,12 +79,12 @@
     <string name="preferences_title_display_all_releases">Ausgeblendete Alben wieder anzeigen</string>
     <string name="preferences_summary_display_all_releases">Mittels langem Tap auf ein Album können diese ausgeblendet werden. Diese Option setzt ausgeblendete Alben und Interpreten zurück</string>
     <string name="preferences_message_display_all_releases">Wirklich alle ausgeblendeten Alben und Interpreten wieder anzeigen?</string>
-    
+
     <string name="preferences_category_bandwitdth">Datennutzung</string>
     <string name="preferences_title_download_only_on_wifi">Nur WLAN</string>
     <string name="preferences_summary_download_only_on_wifi_on">Keine Internetverbindung über Mobilfunknetzwerke verwenden</string>
     <string name="preferences_summary_download_only_on_wifi_off">Auch Internetverbindung über Mobilfunknetzwerke verwenden</string>
-    
+
     <string name="preferences_category_notifications">Benachrichtigungen</string>
     <string name="preferences_title_is_enabled_notify_new_releases">Neue Alben</string>
     <string name="preferences_summary_is_enabled_notify_new_releases_on">Benachrichtigen wenn neue Alben gefunden werden</string>
@@ -93,7 +93,7 @@
     <string name="preferences_summary_is_enabled_notify_released_today_on">Am Tag der Veröffentlichung von Alben benachrichtigen</string>
     <string name="preferences_summary_is_enabled_notify_released_today_off">Keine Benachrichtigung am Tag der Veröffentlichung von Alben</string>
     <string name="preferences_title_released_today_hour_of_day">Zeit der Benachrichtigung</string>
-    
+
     <string name="preferences_category_about">Über %1$s</string>
     <string name="preferences_title_version">Version</string>
     <string name="preferences_title_contributors">Mitwirkende</string>
@@ -114,12 +114,12 @@
     <string name="preferences_title_report">Fehlerbericht</string>
     <string name="preferences_summary_report">Fehlerbericht als E-mail schreiben und Log-Dateien anhängen</string>
     <string name="preferences_category_misc">Verschiedenes</string>
-    <string name="preferences_title_loglevel">Root Log Level</string>
-    <string name="preferences_summary_loglevel">Festlegen welche Log Meldungen gespeichert werden</string>
     <string name="preferences_title_current_log">Aktuelle Log Datei öffnen</string>
     <string name="preferences_title_loglevel_logcat">LogCat Log Level</string>
-    <string name="preferences_summary_loglevel_logcat">Festlegen welche Log Meldungen an LogCat weiter gereicht werden. Hinweis: Muss >= Root Log level sein</string>
-    
+    <string name="preferences_summary_loglevel_logcat">Festlegen welche Log Meldungen an LogCat weiter gereicht werden. </string>
+    <string name="preferences_title_loglevel_file">File Log Level</string>
+    <string name="preferences_summary_loglevel_file">Festlegen welche Log Meldungen in die Logdatei gespeichert werden.</string>
+
     <!-- (Error) messages -->
     <string name="GenericError">Etwas beinahe unmögliches ist geschehen: %1s!</string>
     <string name="NotOnline">Keine Verbindung zum Internet (Einstellungen prüfen, um die Verwendung des mobilen Internet zu ermöglichen)</string>
@@ -128,10 +128,10 @@
     <string name="MainActivity_pleaseWaitUntilRefreshIsFinished">Bitte warten bis die Aktualisierung der Alben abgeschlossen ist.</string>
 
     <string name="TextAssetActivity_errorLoadingFile">Fehler beim Laden der Textdatei</string>
-    
+
     <string name="LoadNewReleasesBinding_errorFindingReleases">Aktualisieren der Alben fehlgeschlagen: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">Unfassbarer Fehler beim Aktualiseren der Alben: </string>
     <string name="LoadNewReleasesBinding_finishedWithErrors">Update der Alben für %1$d Interpreten von %2$d fehlgeschlagen</string>
-    
+
     <string name="ReleasedTodayService_ReleasedTodayError">Fehler beim Finden heutiger Veröffentlichungen</string>
 </resources>

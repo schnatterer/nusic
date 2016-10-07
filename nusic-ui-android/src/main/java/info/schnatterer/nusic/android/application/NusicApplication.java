@@ -21,8 +21,9 @@
  */
 package info.schnatterer.nusic.android.application;
 
+import info.schnatterer.logbackandroidutils.Logs;
+import info.schnatterer.nusic.Constants;
 import info.schnatterer.nusic.android.service.ReleasedTodayService.ReleasedTodayServiceScheduler;
-import info.schnatterer.nusic.android.util.Logs;
 import info.schnatterer.nusic.core.PreferencesService;
 import roboguice.RoboGuice;
 import android.content.SharedPreferences;
@@ -37,11 +38,14 @@ public class NusicApplication extends AbstractApplication {
     private static final String DEPRECATED_PREFERENCES_KEY_FUTURE_RELEASES = "includeFutureReleases";
     private static final String DEPRECATED_PREFERENCES_KEY_LAST_APP_VERSION = "last_app_version";
 
-    public static interface NusicVersion {
+    /**
+     * Constant mapping of version name to version code.
+     */
+    public interface NusicVersion {
         /**
-         * v.0.6 last Version before 1.0
+         * v.3.1.0
          */
-        int V_0_6 = 10;
+        int V_3_1_0 = 19;
     }
 
     private ReleasedTodayServiceScheduler releasedTodayServiceScheduler;
@@ -74,9 +78,9 @@ public class NusicApplication extends AbstractApplication {
         // Set log levels (this overrides settings in logback.xml)
         PreferencesService preferenceService = RoboGuice.getInjector(this)
                 .getInstance(PreferencesService.class);
-        Logs.setRootLogLevel(preferenceService.getLogLevel());
-        // Set log cat level but don't toast warnings
-        Logs.setLogCatLevel(preferenceService.getLogLevelLogCat(), null);
+        Logs.setThresholdFilterLevel(preferenceService.getLogLevelFile(), Constants.FILE_APPENDER_NAME, this);
+        // Set log cat level
+        Logs.setLogCatLevel(preferenceService.getLogLevelLogCat(), this);
 
         // Causes onUpgrade() to be called, etc.
         super.onCreate();
@@ -122,6 +126,13 @@ public class NusicApplication extends AbstractApplication {
 
     @Override
     protected void onUpgrade(int oldVersion, int newVersion) {
+        if (oldVersion <= NusicVersion.V_3_1_0) {
+            /* Changed the way of setting the file log level from root to file appender.
+             * Clean up preferences */
+            SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(this);
+            sharedPreferences.edit().remove("logLevel").apply();
+        }
         /*
          * Make sure the Release Today service is scheduled (if not switched off
          * in preferences). Schedule it only after updates and new installations

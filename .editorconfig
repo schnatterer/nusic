@@ -1,0 +1,18 @@
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+tab_width = 4
+
+[Makefile]
+indent_style = tab
+tab_width = 8
+
+# java properties must be saved in latin1
+[*.properties]
+charset = latin1
