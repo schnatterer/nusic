@@ -76,6 +76,7 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
     @Inject
     @Named("PreferencesKeyDownloadOnlyOnWifi")
     private String KEY_DOWLOAD_ONLY_ON_WIFI;
+    @Inject
     @Named("PreferencesDefaultDownloadOnlyOnWifi")
     private Boolean DEFAULT_DOWLOAD_ONLY_ON_WIFI;
 
