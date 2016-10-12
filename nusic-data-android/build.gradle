@@ -51,7 +51,9 @@ dependencies {
     // Test dependencies
     testCompile(
             libraries.junit,
-            libraries.robolectric
+            libraries.robolectric,
+            // Android API, again. This module uses the plain java plugin and robolectric3's dependcy resolve mechanism does not seem to work here
+            libraries.android
     )
 }
 
