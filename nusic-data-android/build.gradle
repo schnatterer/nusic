@@ -51,8 +51,7 @@ dependencies {
     // Test dependencies
     testCompile(
             libraries.junit,
-            libraries.robolectric,
-            libraries.robolectricAndroid
+            libraries.robolectric
     )
 }
 

@@ -186,8 +186,7 @@ dependencies {
         libraries.junit,
         libraries.hamcrest,
         libraries.mockito,
-        libraries.robolectric,
-        libraries.robolectricAndroid
+        libraries.robolectric
     )
 }
 
