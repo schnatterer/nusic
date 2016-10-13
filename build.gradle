@@ -165,6 +165,7 @@ ext {
          */
         // Robolectric
         robolectric       : "org.robolectric:robolectric:3.1.2",
+        robolectricAndroid: "org.robolectric:android-all:6.0.0_r1-robolectric-0",
         junit             : "junit:junit:4.12",
         hamcrest          : "org.hamcrest:hamcrest-all:1.3",
         mockito           : "org.mockito:mockito-all:1.10.19"
