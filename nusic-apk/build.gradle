@@ -120,6 +120,7 @@ sonarqube {
 
         property "sonar.sourceEncoding", nusicSourceEncoding
         property "sonar.sources", "src/main/java"
+        property "sonar.tests" "src/test/java"
         // first defines where the java files are, the second where the xml files are
         property "sonar.exclusions", "build/**,**/*.png"
         property "sonar.import_unknown_files", true
