@@ -86,7 +86,7 @@ sonarqube {
         // and https://room-15.github.io/blog/2016/01/21/Static-code-quality-measurements-with-SonarQube-Jacoco-and-UnitTests/
         property "sonar.sourceEncoding", nusicSourceEncoding
         property "sonar.sources", "src/main/java"
-        property "sonar.tests" "src/test/java"
+        property "sonar.tests", "src/test/java"
 
         // first defines where the java files are, the second where the xml files are
         property "sonar.exclusions", "build/**,**/*.png"
