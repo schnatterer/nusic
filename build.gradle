@@ -130,7 +130,7 @@ ext {
     nusicMinSdkVersion = 9
     nusictTargetSdkVersion = 24
     nusicCompileSdkVersion = 24
-    nusicBuildToolsVersion = "24.0.1"
+    nusicBuildToolsVersion = "24.0.3"
 
     // Properties for java & android submodules
     nusicSourceCompatibility = JavaVersion.VERSION_1_7
@@ -138,7 +138,7 @@ ext {
     nusicSourceEncoding = "UTF-8"
 
     slf4jVersion = "1.7.21"
-    androidCompatibilityVersion = "24.0.0"
+    androidCompatibilityVersion = "24.2.1"
     roboguiceVersion = "3.0.1"
 
     libraries = [
