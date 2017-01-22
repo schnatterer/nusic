@@ -25,12 +25,12 @@ import java.util.Set;
 
 /**
  * Helper class for updating the progress.
- * 
+ *
  * To use it, just create an inner class setting the generic type parameters
  * needed.
- * 
+ *
  * @author schnatterer
- * 
+ *
  * @param <PROCESSED_ENTITY>
  * @param <RESULT_ENTITY>
  */
@@ -53,8 +53,8 @@ public class ProgressUpdater<PROCESSED_ENTITY, RESULT_ENTITY> {
 
     /**
      * Notifies all {@link ProgressListener}s.
-     * 
-     * @param artist
+     *
+     * @param entity
      * @param progress
      * @param potentialException
      */

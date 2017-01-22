@@ -45,6 +45,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -58,14 +59,12 @@ import org.musicbrainz.model.searchresult.ReleaseResultWs2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.annotation.SuppressLint;
-
 import com.google.common.util.concurrent.RateLimiter;
 import com.google.inject.BindingAnnotation;
 
 /**
  * {@link RemoteMusicDatabaseService} that queries information from MusicBrainz.
- * 
+ *
  * @author schnatterer
  *
  */
@@ -108,13 +107,13 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 
     /**
      * Creates a service instance for finding releases.
-     * 
+     *
      * @param appName
      *            application name used in user agent string of request
-     * 
+     *
      * @param appVersion
      *            application version used in user agent string of request
-     * 
+     *
      * @param appContact
      *            contact URL or author email used in user agent string of
      *            request
@@ -129,8 +128,7 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
         this.appContact = appContact;
     }
 
-    @SuppressLint("SimpleDateFormat")
-    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     @Override
     public Artist findReleases(Artist artist, Date fromDate, Date endDate)
@@ -199,7 +197,7 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 
     /**
      * Creates an instance of the release search object.
-     * 
+     *
      * @param userAgentName
      *            custom application name used in user agent string. If
      *            <code>null</code>, the default user agent string is used.
@@ -207,7 +205,7 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
      *            custom application version used in user agent string
      * @param userAgentContact
      *            contact URL or author email used in user agent string
-     * 
+     *
      * @return a new instance of the web service implementation.
      */
     protected org.musicbrainz.controller.Release createReleaseSearch(
@@ -221,7 +219,7 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
      * Iterates over the results of a MusicBrainz query and converts them to
      * nusic entities. In addition, tries to download artwork for each release
      * group.
-     * 
+     *
      * @param artistName
      * @param artist
      * @param releases
@@ -280,7 +278,7 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 
     /**
      * Downloads the front cover of the release and persists it.
-     * 
+     *
      * @param release
      * @throws IOException
      *             error downloading the artwork
@@ -306,7 +304,7 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
                          * As transactions are not used yet, the cover that is
                          * persisted here won't be deleted, if the corresponding
                          * release could not be saved.
-                         * 
+                         *
                          * This is ignored here as the app will try it again. As
                          * the artwork is needed anyway we might as well keep
                          * it.
@@ -344,7 +342,7 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 
     /**
      * Application name used in user agent string of request
-     * 
+     *
      * @author schnatterer
      *
      */
@@ -356,7 +354,7 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 
     /**
      * Application version used in user agent string of request
-     * 
+     *
      * @author schnatterer
      *
      */
@@ -368,7 +366,7 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
 
     /**
      * Contact URL or author email used in user agent string of request
-     * 
+     *
      * @author schnatterer
      *
      */
