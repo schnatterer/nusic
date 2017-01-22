@@ -42,8 +42,10 @@ import info.schnatterer.nusic.ui.R;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -94,7 +96,6 @@ public class LoadNewReleasesService extends WakefulService {
     @Inject
     private ArtworkDao artworkDao;
 
-    private List<Artist> errorArtists;
     // private int totalArtists = 0;
     private ProgressListenerNotifications progressListenerNotifications = new ProgressListenerNotifications();
     private LoadNewReleasesServiceBinder binder = new LoadNewReleasesServiceBinder();
@@ -129,7 +130,7 @@ public class LoadNewReleasesService extends WakefulService {
         /*
          * Don't release wake lock after this method ends, as the logic runs in
          * a separate thread.
-         * 
+         *
          * The lock is release onDestroy().
          */
         if (refreshing) {
@@ -143,8 +144,8 @@ public class LoadNewReleasesService extends WakefulService {
      * Tries to start refreshing releases. If refresh is already in progress,
      * attaches <code>artistProcessedListener</code> to it and returns
      * <code>false</code>.
-     * 
-     * @param updateOnlyIfNeccesary
+     *
+     * @param updateOnlyIfNecessary
      *            if <code>true</code> the refresh is only done when
      *            {@link SyncReleasesService#isUpdateNeccesarry()} returns
      *            <code>true</code>. Otherwise, the refresh is done at any case.
@@ -152,9 +153,9 @@ public class LoadNewReleasesService extends WakefulService {
      * @return <code>true</code> if refresh was started. <code>false</code> if
      *         already in progress.
      */
-    public boolean refreshReleases(boolean updateOnlyIfNeccesary,
+    public boolean refreshReleases(boolean updateOnlyIfNecessary,
             ArtistProgressListener artistProcessedListener) {
-        if (tryCreateThread(updateOnlyIfNeccesary, artistProcessedListener)) {
+        if (tryCreateThread(updateOnlyIfNecessary, artistProcessedListener)) {
             return true;
         } else {
             LOG.debug("Service thread already working, only adding process listener");
@@ -166,72 +167,42 @@ public class LoadNewReleasesService extends WakefulService {
 
     /**
      * Synchronizes the creation and starting of new {@link #workerThread}s.
-     * 
-     * @param updateOnlyIfNeccesary
+     *
+     * @param updateOnlyIfNecessary
      * @param artistProcessedListener
      * @return <code>true</code> if thread was started, <code>false</code>
      *         otherwise.
      */
-    private synchronized boolean tryCreateThread(boolean updateOnlyIfNeccesary,
+    private synchronized boolean tryCreateThread(boolean updateOnlyIfNecessary,
             ArtistProgressListener artistProcessedListener) {
-        // if (workerThread == null || !workerThread.isAlive()) {
-        if (workerThread == null) {
-            LOG.debug("Service thread not working yet, starting.");
-            errorArtists = new LinkedList<Artist>();
-            // totalArtists = 0;
-            workerThread = new Thread(new WorkerThread(updateOnlyIfNeccesary,
-                    artistProcessedListener));
-            workerThread.start();
-            return true;
+        if (workerThread != null) {
+            return false;
         }
-        return false;
+        LOG.debug("Service thread not working yet, starting.");
+        workerThread = new Thread(new WorkerThread(updateOnlyIfNecessary, artistProcessedListener));
+        workerThread.start();
+        return true;
     }
 
     private class WorkerThread implements Runnable {
-        private boolean updateOnlyIfNeccesary;
+        private boolean updateOnlyIfNecesary;
         private ArtistProgressListener artistProgressListener;
 
-        public WorkerThread(boolean updateOnlyIfNeccesary,
+        public WorkerThread(boolean updateOnlyIfNecessary,
                 ArtistProgressListener artistProgressListener) {
-            this.updateOnlyIfNeccesary = updateOnlyIfNeccesary;
+            this.updateOnlyIfNecesary = updateOnlyIfNecessary;
             this.artistProgressListener = artistProgressListener;
         }
 
         public void run() {
             LOG.debug("Service thread starting work");
             if (!connectivityService.isOnline()) {
-                LOG.debug("Service thread: Not online!");
-                // If not online and update necessary, postpone run
-                if (!updateOnlyIfNeccesary) {
-                    LOG.debug("Postponing service until online or next schedule");
-                    loadNewReleasesServiceConnectivityReceiver.enableReceiver();
-
-                    // Send status "not online" back to listener?
-                    if (artistProgressListener != null) {
-                        // TODO find a solution without ServiceException here!
-                        artistProgressListener.onProgressFailed(null, 0, 0,
-                                null,
-                                new ServiceException("R.string.NotOnline") {
-                                    private static final long serialVersionUID = 1L;
-
-                                    @Override
-                                    public String getLocalizedMessage() {
-                                        return LoadNewReleasesService.this
-                                                .getString(R.string.NotOnline);
-                                    }
-                                });
-                    }
-                } else {
-                    // Make sure any changes to the online state are ignored
-                    loadNewReleasesServiceConnectivityReceiver
-                            .disableReceiver();
-                }
-
+                handleOffline();
             } else {
                 // Make sure any changes to the online state are ignored
                 loadNewReleasesServiceConnectivityReceiver.disableReceiver();
 
-                if (!updateOnlyIfNeccesary && hasReadPermissionOrNotify()) {
+                if (!updateOnlyIfNecesary && hasReadPermissionOrNotify()) {
                     syncReleasesService
                             .addArtistProcessedListener(artistProgressListener);
                     syncReleasesService
@@ -251,8 +222,8 @@ public class LoadNewReleasesService extends WakefulService {
                     } catch (ServiceException e) {
                         // Refresh succeeded, so don't tell user
                         LOG.warn(
-                                "Refresh succeeded, but databse error when trying to find out about new releases",
-                                e);
+                            "Refresh succeeded, but database error when trying to find out about new releases",
+                            e);
                     }
 
                     // Remove all listeners
@@ -265,16 +236,44 @@ public class LoadNewReleasesService extends WakefulService {
             stopSelf();
         }
 
+        private void handleOffline() {
+            LOG.debug("Service thread: Not online!");
+            // If not online and update necessary, postpone run
+            if (!updateOnlyIfNecesary) {
+                LOG.debug("Postponing service until online or next schedule");
+                loadNewReleasesServiceConnectivityReceiver.enableReceiver();
+
+                // Send status "not online" back to listener?
+                if (artistProgressListener != null) {
+                    // TODO find a solution without ServiceException here!
+                    artistProgressListener.onProgressFailed(null, 0, 0,
+                            null,
+                            new ServiceException("R.string.NotOnline") {
+                                private static final long serialVersionUID = 1L;
+
+                                @Override
+                                public String getLocalizedMessage() {
+                                    return LoadNewReleasesService.this
+                                            .getString(R.string.NotOnline);
+                                }
+                            });
+                }
+            } else {
+                // Make sure any changes to the online state are ignored
+                loadNewReleasesServiceConnectivityReceiver.disableReceiver();
+            }
+        }
+
         /**
          * If necessary (depending on the SDK versin of the device), checks if
          * the {@link Manifest.permission#READ_EXTERNAL_STORAGE} is present. If
          * it is not present, notifies an error. <br/>
-         * 
+         *
          * This would be better be done in the nusic-ui-android package, but for
          * now cannot use aar dependencies there (because the
          * android-maven-plugin does not support jars). Pragmatic soulution:
          * Check the permission right here in the service.
-         * 
+         *
          * @return <code>true</code> if the permission is present or checking
          *         was not necessary. Otherwise <code>false</code>.
          */
@@ -300,7 +299,7 @@ public class LoadNewReleasesService extends WakefulService {
 
         /**
          * Checks if the permission for is present.
-         * 
+         *
          * @return <code>true</code> if the permission is present. Otherwise
          *         <code>false</code>.
          */
@@ -318,7 +317,7 @@ public class LoadNewReleasesService extends WakefulService {
     /**
      * Finds which releases are new to the device and notifies user if enabled
      * in preferences.
-     * 
+     *
      * @param beforeRefresh
      * @throws DatabaseException
      */
@@ -340,9 +339,9 @@ public class LoadNewReleasesService extends WakefulService {
      * <br/>
      * Future calls overwrite any previous instances of this notification still
      * on display.
-     * 
+     *
      * @param release
-     * 
+     *
      */
     private void notifyNewReleases(Release release) {
         try {
@@ -374,11 +373,9 @@ public class LoadNewReleasesService extends WakefulService {
      * <br/>
      * Future calls overwrite any previous instances of this notification still
      * on display.
-     * 
+     *
      * @param nReleases
      *            the number of releases published today
-     * 
-     * @param text
      */
     private void notifyNewReleases(int nReleases) {
         Notification.notify(this, NotificationId.NEW_RELEASE, String.format(
@@ -390,7 +387,7 @@ public class LoadNewReleasesService extends WakefulService {
     /**
      * Creates an extra bundle that contains the tab to be shown when
      * {@link MainActivity} is launched.
-     * 
+     *
      * @return
      */
     private Bundle createExtraActiveTab() {
@@ -403,7 +400,7 @@ public class LoadNewReleasesService extends WakefulService {
     /**
      * Creates an intent that, when started as service, directly calls
      * {@link #refreshReleases(boolean, ArtistProgressListener)}.
-     * 
+     *
      * @return
      */
     public static Intent createIntentRefreshReleases(Context context) {
@@ -449,9 +446,9 @@ public class LoadNewReleasesService extends WakefulService {
     /**
      * Broadcast receiver that triggers execution of
      * {@link LoadNewReleasesService} after a scheduled alarm.
-     * 
+     *
      * @author schnatterer
-     * 
+     *
      */
     public static class LoadNewReleasesServiceAlarmReceiver extends
             RoboBroadcastReceiver {
@@ -468,17 +465,22 @@ public class LoadNewReleasesService extends WakefulService {
     /**
      * Progress listeners that displays any crucial info as android
      * notification.
-     * 
+     *
      * @author schnatterer
-     * 
+     *
      */
     private class ProgressListenerNotifications implements
             ArtistProgressListener {
+        private int totalArtists = 0;
+        private List<Artist> errorArtists;
+        // Save exceptions as strings to get rid of duplicates easily
+        private Set<String> exceptions;
 
         @Override
         public void onProgressStarted(int nEntities) {
-            errorArtists = new LinkedList<Artist>();
-            // totalArtists = nEntities;
+            errorArtists = new LinkedList<>();
+            exceptions = new HashSet<>();
+            totalArtists = nEntities;
         }
 
         @Override
@@ -487,38 +489,48 @@ public class LoadNewReleasesService extends WakefulService {
             if (potentialException != null) {
                 if (potentialException instanceof ServiceException) {
                     errorArtists.add(entity);
+                    ServiceException serviceException = (ServiceException) potentialException;
+                    if (serviceException.getCause() != null) {
+                        exceptions.add(serviceException.getCause().toString());
+                    } else {
+                        exceptions.add(serviceException.toString());
+                    }
+                } else {
+                    exceptions.add(potentialException.toString());
                 }
             }
         }
 
         @Override
         public void onProgressFinished(Boolean result) {
-            // Don't bother about the failure. Better luck next time!
+            if (errorArtists != null && errorArtists.size() > 0) {
+                // TODO make notification configurable through properties?
+                //Notification.notifyWarning(LoadNewReleasesService.this,
+                 //   R.string.LoadNewReleasesBinding_finishedWithErrors,
+                 //   errorArtists.size(), totalArtists);
+
+                    errorArtists.size(), totalArtists);
+                LOG.warn("{} different exceptions while loading releases: {}", exceptions.size(),
+                    exceptions);
+            }
         }
 
         @Override
         public void onProgressFailed(Artist entity, int progress, int max,
-                Boolean result, Throwable potentialException) {
-            if (potentialException != null) {
-                LOG.error(potentialException.getMessage(), potentialException);
-                if (potentialException instanceof ServiceException) {
-                    Notification
-                            .notifyWarning(
-                                    LoadNewReleasesService.this,
-                                    LoadNewReleasesService.this
-                                            .getString(R.string.LoadNewReleasesBinding_errorFindingReleases)
-                                            + potentialException
-                                                    .getLocalizedMessage());
-                } else {
-                    Notification
-                            .notifyWarning(
-                                    LoadNewReleasesService.this,
-                                    LoadNewReleasesService.this
-                                            .getString(R.string.LoadNewReleasesBinding_errorFindingReleasesGeneric)
-                                            + potentialException.getClass()
-                                                    .getSimpleName());
+                                     Boolean result, Throwable potentialException) {
+            if (potentialException == null) {
+                return;
+            }
+            LOG.error(potentialException.getMessage(), potentialException);
+            if (potentialException instanceof ServiceException) {
+                Notification.notifyWarning(LoadNewReleasesService.this,
+                    getString(R.string.LoadNewReleasesBinding_errorFindingReleases)
+                        + potentialException.getLocalizedMessage());
+            } else {
+                Notification.notifyWarning(LoadNewReleasesService.this,
+                    getString(R.string.LoadNewReleasesBinding_errorFindingReleasesGeneric)
+                        + potentialException.getClass().getSimpleName());
 
-                }
             }
         }
     }
@@ -531,9 +543,7 @@ public class LoadNewReleasesService extends WakefulService {
 
         /**
          * Schedule this task to run regularly.
-         * 
-         * @param context
-         * @param intervalDays
+         *
          * @param triggerAt
          *            if <code>null</code>, the first start will be now +
          *            <code>intervalDays</code>
