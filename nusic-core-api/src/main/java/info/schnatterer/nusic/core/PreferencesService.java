@@ -155,4 +155,9 @@ public interface PreferencesService {
      *         starting the the app.
      */
     String getLogLevelLogCat();
+
+    /**
+     * @return {@code true} if the user wants to be informed of errors during refresh
+     */
+    boolean isNotifyRefreshErrors();
 }

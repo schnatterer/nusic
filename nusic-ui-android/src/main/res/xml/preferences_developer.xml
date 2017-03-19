@@ -41,4 +41,8 @@
             android:targetClass="info.schnatterer.nusic.android.activities.OpenLogActivity"
             android:targetPackage="info.schnatterer.nusic" />
     </Preference>
+    <SwitchPreference
+        android:defaultValue="@bool/preferences_default_notify_refresh_errors"
+        android:key="@string/preferences_key_notify_refresh_errors"
+        android:title="@string/preferences_title_notify_refresh_errors"/>
 </PreferenceScreen>

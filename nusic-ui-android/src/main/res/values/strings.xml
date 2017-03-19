@@ -119,6 +119,7 @@
     <string name="preferences_summary_loglevel_logcat">Determine which log statements are forwarded to LogCat.</string>
     <string name="preferences_title_loglevel_file">File Log Level</string>
     <string name="preferences_summary_loglevel_file">Determine which log statements are forwarded to the log file.</string>
+    <string name="preferences_title_notify_refresh_errors">Show errors during refresh</string>
 
     <!-- (Error) messages -->
     <string name="GenericError">Something almost impossible has happened: %1s!</string>

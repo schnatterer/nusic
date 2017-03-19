@@ -91,4 +91,6 @@
         <item>ERROR</item>
         <item>OFF</item>
     </string-array>
+    <string name="preferences_key_notify_refresh_errors" translatable="false">notifyRefreshErrors</string>
+    <bool name="preferences_default_notify_refresh_errors" translatable="false">false</bool>
 </resources>

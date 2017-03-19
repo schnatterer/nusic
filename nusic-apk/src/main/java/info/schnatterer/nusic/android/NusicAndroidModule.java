@@ -122,6 +122,8 @@ public class NusicAndroidModule extends AbstractModule {
         bind(String.class).annotatedWith(Names.named("PreferencesDefaultLogLevelFile")).toInstance(application.getString(R.string.preferences_default_log_level_file));
         bind(String.class).annotatedWith(Names.named("PreferencesKeyLogLevelLogCat")).toInstance(application.getString(R.string.preferences_key_log_level_logcat));
         bind(String.class).annotatedWith(Names.named("PreferencesDefaultLogLevelLogCat")).toInstance(application.getString(R.string.preferences_default_log_level_logcat));
+        bind(String.class).annotatedWith(Names.named("PreferencesKeyNotifyRefreshErrors")).toInstance(application.getString(R.string.preferences_key_notify_refresh_errors));
+        bind(Boolean.class).annotatedWith(Names.named("PreferencesDefaultNotifyRefreshErrors")).toInstance((application.getResources().getBoolean(R.bool.preferences_default_notify_refresh_errors)));
     }
 
     /**

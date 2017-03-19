@@ -119,6 +119,7 @@
     <string name="preferences_summary_loglevel_logcat">Festlegen welche Log Meldungen an LogCat weiter gereicht werden. </string>
     <string name="preferences_title_loglevel_file">File Log Level</string>
     <string name="preferences_summary_loglevel_file">Festlegen welche Log Meldungen in die Logdatei gespeichert werden.</string>
+    <string name="preferences_title_notify_refresh_errors">Fehler bei Aktualisierung anzeigen</string>
 
     <!-- (Error) messages -->
     <string name="GenericError">Etwas beinahe unmögliches ist geschehen: %1s!</string>

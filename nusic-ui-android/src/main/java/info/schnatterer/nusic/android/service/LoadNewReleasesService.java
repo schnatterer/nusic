@@ -473,7 +473,6 @@ public class LoadNewReleasesService extends WakefulService {
             ArtistProgressListener {
         private int totalArtists = 0;
         private List<Artist> errorArtists;
-        // Save exceptions as strings to get rid of duplicates easily
         private Set<String> exceptions;
 
         @Override
@@ -503,12 +502,12 @@ public class LoadNewReleasesService extends WakefulService {
 
         @Override
         public void onProgressFinished(Boolean result) {
-            if (errorArtists != null && errorArtists.size() > 0) {
-                // TODO make notification configurable through properties?
-                //Notification.notifyWarning(LoadNewReleasesService.this,
-                 //   R.string.LoadNewReleasesBinding_finishedWithErrors,
-                 //   errorArtists.size(), totalArtists);
+            if (errorArtists != null && errorArtists.size() > 0 && preferencesService.isNotifyRefreshErrors()) {
+                Notification.notifyWarning(LoadNewReleasesService.this,
+                    R.string.LoadNewReleasesBinding_finishedWithErrors,
+                   errorArtists.size(), totalArtists);
 
+                LOG.warn("Loading releases finished with errors for {}/{} artists",
                     errorArtists.size(), totalArtists);
                 LOG.warn("{} different exceptions while loading releases: {}", exceptions.size(),
                     exceptions);

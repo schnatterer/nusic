@@ -136,6 +136,13 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
     @Named("PreferencesDefaultLogLevelLogCat")
     private String DEFAULT_LOG_LEVEL_LOGCAT;
 
+    @Inject
+    @Named("PreferencesKeyNotifyRefreshErrors")
+    private String KEY_NOTIFY_REFRESH_ERRORS;
+    @Inject
+    @Named("PreferencesDefaultNotifyRefreshErrors")
+    private boolean DEFAULT_NOTIFY_REFRESH_ERRORS;
+
     private final SharedPreferences sharedPreferences;
 
     private Set<PreferenceChangedListener> preferenceChangedListeners = new HashSet<PreferenceChangedListener>();
@@ -313,5 +320,10 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
     public String getLogLevelLogCat() {
         return sharedPreferences.getString(KEY_LOG_LEVEL_LOGCAT,
                 DEFAULT_LOG_LEVEL_LOGCAT);
+    }
+
+    @Override
+    public boolean isNotifyRefreshErrors() {
+        return sharedPreferences.getBoolean(KEY_NOTIFY_REFRESH_ERRORS, DEFAULT_NOTIFY_REFRESH_ERRORS);
     }
 }

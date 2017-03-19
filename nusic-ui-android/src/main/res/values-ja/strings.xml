@@ -119,6 +119,7 @@
     <!-- TODO translate this --><string name="preferences_summary_loglevel_logcat">Determine which log statements are forwarded to LogCat.</string>
     <!-- TODO translate this --><string name="preferences_title_loglevel_file">File Log Level</string>
     <!-- TODO translate this --> <string name="preferences_summary_loglevel_file">Determine which log statements are forwarded to the log file. Note: Must be >= Root Log Level</string>
+    <!-- TODO translate this --> <string name="preferences_title_notify_refresh_errors">Show errors during refresh</string>
 
     <!-- (Error) messages -->
     <string name="GenericError">ほとんど実行できないことが発生しました: %1s!</string>
