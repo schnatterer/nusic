@@ -27,13 +27,17 @@ import roboguice.activity.RoboActionBarActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 /**
  * Activity that loads a website from an URL and displays it in a text view.
- * 
+ *
  * The URI to the website that is displayed can be passed to the activity using
  * {@link Intent#setData(android.net.Uri)}.<br/>
  * <br/>
@@ -44,7 +48,7 @@ import android.webkit.WebViewClient;
  * preferred email app is initialized with the parameters passed to this
  * activity. Note that any <code>@string/</code> parameters are localized before
  * starting the new activity.
- * 
+ *
  * @author schnatterer
  */
 public class NusicWebView extends RoboActionBarActivity {
@@ -70,10 +74,6 @@ public class NusicWebView extends RoboActionBarActivity {
             startActivity(send);
             finish();
         } else {
-            /* Activate JavaScript */
-            // webView.getSettings().setJavaScriptEnabled(true);
-
-            // webView.getSettings().setLoadWithOverviewMode(true);
             webView.getSettings().setUseWideViewPort(true);
             webView.getSettings().setBuiltInZoomControls(true);
 
@@ -94,6 +94,15 @@ public class NusicWebView extends RoboActionBarActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.webview, menu);
+
+        createShareIntent(menu, R.id.action_share);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             // When the back arrow in the header (left of the icon) is clicked,
@@ -102,4 +111,17 @@ public class NusicWebView extends RoboActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    /**
+     * Creates a share intent for the URL of the view for a specific {@code menuItem}.
+     */
+    private void createShareIntent(Menu menu, int menuItem) {
+        MenuItem shareItem = menu.findItem(menuItem);
+        ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+        shareActionProvider.setShareIntent(
+            new Intent(Intent.ACTION_SEND)
+                .setType("text/plain")
+                .putExtra(Intent.EXTRA_TEXT, getIntent().getData().toString()));
+    }
+
 }
