@@ -44,7 +44,6 @@ import org.slf4j.LoggerFactory;
 
 import roboguice.fragment.RoboFragment;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -67,14 +66,14 @@ import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 /**
  * Fragment that loads a list of releases from the local database and displays
  * it.
- * 
+ *
  * Which releases are queried and which loader is used can be decided in the
  * intent that create the fragment using the following extra.
- * 
+ *
  * <ul>
  * <li>{@value #EXTRA_LOADER_ID} the ID of the underlying loader</li>
  * </ul>
- * 
+ *
  * @author schnatterer
  *
  */
@@ -140,10 +139,14 @@ public class ReleaseListFragment extends RoboFragment {
                     long id) {
                 Release release = (Release) releasesListView
                         .getItemAtPosition(position);
-                Intent launchBrowser = new Intent("", Uri.parse(release
-                        .getMusicBrainzUri()), getActivity(),
-                        NusicWebView.class);
-                startActivity(launchBrowser);
+                Intent nusicWebView = new Intent(getActivity(), NusicWebView.class);
+                nusicWebView.putExtra(NusicWebView.EXTRA_URL, release.getMusicBrainzUri());
+                nusicWebView.putExtra(NusicWebView.EXTRA_SUBJECT, createNewReleaseText(release));
+                startActivity(nusicWebView);
+            }
+
+            private String createNewReleaseText(Release release) {
+                return release.getArtist().getArtistName() + " - " + release.getReleaseName();
             }
 
         });
@@ -225,9 +228,9 @@ public class ReleaseListFragment extends RoboFragment {
     /**
      * Handles callbacks from the loader manager for {@link ReleaseListFragment}
      * .
-     * 
+     *
      * @author schnatterer
-     * 
+     *
      */
     private class ReleaseLoaderCallbacks implements
             LoaderManager.LoaderCallbacks<AsyncResult<List<Release>>> {

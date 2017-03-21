@@ -26,6 +26,7 @@
     <string name="action_refresh">リリースの更新</string>
     <string name="action_settings">設定</string>
     <string name="action_settings_developer">開発者設定</string>
+    <!-- TODO translate this --><string name="action_share">Share</string>
 
     <string name="releaseListMenu_HideRelease">リリースを非表示</string>
     <string name="releaseListMenu_HideAllByArtist">アーティスト別にすべて非表示</string>

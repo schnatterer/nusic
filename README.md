@@ -64,12 +64,12 @@ What kind of permission does nusic require and why does it require them?
 In order to build the APK use the [SDK manager](https://developer.android.com/tools/help/sdk-manager.html) to download the SDK Version specified in the [parent project's build.gradle](build.gradle) and deploy android to your local maven repo using [maven-android-sdk-deployer](https://github.com/mosabua/maven-android-sdk-deployer). Also make sure to set your `ANDROID_HOME` environment variable to `sdk` folder of your Android SDK.
 Then just run  
 ```sh
-gradle clean check assembleDebug
+gradlew clean check assembleDebug
 ```
 to compile from scratch, run the tests and create a debug-signed APK, or run  
 
 ```sh
-gradle clean check assembleRelease
+gradlew clean check assembleRelease
 ```
 to create a signed APK, using an custom keystore.  
 
