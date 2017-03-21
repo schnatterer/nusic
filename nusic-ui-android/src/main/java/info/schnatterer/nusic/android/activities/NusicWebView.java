@@ -53,6 +53,17 @@ import android.webkit.WebViewClient;
  */
 public class NusicWebView extends RoboActionBarActivity {
 
+    /**
+     * ID of the URL that is shown by this acivity. Its a {@link String} extra passed to this
+     * activity via {@link Intent}.
+     */
+    public static final String EXTRA_URL = NusicWebView.class.getCanonicalName() + ".url";
+    /**
+     * ID of the subject that is added to the EXTRA_URL parameter when pressing the share button in
+     * this activity. Its a {@link String} extra passed to this activity via {@link Intent}.
+     */
+    public static final String EXTRA_SUBJECT = NusicWebView.class.getCanonicalName() + ".title";
+
     /** "Protocol" prefix of a link for E-mails. */
     private static final String MAILTO_LINK = "mailto:";
 
@@ -65,7 +76,7 @@ public class NusicWebView extends RoboActionBarActivity {
         // Display the back arrow in the header (left of the icon)
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String url = getIntent().getData().toString();
+        String url = getExtraOrEmpty(EXTRA_URL);
         if (url.startsWith(MAILTO_LINK)) {
             Intent send = new Intent(Intent.ACTION_SENDTO);
             Uri uri = Uri.parse(TextUtil.replaceResourceStrings(this, url));
@@ -105,8 +116,7 @@ public class NusicWebView extends RoboActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            // When the back arrow in the header (left of the icon) is clicked,
-            // "go back one activity"
+            // When the back arrow in the header (left of the icon) is clicked,  "go back one activity"
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -121,7 +131,16 @@ public class NusicWebView extends RoboActionBarActivity {
         shareActionProvider.setShareIntent(
             new Intent(Intent.ACTION_SEND)
                 .setType("text/plain")
-                .putExtra(Intent.EXTRA_TEXT, getIntent().getData().toString()));
+                .putExtra(Intent.EXTRA_SUBJECT, getExtraOrEmpty(EXTRA_SUBJECT))
+                .putExtra(Intent.EXTRA_TEXT, getExtraOrEmpty(EXTRA_URL)));
     }
 
+    private String getExtraOrEmpty(String extra) {
+        String stringExtra = getIntent().getStringExtra(extra);
+        if (stringExtra != null) {
+            return stringExtra;
+        } else {
+            return "";
+        }
+    }
 }

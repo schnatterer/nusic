@@ -1,5 +1,9 @@
 TODOs - Features, enhancements, refactoring, ...
 
+- Modernize UI: Use Snackbar instead of Toast
+- Modernize UI: Provide Burger Menu for List entries --> Intuitive Way of hiding releases
+
+
 - Setup Github Pull Request Jenkins Plugin: https://www.theguild.nl/building-github-pull-requests-with-jenkins
 - Setup Master Build in Jenkins with SonarQube
 - No longer check artists that were removed
