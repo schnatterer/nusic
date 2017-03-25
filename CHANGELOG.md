@@ -1,6 +1,10 @@
 nusic Changelog
 =========
 
+**v.3.2.0** - 2017/03/25
+
+* Added Share button to Release view 
+
 **v.3.1.0** - 2016/07/08
 
 * Added Japanese translation (thanks, naofum!)
