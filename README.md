@@ -87,7 +87,7 @@ For passing the credentials for this keystore via the command line there are fou
 2. Pass them as command line properties, e.g.  
 
    ```sh
-   gradle clean check assembleRelease -PsignAlias="the key's alias within the keystore"
+   gradlew clean check assembleRelease -PsignAlias="the key's alias within the keystore"
    ```  
 3. Pass them as environment variables, e.g.  
 
@@ -97,7 +97,7 @@ For passing the credentials for this keystore via the command line there are fou
 4. or pass them as system property, e.g.
 
    ```sh
-   gradle clean check assembleRelease -Dorg.gradle.project.signKeystore=signAlias="the key's alias within the keystore"
+   gradlew clean check assembleRelease -Dorg.gradle.project.signKeystore=signAlias="the key's alias within the keystore"
    ```
 
 
@@ -112,14 +112,14 @@ TODO Automate this, e.g. via Jenkins
 - Set Version  
 
    ```sh
-   gradle setVersion -PnewVersion=2.1.1
+   gradlew setVersion -PnewVersion=2.1.1
    ```
 - Update [changelog](CHANGELOG.md)
 - Commit  
 
     ```sh
     git add .
-    git commit -m 'Prepare release v.2.1.1'
+    git commit -m "Prepare release v.2.1.1"
     ```
 - Finish release & Tag (+ tag message)
 
@@ -129,7 +129,7 @@ TODO Automate this, e.g. via Jenkins
 - Set next dev version & commit
 
     ```sh
-    gradle setVersion -PnewVersion=2.1.2-SNAPSHOT
+    gradlew setVersion -PnewVersion=2.1.2-SNAPSHOT
     git add .
     git commit -m "Prepare for next development iteration v.2.1.2-SNAPSHOT"
     ```
@@ -137,7 +137,7 @@ TODO Automate this, e.g. via Jenkins
 
     ```sh
     git checkout tags/v.2.1.1
-    gradle clean check assembleRelease
+    gradlew clean check assembleRelease
     ```
 - Push all branches & tags
 
