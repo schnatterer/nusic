@@ -131,6 +131,8 @@
 
     <string name="TextAssetActivity_errorLoadingFile">Error load text file</string>
 
+    <string name="NusicWebViewActivity_sharedViaNusic">Shared via nusic android app</string>
+
     <string name="LoadNewReleasesBinding_errorFindingReleases">Refreshing releases failed: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">Unbelievable error while trying to refresh releases: </string>
     <string name="LoadNewReleasesBinding_finishedWithErrors">Updating releases failed for %1$d of %2$d artists</string>

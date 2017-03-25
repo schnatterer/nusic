@@ -2,7 +2,7 @@ TODOs - Features, enhancements, refactoring, ...
 
 - Modernize UI: Use Snackbar instead of Toast
 - Modernize UI: Provide Burger Menu for List entries --> Intuitive Way of hiding releases
-
+- Drop Support < Android 4.0 (minSdkVersion 14), Clean Up Code
 
 - Setup Github Pull Request Jenkins Plugin: https://www.theguild.nl/building-github-pull-requests-with-jenkins
 - Setup Master Build in Jenkins with SonarQube

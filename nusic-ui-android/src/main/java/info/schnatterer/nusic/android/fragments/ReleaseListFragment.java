@@ -22,7 +22,7 @@
 package info.schnatterer.nusic.android.fragments;
 
 import info.schnatterer.nusic.Constants.Loaders;
-import info.schnatterer.nusic.android.activities.NusicWebView;
+import info.schnatterer.nusic.android.activities.NusicWebViewActivity;
 import info.schnatterer.nusic.android.adapters.ReleaseListAdapter;
 import info.schnatterer.nusic.android.loaders.AsyncResult;
 import info.schnatterer.nusic.android.loaders.ReleaseLoader;
@@ -139,16 +139,10 @@ public class ReleaseListFragment extends RoboFragment {
                     long id) {
                 Release release = (Release) releasesListView
                         .getItemAtPosition(position);
-                Intent nusicWebView = new Intent(getActivity(), NusicWebView.class);
-                nusicWebView.putExtra(NusicWebView.EXTRA_URL, release.getMusicBrainzUri());
-                nusicWebView.putExtra(NusicWebView.EXTRA_SUBJECT, createNewReleaseText(release));
-                startActivity(nusicWebView);
+                startActivity(new Intent(getActivity(), NusicWebViewActivity.class)
+                    .putExtra(NusicWebViewActivity.EXTRA_URL, release.getMusicBrainzUri())
+                    .putExtra(NusicWebViewActivity.EXTRA_SUBJECT, createNewReleaseText(release)));
             }
-
-            private String createNewReleaseText(Release release) {
-                return release.getArtist().getArtistName() + " - " + release.getReleaseName();
-            }
-
         });
         releasesListView.setAdapter(releasesListViewAdapter);
         releasesListView.setOnScrollListener(new PauseOnScrollListener(
@@ -164,13 +158,10 @@ public class ReleaseListFragment extends RoboFragment {
     public void onCreateContextMenu(ContextMenu menu, View v,
             ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        // if (v.getId() == R.id.releasesListView) {
         MenuInflater inflater = getActivity().getMenuInflater();
         AdapterView.AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
-        Release release = (Release) releasesListView
-                .getItemAtPosition(info.position);
-        menu.setHeaderTitle(release.getArtistName() + " - "
-                + release.getReleaseName());
+        Release release = (Release) releasesListView.getItemAtPosition(info.position);
+        menu.setHeaderTitle(createNewReleaseText(release));
 
         inflater.inflate(R.menu.release_list_menu, menu);
     }
@@ -222,7 +213,10 @@ public class ReleaseListFragment extends RoboFragment {
                 releasesTextViewNoneFound.setVisibility(View.GONE);
             }
         });
+    }
 
+    private String createNewReleaseText(Release release) {
+        return release.getArtist().getArtistName() + " - " + release.getReleaseName();
     }
 
     /**

@@ -189,7 +189,8 @@ dependencies {
         libraries.junit,
         libraries.hamcrest,
         libraries.mockito,
-        libraries.robolectric
+        libraries.robolectric,
+        libraries.opengl
     )
 }
 

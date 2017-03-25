@@ -131,6 +131,8 @@
 
     <string name="TextAssetActivity_errorLoadingFile">テキストファイルの読み込みエラー</string>
 
+    <!-- TODO translate this --> <string name="NusicWebViewActivity_sharedViaNusic">Shared via nusic android app</string>
+
     <string name="LoadNewReleasesBinding_errorFindingReleases">リリースの更新に失敗しました: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">リリースを更新しようとした時に信じられないエラーが発生しました: </string>
     <string name="LoadNewReleasesBinding_finishedWithErrors">%1$d / %2$d アーティストのリリースの更新に失敗しました</string>

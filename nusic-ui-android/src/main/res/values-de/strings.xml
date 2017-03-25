@@ -131,6 +131,8 @@
 
     <string name="TextAssetActivity_errorLoadingFile">Fehler beim Laden der Textdatei</string>
 
+    <string name="NusicWebViewActivity_sharedViaNusic">Geteilt mit der nusic android app</string>
+
     <string name="LoadNewReleasesBinding_errorFindingReleases">Aktualisieren der Alben fehlgeschlagen: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">Unfassbarer Fehler beim Aktualiseren der Alben: </string>
     <string name="LoadNewReleasesBinding_finishedWithErrors">Update der Alben für %1$d Interpreten von %2$d fehlgeschlagen</string>

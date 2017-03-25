@@ -27,6 +27,8 @@ import roboguice.activity.RoboActionBarActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
@@ -49,20 +51,19 @@ import android.webkit.WebViewClient;
  * activity. Note that any <code>@string/</code> parameters are localized before
  * starting the new activity.
  *
- * @author schnatterer
  */
-public class NusicWebView extends RoboActionBarActivity {
+public class NusicWebViewActivity extends RoboActionBarActivity {
 
     /**
      * ID of the URL that is shown by this acivity. Its a {@link String} extra passed to this
      * activity via {@link Intent}.
      */
-    public static final String EXTRA_URL = NusicWebView.class.getCanonicalName() + ".url";
+    public static final String EXTRA_URL = NusicWebViewActivity.class.getCanonicalName() + ".url";
     /**
      * ID of the subject that is added to the EXTRA_URL parameter when pressing the share button in
      * this activity. Its a {@link String} extra passed to this activity via {@link Intent}.
      */
-    public static final String EXTRA_SUBJECT = NusicWebView.class.getCanonicalName() + ".title";
+    public static final String EXTRA_SUBJECT = NusicWebViewActivity.class.getCanonicalName() + ".title";
 
     /** "Protocol" prefix of a link for E-mails. */
     private static final String MAILTO_LINK = "mailto:";
@@ -109,7 +110,9 @@ public class NusicWebView extends RoboActionBarActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.webview, menu);
 
-        createShareIntent(menu, R.id.action_share);
+        MenuItem shareItem = menu.findItem(R.id.action_share);
+        ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+        shareActionProvider.setShareIntent(createShareIntent());
         return true;
     }
 
@@ -125,16 +128,24 @@ public class NusicWebView extends RoboActionBarActivity {
     /**
      * Creates a share intent for the URL of the view for a specific {@code menuItem}.
      */
-    private void createShareIntent(Menu menu, int menuItem) {
-        MenuItem shareItem = menu.findItem(menuItem);
-        ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
-        shareActionProvider.setShareIntent(
-            new Intent(Intent.ACTION_SEND)
+    @VisibleForTesting
+    Intent createShareIntent() {
+           return new Intent(Intent.ACTION_SEND)
                 .setType("text/plain")
                 .putExtra(Intent.EXTRA_SUBJECT, getExtraOrEmpty(EXTRA_SUBJECT))
-                .putExtra(Intent.EXTRA_TEXT, getExtraOrEmpty(EXTRA_URL)));
+                .putExtra(Intent.EXTRA_TEXT, createShareText());
     }
 
+    @NonNull
+    private String createShareText() {
+        String url = getExtraOrEmpty(EXTRA_URL);
+        if (!"".equals(url)) {
+            url += "\n" + getString(R.string.NusicWebViewActivity_sharedViaNusic);
+        }
+        return url;
+    }
+
+    @NonNull
     private String getExtraOrEmpty(String extra) {
         String stringExtra = getIntent().getStringExtra(extra);
         if (stringExtra != null) {
