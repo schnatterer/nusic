@@ -1,11 +1,14 @@
 nusic - your new music
 =====
+
 | Branch        | Build Status  | Quality Gate |
 | ------------- |-------------  | ------------ |
 | Develop       | [![Build Status Develop](https://jenkins.schnatterer.info/job/nusic-develop/badge/icon)](https://jenkins.schnatterer.info/job/nusic-develop/)  |[![Quality Gates Develop](https://sonarqube.schnatterer.info/api/badges/gate?key=info.schnatterer.nusic:nusic-develop)](https://sonarqube.schnatterer.info/dashboard/index/279?did=1) |
 | Features       | [![Build Status Features](https://jenkins.schnatterer.info/job/nusic-features/badge/icon)](https://jenkins.schnatterer.info/job/nusic-features/)  | |
 
-
+  [![License](https://img.shields.io/github/license/schnatterer/nusic.svg)](LICENSE.txt)
+  [<img alt="powered by openshift" align="right" src="https://www.openshift.com/images/logos/powered_by_openshift.png"/>](https://www.openshift.com/)
+  
 Never again miss a new album release of your favorite artists - always stay informed by nusic.
 
 <img alt="nusic icon" src="https://raw.githubusercontent.com/schnatterer/nusic/develop/resources/ic_launcher_highres.png" width="200" height="200" />
@@ -62,12 +65,12 @@ What kind of permission does nusic require and why does it require them?
 In order to build the APK use the [SDK manager](https://developer.android.com/tools/help/sdk-manager.html) to download the SDK Version specified in the [parent project's build.gradle](build.gradle) and deploy android to your local maven repo using [maven-android-sdk-deployer](https://github.com/mosabua/maven-android-sdk-deployer). Also make sure to set your `ANDROID_HOME` environment variable to `sdk` folder of your Android SDK.
 Then just run  
 ```sh
-gradle clean check assembleDebug
+gradlew clean check assembleDebug
 ```
 to compile from scratch, run the tests and create a debug-signed APK, or run  
 
 ```sh
-gradle clean check assembleRelease
+gradlew clean check assembleRelease
 ```
 to create a signed APK, using an custom keystore.  
 
@@ -142,6 +145,7 @@ TODO Automate this, e.g. via Jenkins
     git push --all
     git push --tags
     ```
+- Update [F-Droid metadata](https://gitlab.com/fdroid/fdroiddata/blob/master/metadata/info.schnatterer.nusic.txt) by adding new release to the metadata (e.g. via [this fork](https://gitlab.com/schnatterer/fdroiddata)) and [creating a merge request](https://gitlab.com/schnatterer/fdroiddata/merge_requests/new) 
 - Upload artifact: [Github](https://github.com/schnatterer/nusic/releases), [Google Play](https://play.google.com/apps/publish/)
 - Add changelog to github release page: https://github.com/schnatterer/nusic/releases/tag/v.2.1.1
 - Add changelog to google play entry

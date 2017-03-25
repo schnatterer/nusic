@@ -25,6 +25,7 @@ import nl.javadude.gradle.plugins.license.License
 
 apply plugin: "com.android.library"
 apply plugin: 'de.undercouch.download'
+apply plugin: 'jacoco-android'
 
 def assetsDir = "src/main/assets/"
 def resDir = "src/main/res/"
@@ -79,12 +80,14 @@ sonarqube {
          * that those methods are never used and they should be removed. Same applies for libraries where parent classes
          * are required to understand how a class works and is used. */
         def libraries = project.android.sdkDirectory.getPath() + "/platforms/android-${nusicCompileSdkVersion}/android.jar," +
-                "build/intermediates/exploded-aar/**/*.jar,$compileDependencies"
+            "build/intermediates/exploded-aar/**/*.jar,$compileDependencies"
 
         // See https://github.com/SonarSource/sonar-examples/blob/master/projects/languages/android/android-sonarqube-gradle/app/build.gradle
         // and https://room-15.github.io/blog/2016/01/21/Static-code-quality-measurements-with-SonarQube-Jacoco-and-UnitTests/
         property "sonar.sourceEncoding", nusicSourceEncoding
         property "sonar.sources", "src/main/java"
+        property "sonar.tests", "src/test/java"
+
         // first defines where the java files are, the second where the xml files are
         property "sonar.exclusions", "build/**,**/*.png"
         property "sonar.import_unknown_files", true
@@ -94,7 +97,6 @@ sonarqube {
         property "sonar.java.binaries", "build/intermediates/classes/release"
         property "sonar.java.libraries", libraries
 
-        property "sonar.tests", "src/test/java"
         property "sonar.java.test.binaries", "build/intermediates/classes/release"
         property "sonar.java.test.libraries", libraries
 
@@ -125,7 +127,7 @@ task markdownToHtml << {
     inputFiles.each {
         def inputFile = new File(sourceDir, it)
         new File(outputDir, inputFile.name.replaceFirst(~/\.[^\.]+$/, '') + '.html').withWriter
-                { w -> w.write(pdp.markdownToHtml(inputFile.text)) }
+            { w -> w.write(pdp.markdownToHtml(inputFile.text)) }
     }
 
     //project.ext.contributors = pdp.markdownToHtml(new File(sourceDir, "contributors.md").text)
@@ -163,28 +165,38 @@ task downloadPrivacyPolicy(type: Download) {
 dependencies {
     // Nusic modules
     compile(
-            project(":nusic-data-api"),
-            project(":nusic-core-api"),
-            project(":nusic-util")
+        project(":nusic-data-api"),
+        project(":nusic-core-api"),
+        project(":nusic-util")
     )
 
     // External dependencies
     compile(
-            "com.nostra13.universalimageloader:universal-image-loader:1.9.2",
-            libraries.commonsIo,
-            libraries.roboguice,
-            libraries.slf4j,
-            // An explicit log implementation is needed at compile time, because the log level is set by the app
-            libraries.logback,
-            libraries.androidDesign
+        "com.nostra13.universalimageloader:universal-image-loader:1.9.2",
+        libraries.commonsIo,
+        libraries.roboguice,
+        libraries.slf4j,
+        // An explicit log implementation is needed at compile time, because the log level is set by the app
+        libraries.logback,
+        libraries.logbackAndroidUtils,
+        libraries.androidDesign
     )
     // Enable annotation database to improve performance
     provided libraries.roboblender
 
     // Test dependencies
     testCompile(
-            libraries.junit,
-            libraries.robolectric,
-            libraries.robolectricAndroid
+        libraries.junit,
+        libraries.hamcrest,
+        libraries.mockito,
+        libraries.robolectric,
+        libraries.opengl
     )
+}
+
+
+jacocoAndroidUnitTestReport {
+    csv.enabled true
+    html.enabled true
+    xml.enabled true
 }

@@ -34,7 +34,7 @@ public class NusicDatabaseSqliteTest {
     // Provider<Context> contextProviderMock = new Provider<Context>() {
     // @Override
     // public Context get() {
-    // return Robolectric.application;
+    // return RuntimeEnvironment.application;
     // }
     // };
     // NusicDatabaseSqlite.contextProvider = contextProviderMock;

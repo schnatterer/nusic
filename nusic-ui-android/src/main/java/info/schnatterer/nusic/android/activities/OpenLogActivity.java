@@ -21,7 +21,7 @@
  */
 package info.schnatterer.nusic.android.activities;
 
-import info.schnatterer.nusic.android.util.Logs;
+import info.schnatterer.logbackandroidutils.Logs;
 import info.schnatterer.nusic.ui.R;
 import roboguice.activity.RoboActionBarActivity;
 import android.content.Intent;
@@ -33,7 +33,7 @@ import android.support.v4.content.FileProvider;
  * Sends an intent that contains the newest log file as <code>text/plain</code>.
  * Note that you need to set up the {@link FileProvider} in your android
  * manifest. For example: <br/>
- * 
+ *
  * <pre>
  *    &lt;!-- Expose log files for email clients --&gt;
  *    &lt;provider
@@ -46,7 +46,7 @@ import android.support.v4.content.FileProvider;
  *             android:resource=&quot;@xml/logpath&quot; /&gt;
  *     &lt;/provider&gt;
  * </pre>
- * 
+ *
  * @author schnatterer
  *
  */

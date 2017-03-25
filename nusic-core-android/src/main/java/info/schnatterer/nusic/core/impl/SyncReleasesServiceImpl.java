@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation of {@link SyncReleasesService}.
- * 
+ *
  * @author schnatterer
  *
  */
@@ -89,74 +89,86 @@ public class SyncReleasesServiceImpl implements SyncReleasesService {
 
     private void refreshReleases(Date startDate, Date endDate) {
 
-        // TODO create service for checking wifi and available internet
-        // connection
+        // TODO create service for checking wifi and available internet connection
 
-        Artist[] artists;
+        Artist[] artists = queryArtists();
+        if (artists == null) {
+            return;
+        }
+
+        progressUpdater.progressStarted(artists.length);
+        ServiceException potentialException = null;
+        for (int i = 0; i < artists.length; i++) {
+
+            try {
+                potentialException = processArtist(artists, i, startDate, endDate);
+
+                if (potentialException != null &&
+                    potentialException.getCause() instanceof DatabaseException) {
+                    // Allow for displaying errors to the user.
+                    progressUpdater.progressFailed(artists[i], i + 1,
+                        new AndroidServiceException(CoreMessageKey.ERROR_WRITING_TO_DB, potentialException), null);
+                    return;
+                }
+            } catch (Exception e) {
+                LOG.warn("Unexpected exception during sync, cancelling sync", e);
+                progressUpdater.progressFailed(artists[i], i + 1, e, null);
+                return;
+            }
+
+            progressUpdater.progress(artists[i], i + 1, potentialException);
+        }
+        progressUpdater.progressFinished(true);
+
+    }
+
+    /**
+     * Finds releases for an artists and stores them. Logs {@link ServiceException}s and propagates
+     * them to the {@link #progressUpdater}.
+     * @return any {@link ServiceException} that might have occurred, or {@code null} if none occurred
+     */
+    private ServiceException processArtist(Artist[] artists, int i, Date startDate, Date endDate) {
+        Artist artist = artists[i];
+        /* TODO find out if its more efficient to concat all artist in one big query and then
+         * process it page by page (keep URL limit of 2048 chars in mind) */
+        try {
+            artist = remoteMusicDatabaseService.findReleases(artist, startDate, endDate);
+            if (artist == null) {
+                LOG.warn("Artist {} of {} is null.", i, artists.length);
+            } else if (artist.getReleases().size() > 0) {
+                artistService.saveOrUpdate(artist);
+                // After saving, release memory for releases
+                artist.setReleases(null);
+            }
+            // Release memory for artist
+            artists[i] = null;
+
+        } catch (ServiceException e) {
+            LOG.warn(e.getMessage(), e.getCause());
+            return e;
+        }
+        return null;
+    }
+
+    /**
+     * Queries artists from device. Logs all errors and propagates to {@link #progressUpdater}.
+     *
+     * @return a list of artists. Empty list if none found, <code>null</code> on error.
+     */
+    private Artist[] queryArtists() {
+        Artist[] artists = null;
         try {
             artists = deviceMusicService.getArtists();
             if (artists == null) {
                 LOG.warn("No artists were returned. No music files on device?");
-                return;
+                artists = new Artist[0];
             }
-
-            progressUpdater.progressStarted(artists.length);
-            ServiceException potentialException = null;
-            for (int i = 0; i < artists.length; i++) {
-                Artist artist = artists[i];
-                /*
-                 * TODO find out if its more efficient to concat all artist in
-                 * one big query and then process it page by page (keep URL
-                 * limit of 2048 chars in mind)
-                 */
-                try {
-                    artist = remoteMusicDatabaseService.findReleases(artist,
-                            startDate, endDate);
-                    if (artist == null) {
-                        LOG.warn("Artist " + i + " of " + artists.length
-                                + " is null.");
-                        continue;
-                    }
-
-                    if (artist.getReleases().size() > 0) {
-                        artistService.saveOrUpdate(artist);
-                        // After saving, release memory for releases
-
-                        // for (Release release : artist.getReleases()) {
-                        // // clear reference from release to artist as well
-                        // release.setArtist(null);
-                        // }
-                        artist.setReleases(null);
-                    }
-                    // Release memory for artist
-                    artists[i] = null;
-
-                } catch (ServiceException e) {
-                    LOG.warn(e.getMessage(), e.getCause());
-                    // Allow for displaying errors to the user.
-                    if (e.getCause() instanceof DatabaseException) {
-                        progressUpdater.progressFailed(artist, i + 1,
-                                new AndroidServiceException(
-                                        CoreMessageKey.ERROR_WRITING_TO_DB, e),
-                                null);
-                        return;
-                    }
-                    potentialException = e;
-                } catch (Exception e) {
-                    LOG.warn("", e);
-                    progressUpdater.progressFailed(artist, i + 1, e, null);
-                    return;
-                }
-
-                progressUpdater.progress(artist, i + 1, potentialException);
-            }
-            progressUpdater.progressFinished(true);
-            return;
         } catch (Exception e) {
-            LOG.warn("", e);
+            LOG.warn("Error querying artists from device", e);
             progressUpdater.progressFailed(null, 0, e, null);
-            return;
         }
+
+        return artists;
     }
 
     @Override

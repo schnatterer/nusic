@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 
     Copyright (C) 2013 Johannes Schnatterer
 
@@ -22,23 +21,28 @@
     along with nusic.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-        <ListPreference
-            android:entries="@array/preferences_entry_values_log_levels" 
-            android:entryValues="@array/preferences_entry_values_log_levels"
-            android:defaultValue="@string/preferences_default_log_level"
-            android:key="@string/preferences_key_log_level"
-            android:summary="@string/preferences_summary_loglevel"
-            android:title="@string/preferences_title_loglevel" />
-        <ListPreference
-            android:entries="@array/preferences_entry_values_log_levels" 
-            android:entryValues="@array/preferences_entry_values_log_levels"
-            android:defaultValue="@string/preferences_default_log_level_logcat"
-            android:key="@string/preferences_key_log_level_logcat"
-            android:summary="@string/preferences_summary_loglevel_logcat"
-            android:title="@string/preferences_title_loglevel_logcat" />
-        <Preference android:title="@string/preferences_title_current_log">
-             <intent android:targetPackage="info.schnatterer.nusic"
-                android:targetClass="info.schnatterer.nusic.android.activities.OpenLogActivity"/> 
-       </Preference>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:defaultValue="@string/preferences_default_log_level_file"
+        android:entries="@array/preferences_entry_values_log_levels"
+        android:entryValues="@array/preferences_entry_values_log_levels"
+        android:key="@string/preferences_key_log_level_file"
+        android:summary="@string/preferences_summary_loglevel_file"
+        android:title="@string/preferences_title_loglevel_file" />
+    <ListPreference
+        android:defaultValue="@string/preferences_default_log_level_logcat"
+        android:entries="@array/preferences_entry_values_log_levels"
+        android:entryValues="@array/preferences_entry_values_log_levels"
+        android:key="@string/preferences_key_log_level_logcat"
+        android:summary="@string/preferences_summary_loglevel_logcat"
+        android:title="@string/preferences_title_loglevel_logcat" />
+    <Preference android:title="@string/preferences_title_current_log">
+        <intent
+            android:targetClass="info.schnatterer.nusic.android.activities.OpenLogActivity"
+            android:targetPackage="info.schnatterer.nusic" />
+    </Preference>
+    <SwitchPreference
+        android:defaultValue="@bool/preferences_default_notify_refresh_errors"
+        android:key="@string/preferences_key_notify_refresh_errors"
+        android:title="@string/preferences_title_notify_refresh_errors"/>
 </PreferenceScreen>

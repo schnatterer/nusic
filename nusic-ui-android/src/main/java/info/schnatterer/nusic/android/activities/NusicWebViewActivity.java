@@ -27,13 +27,19 @@ import roboguice.activity.RoboActionBarActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 /**
  * Activity that loads a website from an URL and displays it in a text view.
- * 
+ *
  * The URI to the website that is displayed can be passed to the activity using
  * {@link Intent#setData(android.net.Uri)}.<br/>
  * <br/>
@@ -44,10 +50,20 @@ import android.webkit.WebViewClient;
  * preferred email app is initialized with the parameters passed to this
  * activity. Note that any <code>@string/</code> parameters are localized before
  * starting the new activity.
- * 
- * @author schnatterer
+ *
  */
-public class NusicWebView extends RoboActionBarActivity {
+public class NusicWebViewActivity extends RoboActionBarActivity {
+
+    /**
+     * ID of the URL that is shown by this acivity. Its a {@link String} extra passed to this
+     * activity via {@link Intent}.
+     */
+    public static final String EXTRA_URL = NusicWebViewActivity.class.getCanonicalName() + ".url";
+    /**
+     * ID of the subject that is added to the EXTRA_URL parameter when pressing the share button in
+     * this activity. Its a {@link String} extra passed to this activity via {@link Intent}.
+     */
+    public static final String EXTRA_SUBJECT = NusicWebViewActivity.class.getCanonicalName() + ".title";
 
     /** "Protocol" prefix of a link for E-mails. */
     private static final String MAILTO_LINK = "mailto:";
@@ -61,7 +77,7 @@ public class NusicWebView extends RoboActionBarActivity {
         // Display the back arrow in the header (left of the icon)
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String url = getIntent().getData().toString();
+        String url = getExtraOrEmpty(EXTRA_URL);
         if (url.startsWith(MAILTO_LINK)) {
             Intent send = new Intent(Intent.ACTION_SENDTO);
             Uri uri = Uri.parse(TextUtil.replaceResourceStrings(this, url));
@@ -70,10 +86,6 @@ public class NusicWebView extends RoboActionBarActivity {
             startActivity(send);
             finish();
         } else {
-            /* Activate JavaScript */
-            // webView.getSettings().setJavaScriptEnabled(true);
-
-            // webView.getSettings().setLoadWithOverviewMode(true);
             webView.getSettings().setUseWideViewPort(true);
             webView.getSettings().setBuiltInZoomControls(true);
 
@@ -94,12 +106,52 @@ public class NusicWebView extends RoboActionBarActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.webview, menu);
+
+        MenuItem shareItem = menu.findItem(R.id.action_share);
+        ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+        shareActionProvider.setShareIntent(createShareIntent());
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            // When the back arrow in the header (left of the icon) is clicked,
-            // "go back one activity"
+            // When the back arrow in the header (left of the icon) is clicked,  "go back one activity"
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Creates a share intent for the URL of the view for a specific {@code menuItem}.
+     */
+    @VisibleForTesting
+    Intent createShareIntent() {
+           return new Intent(Intent.ACTION_SEND)
+                .setType("text/plain")
+                .putExtra(Intent.EXTRA_SUBJECT, getExtraOrEmpty(EXTRA_SUBJECT))
+                .putExtra(Intent.EXTRA_TEXT, createShareText());
+    }
+
+    @NonNull
+    private String createShareText() {
+        String url = getExtraOrEmpty(EXTRA_URL);
+        if (!"".equals(url)) {
+            url += "\n" + getString(R.string.NusicWebViewActivity_sharedViaNusic);
+        }
+        return url;
+    }
+
+    @NonNull
+    private String getExtraOrEmpty(String extra) {
+        String stringExtra = getIntent().getStringExtra(extra);
+        if (stringExtra != null) {
+            return stringExtra;
+        } else {
+            return "";
+        }
     }
 }

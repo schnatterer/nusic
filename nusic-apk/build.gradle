@@ -120,6 +120,8 @@ sonarqube {
 
         property "sonar.sourceEncoding", nusicSourceEncoding
         property "sonar.sources", "src/main/java"
+        // This project does not have tests, yet
+        //property "sonar.tests", "src/test/java"
         // first defines where the java files are, the second where the xml files are
         property "sonar.exclusions", "build/**,**/*.png"
         property "sonar.import_unknown_files", true
@@ -128,8 +130,6 @@ sonarqube {
         property "sonar.java.binaries", "build/intermediates/classes/release"
         property "sonar.java.libraries", libraries
 
-        // This project does not have test (yet?)
-        //property "sonar.tests", "src/test/java"
         property "sonar.java.test.binaries", "build/intermediates/classes/release"
         property "sonar.java.test.libraries", libraries
 

@@ -45,9 +45,9 @@ import android.content.Context;
  * {@link LoadNewReleasesServiceConnection}. Allows for executing the service
  * method {@link SyncReleasesService#refreshReleases(boolean)} and visualizes
  * its result in a {@link ProgressDialog}.
- * 
+ *
  * @author schnatterer
- * 
+ *
  */
 public class LoadNewRelasesServiceBinding {
     private static final Logger LOG = LoggerFactory
@@ -68,18 +68,19 @@ public class LoadNewRelasesServiceBinding {
     private boolean isDataChanged = false;
 
     /**
-     * Executes {@link SyncReleasesService#refreshReleases(boolean)} within
+     * Executes {@link SyncReleasesService#syncReleases()} within
      * {@link LoadNewReleasesService} in a separate thread.
-     * 
+     *
      * @param activity
      *            activity that is used to display the {@link ProgressDialog}
-     * @param updateOnlyIfNeccesary
+     * @param updateOnlyIfNecessary
      *            launch the service but do the update only
      * @return <code>true</code> if refresh was started. <code>false</code> if
      *         already in progress.
      */
+    // TODO get rid of updateOnlyIfNecessary
     public boolean refreshReleases(Activity activity,
-            boolean updateOnlyIfNeccesary) {
+            boolean updateOnlyIfNecessary) {
         // Make sure the progress dialog is bound to any new activty
         updateActivity(activity);
 
@@ -91,13 +92,13 @@ public class LoadNewRelasesServiceBinding {
              */
             LOG.debug("Service already bound. Calling refreshReleases()");
             return loadNewReleasesServiceConnection.getLoadNewReleasesService()
-                    .refreshReleases(updateOnlyIfNeccesary,
+                    .refreshReleases(updateOnlyIfNecessary,
                             artistProcessedListener);
         } else {
             // Start service and bind to it
             LOG.debug("Service not bound. Binding");
             loadNewReleasesServiceConnection = startAndBindService(activity,
-                    updateOnlyIfNeccesary);
+                    updateOnlyIfNecessary);
             return true;
         }
     }
@@ -117,7 +118,7 @@ public class LoadNewRelasesServiceBinding {
      * Start {@link LoadNewReleasesService}, then binds to it. In doing so, the
      * service can hopefully linger on after the unbinding (if it still is
      * running).
-     * 
+     *
      * @param packageContext
      *            some context start the service from
      * @param updateOnlyIfNeccesary
@@ -155,7 +156,7 @@ public class LoadNewRelasesServiceBinding {
 
     /**
      * Sets a new {@link Activity} for the {@link ProgressDialog}.
-     * 
+     *
      * @param newActivity
      *            can be <code>null</code>
      */
@@ -185,7 +186,7 @@ public class LoadNewRelasesServiceBinding {
 
     /**
      * Set the progress of the {@link ProgressDialog}.
-     * 
+     *
      * @param progress
      * @param max
      */
@@ -202,7 +203,7 @@ public class LoadNewRelasesServiceBinding {
     /**
      * This should only be called from from the main thread (e.g. from
      * {@link #onProgressUpdate(Object...)}).
-     * 
+     *
      * @param progress
      * @param max
      * @return
@@ -223,9 +224,9 @@ public class LoadNewRelasesServiceBinding {
 
     /**
      * Handles updating the {@link ProgressDialog}.
-     * 
+     *
      * @author schnatterer
-     * 
+     *
      */
     private class ProgressListener implements ArtistProgressListener {
         @Override
@@ -313,11 +314,11 @@ public class LoadNewRelasesServiceBinding {
      * of this method. If so returns <code>true</code> and resets the variable.
      * So all subsequent calls to the method will return <code>false</code>
      * until the next change of data.
-     * 
+     *
      * This is somewhat opposed to the listener mechanism, however this can be
      * useful to check if the service has been active while the activity was
      * paused.
-     * 
+     *
      * @return
      */
     public boolean checkDataChanged() {

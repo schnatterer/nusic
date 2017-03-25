@@ -25,15 +25,12 @@ import info.schnatterer.nusic.core.PreferencesService;
 import info.schnatterer.nusic.core.event.PreferenceChangedListener;
 import info.schnatterer.nusic.util.DateUtil;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import roboguice.inject.ContextSingleton;
 import android.content.Context;
@@ -41,13 +38,12 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
 
-import com.google.inject.BindingAnnotation;
 import com.google.inject.Provider;
 
 /**
  * Provides access to the preferences of the application via android's
  * {@link SharedPreferences}.
- * 
+ *
  * @author schnatterer
  *
  */
@@ -77,72 +73,75 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
      * for preferences.xml
      */
 
-    /*
-     * TODO find less verbose solution for passing XML values from APK to core
-     * See also Module, where annotations are defined
-     */
     @Inject
-    @PreferencesKeyDownloadOnlyOnWifi
+    @Named("PreferencesKeyDownloadOnlyOnWifi")
     private String KEY_DOWLOAD_ONLY_ON_WIFI;
     @Inject
-    @PreferencesDefaultDownloadOnlyOnWifi
+    @Named("PreferencesDefaultDownloadOnlyOnWifi")
     private Boolean DEFAULT_DOWLOAD_ONLY_ON_WIFI;
 
     @Inject
-    @PreferencesKeyDownloadReleasesTimePeriod
+    @Named("PreferencesKeyDownloadReleasesTimePeriod")
     private String KEY_DOWNLOAD_RELEASES_TIME_PERIOD;
     @Inject
-    @PreferencesDefaultDownloadReleasesTimePeriod
+    @Named("PreferencesDefaultDownloadReleasesTimePeriod")
     private String DEFAULT_DOWNLOAD_RELEASES_TIME_PERIOD;
 
     @Inject
-    @PreferencesKeyRefreshPeriod
+    @Named("PreferencesKeyRefreshPeriod")
     private String KEY_REFRESH_PERIOD;
     @Inject
-    @PreferencesDefaultRefreshPeriod
+    @Named("PreferencesDefaultRefreshPeriod")
     private String DEFAULT_REFRESH_PERIOD;
 
     @Inject
-    @PreferencesKeyIsEnabledNotifyReleasedToday
+    @Named("PreferencesKeyIsEnabledNotifyReleasedToday")
     private String KEY_ENABLED_NOTIFY_RELEASED_TODAY;
     @Inject
-    @PreferencesDefaultIsEnabledNotifyReleasedToday
+    @Named("PreferencesDefaultIsEnabledNotifyReleasedToday")
     private Boolean DEFAULT_ENABLED_NOTIFY_RELEASED_TODAY;
 
     @Inject
-    @PreferencesKeyIsEnabledNotifyNewReleases
+    @Named("PreferencesKeyIsEnabledNotifyNewReleases")
     private String KEY_ENABLED_NOTIFY_NEW_RELEASES;
     @Inject
-    @PreferencesDefaultIsEnabledNotifyNewReleases
+    @Named("PreferencesDefaultIsEnabledNotifyNewReleases")
     private Boolean DEFAULT_ENABLED_NOTIFY_NEW_RELEASES;
 
     @Inject
-    @PreferencesKeyReleasedTodayHourOfDay
+    @Named("PreferencesKeyReleasedTodayHourOfDay")
     private String KEY_RELEASED_TODAY_HOUR_OF_DAY;
     @Inject
-    @PreferencesDefaultReleasedTodayHourOfDay
+    @Named("PreferencesDefaultReleasedTodayHourOfDay")
     private Integer DEFAULT_RELEASED_TODAY_HOUR_OF_DAY;
 
     @Inject
-    @PreferencesKeyReleasedTodayMinute
+    @Named("PreferencesKeyReleasedTodayMinute")
     private String KEY_RELEASED_TODAY_MINUTE;
     @Inject
-    @PreferencesDefaultReleasedTodayMinute
+    @Named("PreferencesDefaultReleasedTodayMinute")
     private Integer DEFAULT_RELEASED_TODAY_MINUTE;
 
     @Inject
-    @PreferencesKeyLogLevel
-    private String KEY_LOG_LEVEL;
+    @Named("PreferencesKeyLogLevelFile")
+    private String KEY_LOG_LEVEL_FILE;
     @Inject
-    @PreferencesDefaultLogLevel
-    private String DEFAULT_LOG_LEVEL;
+    @Named("PreferencesDefaultLogLevelFile")
+    private String DEFAULT_LOG_LEVEL_FILE;
 
     @Inject
-    @PreferencesKeyLogLevelLogCat
+    @Named("PreferencesKeyLogLevelLogCat")
     private String KEY_LOG_LEVEL_LOGCAT;
     @Inject
-    @PreferencesDefaultLogLevelLogCat
+    @Named("PreferencesDefaultLogLevelLogCat")
     private String DEFAULT_LOG_LEVEL_LOGCAT;
+
+    @Inject
+    @Named("PreferencesKeyNotifyRefreshErrors")
+    private String KEY_NOTIFY_REFRESH_ERRORS;
+    @Inject
+    @Named("PreferencesDefaultNotifyRefreshErrors")
+    private boolean DEFAULT_NOTIFY_REFRESH_ERRORS;
 
     private final SharedPreferences sharedPreferences;
 
@@ -153,8 +152,8 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
 
     @Inject
     public PreferencesServiceSharedPreferences(
-            @PreferencesKeyRefreshPeriod String keyRefreshPeriod,
-            @PreferencesDefaultRefreshPeriod String defaultRefreshPerioid) {
+            @Named("PreferencesKeyRefreshPeriod") String keyRefreshPeriod,
+            @Named("PreferencesDefaultRefreshPeriod") String defaultRefreshPerioid) {
         Context context = contextProvider.get();
 
         this.sharedPreferences = PreferenceManager
@@ -313,14 +312,8 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
     }
 
     @Override
-    public String getLogLevel() {
-        return sharedPreferences.getString(KEY_LOG_LEVEL, DEFAULT_LOG_LEVEL);
-    }
-
-    @Override
-    public boolean setLogLevel(String logLevel) {
-        return sharedPreferences.edit().putString(KEY_LOG_LEVEL, logLevel)
-                .commit();
+    public String getLogLevelFile() {
+        return sharedPreferences.getString(KEY_LOG_LEVEL_FILE, DEFAULT_LOG_LEVEL_FILE);
     }
 
     @Override
@@ -330,116 +323,7 @@ public class PreferencesServiceSharedPreferences implements PreferencesService,
     }
 
     @Override
-    public boolean setLogLevelLogCat(String logLevel) {
-        return sharedPreferences.edit()
-                .putString(KEY_LOG_LEVEL_LOGCAT, logLevel).commit();
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD, ElementType.PARAMETER })
-    @BindingAnnotation
-    public @interface PreferencesKeyDownloadOnlyOnWifi {
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD, ElementType.PARAMETER })
-    @BindingAnnotation
-    public @interface PreferencesDefaultDownloadOnlyOnWifi {
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD, ElementType.PARAMETER })
-    @BindingAnnotation
-    public @interface PreferencesKeyDownloadReleasesTimePeriod {
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD, ElementType.PARAMETER })
-    @BindingAnnotation
-    public @interface PreferencesDefaultDownloadReleasesTimePeriod {
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD, ElementType.PARAMETER })
-    @BindingAnnotation
-    public @interface PreferencesKeyRefreshPeriod {
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD, ElementType.PARAMETER })
-    @BindingAnnotation
-    public @interface PreferencesDefaultRefreshPeriod {
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD, ElementType.PARAMETER })
-    @BindingAnnotation
-    public @interface PreferencesKeyIsEnabledNotifyReleasedToday {
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD, ElementType.PARAMETER })
-    @BindingAnnotation
-    public @interface PreferencesDefaultIsEnabledNotifyReleasedToday {
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD, ElementType.PARAMETER })
-    @BindingAnnotation
-    public @interface PreferencesKeyIsEnabledNotifyNewReleases {
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD, ElementType.PARAMETER })
-    @BindingAnnotation
-    public @interface PreferencesDefaultIsEnabledNotifyNewReleases {
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD, ElementType.PARAMETER })
-    @BindingAnnotation
-    public @interface PreferencesKeyReleasedTodayHourOfDay {
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD, ElementType.PARAMETER })
-    @BindingAnnotation
-    public @interface PreferencesDefaultReleasedTodayHourOfDay {
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD, ElementType.PARAMETER })
-    @BindingAnnotation
-    public @interface PreferencesKeyReleasedTodayMinute {
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD, ElementType.PARAMETER })
-    @BindingAnnotation
-    public @interface PreferencesDefaultReleasedTodayMinute {
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD, ElementType.PARAMETER })
-    @BindingAnnotation
-    public @interface PreferencesKeyLogLevel {
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD, ElementType.PARAMETER })
-    @BindingAnnotation
-    public @interface PreferencesDefaultLogLevel {
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD, ElementType.PARAMETER })
-    @BindingAnnotation
-    public @interface PreferencesKeyLogLevelLogCat {
-    }
-
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.FIELD, ElementType.PARAMETER })
-    @BindingAnnotation
-    public @interface PreferencesDefaultLogLevelLogCat {
+    public boolean isNotifyRefreshErrors() {
+        return sharedPreferences.getBoolean(KEY_NOTIFY_REFRESH_ERRORS, DEFAULT_NOTIFY_REFRESH_ERRORS);
     }
 }

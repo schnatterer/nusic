@@ -52,6 +52,7 @@ dependencies {
     testCompile(
             libraries.junit,
             libraries.robolectric,
+            // TODO convert to android library, so this dependency will no longer be neccessary?!
             libraries.robolectricAndroid
     )
 }

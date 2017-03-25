@@ -21,34 +21,26 @@
  */
 package info.schnatterer.nusic.android.activities;
 
-import info.schnatterer.nusic.android.fragments.NusicPreferencesDeveloperFragment;
-import info.schnatterer.nusic.android.util.Logs;
-import info.schnatterer.nusic.core.PreferencesService;
-import info.schnatterer.nusic.core.event.PreferenceChangedListener;
-import info.schnatterer.nusic.ui.R;
-
-import javax.inject.Inject;
-
-import roboguice.activity.RoboAppCompatPreferenceActivity;
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import info.schnatterer.nusic.android.fragments.NusicPreferencesDeveloperFragment;
+import info.schnatterer.nusic.android.fragments.NusicPreferencesDeveloperFragment.LogCatLogLevelPreferenceChangedListener;
+import info.schnatterer.nusic.android.fragments.NusicPreferencesDeveloperFragment.FileLevelPreferenceChangedListener;
+import info.schnatterer.nusic.ui.R;
+import roboguice.activity.RoboAppCompatPreferenceActivity;
+
 /**
  * Activity that realizes the developer settings.
- * 
+ *
  * @author schnatterer
  *
  */
 public class NusicPreferencesDeveloperActivity extends
         RoboAppCompatPreferenceActivity {
-    private LogLevelPreferenceChangedListener logLevelPreferenceChangedListener = new LogLevelPreferenceChangedListener();
-    private LogLevelLogCatPreferenceChangedListener logLevelLogCatPreferenceChangedListener = new LogLevelLogCatPreferenceChangedListener();
-
-    @Inject
-    private PreferencesService preferencesService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +62,10 @@ public class NusicPreferencesDeveloperActivity extends
     @SuppressWarnings("deprecation")
     private void onCreatePreferenceActivity() {
         addPreferencesFromResource(R.xml.preferences_developer);
+        findPreference(getString(R.string.preferences_key_log_level_logcat))
+            .setOnPreferenceChangeListener(new LogCatLogLevelPreferenceChangedListener(this));
+        findPreference(getString(R.string.preferences_key_log_level_file))
+            .setOnPreferenceChangeListener(new FileLevelPreferenceChangedListener(this));
     }
 
     /**
@@ -95,61 +91,5 @@ public class NusicPreferencesDeveloperActivity extends
             finish();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        preferencesService
-                .registerOnSharedPreferenceChangeListener(logLevelPreferenceChangedListener);
-        preferencesService
-                .registerOnSharedPreferenceChangeListener(logLevelLogCatPreferenceChangedListener);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        preferencesService
-                .unregisterOnSharedPreferenceChangeListener(logLevelPreferenceChangedListener);
-        preferencesService
-                .unregisterOnSharedPreferenceChangeListener(logLevelLogCatPreferenceChangedListener);
-    }
-
-    /**
-     * Listens for a change in the {@link PreferencesService#getLogLevel()}
-     * preference and triggers an update of the releases.
-     * 
-     * @author schnatterer
-     * 
-     */
-    private class LogLevelPreferenceChangedListener implements
-            PreferenceChangedListener {
-        @Override
-        public void onPreferenceChanged(String key, Object newValue) {
-            if (key.equals(NusicPreferencesDeveloperActivity.this
-                    .getString(R.string.preferences_key_log_level))) {
-                Logs.setRootLogLevel(newValue.toString());
-            }
-        }
-    }
-
-    /**
-     * Listens for a change in the
-     * {@link PreferencesService#getLogLevelLogCat()} preference and triggers an
-     * update of the releases.
-     * 
-     * @author schnatterer
-     * 
-     */
-    private class LogLevelLogCatPreferenceChangedListener implements
-            PreferenceChangedListener {
-        @Override
-        public void onPreferenceChanged(String key, Object newValue) {
-            if (key.equals(NusicPreferencesDeveloperActivity.this
-                    .getString(R.string.preferences_key_log_level_logcat))) {
-                Logs.setLogCatLevel(newValue.toString(),
-                        NusicPreferencesDeveloperActivity.this);
-            }
-        }
     }
 }

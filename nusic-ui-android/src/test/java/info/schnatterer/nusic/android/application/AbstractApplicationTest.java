@@ -30,6 +30,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import android.content.Context;
@@ -68,7 +69,7 @@ public class AbstractApplicationTest {
         assertEquals(
                 "Last app version wasn't updated",
                 expectedCurrentVersionCode,
-                Robolectric.application.getSharedPreferences(
+                RuntimeEnvironment.application.getSharedPreferences(
                         AbstractApplication.SHARED_PREFERENCES_NAME,
                         Context.MODE_PRIVATE).getInt(
                         AbstractApplication.KEY_LAST_APP_VERSION, -1));
@@ -101,7 +102,7 @@ public class AbstractApplicationTest {
         assertEquals(
                 "Last app version wasn't updated",
                 expectedCurrentVersionCode,
-                Robolectric.application.getSharedPreferences(
+                RuntimeEnvironment.application.getSharedPreferences(
                         AbstractApplication.SHARED_PREFERENCES_NAME,
                         Context.MODE_PRIVATE).getInt(
                         AbstractApplication.KEY_LAST_APP_VERSION, -1));
@@ -133,16 +134,16 @@ public class AbstractApplicationTest {
         assertEquals(
                 "Last app version was overwritten unexpectedly",
                 expectedCurrentVersionCode,
-                Robolectric.application.getSharedPreferences(
+                RuntimeEnvironment.application.getSharedPreferences(
                         AbstractApplication.SHARED_PREFERENCES_NAME,
                         Context.MODE_PRIVATE).getInt(
                         AbstractApplication.KEY_LAST_APP_VERSION, -1));
     }
 
     /**
-     * Implementation of {@link #AbstractApplicationTest()} that facilitates
+     * Implementation of {@link AbstractApplicationTest} that facilitates
      * testing.
-     * 
+     *
      * @author schnatterer
      *
      */
@@ -159,8 +160,8 @@ public class AbstractApplicationTest {
         public AbstractApplicationUnderTest() {
 
             try {
-                packageInfo = Robolectric.packageManager.getPackageInfo(
-                        Robolectric.application.getPackageName(), -1);
+                packageInfo = RuntimeEnvironment.getPackageManager().getPackageInfo(
+                        RuntimeEnvironment.application.getPackageName(), -1);
             } catch (NameNotFoundException e) {
                 // We're in a test, so facilitate exception handling by just
                 // crashing
@@ -173,7 +174,7 @@ public class AbstractApplicationTest {
         }
 
         public void setMockedLastVersionCode(int lastVersionCode) {
-            Robolectric.application
+            RuntimeEnvironment.application
                     .getSharedPreferences(SHARED_PREFERENCES_NAME,
                             Context.MODE_PRIVATE).edit()
                     .putInt(KEY_LAST_APP_VERSION, lastVersionCode).commit();
@@ -201,7 +202,7 @@ public class AbstractApplicationTest {
 
         @Override
         public Context getApplicationContext() {
-            return Robolectric.application;
+            return RuntimeEnvironment.application;
         }
 
         protected boolean isOnFirstCreate() {

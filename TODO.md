@@ -1,17 +1,21 @@
 TODOs - Features, enhancements, refactoring, ...
 
-- Simplify contributors by using a separate preference
+- Modernize UI: Use Snackbar instead of Toast
+- Modernize UI: Provide Burger Menu for List entries --> Intuitive Way of hiding releases
+- Drop Support < Android 4.0 (minSdkVersion 14), Clean Up Code
+
+- Setup Github Pull Request Jenkins Plugin: https://www.theguild.nl/building-github-pull-requests-with-jenkins
+- Setup Master Build in Jenkins with SonarQube
+- No longer check artists that were removed
 
 - Rename "constants.xml" to "donottranslate.xml" (best practice: See http://tools.android.com/recent/non-translatablestrings)
+- Download Artist Image? http://stackoverflow.com/questions/28458654/musicbrainz-artist-image-and-information
+Or use placeholder image (just like in k9): http://stackoverflow.com/questions/23122088/colored-boxed-with-letters-a-la-gmail
 
 - Use Transifex for translation? E.g. https://www.transifex.com/vanilla_music/vanilla-music-1/
 
 - Gradle: Dont repeat yourself - Set common compileJava, android and sonarqube (for android)  options only once
 See e.g https://discuss.gradle.org/t/how-do-i-detect-if-a-sub-project-has-applied-a-given-plugin-e-g-jar-or-war/4974
-
-- Set TargetSDK to 24 and test on emu
-https://developer.android.com/preview/api-overview.html
-- Use newest build tools version, as soon as openshift updates GLIBC to GLIBC_2.14 needed by aapt (test with "ldd --version")
 
 - Specify which files to backup in manifest: https://developer.android.com/training/backup/autosyncapi.html
 

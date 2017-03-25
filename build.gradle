@@ -29,11 +29,12 @@ buildscript {
 
     // Gradle plugins
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath 'com.android.tools.build:gradle:2.3.0'
         classpath 'de.undercouch:gradle-download-task:3.0.0'
         // Mark down generation
         classpath 'org.pegdown:pegdown:1.6.0'
         classpath "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.13.1"
+        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.1'
     }
 }
 
@@ -48,6 +49,7 @@ allprojects {
     group = "info.schnatterer.nusic"
     //version = gradle.properties
     apply plugin: "com.github.hierynomus.license"
+    apply plugin: "jacoco"
 
     license {
         header rootProject.file('resources/GPL-3.txt')
@@ -126,49 +128,53 @@ ext {
     // Properties for android submodules
     nusicVersionCode = Integer.parseInt(versionCode)
     nusicMinSdkVersion = 9
-    nusictTargetSdkVersion = 23
-    nusicCompileSdkVersion = 23
-    nusicBuildToolsVersion = "23.0.3"
+    nusictTargetSdkVersion = 24
+    nusicCompileSdkVersion = 24
+    nusicBuildToolsVersion = "25.0.0"
 
     // Properties for java & android submodules
     nusicSourceCompatibility = JavaVersion.VERSION_1_7
     nusicTargetCompatibility = JavaVersion.VERSION_1_7
     nusicSourceEncoding = "UTF-8"
 
-    slf4jVersion = "1.7.6"
-    androidCompatibilityVersion = "24.0.0"
+    slf4jVersion = "1.7.21"
+    androidCompatibilityVersion = "24.2.1"
     roboguiceVersion = "3.0.1"
 
     libraries = [
-            android           : "com.google.android:android:4.1.1.4",
-            //Android Support libs
-            androidSupportV4  : "com.android.support:support-v4:${androidCompatibilityVersion}",
-            // Appcompat for API lvl 4 and 7, as well as backport of material design
-            androidDesign     : "com.android.support:design:${androidCompatibilityVersion}",
-            // Roboguice
-            roboguice         : "org.roboguice:roboguice:${roboguiceVersion}",
-            roboblender       : "org.roboguice:roboblender:${roboguiceVersion}",
-            //logback-android - process log statements produced by dependencies via slf4j with logback
-            logback           : dependencies.create("com.github.tony19:logback-android-classic:1.1.1-3") {
-                exclude group: "com.google.android:android", module: "android"
-                force = true
-            },
-            julToSlf4j        : "org.slf4j:jul-to-slf4j:${slf4jVersion}",
-            slf4j             : "org.slf4j:slf4j-api:${slf4jVersion}",
-            guava             : "com.google.guava:guava:19.0",
-            commonsIo         : "commons-io:commons-io:2.4",
-            /*
-             * Test dependencies
-             */
-            // Robolectric
-            robolectric       : "org.robolectric:robolectric:2.4",
-            robolectricAndroid: "org.robolectric:android-all:6.0.0_r1-robolectric-0",
-            junit             : "junit:junit:4.12",
-            hamcrest          : "org.hamcrest:hamcrest-all:1.3",
-            mockito           : "org.mockito:mockito-all:1.10.19"
+        android           : "com.google.android:android:4.1.1.4",
+        // Android Support libs
+        androidSupportV4  : "com.android.support:support-v4:${androidCompatibilityVersion}",
+        // Appcompat for API lvl 4 and 7, as well as backport of material design
+        androidDesign     : "com.android.support:design:${androidCompatibilityVersion}",
+        // Roboguice
+        roboguice         : "org.roboguice:roboguice:${roboguiceVersion}",
+        roboblender       : "org.roboguice:roboblender:${roboguiceVersion}",
+        //logback-android - process log statements produced by dependencies via slf4j with logback
+        logback           : dependencies.create("com.github.tony19:logback-android-classic:1.1.1-5") {
+            exclude group: "com.google.android:android", module: "android"
+            force = true
+        },
+        logbackAndroidUtils: "com.github.schnatterer:logback-android-utils:1.0.0",
+        julToSlf4j        : "org.slf4j:jul-to-slf4j:${slf4jVersion}",
+        slf4j             : "org.slf4j:slf4j-api:${slf4jVersion}",
+        guava             : "com.google.guava:guava:19.0",
+        commonsIo         : "commons-io:commons-io:2.4",
+        /*
+         * Test dependencies
+         */
+        // Robolectric
+        robolectric       : "org.robolectric:robolectric:3.3.1",
+        robolectricAndroid: "org.robolectric:android-all:7.1.0_r7-robolectric-0",
+        // Might be fixed with robolectric 3.3.2
+        opengl: 'org.khronos:opengl-api:gl1.1-android-2.1_r1',
+
+        junit             : "junit:junit:4.12",
+        hamcrest          : "org.hamcrest:hamcrest-all:1.3",
+        mockito           : "org.mockito:mockito-android:2.7.19"
     ]
 }
 
 jacoco {
-    toolVersion = "0.7.5.201505241946"
+    toolVersion = "0.7.7.201606060606"
 }
