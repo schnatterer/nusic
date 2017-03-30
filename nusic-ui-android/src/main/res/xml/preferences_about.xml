@@ -29,7 +29,7 @@
             android:title="@string/preferences_title_version" />
 
         <Preference android:title="@string/preferences_title_contributors" >
-            <intent android:targetPackage="info.schnatterer.nusic" 
+            <intent android:targetPackage="info.schnatterer.nusic"
                 android:targetClass="info.schnatterer.nusic.android.activities.TextAssetActivity">
                 <extra android:name="@string/extra_activity_title" android:value="@string/preferences_title_contributors" />
                 <extra android:name="@string/extra_asset_name" android:value="contributors.html" />
@@ -52,12 +52,12 @@
         </Preference>
         <Preference android:title="@string/preferences_title_privacy_policy"
                android:summary="@string/preferences_summary_privacy_policy">
-            <intent android:targetPackage="info.schnatterer.nusic" 
+            <intent android:targetPackage="info.schnatterer.nusic"
                 android:targetClass="info.schnatterer.nusic.android.activities.TextAssetActivity">
                 <extra android:name="@string/extra_activity_title" android:value="@string/preferences_title_privacy_policy" />
                 <extra android:name="@string/extra_asset_name" android:value="privacyPolicy.html" />
             </intent>
-        </Preference> 
+        </Preference>
     <PreferenceCategory android:title="@string/preferences_category_web" >
         <Preference android:title="@string/FDroid"
             android:summary="@string/preferences_summary_fdroid">
@@ -66,7 +66,7 @@
                 android:data="@string/link_nusic_fdroid" >
             </intent>
         </Preference>
-        <Preference android:title="@string/GooglePlay" 
+        <Preference android:title="@string/GooglePlay"
             android:summary="@string/preferences_summary_google_play">
                <intent
                    android:action="android.intent.action.VIEW"
@@ -85,13 +85,15 @@
         <Preference android:title="@string/preferences_title_email"
                android:summary="@string/preferences_summary_email">
              <intent android:targetPackage="info.schnatterer.nusic"
-                android:targetClass="info.schnatterer.nusic.android.activities.NusicWebView"
-                android:data="mailto:@string/app_contact?subject=[nusic @string/versionName]&amp;body="/> 
+                android:targetClass="info.schnatterer.nusic.android.activities.NusicWebViewActivity">
+                 <extra android:name="info.schnatterer.nusic.android.activities.NusicWebViewActivity.url"
+                        android:value="mailto:@string/app_contact?subject=[nusic @string/versionName]&amp;body=" />
+                 </intent>
        </Preference>
         <Preference android:title="@string/preferences_title_report"
                android:summary="@string/preferences_summary_report">
              <intent android:targetPackage="info.schnatterer.nusic"
-                android:targetClass="info.schnatterer.nusic.android.activities.SendLogActivity"/> 
+                android:targetClass="info.schnatterer.nusic.android.activities.SendLogActivity"/>
        </Preference>
     </PreferenceCategory>
 </PreferenceScreen>
