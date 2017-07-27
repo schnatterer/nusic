@@ -9,3 +9,7 @@ android:
     # When chaning the following, change also in build.gradle!
     - build-tools-25.0.0
     - android-24
+
+before_install:
+# Avoid ./gradlew: Permission denied
+ - chmod +x gradlew
