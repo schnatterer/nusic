@@ -118,7 +118,7 @@ sonarqube {
          * that those methods are never used and they should be removed. Same applies for libraries where parent classes
          * are required to understand how a class works and is used. */
         def libraries = project.android.sdkDirectory.getPath() + "/platforms/android-${nusicCompileSdkVersion}/android.jar," +
-                "build/intermediates/exploded-aar/**/*.jar,$compileDependencies"
+                "build/intermediates/pre-dexed/**/*.jar,$compileDependencies"
 
         // See https://github.com/SonarSource/sonar-examples/blob/master/projects/languages/android/android-sonarqube-gradle/app/build.gradle
         // and https://room-15.github.io/blog/2016/01/21/Static-code-quality-measurements-with-SonarQube-Jacoco-and-UnitTests/
