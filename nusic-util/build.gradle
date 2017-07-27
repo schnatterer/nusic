@@ -31,7 +31,6 @@ dependencies {
     // Test dependencies
     testCompile(
             libraries.junit,
-            libraries.hamcrest,
-            libraries.mockito
+            libraries.hamcrest
     )
 }

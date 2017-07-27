@@ -188,7 +188,7 @@ dependencies {
     testCompile(
         libraries.junit,
         libraries.hamcrest,
-        libraries.mockito,
+        libraries.mockitoAndroid,
         libraries.robolectric,
         libraries.opengl
     )

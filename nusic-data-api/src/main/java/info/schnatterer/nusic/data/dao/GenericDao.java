@@ -30,9 +30,9 @@ public interface GenericDao<T extends Entity> {
 
     /**
      * Stores an entity, if does not exist yet.
-     * 
+     *
      * @param entity
-     * @return
+     * @return the row ID of the newly inserted row, or -1 if an error occurred
      * @throws DatabaseException
      *             entity already exists, error writing data, etc.
      */
@@ -40,9 +40,9 @@ public interface GenericDao<T extends Entity> {
 
     /**
      * Updates an entity, if does exist.
-     * 
+     *
      * @param entity
-     * @return
+     * @return the number of rows affected
      * @throws DatabaseException
      *             entity does not exist, error writing data, etc.
      */
@@ -52,7 +52,7 @@ public interface GenericDao<T extends Entity> {
      * Convenience method for updating rows in the database. This is useful when
      * updating more than one row at a time. To update only one row, consider
      * using {@link #update(Entity)}.
-     * 
+     *
      * @param values
      *            a map from column names to new column values. null is a valid
      *            value that will be translated to NULL.

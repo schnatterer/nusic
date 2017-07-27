@@ -53,6 +53,7 @@ dependencies {
     // Test dependencies
     testCompile(
             libraries.junit,
+            libraries.mockito,
             // Android API - needed for @SuppressLint
             libraries.android
     )

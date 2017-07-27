@@ -45,7 +45,8 @@ public class Artist implements Entity {
     private Date dateCreated;
     private Boolean isHidden;
 
-    public Artist() {
+    public Artist(Long androidAudioArtistId) {
+        this.androidAudioArtistId = androidAudioArtistId;
     }
 
     public Artist(Date dateCreated) {

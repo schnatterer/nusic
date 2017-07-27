@@ -38,7 +38,7 @@ import android.provider.MediaStore.Audio.ArtistColumns;
 
 /**
  * Provides access to music stored on the device via android's APIs.
- * 
+ *
  * @author schnatterer
  *
  */
@@ -64,11 +64,8 @@ public class DeviceMusicServiceAndroid implements DeviceMusicService {
                 artists = new Artist[cursor.getCount()];
                 int i = 0;
                 while (cursor.moveToNext()) {
-                    Artist artist = new Artist();
-                    artist.setAndroidAudioArtistId(cursor
-                            .getLong(ArtistProjection.ID.getIndex()));
-                    artist.setArtistName(cursor
-                            .getString(ArtistProjection.ARTIST.getIndex()));
+                    Artist artist = new Artist(cursor.getLong(ArtistProjection.ID.getIndex()));
+                    artist.setArtistName(cursor.getString(ArtistProjection.ARTIST.getIndex()));
                     artists[i++] = artist;
                 }
             }
