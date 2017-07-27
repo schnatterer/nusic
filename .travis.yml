@@ -13,3 +13,8 @@ android:
 before_install:
 # Avoid ./gradlew: Permission denied
  - chmod +x gradlew
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
