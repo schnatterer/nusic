@@ -1,0 +1,11 @@
+language: android
+
+android:
+  components:
+    # Use the latest revision of Android SDK Tools
+     - tools
+     - platform-tools
+
+    # When chaning the following, change also in build.gradle!
+    - build-tools-25.0.0
+    - android-24
