@@ -65,9 +65,9 @@ android {
 
     signingConfigs {
         release {
-            if (project.hasProperty(signKeystore)) {
+            if (project.hasProperty('signKeystore')) {
                 storeFile file(signKeystore)
-            } else if (project.hasProperty(signKeystoreBase64)) {
+            } else if (project.hasProperty('signKeystoreBase64')) {
                 // Special case for travisCI
                 storeFile decodeKeyStoreFileFromBase64Env(signKeystoreBase64)
             }
