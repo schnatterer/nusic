@@ -137,11 +137,6 @@ sonarqube {
 
         property "sonar.java.test.binaries", "build/intermediates/classes/release"
         property "sonar.java.test.libraries", libraries
-
-        property "sonar.jacoco.reportPaths", "build/jacoco/testReleaseUnitTest.exec"
-        property "sonar.java.coveragePlugin", "jacoco"
-        property "sonar.junit.reportsPath", "build/test-results/testReleaseUnitTest"
-        property "sonar.android.lint.report", "build/outputs/lint-results.xml"
     }
 }
 
