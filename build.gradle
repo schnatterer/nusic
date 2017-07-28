@@ -41,7 +41,7 @@ buildscript {
 plugins {
     id "maven"
     id "jacoco"
-    id "org.sonarqube" version "2.0.1"
+    id "org.sonarqube" version "2.5"
 }
 
 //rootProject and the subprojects
@@ -128,6 +128,7 @@ ext {
     // Properties for android submodules
     nusicVersionCode = Integer.parseInt(versionCode)
     nusicMinSdkVersion = 9
+    // When changing the following, change also in .travis.yml
     nusictTargetSdkVersion = 24
     nusicCompileSdkVersion = 24
     nusicBuildToolsVersion = "25.0.0"
@@ -165,7 +166,7 @@ ext {
          * Test dependencies
          */
         // Robolectric
-        robolectric       : "org.robolectric:robolectric:3.3.1",
+        robolectric       : "org.robolectric:robolectric:3.4",
         robolectricAndroid: "org.robolectric:android-all:7.1.0_r7-robolectric-0",
         // Might be fixed with robolectric 3.3.2
         opengl: 'org.khronos:opengl-api:gl1.1-android-2.1_r1',

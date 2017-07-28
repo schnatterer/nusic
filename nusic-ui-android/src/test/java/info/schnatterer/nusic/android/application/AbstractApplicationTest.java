@@ -28,7 +28,6 @@ import info.schnatterer.nusic.android.application.AbstractApplication.AppStart;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
@@ -160,7 +159,7 @@ public class AbstractApplicationTest {
         public AbstractApplicationUnderTest() {
 
             try {
-                packageInfo = RuntimeEnvironment.getPackageManager().getPackageInfo(
+                packageInfo = RuntimeEnvironment.application.getPackageManager().getPackageInfo(
                         RuntimeEnvironment.application.getPackageName(), -1);
             } catch (NameNotFoundException e) {
                 // We're in a test, so facilitate exception handling by just
