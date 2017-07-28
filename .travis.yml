@@ -31,6 +31,6 @@ addons:
     branches:
       - master
       - develop
-      - feature/travis
+      - feature/*
 
 script: ./gradlew clean build connectedCheck sonarqube --stacktrace
