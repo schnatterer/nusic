@@ -166,7 +166,7 @@ ext {
          * Test dependencies
          */
         // Robolectric
-        robolectric       : "org.robolectric:robolectric:3.3.1",
+        robolectric       : "org.robolectric:robolectric:3.4",
         robolectricAndroid: "org.robolectric:android-all:7.1.0_r7-robolectric-0",
         // Might be fixed with robolectric 3.3.2
         opengl: 'org.khronos:opengl-api:gl1.1-android-2.1_r1',
