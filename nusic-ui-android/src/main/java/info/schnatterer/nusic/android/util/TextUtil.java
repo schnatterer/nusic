@@ -244,10 +244,10 @@ public class TextUtil {
                 if (opening) {
                     lists.push(tag);
                     // TODO: add support for lists starting other index than 1
-                    olNextIndex.push(Integer.valueOf(1)).toString();
+                    olNextIndex.push(Integer.valueOf(1));
                 } else {
                     lists.pop();
-                    olNextIndex.pop().toString();
+                    olNextIndex.pop();
                 }
             } else if (tag.equalsIgnoreCase("li")) {
                 if (opening) {
