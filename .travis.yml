@@ -33,4 +33,4 @@ addons:
       - develop
       - feature/travis
 
-script: ./gradlew clean assembleRelease lintRelease testReleaseUnitTest sonarqube --stacktrace -Dsonar.branch=
+script: ./gradlew clean build connectedCheck sonarqube --stacktrace
