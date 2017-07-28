@@ -10,6 +10,8 @@ android:
     - build-tools-25.0.0
     - android-24
 
+    - extra-android-m2repository
+
 before_install:
 # Avoid ./gradlew: Permission denied
  - chmod +x gradlew
