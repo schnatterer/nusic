@@ -62,6 +62,7 @@ public class SyncReleasesServiceImpl implements SyncReleasesService {
     private PreferencesService preferencesService;
     @Inject
     private ArtistService artistService;
+
     private Set<ProgressListener<Artist, Boolean>> listenerList = new HashSet<ProgressListener<Artist, Boolean>>();
     private ProgressUpdater<Artist, Boolean> progressUpdater = new ProgressUpdater<Artist, Boolean>(
             listenerList) {
@@ -87,6 +88,7 @@ public class SyncReleasesServiceImpl implements SyncReleasesService {
         return cal.getTime();
     }
 
+    @SuppressWarnings("squid:S2583") // False positive! processArtist can return values != null. See unit tests!
     private void refreshReleases(Date startDate, Date endDate) {
 
         // TODO create service for checking wifi and available internet connection
@@ -142,12 +144,11 @@ public class SyncReleasesServiceImpl implements SyncReleasesService {
             }
             // Release memory for artist
             artists[i] = null;
-
+            return null;
         } catch (ServiceException e) {
             LOG.warn(e.getMessage(), e.getCause());
             return e;
         }
-        return null;
     }
 
     /**
