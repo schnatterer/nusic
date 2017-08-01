@@ -33,7 +33,7 @@ import javax.inject.Inject;
 
 /**
  * Default implementation of {@link ArtistService}.
- * 
+ *
  * @author schnatterer
  *
  */
@@ -51,8 +51,7 @@ public class ArtistServiceImpl implements ArtistService {
             releaseService.saveOrUpdate(artist.getReleases(), false);
             return ret;
         } catch (DatabaseException e) {
-            throw new AndroidServiceException(
-                    CoreMessageKey.ERROR_WRITING_TO_DB, e);
+            throw new AndroidServiceException(CoreMessageKey.ERROR_WRITING_TO_DB, e);
         }
     }
 
@@ -64,32 +63,28 @@ public class ArtistServiceImpl implements ArtistService {
             releaseService.saveOrUpdate(artist.getReleases());
             return ret;
         } catch (DatabaseException e) {
-            throw new AndroidServiceException(
-                    CoreMessageKey.ERROR_WRITING_TO_DB, e);
+            throw new AndroidServiceException(CoreMessageKey.ERROR_WRITING_TO_DB, e);
         }
     }
 
     @Override
     public long saveOrUpdate(Artist artist) throws ServiceException {
         try {
-            // Does artist exist?
-            if (artist.getId() == null) {
-                Artist existingArtist = artistDao.findByAndroidId(artist
-                        .getAndroidAudioArtistId());
+            if (artist.getId() != null) {
+                update(artist);
+            } else {
+                Artist existingArtist = artistDao.findByAndroidId(artist.getAndroidAudioArtistId());
                 if (existingArtist != null) {
                     artist.setId(existingArtist.getId());
                     artist.setDateCreated(existingArtist.getDateCreated());
+                    update(artist);
+                } else {
+                    save(artist);
                 }
-            }
-            if (artist.getId() == null) {
-                save(artist);
-            } else {
-                update(artist);
             }
             return artist.getId();
         } catch (DatabaseException e) {
-            throw new AndroidServiceException(
-                    CoreMessageKey.ERROR_WRITING_TO_DB, e);
+            throw new AndroidServiceException(CoreMessageKey.ERROR_WRITING_TO_DB, e);
         }
     }
 }
