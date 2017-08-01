@@ -92,15 +92,6 @@ public class ArtistServiceImplTest {
 
     @Test
     public void saveOrUpdateSaveExisting() throws Exception {
-        long actualId = artistService.saveOrUpdate(existingArtist);
-
-        assertEquals(expectedId, Long.valueOf(actualId));
-        verify(artistDao).update(existingArtist);
-        verify(releaseService).saveOrUpdate(existingReleases);
-    }
-
-    @Test
-    public void saveOrUpdateSaveExistingWithoutId() throws Exception {
         when(artistDao.findByAndroidId(expectedAndroidAudioArtistId)).thenReturn(existingArtist);
 
         long actualId = artistService.saveOrUpdate(newArtist);

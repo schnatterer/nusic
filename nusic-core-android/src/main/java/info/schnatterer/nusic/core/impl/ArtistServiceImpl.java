@@ -70,17 +70,13 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public long saveOrUpdate(Artist artist) throws ServiceException {
         try {
-            if (artist.getId() != null) {
+            Artist existingArtist = artistDao.findByAndroidId(artist.getAndroidAudioArtistId());
+            if (existingArtist != null) {
+                artist.setId(existingArtist.getId());
+                artist.setDateCreated(existingArtist.getDateCreated());
                 update(artist);
             } else {
-                Artist existingArtist = artistDao.findByAndroidId(artist.getAndroidAudioArtistId());
-                if (existingArtist != null) {
-                    artist.setId(existingArtist.getId());
-                    artist.setDateCreated(existingArtist.getDateCreated());
-                    update(artist);
-                } else {
-                    save(artist);
-                }
+                save(artist);
             }
             return artist.getId();
         } catch (DatabaseException e) {
