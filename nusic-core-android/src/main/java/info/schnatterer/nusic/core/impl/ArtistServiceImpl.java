@@ -21,6 +21,10 @@
  */
 package info.schnatterer.nusic.core.impl;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import info.schnatterer.nusic.core.ArtistService;
 import info.schnatterer.nusic.core.ReleaseService;
 import info.schnatterer.nusic.core.ServiceException;
@@ -28,6 +32,7 @@ import info.schnatterer.nusic.core.i18n.CoreMessageKey;
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.dao.ArtistDao;
 import info.schnatterer.nusic.data.model.Artist;
+import info.schnatterer.nusic.data.model.Release;
 
 import javax.inject.Inject;
 
@@ -57,14 +62,7 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public int update(Artist artist) throws ServiceException {
-        int ret;
-        try {
-            ret = artistDao.update(artist);
-            releaseService.saveOrUpdate(artist.getReleases());
-            return ret;
-        } catch (DatabaseException e) {
-            throw new AndroidServiceException(CoreMessageKey.ERROR_WRITING_TO_DB, e);
-        }
+        return update(artist, null);
     }
 
     @Override
@@ -74,7 +72,7 @@ public class ArtistServiceImpl implements ArtistService {
             if (existingArtist != null) {
                 artist.setId(existingArtist.getId());
                 artist.setDateCreated(existingArtist.getDateCreated());
-                update(artist);
+                update(artist, existingArtist.getReleases());
             } else {
                 save(artist);
             }
@@ -82,5 +80,43 @@ public class ArtistServiceImpl implements ArtistService {
         } catch (DatabaseException e) {
             throw new AndroidServiceException(CoreMessageKey.ERROR_WRITING_TO_DB, e);
         }
+    }
+
+    private int update(Artist artist, List<Release> existingReleases) throws ServiceException {
+        int ret;
+        try {
+            if (existingReleases != null) {
+                deleteSuperfluousReleases(existingReleases, artist.getReleases());
+            }
+            ret = artistDao.update(artist);
+            // TODO do we need to save the artist here? i.e. shouldn't the second parameter be false?
+            releaseService.saveOrUpdate(artist.getReleases());
+            return ret;
+        } catch (DatabaseException e) {
+            throw new AndroidServiceException(CoreMessageKey.ERROR_WRITING_TO_DB, e);
+        }
+    }
+
+    // TODO move to releaseService?
+    private void deleteSuperfluousReleases(List<Release> existingReleases, List<Release> newReleases) throws ServiceException {
+        Set<String> newReleaseIds = toSetOfMusicBrainzIds(newReleases);
+
+        deleteReleasesNotContainedIn(existingReleases, newReleaseIds);
+    }
+
+    private void deleteReleasesNotContainedIn(List<Release> existingReleases, Set<String> newReleaseIds) throws ServiceException {
+        for (Release existingRelease : existingReleases) {
+            if (!newReleaseIds.contains(existingRelease.getMusicBrainzId())) {
+                releaseService.delete(existingRelease);
+            }
+        }
+    }
+
+    private Set<String> toSetOfMusicBrainzIds(List<Release> releases) {
+        Set<String> newReleaseIds = new HashSet<>(releases.size());
+        for (Release newRelease : releases) {
+            newReleaseIds.add(newRelease.getMusicBrainzId());
+        }
+        return newReleaseIds;
     }
 }

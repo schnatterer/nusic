@@ -41,13 +41,13 @@ import android.provider.BaseColumns;
  * Wraps the {@link SQLiteDatabase} object as well as the {@link Cursor} and
  * provides {@link SQLiteDatabase}'s <code>query()</code> methods to its
  * concrete sub classes.
- * 
+ *
  * Allows for only one concurrent database query at a time, which in turn allows
  * other classes (such as {@link AsyncTaskLoader}s to close the {@link Cursor}
  * any time by calling {@link #closeCursor()}.
- * 
+ *
  * @author schnatterer
- * 
+ *
  * @param <T>
  */
 public abstract class AbstractSqliteDao<T extends Entity> implements
@@ -76,7 +76,7 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
 
     /**
      * For reasons of efficiency when joining.
-     * 
+     *
      * @param cursor
      * @param startIndex
      * @return
@@ -86,7 +86,7 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
     /**
      * Only fills in "direct" columns. Relation (joins) must be taken care of by
      * DAO's methods.
-     * 
+     *
      * @param cursor
      * @param startIndex
      * @return
@@ -114,7 +114,7 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
     /**
      * Calls {@link Entity#prePersist()} before converting to
      * {@link ContentValues}.
-     * 
+     *
      * @param t
      * @return
      */
@@ -153,13 +153,28 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
         }
     }
 
+    @Override
+    public long delete(T entity) throws DatabaseException {
+        try {
+            Long id = getId(entity);
+            if (id == null) {
+                throw new DatabaseException(
+                    "Unable to update because Id is null in entity: "
+                        + entity);
+            }
+            return db.delete(getTableName(),  BaseColumns._ID + "=" + id, null);
+        } catch (Exception e) {
+            throw new DatabaseException("Unable to delete " + entity, e);
+        }
+    }
+
     protected Context getContext() {
         return context;
     }
 
     /**
      * Create a new cursor, closing the old one first.
-     * 
+     *
      * @param cursor
      * @return
      */
@@ -229,7 +244,7 @@ public abstract class AbstractSqliteDao<T extends Entity> implements
      * {@link SQLiteDatabase#queryWithFactory(CursorFactory, boolean, String, String[], String, String[], String, String, String, String, CancellationSignal)}
      * , storing a reference of the cursor so it can be closed at any time via
      * {@link #closeCursor()}.
-     * 
+     *
      */
     protected Cursor queryWithFactory(CursorFactory cursorFactory,
             boolean distinct, String table, String[] columns, String selection,

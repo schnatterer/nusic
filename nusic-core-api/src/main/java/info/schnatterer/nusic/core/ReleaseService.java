@@ -29,9 +29,9 @@ import java.util.List;
 /**
  * Provides access to the {@link Release}s stored locally. This would be the
  * place to implement transaction handling.
- * 
+ *
  * @author schnatterer
- * 
+ *
  */
 public interface ReleaseService {
 
@@ -40,7 +40,7 @@ public interface ReleaseService {
     /**
      * Convenience method for {@link #saveOrUpdate(List)}, that checks if the
      * artists
-     * 
+     *
      * @param releases
      * @throws ServiceException
      */
@@ -50,7 +50,7 @@ public interface ReleaseService {
      * Creates new {@link Release}s or updates existing ones (matching by
      * {@link Release#getMusicBrainzId()}). Does not update the
      * {@link Release#getArtist()}.
-     * 
+     *
      * @param releases
      * @param saveArtist
      *            <code>false</code> assumes that the artist is persisted
@@ -66,7 +66,7 @@ public interface ReleaseService {
     /**
      * Saves or updates only the {@link Release}, not any related {@link Artist}
      * .
-     * 
+     *
      * @param release
      * @return
      * @throws ServiceException
@@ -74,13 +74,21 @@ public interface ReleaseService {
     long saveOrUpdate(Release release) throws ServiceException;
 
     /**
+     * Deletes an entity, if does exist.
+     *
+     * @param release
+     * @throws ServiceException
+     */
+    void delete(Release release) throws ServiceException;
+
+    /**
      * Finds all releases that were created after a specific date and that are
      * visible.
-     * 
-     * @param gtDateCreated
+     *
+     * @param beforeRefresh
      *            all releases whose creation data is greater than this date are
      *            returned.
-     * 
+     *
      * @return all releases that were created after <code>gtDateCreated</code>
      * @throws ServiceException
      */
@@ -91,7 +99,7 @@ public interface ReleaseService {
      * Finds all releases that are released today. That is all releases whose
      * release date is greater than or equal today midnight and less than
      * tomorrow midnight.
-     * 
+     *
      * @return all releases that will be released today
      * @throws ServiceException
      */
@@ -99,7 +107,7 @@ public interface ReleaseService {
 
     /**
      * Finds all release that are available as of today. *
-     * 
+     *
      * @param isAvailable
      *            if <code>true</code> all releases that are available today are
      *            returned. Otherwise, all releases that are announced are
@@ -112,7 +120,7 @@ public interface ReleaseService {
 
     /**
      * Finds all releases that are not hidden.
-     * 
+     *
      * @return
      * @throws ServiceException
      */

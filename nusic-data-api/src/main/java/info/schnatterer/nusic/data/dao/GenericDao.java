@@ -49,6 +49,15 @@ public interface GenericDao<T extends Entity> {
     int update(T entity) throws DatabaseException;
 
     /**
+     * Deletes an entity, if does exist.
+     *
+     * @param entity
+     * @return the number of rows affected
+     * @throws DatabaseException entity does not exist, error writing data, etc.
+     */
+    long delete(T entity) throws DatabaseException;
+
+    /**
      * Convenience method for updating rows in the database. This is useful when
      * updating more than one row at a time. To update only one row, consider
      * using {@link #update(Entity)}.

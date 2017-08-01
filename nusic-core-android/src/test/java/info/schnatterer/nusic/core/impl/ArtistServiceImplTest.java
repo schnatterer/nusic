@@ -31,6 +31,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import info.schnatterer.nusic.core.ReleaseService;
@@ -40,6 +42,7 @@ import info.schnatterer.nusic.data.model.Release;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -63,7 +66,8 @@ public class ArtistServiceImplTest {
     private List<Release> existingReleases = Arrays.asList(
         createRelease("existing1", existingArtist), createRelease("existing2", existingArtist));
 
-    private List<Release> newReleases = Arrays.asList(createRelease("new1", newArtist), createRelease("nwe2", newArtist));
+    private List<Release> newReleases = new LinkedList<>(
+        Arrays.asList(createRelease("new1", newArtist), createRelease("nwe2", newArtist)));
 
     @Before
     public void setup() throws Exception {
@@ -91,7 +95,7 @@ public class ArtistServiceImplTest {
     }
 
     @Test
-    public void saveOrUpdateSaveExisting() throws Exception {
+    public void saveOrUpdateSaveExistingAddAndRemoveReleases() throws Exception {
         when(artistDao.findByAndroidId(expectedAndroidAudioArtistId)).thenReturn(existingArtist);
 
         long actualId = artistService.saveOrUpdate(newArtist);
@@ -99,11 +103,61 @@ public class ArtistServiceImplTest {
         assertEquals(expectedId, Long.valueOf(actualId));
         verify(artistDao).update(existingArtist);
         verify(releaseService).saveOrUpdate(newReleases);
+        for (Release existingRelease : existingReleases) {
+            verify(releaseService).delete(existingRelease);
+        }
     }
+
+    @Test
+    public void saveOrUpdateSaveExistingAddReleases() throws Exception {
+        when(artistDao.findByAndroidId(expectedAndroidAudioArtistId)).thenReturn(existingArtist);
+        newReleases.addAll(existingReleases);
+        newArtist.setReleases(newReleases);
+
+        long actualId = artistService.saveOrUpdate(newArtist);
+
+        assertEquals(expectedId, Long.valueOf(actualId));
+        verify(artistDao).update(existingArtist);
+        verify(releaseService).saveOrUpdate(newReleases);
+
+        verify(releaseService, never()).delete((Release) any());
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void saveOrUpdateSaveExistingRemoveReleases() throws Exception {
+        when(artistDao.findByAndroidId(expectedAndroidAudioArtistId)).thenReturn(existingArtist);
+        List<Release> emptyList = Collections.emptyList();
+        newArtist.setReleases(emptyList);
+
+        long actualId = artistService.saveOrUpdate(newArtist);
+
+        assertEquals(expectedId, Long.valueOf(actualId));
+        verify(artistDao).update(existingArtist);
+        for (Release existingRelease : existingReleases) {
+            verify(releaseService).delete(existingRelease);
+        }
+
+        verify(releaseService).saveOrUpdate(emptyList);
+    }
+
+    @Test
+    public void saveOrUpdateSaveSameReleases() throws Exception {
+        when(artistDao.findByAndroidId(expectedAndroidAudioArtistId)).thenReturn(existingArtist);
+        newArtist.setReleases(existingReleases);
+
+        long actualId = artistService.saveOrUpdate(newArtist);
+
+        assertEquals(expectedId, Long.valueOf(actualId));
+        verify(artistDao).update(existingArtist);
+        verify(releaseService).saveOrUpdate(existingReleases);
+    }
+
 
     private Release createRelease(String name, Artist artist) {
         Release release = new Release();
         release.setReleaseName(name);
+        release.setMusicBrainzId(name);
         release.setArtist(artist);
         artist.getReleases().add(release);
         return release;

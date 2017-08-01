@@ -39,7 +39,7 @@ import javax.inject.Inject;
 
 /**
  * Default implementation of {@link ReleaseService}.
- * 
+ *
  * @author schnatterer
  *
  */
@@ -118,6 +118,15 @@ public class ReleaseServiceImpl implements ReleaseService {
         } catch (DatabaseException e) {
             throw new AndroidServiceException(
                     CoreMessageKey.ERROR_WRITING_TO_DB, e);
+        }
+    }
+
+    @Override
+    public void delete(Release release) throws ServiceException {
+        try {
+            releaseDao.delete(release);
+        } catch (DatabaseException e) {
+            throw new AndroidServiceException(CoreMessageKey.ERROR_WRITING_TO_DB, e);
         }
     }
 
@@ -203,14 +212,14 @@ public class ReleaseServiceImpl implements ReleaseService {
 
     /**
      * Calculates the date where the release time period begins.<br/>
-     * 
+     *
      * Releases tha were released in the past are only downloaded and displayed
      * if there were release within a certain time period. This
      * {@link PreferencesService#getDownloadReleasesTimePeriod()} is relative to
      * the current date and shows how many months of the past are downloaded and
      * displayed. So there is a lower limit for the release date.<br/>
      * All releases that were release before this limit are not displayed.
-     * 
+     *
      * @return all releases that were released before this date are not
      *         displayed.
      */
