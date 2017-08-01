@@ -21,6 +21,9 @@
  */
 package info.schnatterer.nusic.core.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,6 +46,8 @@ import javax.inject.Inject;
  *
  */
 public class ArtistServiceImpl implements ArtistService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ArtistServiceImpl.class);
 
     @Inject
     private ReleaseService releaseService;
@@ -107,6 +112,8 @@ public class ArtistServiceImpl implements ArtistService {
     private void deleteReleasesNotContainedIn(List<Release> existingReleases, Set<String> newReleaseIds) throws ServiceException {
         for (Release existingRelease : existingReleases) {
             if (!newReleaseIds.contains(existingRelease.getMusicBrainzId())) {
+                LOG.info("Deleting existing release, because it no longer exists in new artist {}",
+                    existingRelease);
                 releaseService.delete(existingRelease);
             }
         }
