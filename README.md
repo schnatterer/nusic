@@ -5,10 +5,6 @@ nusic - your new music
 [![Quality Gates Develop](https://sonarcloud.io/api/badges/gate?key=info.schnatterer.nusic:nusic:develop)](https://sonarcloud.io/dashboard?id=info.schnatterer.nusic%3Anusic%3Adevelop)
 [![License](https://img.shields.io/github/license/schnatterer/nusic.svg)](LICENSE.txt)
 
-Legacy Jenkins 1 and SonarQube 5 (OpenShift)  
-[![Build Status Develop](https://jenkins.schnatterer.info/job/nusic-develop/badge/icon)](https://jenkins.schnatterer.info/job/nusic-develop/)
-[![Quality Gates Develop](https://sonarqube.schnatterer.info/api/badges/gate?key=info.schnatterer.nusic:nusic-develop)](https://sonarqube.schnatterer.info/dashboard/index/279?did=1)
-
 Never again miss a new album release of your favorite artists - always stay informed by nusic.
 
 <img alt="nusic icon" src="https://raw.githubusercontent.com/schnatterer/nusic/develop/resources/ic_launcher_highres.png" width="200" height="200" />
