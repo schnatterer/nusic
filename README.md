@@ -16,10 +16,10 @@ No account necessary.
 
 Note that this app is not optimized for tablets, yet. Please be patient.
 
-Please report any issues [here] (https://github.com/schnatterer/nusic/issues).
+Please report any issues [here](https://github.com/schnatterer/nusic/issues).
 
 ## Download
-You can download the lates version as APK from [GitHub] (https://github.com/schnatterer/nusic/releases/latest) or get the app directly from [F-Droid](https://f-droid.org/app/info.schnatterer.nusic) or [Google Play](https://play.google.com/store/apps/details?id=info.schnatterer.nusic).
+You can download the lates version as APK from [GitHub](https://github.com/schnatterer/nusic/releases/latest) or get the app directly from [F-Droid](https://f-droid.org/app/info.schnatterer.nusic) or [Google Play](https://play.google.com/store/apps/details?id=info.schnatterer.nusic).
 
 [<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/app/info.schnatterer.nusic)
 
@@ -32,7 +32,7 @@ Licensed under the GNU General Public License Version 3.
 See the [License](LICENSE.txt) and the [licenses of dependencies](NOTICE.md).
 
 ## Release notes
-See [Changelog](CHANGELOG.md) and [Releases] (https://github.com/schnatterer/nusic/releases).
+See [Changelog](CHANGELOG.md) and [Releases](https://github.com/schnatterer/nusic/releases).
 
 ## Permissions
 What kind of permission does nusic require and why does it require them?
