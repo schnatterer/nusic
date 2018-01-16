@@ -23,6 +23,7 @@ package info.schnatterer.nusic.data.dao.sqlite;
 
 import info.schnatterer.nusic.data.DatabaseException;
 import info.schnatterer.nusic.data.NusicDatabaseSqlite;
+import info.schnatterer.nusic.data.NusicDatabaseSqlite.TableRelease;
 import info.schnatterer.nusic.data.NusicDatabaseSqlite.TableArtist;
 import info.schnatterer.nusic.data.dao.ArtistDao;
 import info.schnatterer.nusic.data.model.Artist;
@@ -40,6 +41,11 @@ import android.database.Cursor;
 public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
         ArtistDao {
 
+    //ReleaseDaoSqlite.QUERY_ALL
+    public static final String QUERY_ALL = "SELECT " + TableRelease.COLUMNS_ALL + "," + TableArtist.COLUMNS_ALL + " FROM " +
+        TableRelease.NAME + " INNER JOIN " + TableArtist.NAME + " ON " + TableRelease.NAME +"." + TableRelease.COLUMN_FK_ID_ARTIST + "=" +
+        TableArtist.NAME + "." + TableArtist.COLUMN_ID;
+
     @Inject
     public ArtistDaoSqlite(Context context, NusicDatabaseSqlite db) {
         super(context, db.getWritableDatabase());
@@ -53,6 +59,7 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
             if (!cursor.moveToFirst()) {
                 return null;
             }
+
             Artist artist = new Artist(SqliteUtil.loadDate(cursor, 1));
             artist.setId(cursor.getLong(0));
             return artist;
@@ -110,7 +117,7 @@ public class ArtistDaoSqlite extends AbstractSqliteDao<Artist> implements
     /**
      * Queries a specific artists ID and returns the cursor or <code>null</code>
      * if none present. <b>Make sure to close the cursor when finished!</b>
-     * 
+     *
      * @param androidId
      * @param columns
      * @return the cursor or <code>null</code>, if none found

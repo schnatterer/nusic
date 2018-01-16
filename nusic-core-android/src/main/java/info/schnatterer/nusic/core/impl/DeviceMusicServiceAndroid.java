@@ -36,6 +36,9 @@ import android.provider.BaseColumns;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Audio.ArtistColumns;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Provides access to music stored on the device via android's APIs.
  *
@@ -43,6 +46,8 @@ import android.provider.MediaStore.Audio.ArtistColumns;
  *
  */
 public class DeviceMusicServiceAndroid implements DeviceMusicService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DeviceMusicServiceAndroid.class);
 
     @Inject
     private Context context;
@@ -77,8 +82,18 @@ public class DeviceMusicServiceAndroid implements DeviceMusicService {
                 cursor.close();
             }
         }
+
+        LOG.info("artists={}", artists);
         return artists;
+        //return new Artist[] { createArtist(316, "Radiohead") };
     }
+
+    private Artist createArtist(int androidAudioArtistId, String artistName) {
+        Artist artist = new Artist(Long.valueOf(androidAudioArtistId));
+        artist.setArtistName(artistName);
+        return artist;
+    }
+
 
     public enum ArtistProjection {
         ID(0, BaseColumns._ID), ARTIST(1, ArtistColumns.ARTIST);

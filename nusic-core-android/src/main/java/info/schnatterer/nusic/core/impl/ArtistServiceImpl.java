@@ -77,6 +77,7 @@ public class ArtistServiceImpl implements ArtistService {
             if (existingArtist != null) {
                 artist.setId(existingArtist.getId());
                 artist.setDateCreated(existingArtist.getDateCreated());
+                // TODO existingArtist Releases are not loaded at this place
                 update(artist, existingArtist.getReleases());
             } else {
                 save(artist);
