@@ -5,10 +5,6 @@ nusic - your new music
 [![Quality Gates Develop](https://sonarcloud.io/api/badges/gate?key=info.schnatterer.nusic:nusic:develop)](https://sonarcloud.io/dashboard?id=info.schnatterer.nusic%3Anusic%3Adevelop)
 [![License](https://img.shields.io/github/license/schnatterer/nusic.svg)](LICENSE.txt)
 
-Legacy Jenkins 1 and SonarQube 5 (OpenShift)  
-[![Build Status Develop](https://jenkins.schnatterer.info/job/nusic-develop/badge/icon)](https://jenkins.schnatterer.info/job/nusic-develop/)
-[![Quality Gates Develop](https://sonarqube.schnatterer.info/api/badges/gate?key=info.schnatterer.nusic:nusic-develop)](https://sonarqube.schnatterer.info/dashboard/index/279?did=1)
-
 Never again miss a new album release of your favorite artists - always stay informed by nusic.
 
 <img alt="nusic icon" src="https://raw.githubusercontent.com/schnatterer/nusic/develop/resources/ic_launcher_highres.png" width="200" height="200" />
@@ -20,10 +16,10 @@ No account necessary.
 
 Note that this app is not optimized for tablets, yet. Please be patient.
 
-Please report any issues [here] (https://github.com/schnatterer/nusic/issues).
+Please report any issues [here](https://github.com/schnatterer/nusic/issues).
 
 ## Download
-You can download the lates version as APK from [GitHub] (https://github.com/schnatterer/nusic/releases/latest) or get the app directly from [F-Droid](https://f-droid.org/app/info.schnatterer.nusic) or [Google Play](https://play.google.com/store/apps/details?id=info.schnatterer.nusic).
+You can download the lates version as APK from [GitHub](https://github.com/schnatterer/nusic/releases/latest) or get the app directly from [F-Droid](https://f-droid.org/app/info.schnatterer.nusic) or [Google Play](https://play.google.com/store/apps/details?id=info.schnatterer.nusic).
 
 [<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/app/info.schnatterer.nusic)
 
@@ -36,7 +32,7 @@ Licensed under the GNU General Public License Version 3.
 See the [License](LICENSE.txt) and the [licenses of dependencies](NOTICE.md).
 
 ## Release notes
-See [Changelog](CHANGELOG.md) and [Releases] (https://github.com/schnatterer/nusic/releases).
+See [Changelog](CHANGELOG.md) and [Releases](https://github.com/schnatterer/nusic/releases).
 
 ## Permissions
 What kind of permission does nusic require and why does it require them?
