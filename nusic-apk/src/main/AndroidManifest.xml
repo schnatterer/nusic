@@ -22,7 +22,9 @@
     along with nusic.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"  package="info.schnatterer.nusic" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="info.schnatterer.nusic">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -31,7 +33,11 @@
     <!-- Needed for querying artists from provider from android 4.4; From Android 6, the user is also asked programmatically before actually using the permission -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
-    <application android:allowBackup="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:name=".android.application.NusicApplication" android:theme="@style/AppTheme">
+    <application android:allowBackup="true" android:icon="@drawable/ic_launcher"
+                 android:label="@string/app_name"
+                 android:name=".android.application.NusicApplication"
+                 android:theme="@style/AppTheme"
+                 tools:replace="android:theme">
 
         <!-- Use theme without actionbar here because we're going to use the toolbar here -->
         <activity android:label="@string/app_name" android:name=".android.activities.MainActivity" android:theme="@style/Theme.Nusic.NoActionBar">

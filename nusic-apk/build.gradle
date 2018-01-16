@@ -36,9 +36,7 @@ android {
         // Set final name "nusic-x.y.z.apk" Some things were just easier with maven.
         applicationVariants.all { variant ->
             variant.outputs.each { output ->
-                output.outputFile = new File(
-                        output.outputFile.parent,
-                        output.outputFile.name.replaceFirst(".*", "nusic-${project.version}.apk"))
+                output.outputFileName = output.outputFileName.replaceFirst(".*", "nusic-${project.version}.apk")
             }
         }
     }

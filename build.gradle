@@ -25,11 +25,12 @@ import nl.javadude.gradle.plugins.license.License
 buildscript {
     repositories {
         jcenter()
+        google()
     }
 
     // Gradle plugins
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.0.1'
         classpath 'de.undercouch:gradle-download-task:3.0.0'
         // Mark down generation
         classpath 'org.pegdown:pegdown:1.6.0'
@@ -131,7 +132,7 @@ ext {
     // When changing the following, change also in .travis.yml
     nusictTargetSdkVersion = 24
     nusicCompileSdkVersion = 24
-    nusicBuildToolsVersion = "25.0.0"
+    nusicBuildToolsVersion = '26.0.2'
 
     // Properties for java & android submodules
     nusicSourceCompatibility = JavaVersion.VERSION_1_7
@@ -153,8 +154,8 @@ ext {
         roboguice         : "org.roboguice:roboguice:${roboguiceVersion}",
         roboblender       : "org.roboguice:roboblender:${roboguiceVersion}",
         //logback-android - process log statements produced by dependencies via slf4j with logback
-        logback           : dependencies.create("com.github.tony19:logback-android-classic:1.1.1-5") {
-            exclude group: "com.google.android:android", module: "android"
+        logback           : dependencies.create("com.github.tony19:logback-android-classic:1.1.1-6") {
+            exclude group: "com.google.android", module: "android"
             force = true
         },
         logbackAndroidUtils: "com.github.schnatterer:logback-android-utils:1.0.0",

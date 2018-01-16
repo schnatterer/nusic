@@ -182,7 +182,7 @@ dependencies {
         libraries.androidDesign
     )
     // Enable annotation database to improve performance
-    provided libraries.roboblender
+    annotationProcessor libraries.roboblender
 
     // Test dependencies
     testCompile(
