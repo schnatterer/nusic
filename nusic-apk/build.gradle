@@ -27,6 +27,9 @@ android {
     compileSdkVersion nusicCompileSdkVersion
     buildToolsVersion nusicBuildToolsVersion
 
+    // MusicBrainz and Coverartarchive API Binding depend on apache http client
+    useLibrary 'org.apache.http.legacy'
+
     defaultConfig {
         applicationId project.group
         minSdkVersion nusicMinSdkVersion
@@ -147,7 +150,9 @@ dependencies {
 
     compile( project(":nusic-core-android")) {
         // This dependency is provided by android anyway, so spare the APK the bloat
-        exclude group: "commons-logging", module: "commons-logging"
+        exclude (group: "commons-logging", module: "commons-logging")
+        // Provided by android until 6, then by useLibrary 'org.apache.http.legacy'
+        exclude (group: "org.apache.httpcomponents", module: "httpclient")
     }
 
     // External dependencies
