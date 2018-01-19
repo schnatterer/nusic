@@ -42,7 +42,7 @@ buildscript {
 plugins {
     id "maven"
     id "jacoco"
-    id "org.sonarqube" version "2.5"
+    id "org.sonarqube" version "2.6"
 }
 
 //rootProject and the subprojects
