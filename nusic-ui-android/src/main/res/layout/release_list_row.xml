@@ -43,7 +43,7 @@
             android:layout_width="50dip"
             android:layout_height="50dip"
             android:contentDescription="@string/releaseListRow_Thumbnail"
-            android:src="@drawable/ic_launcher" />
+            android:src="@mipmap/ic_launcher" />
     </LinearLayout>
 
     <LinearLayout
