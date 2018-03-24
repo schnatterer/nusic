@@ -179,7 +179,8 @@ dependencies {
         // An explicit log implementation is needed at compile time, because the log level is set by the app
         libraries.logback,
         libraries.logbackAndroidUtils,
-        libraries.androidDesign
+        libraries.androidDesign,
+        libraries.supportCompat,
     )
     // Enable annotation database to improve performance
     annotationProcessor libraries.roboblender

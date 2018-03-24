@@ -1,5 +1,16 @@
 TODOs - Features, enhancements, refactoring, ...
 
+Target API 27:
+- Notifcation: Use of stream types is deprecated for operations other than volume control
+- min API changed to 14 -> Remove dead code
+- Shared Button No longer Works on physical phone. Works on emu?!
+- Icons on physical phone with API 27 are never round when background is transparent image?!
+
+- Drop Status Dialog an ServiceConnection?
+- Drop Support < Android 4?
+
+
+
 - Modernize UI: Use Snackbar instead of Toast
 - Modernize UI: Provide Burger Menu for List entries --> Intuitive Way of hiding releases
 - Drop Support < Android 4.0 (minSdkVersion 14), Clean Up Code

@@ -99,6 +99,7 @@ subprojects {
 
         //mavenCentral()
         jcenter()
+        maven { url "https://maven.google.com" }
 
         // For musicbrainzws from github
         maven { url "https://jitpack.io" }
@@ -107,7 +108,7 @@ subprojects {
 
 task setVersion << {
     // Load file
-    def Properties gradleProperties = new Properties()
+    Properties gradleProperties = new Properties()
     def gradlePropertiesFile = file('gradle.properties')
     gradleProperties.load(new FileInputStream(gradlePropertiesFile))
 
@@ -128,7 +129,7 @@ project.ext {
 ext {
     // Properties for android submodules
     nusicVersionCode = Integer.parseInt(versionCode)
-    nusicMinSdkVersion = 9
+    nusicMinSdkVersion = 14
     // When changing the following, change also in .travis.yml
     nusictTargetSdkVersion = 27
     nusicCompileSdkVersion = 27
@@ -141,7 +142,7 @@ ext {
 
     slf4jVersion = "1.7.21"
     mockitoVersion = "2.8.47"
-    androidCompatibilityVersion = "24.2.1"
+    androidCompatibilityVersion = "27.0.2"
     roboguiceVersion = "3.0.1"
 
     libraries = [
@@ -150,6 +151,7 @@ ext {
         androidSupportV4  : "com.android.support:support-v4:${androidCompatibilityVersion}",
         // Appcompat for API lvl 4 and 7, as well as backport of material design
         androidDesign     : "com.android.support:design:${androidCompatibilityVersion}",
+        supportCompat     : "com.android.support:support-compat:${androidCompatibilityVersion}",
         // Roboguice
         roboguice         : "org.roboguice:roboguice:${roboguiceVersion}",
         roboblender       : "org.roboguice:roboblender:${roboguiceVersion}",
