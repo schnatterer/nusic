@@ -1,5 +1,8 @@
 language: android
 
+env:
+  - BUILD_TOOLS_VERSION=27.0.3
+
 android:
   components:
     # Use the latest revision of Android SDK Tools
@@ -7,7 +10,7 @@ android:
     - platform-tools
 
     # When changing the following, change also in build.gradle!
-    - build-tools-27.0.3
+    - build-tools-${BUILD_TOOLS_VERSION}
     - android-24
 
     - extra-android-m2repository
@@ -15,6 +18,10 @@ android:
 before_install:
 # Avoid ./gradlew: Permission denied
  - chmod +x gradlew
+
+install:
+# Avoids "Failed to install the following Android SDK packages as some licences have not been accepted."
+  - echo yes | sdkmanager "build-tools;${BUILD_TOOLS_VERSION}"
 
 cache:
   directories:
