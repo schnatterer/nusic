@@ -132,7 +132,7 @@ ext {
     // When changing the following, change also in .travis.yml
     nusictTargetSdkVersion = 24
     nusicCompileSdkVersion = 24
-    nusicBuildToolsVersion = '26.0.2'
+    nusicBuildToolsVersion = '27.0.3'
 
     // Properties for java & android submodules
     nusicSourceCompatibility = JavaVersion.VERSION_1_7
