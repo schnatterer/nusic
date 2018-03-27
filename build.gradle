@@ -97,7 +97,7 @@ subprojects {
     repositories {
         mavenLocal()
 
-        //mavenCentral()
+        google()
         jcenter()
 
         // For musicbrainzws from github
