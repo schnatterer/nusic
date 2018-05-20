@@ -1,3 +1,7 @@
+<p align="center">
+ <img src="https://raw.githubusercontent.com/jbeguna04/nusic/develop/Icongraphic/featuredGraphic-02.png" width=500 align="center">
+</p>
+
 nusic - your new music
 =====
 
