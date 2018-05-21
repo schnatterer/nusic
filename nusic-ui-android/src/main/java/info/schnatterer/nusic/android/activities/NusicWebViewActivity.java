@@ -41,7 +41,7 @@ import android.webkit.WebViewClient;
  * Activity that loads a website from an URL and displays it in a text view.
  *
  * The URI to the website that is displayed can be passed to the activity using
- * {@link Intent#setData(android.net.Uri)}.<br/>
+ * {@link Intent#putExtra(String, String)} with {@link #EXTRA_URL} as key.<br/>
  * <br/>
  * This will also work for email links (<code>mailto:</code>).URLs like<br/>
  * <code>mailto:x@y.z?subject=@string/someResource&amp;body=Your message here</code>
@@ -50,7 +50,9 @@ import android.webkit.WebViewClient;
  * preferred email app is initialized with the parameters passed to this
  * activity. Note that any <code>@string/</code> parameters are localized before
  * starting the new activity.
- *
+ * <br/>
+ * In addition a title for the share button can be added using
+ * {@link Intent#putExtra(String, String)} with {@link #EXTRA_SUBJECT} as key.
  */
 public class NusicWebViewActivity extends RoboActionBarActivity {
 

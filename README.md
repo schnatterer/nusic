@@ -1,18 +1,13 @@
 nusic - your new music
 =====
 
-| Branch        | Build Status  | Quality Gate |
-| ------------- |-------------  | ------------ |
-| Develop       | [![Build Status Develop](https://jenkins.schnatterer.info/job/nusic-develop/badge/icon)](https://jenkins.schnatterer.info/job/nusic-develop/)  |[![Quality Gates Develop](https://sonarqube.schnatterer.info/api/badges/gate?key=info.schnatterer.nusic:nusic-develop)](https://sonarqube.schnatterer.info/dashboard/index/279?did=1) |
-| Features       | [![Build Status Features](https://jenkins.schnatterer.info/job/nusic-features/badge/icon)](https://jenkins.schnatterer.info/job/nusic-features/)  | |
+[![Build Status Develop](https://travis-ci.org/schnatterer/nusic.svg?branch=develop)](https://travis-ci.org/schnatterer/nusic)
+[![Quality Gates Develop](https://sonarcloud.io/api/project_badges/measure?project=info.schnatterer.nusic%3Anusic%3Adevelop&metric=alert_status)](https://sonarcloud.io/dashboard?id=info.schnatterer.nusic%3Anusic%3Adevelop)
+[![License](https://img.shields.io/github/license/schnatterer/nusic.svg)](LICENSE.txt)
 
-  [![License](https://img.shields.io/github/license/schnatterer/nusic.svg)](LICENSE.txt)
-  [<img alt="powered by openshift" align="right" src="https://www.openshift.com/images/logos/powered_by_openshift.png"/>](https://www.openshift.com/)
-  
 Never again miss a new album release of your favorite artists - always stay informed by nusic.
 
-<img alt="nusic icon" src="https://raw.githubusercontent.com/schnatterer/nusic/develop/resources/ic_launcher_highres.png" width="200" height="200" />
-
+<img src="resources/featuredGraphic-02.png" width=500 align="center">
 
 nusic uses [MusicBrainz](http://musicbrainz.org/) - the free music encyclopedia - to find out about new releases of the artists on your phone.
 
@@ -20,10 +15,10 @@ No account necessary.
 
 Note that this app is not optimized for tablets, yet. Please be patient.
 
-Please report any issues [here] (https://github.com/schnatterer/nusic/issues).
+Please report any issues [here](https://github.com/schnatterer/nusic/issues).
 
 ## Download
-You can download the lates version as APK from [GitHub] (https://github.com/schnatterer/nusic/releases/latest) or get the app directly from [F-Droid](https://f-droid.org/app/info.schnatterer.nusic) or [Google Play](https://play.google.com/store/apps/details?id=info.schnatterer.nusic).
+You can download the lates version as APK from [GitHub](https://github.com/schnatterer/nusic/releases/latest) or get the app directly from [F-Droid](https://f-droid.org/app/info.schnatterer.nusic) or [Google Play](https://play.google.com/store/apps/details?id=info.schnatterer.nusic).
 
 [<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/app/info.schnatterer.nusic)
 
@@ -36,7 +31,7 @@ Licensed under the GNU General Public License Version 3.
 See the [License](LICENSE.txt) and the [licenses of dependencies](NOTICE.md).
 
 ## Release notes
-See [Changelog](CHANGELOG.md) and [Releases] (https://github.com/schnatterer/nusic/releases).
+See [Changelog](CHANGELOG.md) and [Releases](https://github.com/schnatterer/nusic/releases).
 
 ## Permissions
 What kind of permission does nusic require and why does it require them?

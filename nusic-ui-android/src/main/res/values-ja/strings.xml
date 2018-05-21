@@ -26,7 +26,7 @@
     <string name="action_refresh">リリースの更新</string>
     <string name="action_settings">設定</string>
     <string name="action_settings_developer">開発者設定</string>
-    <!-- TODO translate this --><string name="action_share">Share</string>
+    <string name="action_share">共有</string>
 
     <string name="releaseListMenu_HideRelease">リリースを非表示</string>
     <string name="releaseListMenu_HideAllByArtist">アーティスト別にすべて非表示</string>
@@ -98,7 +98,7 @@
 
     <string name="preferences_category_about">%1$s について</string>
     <string name="preferences_title_version">バージョン</string>
-    <!-- TODO translate this --><string name="preferences_title_contributors">Contributors</string>
+    <string name="preferences_title_contributors">貢献者</string>
     <string name="preferences_title_privacy_policy">プライバシーポリシー</string>
     <string name="preferences_summary_privacy_policy">nusic がアクセスするデータと、それで何をするを確認します</string>
     <string name="preferences_title_licences">ライセンス</string>
@@ -117,13 +117,13 @@
     <string name="preferences_category_misc">その他</string>
     <string name="preferences_title_current_log">現在のログファイルを開く</string>
     <string name="preferences_title_loglevel_logcat">LogCat ログレベル</string>
-    <!-- TODO translate this --><string name="preferences_summary_loglevel_logcat">Determine which log statements are forwarded to LogCat.</string>
-    <!-- TODO translate this --><string name="preferences_title_loglevel_file">File Log Level</string>
-    <!-- TODO translate this --> <string name="preferences_summary_loglevel_file">Determine which log statements are forwarded to the log file. Note: Must be >= Root Log Level</string>
-    <!-- TODO translate this --> <string name="preferences_title_notify_refresh_errors">Show errors during refresh</string>
+    <string name="preferences_summary_loglevel_logcat">LogCat に転送するログ・ステートメントを決定します。</string>
+    <string name="preferences_title_loglevel_file">ファイル ログレベル</string>
+    <string name="preferences_summary_loglevel_file">ログ・ファイルに転送するログ・ステートメントを決定します。 注: ルートログレベル以上にする必要があります</string>
+    <string name="preferences_title_notify_refresh_errors">更新中にエラーを表示</string>
 
     <!-- (Error) messages -->
-    <string name="GenericError">ほとんど実行できないことが発生しました: %1s!</string>
+    <string name="GenericError">実行できない状況が発生しました: %1s!</string>
     <string name="NotOnline">インターネット接続がありません (設定を確認して、モバイル通信の使用を許可してください)</string>
     <string name="MainActivity_errorLoadingReleases">デバイスからリリースの読み込み時にエラー</string>
     <string name="MainActivity_refreshAlreadyInProgress">更新はすでに実行中です。</string>
@@ -131,7 +131,7 @@
 
     <string name="TextAssetActivity_errorLoadingFile">テキストファイルの読み込みエラー</string>
 
-    <!-- TODO translate this --> <string name="NusicWebViewActivity_sharedViaNusic">Shared via nusic android app</string>
+    <string name="NusicWebViewActivity_sharedViaNusic">nusic android アプリ経由で共有しました</string>
 
     <string name="LoadNewReleasesBinding_errorFindingReleases">リリースの更新に失敗しました: </string>
     <string name="LoadNewReleasesBinding_errorFindingReleasesGeneric">リリースを更新しようとした時に信じられないエラーが発生しました: </string>
