@@ -92,7 +92,7 @@ For passing the credentials for this keystore via the command line there are fou
 4. or pass them as system property, e.g.
 
    ```sh
-   gradlew clean check assembleRelease -Dorg.gradle.project.signKeystore=signAlias="the key's alias within the keystore"
+   gradlew clean connectedCheck assembleRelease -Dorg.gradle.project.signKeystore=signAlias="the key's alias within the keystore"
    ```
 
 
@@ -132,7 +132,7 @@ TODO Automate this, e.g. via Jenkins
 
     ```sh
     git checkout tags/v.2.1.1
-    gradlew clean check assembleRelease
+    gradlew clean connectedCheck assembleRelease
     ```
 - Push all branches & tags
 

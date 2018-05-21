@@ -41,7 +41,8 @@ addons:
       - feature/*
 
 script:
-   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./gradlew clean build connectedCheck sonarqube --stacktrace; fi'
+   # Use assembleRelease here to make sure the changes have not affected proguard
+   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./gradlew clean build connectedCheck assembleRelease sonarqube --stacktrace; fi'
    # On PRs we don't have env vars that provide the keystore for signing, so build only debug (see https://docs.travis-ci.com/user/pull-requests/)
    # TODO - this still uses the release config, therefore failing PRs See #18
    - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then bash ./gradlew clean build connectedDebugAndroidTest sonarqube --stacktrace; fi'
