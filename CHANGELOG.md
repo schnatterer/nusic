@@ -1,9 +1,16 @@
 nusic Changelog
 =========
 
+**v.3.3.0** - 2018/05/21
+
+* New logo
+* Minor bug fixes, e.g. [#16](https://github.com/schnatterer/nusic/issues/16)
+
+
 **v.3.2.0** - 2017/03/25
 
 * Added Share button to Release view 
+
 
 **v.3.1.0** - 2016/07/08
 
@@ -11,10 +18,12 @@ nusic Changelog
 * Added contributors to "about" menu
 * Added F-Droid link
 
+
 **v.3.0.0** - 2016/06/19
 
 * Updated android support libraries - fixing errors for legacy android versions
 * Technical reconstructions (maven -> gradle)
+
 
 **v.2.1.1** - 2016/06/01
 
