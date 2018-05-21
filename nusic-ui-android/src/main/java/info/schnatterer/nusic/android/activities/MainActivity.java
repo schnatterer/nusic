@@ -68,13 +68,13 @@ import android.widget.TextView;
 
 /**
  * The activity that is started when the app starts.
- * 
+ *
  * The tab that is shown can parameterized using the {@link #EXTRA_ACTIVE_TAB},
  * that contains a {@link TabDefinition}.
- * 
+ *
  * This activity uses the toolbar as action bar, so better don't use it in
  * conjuntion with a theme that uses an action bar.
- * 
+ *
  * @author schnatterer
  *
  */
@@ -217,10 +217,10 @@ public class MainActivity extends RoboActionBarActivity {
     /**
      * Basically, this method calls
      * {@link #startLoadingReleasesFromInternet(boolean)}.
-     * 
+     *
      * Depending on the SDK version of the device requests the
      * {@link Manifest.permission#READ_EXTERNAL_STORAGE} permission before.
-     * 
+     *
      * @param updateOnlyIfNecessary
      */
     private void requestPermissionOrStartLoadingReleasesFromInternet(
@@ -238,7 +238,7 @@ public class MainActivity extends RoboActionBarActivity {
      * Calls {@link #startLoadingReleasesFromInternet(boolean)} asynchronously
      * via Android M's {@link #onRequestPermissionsResult(int, String[], int[])}
      * mechanism.
-     * 
+     *
      * @param updateOnlyIfNecessary
      */
     @TargetApi(Build.VERSION_CODES.M)
@@ -294,7 +294,7 @@ public class MainActivity extends RoboActionBarActivity {
 
     /**
      * "Encodes" updateOnlyIfNecessary into two different request codes
-     * 
+     *
      * @param updateOnlyIfNecessary
      * @return {@link #PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FORCE_UPDATE_ONLY_IF_NECESSARY_TRUE}
      *         if <code>updateOnlyIfNecessary</code> is <code>true</code>.
@@ -311,7 +311,7 @@ public class MainActivity extends RoboActionBarActivity {
 
     /**
      * "Decodes" the different request codes to boolean updateOnlyIfNecessary
-     * 
+     *
      * @param requestCode
      * @return <code>true</code> if
      *         {@link #PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE_FORCE_UPDATE_ONLY_IF_NECESSARY_TRUE}
@@ -382,7 +382,7 @@ public class MainActivity extends RoboActionBarActivity {
          * task is already running, the notification is not delivered, but
          * instead this method is called. getIntent() seems to always return the
          * first intent that started the app.
-         * 
+         *
          * For Android 4.4.2 this seems not to be called anymore. However, the
          * intent is delivered anyway and getIntent() always returns the last
          * intent that was delivered.
@@ -522,7 +522,7 @@ public class MainActivity extends RoboActionBarActivity {
      * Shows an alert dialog displaying some text. Useful for welcome messages.
      * Calls {@link #registerListenersAndStartLoading()} when the dialog is
      * dismissed.
-     * 
+     *
      * @param text
      *            text to display. If loading from an asset, consider using
      *            {@link TextUtil#loadTextFromAsset(android.content.Context, String)}
@@ -541,7 +541,7 @@ public class MainActivity extends RoboActionBarActivity {
                 .setTitle(
                         getString(R.string.WelcomeScreenTitle,
                                 NusicApplication.getCurrentVersionName()))
-                .setIcon(R.drawable.ic_launcher)
+                .setIcon(R.mipmap.ic_launcher)
                 .setOnCancelListener(new OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
@@ -566,7 +566,7 @@ public class MainActivity extends RoboActionBarActivity {
 
     /**
      * Holds the basic information for each tab.
-     * 
+     *
      * @author schnatterer
      */
     public static enum TabDefinition {
@@ -596,9 +596,9 @@ public class MainActivity extends RoboActionBarActivity {
     /**
      * A fragment pager adapter that defines the content of the tabs and manages
      * the fragments that basically show the content of the tabs.
-     * 
+     *
      * @author schnatterer
-     * 
+     *
      */
     static class TabFragmentPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragments = new ArrayList<>();

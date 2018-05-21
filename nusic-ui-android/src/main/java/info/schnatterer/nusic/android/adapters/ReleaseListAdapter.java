@@ -52,7 +52,7 @@ public class ReleaseListAdapter extends BaseAdapter {
     private static final Logger LOG = LoggerFactory
             .getLogger(ReleaseListAdapter.class);
 
-    private static final int DEFAULT_ARTWORK = R.drawable.ic_launcher;
+    private static final int DEFAULT_ARTWORK = R.drawable.ic_vinyl;
 
     /**
      * Options for asynchronous image loading.
