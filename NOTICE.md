@@ -38,5 +38,5 @@ published under  GNU Lesser General Public License version 2.1
 published under The Apache Software License, Version 2.0  
 [Website](https://commons.apache.org/proper/commons-io/)
   
-The nusic logo bases on Wikitracks Vinyl by Fleshgrinder (released under the Public domain)  
+The nusic vinyl icon bases on Wikitracks Vinyl by Fleshgrinder (released under the Public domain)  
 [Website](https://en.wikipedia.org/wiki/File:Wikitracks_Vinyl.svg)
