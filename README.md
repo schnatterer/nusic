@@ -1,7 +1,3 @@
-<p align="center">
- <img src="https://raw.githubusercontent.com/jbeguna04/nusic/develop/Icongraphic/featuredGraphic-02.png" width=500 align="center">
-</p>
-
 nusic - your new music
 =====
 
@@ -11,8 +7,7 @@ nusic - your new music
 
 Never again miss a new album release of your favorite artists - always stay informed by nusic.
 
-<img alt="nusic icon" src="https://raw.githubusercontent.com/schnatterer/nusic/develop/resources/ic_launcher_highres.png" width="200" height="200" />
-
+<img src="resources/featuredGraphic-02.png" width=500 align="center">
 
 nusic uses [MusicBrainz](http://musicbrainz.org/) - the free music encyclopedia - to find out about new releases of the artists on your phone.
 
