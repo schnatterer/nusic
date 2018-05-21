@@ -30,7 +30,7 @@ buildscript {
 
     // Gradle plugins
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.2'
         classpath 'de.undercouch:gradle-download-task:3.0.0'
         // Mark down generation
         classpath 'org.pegdown:pegdown:1.6.0'
@@ -97,9 +97,8 @@ subprojects {
     repositories {
         mavenLocal()
 
-        //mavenCentral()
+        google()
         jcenter()
-        maven { url "https://maven.google.com" }
 
         // For musicbrainzws from github
         maven { url "https://jitpack.io" }
@@ -133,7 +132,7 @@ ext {
     // When changing the following, change also in .travis.yml
     nusictTargetSdkVersion = 27
     nusicCompileSdkVersion = 27
-    nusicBuildToolsVersion = '26.0.2'
+    nusicBuildToolsVersion = '27.0.3'
 
     // Properties for java & android submodules
     nusicSourceCompatibility = JavaVersion.VERSION_1_7
