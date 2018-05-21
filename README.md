@@ -2,7 +2,7 @@ nusic - your new music
 =====
 
 [![Build Status Develop](https://travis-ci.org/schnatterer/nusic.svg?branch=develop)](https://travis-ci.org/schnatterer/nusic)
-[![Quality Gates Develop](https://sonarcloud.io/api/badges/gate?key=info.schnatterer.nusic:nusic:develop)](https://sonarcloud.io/dashboard?id=info.schnatterer.nusic%3Anusic%3Adevelop)
+[![Quality Gates Develop](https://sonarcloud.io/api/project_badges/measure?project=info.schnatterer.nusic%3Anusic%3Adevelop&metric=alert_status)](https://sonarcloud.io/dashboard?id=info.schnatterer.nusic%3Anusic%3Adevelop)
 [![License](https://img.shields.io/github/license/schnatterer/nusic.svg)](LICENSE.txt)
 
 Never again miss a new album release of your favorite artists - always stay informed by nusic.
