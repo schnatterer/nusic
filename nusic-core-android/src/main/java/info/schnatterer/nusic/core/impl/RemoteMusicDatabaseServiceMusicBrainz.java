@@ -80,7 +80,8 @@ public class RemoteMusicDatabaseServiceMusicBrainz implements
     private static final String SEARCH_BASE = "type:album";
     private static final String SEARCH_DATE_BASE = " AND date:[";
     private static final String SEARCH_DATE_TO = " TO ";
-    private static final String SEARCH_DATE_OPEN_END = "?";
+    // 2019/07: "?" seems to no longer work, results in a huge number of results
+    private static final String SEARCH_DATE_OPEN_END = "9999-12-31";
     private static final String SEARCH_DATE_FINAL = "]";
     private static final String SEARCH_ARTIST_1 = " AND artist:\"";
     private static final String SEARCH_ARTIST_2 = "\"";

@@ -52,7 +52,7 @@ public class RemoteMusicDatabaseServiceMusicBrainzTest {
     private String EXPECTED_STRING_OPEN_BEGINNING = EXPECTED_STRING_BASE
             + "0 TO " + expectedToDateStr + "]";
     private String EXPECTED_STRING_OPEN_END = EXPECTED_STRING_BASE
-            + expectedFromDateStr + " TO ?]";
+            + expectedFromDateStr + " TO 9999-12-31]";
     private String EXPECTED_STRING_NO_DATES = "";
     private String EXPECTED_STRING_REGULAR_DATES = EXPECTED_STRING_BASE
             + expectedFromDateStr + " TO " + expectedToDateStr + "]";
