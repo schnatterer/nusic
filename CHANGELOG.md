@@ -1,6 +1,11 @@
 nusic Changelog
 =========
 
+**v.3.3.1** - 2019/07/06
+
+* Fixes [#23](https://github.com/schnatterer/nusic/issues/23), where too much releases were downloaded causing long syncing times, battery drainage and wasting a lot of storage
+* Reduces the amount of data written to local log file in default `INFO` mode
+
 **v.3.3.0** - 2018/05/21
 
 * New logo
