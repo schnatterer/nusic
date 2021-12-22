@@ -27,8 +27,8 @@ android {
     compileSdkVersion nusicCompileSdkVersion
     buildToolsVersion nusicBuildToolsVersion
 
-    // MusicBrainz and Coverartarchive API Binding depend on apache http client
-    useLibrary 'org.apache.http.legacy'
+    // Coverartarchive API Binding depends on apache http client
+    //useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId project.group
@@ -92,9 +92,15 @@ android {
         }
     }
     packagingOptions {
-        // Both guava and roboguice contain this file. Avoid DuplicateFileException
-        pickFirst "META-INF/maven/com.google.guava/guava/pom.properties"
-        pickFirst "META-INF/maven/com.google.guava/guava/pom.xml"
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/maven/**'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
     }
 }
 

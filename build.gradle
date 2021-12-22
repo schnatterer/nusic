@@ -135,8 +135,8 @@ ext {
     nusicBuildToolsVersion = '27.0.3'
 
     // Properties for java & android submodules
-    nusicSourceCompatibility = JavaVersion.VERSION_1_7
-    nusicTargetCompatibility = JavaVersion.VERSION_1_7
+    nusicSourceCompatibility = JavaVersion.VERSION_1_8
+    nusicTargetCompatibility = JavaVersion.VERSION_1_8
     nusicSourceEncoding = "UTF-8"
 
     slf4jVersion = "1.7.21"

@@ -37,12 +37,14 @@ dependencies {
 
     // External dependencies
     compile(
-            "com.github.schnatterer:musicbrainzws2-java:v.3.0.0",
             "fm.last:coverartarchive-api:2.1.0",
             libraries.roboguice,
             libraries.slf4j,
             libraries.guava
     )
+    compile( "info.schnatterer.musicbrainzws2-java:musicbrainzws2-java:3.2.0",) {
+        exclude group: 'org.slf4j', module: 'slf4j-jdk14'
+    }
     compileOnly(
             // Android API
             libraries.android,
