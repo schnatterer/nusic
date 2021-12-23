@@ -41,7 +41,7 @@ android {
         minSdkVersion nusicMinSdkVersion
         targetSdkVersion nusictTargetSdkVersion
         versionCode 23
-        versionName '3.3.2-SNAPSHOT'
+        versionName '3.3.2'
     }
 
     compileOptions {

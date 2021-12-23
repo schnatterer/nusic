@@ -1,6 +1,10 @@
 nusic Changelog
 =========
 
+**v.3.3.2** - 2021/12/23
+
+* Gets rid of lots of MusicBrainz-related warnings, written to the log each day
+
 **v.3.3.1** - 2019/07/06
 
 * Fixes [#23](https://github.com/schnatterer/nusic/issues/23), where too much releases were downloaded causing long syncing times, battery drainage and wasting a lot of storage
@@ -14,7 +18,7 @@ nusic Changelog
 
 **v.3.2.0** - 2017/03/25
 
-* Added Share button to Release view 
+* Added Share button to Release view
 
 
 **v.3.1.0** - 2016/07/08
