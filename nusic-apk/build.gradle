@@ -34,8 +34,8 @@ android {
         applicationId project.group
         minSdkVersion nusicMinSdkVersion
         targetSdkVersion nusictTargetSdkVersion
-        versionCode 23
-        versionName '3.3.2'
+        versionCode 24
+        versionName '3.3.3-SNAPSHOT'
         // Set final name "nusic-x.y.z.apk" Some things were just easier with maven.
         applicationVariants.all { variant ->
             variant.outputs.each { output ->
