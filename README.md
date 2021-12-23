@@ -1,10 +1,6 @@
 nusic - your new music
 =====
 
-[![Build Status Develop](https://travis-ci.org/schnatterer/nusic.svg?branch=develop)](https://travis-ci.org/schnatterer/nusic)
-[![Quality Gates Develop](https://sonarcloud.io/api/project_badges/measure?project=info.schnatterer.nusic%3Anusic%3Adevelop&metric=alert_status)](https://sonarcloud.io/dashboard?id=info.schnatterer.nusic%3Anusic%3Adevelop)
-[![License](https://img.shields.io/github/license/schnatterer/nusic.svg)](LICENSE.txt)
-
 Never again miss a new album release of your favorite artists - always stay informed by nusic.
 
 <img src="resources/featuredGraphic-02.png" width=500 align="center">
@@ -13,12 +9,9 @@ nusic uses [MusicBrainz](http://musicbrainz.org/) - the free music encyclopedia 
 
 No account necessary.
 
-Note that this app is not optimized for tablets, yet. Please be patient.
-
-Please report any issues [here](https://github.com/schnatterer/nusic/issues).
-
 ## Download
-You can download the lates version as APK from [GitHub](https://github.com/schnatterer/nusic/releases/latest) or get the app directly from [F-Droid](https://f-droid.org/app/info.schnatterer.nusic) or [Google Play](https://play.google.com/store/apps/details?id=info.schnatterer.nusic).
+You can download the latest version as APK from [GitHub](https://github.com/schnatterer/nusic/releases/latest) or get the app directly from [F-Droid](https://f-droid.org/app/info.schnatterer.nusic).
+Due to Google's policy newer version can no longer be supplied via [Google Play](https://play.google.com/store/apps/details?id=info.schnatterer.nusic). However, the APKs found on GitHub are compatible, so you can use those to upgrade your old installations from Google Play.
 
 [<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/app/info.schnatterer.nusic)
 
@@ -58,20 +51,20 @@ What kind of permission does nusic require and why does it require them?
 
 ### Gradle
 In order to build the APK use the [SDK manager](https://developer.android.com/tools/help/sdk-manager.html) to download the SDK Version specified in the [parent project's build.gradle](build.gradle) and deploy android to your local maven repo using [maven-android-sdk-deployer](https://github.com/mosabua/maven-android-sdk-deployer). Also make sure to set your `ANDROID_HOME` environment variable to `sdk` folder of your Android SDK.
-Then just run  
+Then just run
 ```sh
 gradlew clean check assembleDebug
 ```
-to compile from scratch, run the tests and create a debug-signed APK, or run  
+to compile from scratch, run the tests and create a debug-signed APK, or run
 
 ```sh
 gradlew clean check assembleRelease
 ```
-to create a signed APK, using an custom keystore.  
+to create a signed APK, using an custom keystore.
 
-For passing the credentials for this keystore via the command line there are four options  
+For passing the credentials for this keystore via the command line there are four options
 
-1. Define them in your `~/.gradle/gradle.properties` like so  
+1. Define them in your `~/.gradle/gradle.properties` like so
 
    ```ini
    signKeystore=FULL/path/to/keystore
@@ -79,12 +72,12 @@ For passing the credentials for this keystore via the command line there are fou
    signKeypass=password for keystore
    signStorepasss=password for key
    ```
-2. Pass them as command line properties, e.g.  
+2. Pass them as command line properties, e.g.
 
    ```sh
    gradlew clean check assembleRelease -PsignAlias="the key's alias within the keystore"
-   ```  
-3. Pass them as environment variables, e.g.  
+   ```
+3. Pass them as environment variables, e.g.
 
    ```sh
    export ORG_GRADLE_PROJECT_signAlias=the key's alias within the keystore
@@ -97,50 +90,44 @@ For passing the credentials for this keystore via the command line there are fou
 
 
 ## Creating a release
-TODO Automate this, e.g. via Jenkins
 
-- Start release  
+TODO: 1. and 5. could be simplified via a gradle task, similar to the one that existed until
+commit 6748ca51.
 
-   ```sh
-   git-flow release start v.2.1.1
-   ```
-- Set Version  
-
-   ```sh
-   gradlew setVersion -PnewVersion=2.1.1
-   ```
-- Update [changelog](CHANGELOG.md)
-- Commit  
+1. Set desired `versionName` and remove `-SNAPSHOT` in
+    - [nusic-apk/build.gradle](nusic-apk/build.gradle)
+    - [nusic-ui-android/build.gradle](nusic-ui-android/build.gradle)
+2. Update [changelog](CHANGELOG.md)
+3. Commit
 
     ```sh
     git add .
     git commit -m "Prepare release v.2.1.1"
     ```
-- Finish release & Tag (+ tag message)
+4. Finish release: Tag
 
    ```sh
-   git-flow release finish v.2.1.1
+   git tag -s "v.2.1.1" -m "v.2.1.1"
    ```
-- Set next dev version & commit
-
+5. Set next dev version: Increase `versionCode` and `versionName`, add `-SNAPSHOT` to the latter in
+    - [nusic-apk/build.gradle](nusic-apk/build.gradle)
+    - [nusic-ui-android/build.gradle](nusic-ui-android/build.gradle)
+6. Commit
     ```sh
-    gradlew setVersion -PnewVersion=2.1.2-SNAPSHOT
     git add .
-    git commit -m "Prepare for next development iteration v.2.1.2-SNAPSHOT"
+    git commit -m "Prepare for next development iteration"
     ```
-- Checkout and build tag
+7. Checkout and build tag
 
     ```sh
     git checkout tags/v.2.1.1
     gradlew clean connectedCheck assembleRelease
     ```
-- Push all branches & tags
+8. Push all branches & tags
 
     ```sh
     git push --all
     git push --tags
     ```
-- Update [F-Droid metadata](https://gitlab.com/fdroid/fdroiddata/blob/master/metadata/info.schnatterer.nusic.txt) by adding new release to the metadata (e.g. via [this fork](https://gitlab.com/schnatterer/fdroiddata)) and [creating a merge request](https://gitlab.com/schnatterer/fdroiddata/merge_requests/new) 
-- Upload artifact: [Github](https://github.com/schnatterer/nusic/releases), [Google Play](https://play.google.com/apps/publish/)
+- Upload artifact: [Github](https://github.com/schnatterer/nusic/releases)
 - Add changelog to github release page: https://github.com/schnatterer/nusic/releases/tag/v.2.1.1
-- Add changelog to google play entry
