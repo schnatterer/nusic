@@ -105,29 +105,12 @@ subprojects {
     }
 }
 
-task setVersion << {
-    // Load file
-    def Properties gradleProperties = new Properties()
-    def gradlePropertiesFile = file('gradle.properties')
-    gradleProperties.load(new FileInputStream(gradlePropertiesFile))
-
-    // Increase android version
-    if (newVersion.contains("SNAPSHOT")) {
-        gradleProperties['versionCode'] = (nusicVersionCode + 1).toString()
-    }
-    gradleProperties['version'] = newVersion
-
-    // Write file
-    gradleProperties.store(gradlePropertiesFile.newWriter(), null)
-}
-
 project.ext {
     website = "https://github.com/schnatterer/nusic"
 }
 
 ext {
     // Properties for android submodules
-    nusicVersionCode = Integer.parseInt(versionCode)
     nusicMinSdkVersion = 9
     // When changing the following, change also in .travis.yml
     nusictTargetSdkVersion = 24
