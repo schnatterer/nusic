@@ -40,8 +40,8 @@ android {
     defaultConfig {
         minSdkVersion nusicMinSdkVersion
         targetSdkVersion nusictTargetSdkVersion
-        versionCode 24
-        versionName '3.3.3-SNAPSHOT'
+        versionCode nusicVersionCode
+        versionName project.version
     }
 
     compileOptions {
