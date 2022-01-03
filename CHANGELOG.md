@@ -1,6 +1,10 @@
 nusic Changelog
 =========
 
+**v.3.3.3** - 2022/01/03
+
+* Fix F-Droid automated release
+
 **v.3.3.2** - 2021/12/23
 
 * Gets rid of lots of MusicBrainz-related warnings, written to the log each day
