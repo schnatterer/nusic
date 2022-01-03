@@ -91,43 +91,35 @@ For passing the credentials for this keystore via the command line there are fou
 
 ## Creating a release
 
-TODO: 1. and 5. could be simplified via a gradle task, similar to the one that existed until
-commit 6748ca51.
-
-1. Set desired `versionName` and remove `-SNAPSHOT` in
-    - [nusic-apk/build.gradle](nusic-apk/build.gradle)
-    - [nusic-ui-android/build.gradle](nusic-ui-android/build.gradle)
+1.Set Version
+   ```sh
+   gradlew setVersion -PnewVersion=2.1.1
+   ```
 2. Update [changelog](CHANGELOG.md)
 3. Commit
-
     ```sh
     git add .
     git commit -m "Prepare release v.2.1.1"
     ```
 4. Finish release: Tag
-
    ```sh
    git tag -s "v.2.1.1" -m "v.2.1.1"
    ```
-5. Set next dev version: Increase `versionCode` and `versionName`, add `-SNAPSHOT` to the latter in
-    - [nusic-apk/build.gradle](nusic-apk/build.gradle)
-    - [nusic-ui-android/build.gradle](nusic-ui-android/build.gradle)
-6. Commit
+5. Set next dev version & commit
     ```sh
+    gradlew setVersion -PnewVersion=2.1.2-SNAPSHOT
     git add .
-    git commit -m "Prepare for next development iteration"
+    git commit -m "Prepare for next development iteration v.2.1.2-SNAPSHOT"
     ```
-7. Checkout and build tag
-
+6. Checkout and build tag
     ```sh
     git checkout tags/v.2.1.1
     gradlew clean connectedCheck assembleRelease
     ```
-8. Push all branches & tags
-
+7. Push all branches & tags
     ```sh
     git push --all
     git push --tags
     ```
-- Upload artifact: [Github](https://github.com/schnatterer/nusic/releases)
-- Add changelog to github release page: https://github.com/schnatterer/nusic/releases/tag/v.2.1.1
+8. Upload artifact: [Github](https://github.com/schnatterer/nusic/releases)
+9. Add changelog to github release page: https://github.com/schnatterer/nusic/releases/tag/v.2.1.1
